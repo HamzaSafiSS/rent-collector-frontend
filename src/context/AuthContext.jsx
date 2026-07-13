@@ -16,6 +16,19 @@ import api from '../api/axios';
 // ── Create context ────────────────────────────────────────────────────────────
 const AuthContext = createContext(null);
 
+// ── Helper to extract role from JWT ──────────────────────────────────────────
+function getRoleFromToken(token) {
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    let role = payload.role || payload.roles || '';
+    if (Array.isArray(role)) role = role[0];
+    return role.replace('ROLE_', '').toUpperCase();
+  } catch (e) {
+    return null;
+  }
+}
+
 // ── Provider ──────────────────────────────────────────────────────────────────
 export function AuthProvider({ children }) {
   const [user, setUser]               = useState(null);
@@ -69,7 +82,11 @@ export function AuthProvider({ children }) {
           const profileRes = await api.get('/users/me', {
             headers: { Authorization: `Bearer ${newToken}` },
           });
-          setUser(profileRes.data?.data);
+          const profile = profileRes.data?.data;
+          if (profile) {
+            profile.role = getRoleFromToken(newToken);
+          }
+          setUser(profile);
         }
       } catch {
         // No valid refresh token — user is not logged in, that's fine
@@ -93,6 +110,9 @@ export function AuthProvider({ children }) {
     const profileRes = await api.get('/users/me');
     const profile    = profileRes.data?.data;
 
+    if (profile) {
+      profile.role = getRoleFromToken(data.accessToken);
+    }
     setUser(profile);
 
     return {
@@ -128,7 +148,11 @@ export function AuthProvider({ children }) {
     setAccessToken(data.accessToken);
 
     const profileRes = await api.get('/users/me');
-    setUser(profileRes.data?.data);
+    const profile = profileRes.data?.data;
+    if (profile) {
+      profile.role = getRoleFromToken(data.accessToken);
+    }
+    setUser(profile);
 
     return data;
   }, []);
@@ -137,7 +161,11 @@ export function AuthProvider({ children }) {
   const refreshUser = useCallback(async () => {
     try {
       const profileRes = await api.get('/users/me');
-      setUser(profileRes.data?.data);
+      const profile = profileRes.data?.data;
+      if (profile) {
+        profile.role = getRoleFromToken(tokenRef.current);
+      }
+      setUser(profile);
     } catch {
       // Silently ignore
     }
