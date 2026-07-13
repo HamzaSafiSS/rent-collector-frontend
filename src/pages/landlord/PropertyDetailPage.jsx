@@ -8,15 +8,7 @@ import {
 import { propertyApi } from '../../api/propertyApi';
 import { unitApi } from '../../api/unitApi';
 import { useToast } from '../../context/ToastContext';
-
-const NAV = [
-  { label: 'Dashboard',  to: '/landlord/dashboard',  icon: '📊' },
-  { label: 'Properties', to: '/landlord/properties', icon: '🏗️' },
-  { label: 'Tenants',    to: '/landlord/tenants',    icon: '👥' },
-  { label: 'Leases',     to: '/landlord/leases',     icon: '📄' },
-  { label: 'Payments',   to: '/landlord/payments',   icon: '💳' },
-  { label: 'Reports',    to: '/landlord/reports',    icon: '📈' },
-];
+import { LANDLORD_NAV } from './landlordNav';
 
 export default function PropertyDetailPage() {
   const { id }    = useParams();
@@ -174,20 +166,20 @@ export default function PropertyDetailPage() {
   ];
 
   if (loading) return (
-    <PortalLayout navItems={NAV} portalLabel="Landlord">
+    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
       <div className="flex justify-center py-20"><Spinner size="lg" /></div>
     </PortalLayout>
   );
 
   if (error) return (
-    <PortalLayout navItems={NAV} portalLabel="Landlord">
+    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
       <Alert type="error" message={error} />
       <Button className="mt-4" variant="secondary" onClick={() => navigate('/landlord/properties')}>← Back</Button>
     </PortalLayout>
   );
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Landlord">
+    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
       {/* Breadcrumb */}
       <button onClick={() => navigate('/landlord/properties')} className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1">
         ← Back to Properties

@@ -5,15 +5,8 @@ import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import { leaseApi } from '../../api/leaseApi';
 import { paymentApi } from '../../api/paymentApi';
+import { LANDLORD_NAV } from './landlordNav';
 
-const NAV = [
-  { label: 'Dashboard',   to: '/landlord/dashboard',   icon: '📊' },
-  { label: 'Properties',  to: '/landlord/properties',  icon: '🏗️' },
-  { label: 'Tenants',     to: '/landlord/tenants',     icon: '👥' },
-  { label: 'Leases',      to: '/landlord/leases',      icon: '📄' },
-  { label: 'Payments',    to: '/landlord/payments',    icon: '💳' },
-  { label: 'Reports',     to: '/landlord/reports',     icon: '📈' },
-];
 
 export default function LandlordDashboard() {
   const [stats, setStats]     = useState(null);
@@ -47,7 +40,7 @@ export default function LandlordDashboard() {
   }, []);
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Landlord">
+    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
       <PageHeader title="Landlord Dashboard" subtitle="Your portfolio at a glance" />
 
       {loading ? (

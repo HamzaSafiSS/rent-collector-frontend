@@ -8,15 +8,7 @@ import {
 import PropertyForm from '../../components/property/PropertyForm';
 import { propertyApi } from '../../api/propertyApi';
 import { useToast } from '../../context/ToastContext';
-
-const NAV = [
-  { label: 'Dashboard',   to: '/landlord/dashboard',   icon: '📊' },
-  { label: 'Properties',  to: '/landlord/properties',  icon: '🏗️' },
-  { label: 'Tenants',     to: '/landlord/tenants',     icon: '👥' },
-  { label: 'Leases',      to: '/landlord/leases',      icon: '📄' },
-  { label: 'Payments',    to: '/landlord/payments',    icon: '💳' },
-  { label: 'Reports',     to: '/landlord/reports',     icon: '📈' },
-];
+import { LANDLORD_NAV } from './landlordNav';
 
 const PAGE_SIZE = 9;
 
@@ -93,7 +85,7 @@ export default function PropertiesPage() {
   }
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Landlord">
+    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
       <PageHeader
         title="My Properties"
         subtitle={`${totalElements} propert${totalElements !== 1 ? 'ies' : 'y'}`}
