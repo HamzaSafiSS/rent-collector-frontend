@@ -106,6 +106,14 @@ export function AuthProvider({ children }) {
     tokenRef.current = data.accessToken;
     setAccessToken(data.accessToken);
 
+    if (data.mustChangePassword) {
+      setUser({ status: 'PendingPasswordChange', role: data.role });
+      return {
+        mustChangePassword: data.mustChangePassword,
+        role: data.role,
+      };
+    }
+
     // Load full user profile
     const profileRes = await api.get('/users/me');
     const profile    = profileRes.data?.data;

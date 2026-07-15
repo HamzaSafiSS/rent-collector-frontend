@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { authApi } from '../../api/authApi';
@@ -7,38 +7,43 @@ import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 
 export default function ChangePasswordPage() {
-  const navigate       = useNavigate();
-  const { user, logout } = useAuth();
+  const navigate               = useNavigate();
+  const { user, logout, isAuthenticated, loading } = useAuth();
 
-  const [form, setForm] = useState({
+  const [form, setForm]         = useState({
     currentPassword: '',
     newPassword:     '',
     confirmPassword: '',
   });
+  const [errors, setErrors]     = useState({});
+  const [apiError, setApiError] = useState('');
+  const [success, setSuccess]   = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const [errors, setErrors]       = useState({});
-  const [apiError, setApiError]   = useState('');
-  const [success, setSuccess]     = useState('');
-  const [loading, setLoading]     = useState(false);
+  // Redirect completely unauthenticated visitors to /login.
+  // Wait until AuthContext has finished its silent refresh check (loading = false)
+  // before deciding — otherwise we might redirect a user whose session is
+  // still being restored from the HttpOnly cookie.
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      navigate('/login', { replace: true });
+    }
+  }, [loading, isAuthenticated, navigate]);
 
   function validate() {
     const errs = {};
-
     if (!form.currentPassword)
       errs.currentPassword = 'Current password is required.';
-
     if (!form.newPassword)
       errs.newPassword = 'New password is required.';
     else if (form.newPassword.length < 8)
       errs.newPassword = 'New password must be at least 8 characters.';
     else if (form.newPassword === form.currentPassword)
-      errs.newPassword = 'New password must be different from the current password.';
-
+      errs.newPassword = 'New password must be different from your current password.';
     if (!form.confirmPassword)
       errs.confirmPassword = 'Please confirm your new password.';
     else if (form.newPassword !== form.confirmPassword)
       errs.confirmPassword = 'Passwords do not match.';
-
     return errs;
   }
 
@@ -54,32 +59,35 @@ export default function ChangePasswordPage() {
     }
 
     try {
-      setLoading(true);
+      setSubmitting(true);
       await authApi.changePassword(form.currentPassword, form.newPassword);
-
       setSuccess('Password changed successfully. Please log in again.');
 
-      // All refresh tokens are revoked after password change —
-      // log the user out and redirect to login after a brief delay
       setTimeout(async () => {
         await logout();
         navigate('/login', { replace: true });
       }, 2000);
 
     } catch (err) {
-      const message = err.response?.data?.message || 'Failed to change password.';
-      setApiError(message);
+      setApiError(err.response?.data?.message || 'Failed to change password.');
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   }
 
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+  }
+
+  // Show spinner while AuthContext is still checking the session
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
+      </div>
+    );
   }
 
   return (
@@ -96,7 +104,6 @@ export default function ChangePasswordPage() {
           </div>
           <h1 className="text-2xl font-bold text-slate-800">Change Password</h1>
 
-          {/* Show contextual message for forced change */}
           {user?.status === 'PendingPasswordChange' ? (
             <div className="mt-3 mx-auto max-w-sm">
               <Alert
@@ -124,9 +131,8 @@ export default function ChangePasswordPage() {
               value={form.currentPassword}
               onChange={handleChange}
               error={errors.currentPassword}
-              disabled={loading || !!success}
+              disabled={submitting || !!success}
             />
-
             <Input
               label="New password"
               name="newPassword"
@@ -136,9 +142,8 @@ export default function ChangePasswordPage() {
               value={form.newPassword}
               onChange={handleChange}
               error={errors.newPassword}
-              disabled={loading || !!success}
+              disabled={submitting || !!success}
             />
-
             <Input
               label="Confirm new password"
               name="confirmPassword"
@@ -148,13 +153,12 @@ export default function ChangePasswordPage() {
               value={form.confirmPassword}
               onChange={handleChange}
               error={errors.confirmPassword}
-              disabled={loading || !!success}
+              disabled={submitting || !!success}
             />
-
             <Button
               type="submit"
               fullWidth
-              loading={loading}
+              loading={submitting}
               disabled={!!success}
               size="lg"
               className="mt-2"
