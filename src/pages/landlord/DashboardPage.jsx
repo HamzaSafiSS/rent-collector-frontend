@@ -6,6 +6,7 @@ import { propertyApi } from '../../api/propertyApi';
 import { leaseApi } from '../../api/leaseApi';
 import { paymentApi } from '../../api/paymentApi';
 import { LANDLORD_NAV } from './landlordNav';
+import { StatCardsSkeleton } from '../../components/common';
 
 
 export default function LandlordDashboard() {
@@ -44,7 +45,7 @@ export default function LandlordDashboard() {
       <PageHeader title="Landlord Dashboard" subtitle="Your portfolio at a glance" />
 
       {loading ? (
-        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
+        <StatCardsSkeleton count={6} />
       ) : !stats ? (
         <p className="text-slate-500 text-sm">Could not load statistics.</p>
       ) : (

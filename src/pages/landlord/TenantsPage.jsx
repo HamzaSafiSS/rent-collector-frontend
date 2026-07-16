@@ -8,6 +8,7 @@ import TenantTable from '../../components/tenant/TenantTable';
 import { tenantApi } from '../../api/tenantApi';
 import { useToast } from '../../context/ToastContext';
 import { LANDLORD_NAV } from './landlordNav';
+import { TableSkeleton } from '../../components/common';
 
 const PAGE_SIZE = 10;
 
@@ -102,12 +103,11 @@ export default function TenantsPage() {
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <TenantTable
-          data={tenants}
-          loading={loading}
-          onEdit={openEdit}
-          onDelete={(t) => setDeleteTarget(t)}
-        />
+        {loading ? (
+          <TableSkeleton rows={8} cols={columns.length} />
+        ) : (
+          <Table columns={columns} data={tenants} emptyMessage="..." />
+        )}
         <div className="px-4 border-t border-slate-100">
           <Pagination
             page={page} totalPages={totalPages}

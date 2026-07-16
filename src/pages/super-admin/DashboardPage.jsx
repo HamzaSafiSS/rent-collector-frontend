@@ -3,6 +3,7 @@ import PortalLayout from '../../components/common/PortalLayout';
 import { StatCard, PageHeader, Spinner } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 import { reportApi } from '../../api/reportApi';
+import { StatCardsSkeleton } from '../../components/common';
 
 const NAV = [
   { label: 'Dashboard',    to: '/super-admin/dashboard',  icon: '📊' },
@@ -42,7 +43,7 @@ export default function SuperAdminDashboard() {
       />
 
       {loading ? (
-        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
+        <StatCardsSkeleton count={9} />
       ) : !stats ? (
         <p className="text-slate-500 text-sm">Could not load statistics.</p>
       ) : (

@@ -9,6 +9,7 @@ import PropertyForm from '../../components/property/PropertyForm';
 import { propertyApi } from '../../api/propertyApi';
 import { useToast } from '../../context/ToastContext';
 import { LANDLORD_NAV } from './landlordNav';
+import { CardGridSkeleton } from '../../components/common';
 
 const PAGE_SIZE = 9;
 
@@ -95,7 +96,7 @@ export default function PropertiesPage() {
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
       {loading ? (
-        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
+        <CardGridSkeleton count={6} />
       ) : properties.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-4xl mb-3">🏗️</p>

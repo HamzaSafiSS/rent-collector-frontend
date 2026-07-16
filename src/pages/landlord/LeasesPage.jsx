@@ -10,6 +10,7 @@ import { unitApi } from '../../api/unitApi';
 import { propertyApi } from '../../api/propertyApi';
 import { useToast } from '../../context/ToastContext';
 import { LANDLORD_NAV } from './landlordNav';
+import { TableSkeleton } from '../../components/common';
 
 const PAGE_SIZE = 10;
 
@@ -156,7 +157,11 @@ export default function LeasesPage() {
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <Table columns={columns} data={leases} loading={loading} emptyMessage="No leases found." />
+            {loading ? (
+            <TableSkeleton rows={8} cols={columns.length} />
+          ) : (
+            <Table columns={columns} data={data} emptyMessage="..." />
+          )}
         <div className="px-4 border-t border-slate-100">
           <Pagination
             page={page} totalPages={totalPages}

@@ -3,6 +3,7 @@ import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Table, Badge, Button, Pagination, Alert, ConfirmDialog } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 import { useToast } from '../../context/ToastContext';
+import { TableSkeleton } from '../../components/common';
 
 const NAV = [
   { label: 'Dashboard',  to: '/admin/dashboard',  icon: '📊' },
@@ -98,7 +99,11 @@ export default function ManageLandlordsPage() {
       {error && <Alert type="error" message={error} className="mb-4" />}
 
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <Table columns={columns} data={landlords} loading={loading} emptyMessage="No landlords found." />
+        {loading ? (
+          <TableSkeleton rows={8} cols={columns.length} />
+        ) : (
+          <Table columns={columns} data={data} emptyMessage="..." />
+        )}
         <div className="px-4 border-t border-slate-100">
           <Pagination
             page={page} totalPages={totalPages}

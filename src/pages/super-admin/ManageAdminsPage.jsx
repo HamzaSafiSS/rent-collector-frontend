@@ -7,6 +7,7 @@ import {
 import AdminForm from '../../components/admin/AdminForm';
 import { adminApi } from '../../api/adminApi';
 import { useToast } from '../../context/ToastContext';
+import { TableSkeleton } from '../../components/common';
 
 const NAV = [
   { label: 'Dashboard',     to: '/super-admin/dashboard',  icon: '📊' },
@@ -159,12 +160,11 @@ export default function ManageAdminsPage() {
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <Table
-          columns={columns}
-          data={admins}
-          loading={loading}
-          emptyMessage="No admin accounts yet."
-        />
+        {loading ? (
+          <TableSkeleton rows={8} cols={columns.length} />
+        ) : (
+          <Table columns={columns} data={data} emptyMessage="..." />
+        )}
         <div className="px-4 border-t border-slate-100">
           <Pagination
             page={page}

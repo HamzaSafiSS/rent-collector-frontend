@@ -1,6 +1,5 @@
 import Spinner from './Spinner';
 
-
 export default function Table({
   columns = [],
   data = [],
@@ -16,7 +15,7 @@ export default function Table({
           <Spinner size="lg" />
         </div>
       )}
-
+<div className={`relative w-full overflow-x-auto rounded-lg border border-slate-200 ${className}`}>
       <table className="w-full text-sm text-slate-700">
         {/* Header */}
         <thead className="bg-slate-50 border-b border-slate-200">
@@ -36,13 +35,13 @@ export default function Table({
         <tbody className="divide-y divide-slate-100">
           {data.length === 0 && !loading ? (
             <tr>
-              <td
-                colSpan={columns.length}
-                className="px-4 py-12 text-center text-slate-400 text-sm"
-              >
-                {emptyMessage}
-              </td>
-            </tr>
+                <td colSpan={columns.length} className="py-2">
+                  <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <p className="text-3xl mb-3">📭</p>
+                    <p className="text-sm text-slate-400">{emptyMessage}</p>
+                  </div>
+                </td>
+          </tr>
           ) : (
             data.map((row, rowIndex) => (
               <tr
@@ -61,6 +60,7 @@ export default function Table({
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

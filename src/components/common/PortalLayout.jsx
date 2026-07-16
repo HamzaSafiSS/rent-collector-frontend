@@ -93,19 +93,27 @@ export default function PortalLayout({ navItems, portalLabel, children }) {
       {/* ── Main content ── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
-        {/* Top bar */}
-        <header className="bg-white border-b border-slate-200 px-4 py-3 flex items-center gap-3 lg:px-6">
-          <button
-            className="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <div className="flex-1" />
-          <span className="text-sm text-slate-500">{user?.fullName}</span>
-        </header>
+      <header className="bg-white border-b border-slate-200 px-4 py-3 flex items-center gap-3 lg:px-6 sticky top-0 z-20">
+        {/* Hamburger — visible only on mobile */}
+        <button className="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open navigation menu"
+          aria-expanded={sidebarOpen}
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        {/* Page title on mobile */}
+        <span className="lg:hidden font-semibold text-slate-700 text-sm flex-1">
+          Rent Collector
+        </span>
+
+        <div className="hidden lg:flex flex-1" />
+
+        <span className="text-sm text-slate-500 hidden lg:block">{user?.fullName}</span>
+      </header>
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
