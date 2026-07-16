@@ -59,45 +59,65 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
-  // ── Sync tokenRef whenever accessToken state changes ──────────────────────
   useEffect(() => {
     tokenRef.current = accessToken;
   }, [accessToken]);
 
-  // ── On app load — attempt silent refresh ───────────────────────────────────
-  // If the user has a valid refresh token cookie from a previous session,
-  // this silently gets a new access token and restores their session.
-  // If not, they just stay logged out — no redirect.
-  useEffect(() => {
-    async function trySilentRefresh() {
+useEffect(() => {
+  async function trySilentRefresh() {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1'}/auth/refresh`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        return;
+      }
+
+      const data     = await response.json();
+      const newToken = data?.data?.accessToken;
+
+      if (!newToken) {
+        setLoading(false);
+        return;
+      }
+
+      tokenRef.current = newToken;
+      setAccessToken(newToken);
+
       try {
-        const response = await api.post('/auth/refresh');
-        const newToken = response.data?.data?.accessToken;
-
-        if (newToken) {
-          tokenRef.current = newToken;
-          setAccessToken(newToken);
-
-          // Load the user's profile with the new token
-          const profileRes = await api.get('/users/me', {
-            headers: { Authorization: `Bearer ${newToken}` },
-          });
-          const profile = profileRes.data?.data;
-          if (profile) {
-            profile.role = getRoleFromToken(newToken);
+        const profileRes = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1'}/users/me`,
+          {
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${newToken}`,
+            },
           }
-          setUser(profile);
+        );
+
+        if (profileRes.ok) {
+          const profileData = await profileRes.json();
+          setUser(profileData?.data);
         }
       } catch {
-        // No valid refresh token — user is not logged in, that's fine
-      } finally {
-        setLoading(false);
       }
+
+    } catch {
+    } finally {
+      setLoading(false);
     }
+  }
 
-    trySilentRefresh();
-  }, []);
-
+  trySilentRefresh();
+}, []);
   // ── Login ──────────────────────────────────────────────────────────────────
   const login = useCallback(async (email, password) => {
     const response = await api.post('/auth/login', { email, password });

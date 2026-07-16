@@ -131,7 +131,7 @@ export default function PaymentsPage() {
         {loading ? (
             <TableSkeleton rows={8} cols={columns.length} />
           ) : (
-            <Table columns={columns} data={data} emptyMessage="..." />
+            <Table columns={columns} data={payments} emptyMessage="No payments found." />
           )}
         <div className="px-4 border-t border-slate-100">
           <Pagination

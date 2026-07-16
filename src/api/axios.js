@@ -9,10 +9,6 @@ const api = axios.create({
   },
 });
 
-// ── Request interceptor — attach access token ─────────────────────────────────
-// Reads the access token from memory (stored in AuthContext, not localStorage).
-// We use a getter function instead of importing AuthContext directly to avoid
-// circular dependency issues.
 let getAccessToken = () => null;
 
 export function setTokenGetter(fn) {
@@ -69,25 +65,25 @@ let onLogout = () => {
 export function setLogoutCallback(fn) {
   onLogout = fn;
 }
-
 api.interceptors.response.use(
-  // Success — pass through
   (response) => response,
 
-  // Error — handle 401
   async (error) => {
     const originalRequest = error.config;
 
-    // Only intercept 401 errors that haven't been retried yet
-    // Also skip the /auth/refresh endpoint itself to avoid infinite loops
+    // Skip interceptor for:
+    // 1. Requests that already retried
+    // 2. The /auth/refresh endpoint itself
+    // 3. The /auth/login endpoint
+    // 4. Any request that explicitly opts out
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      !originalRequest.url.includes('/auth/refresh') &&
-      !originalRequest.url.includes('/auth/login')
+      !originalRequest.url?.includes('/auth/refresh') &&
+      !originalRequest.url?.includes('/auth/login') &&
+      !originalRequest._skipRefresh
     ) {
       if (isRefreshing) {
-        // Another refresh is already in progress — queue this request
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
@@ -102,25 +98,18 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Call refresh — cookie is sent automatically (withCredentials: true)
         const response = await api.post('/auth/refresh');
         const newToken = response.data?.data?.accessToken;
 
         if (!newToken) throw new Error('No access token in refresh response');
 
-        // Update the in-memory token via AuthContext setter
         setAccessToken(newToken);
-
-        // Update the Authorization header for the retry
         originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
-
-        // Resolve all queued requests with the new token
         processQueue(null, newToken);
 
         return api(originalRequest);
 
       } catch (refreshError) {
-        // Refresh failed — session is truly expired
         processQueue(refreshError, null);
         setAccessToken(null);
         onLogout();
@@ -134,5 +123,4 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 export default api;

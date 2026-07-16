@@ -1,3 +1,6 @@
+import { buttonVariants, buttonSizes } from './styles';
+import Spinner from './Spinner';
+
 export default function Button({
   children, variant = 'primary', size = 'md',
   loading = false, fullWidth = false, className = '',

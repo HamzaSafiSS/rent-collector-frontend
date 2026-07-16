@@ -160,7 +160,7 @@ export default function LeasesPage() {
             {loading ? (
             <TableSkeleton rows={8} cols={columns.length} />
           ) : (
-            <Table columns={columns} data={data} emptyMessage="..." />
+            <Table columns={columns} data={leases} emptyMessage="No leases found." />
           )}
         <div className="px-4 border-t border-slate-100">
           <Pagination

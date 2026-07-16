@@ -1,3 +1,5 @@
+import { inputBase, inputError } from './styles';
+
 export default function Input({
   label, error, hint, className = '', id, required, ...props
 }) {
