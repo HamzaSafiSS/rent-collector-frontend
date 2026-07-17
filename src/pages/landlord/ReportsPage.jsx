@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import PortalLayout from '../../components/common/PortalLayout';
-import { PageHeader, Spinner, Alert, Input, Button } from '../../components/common';
+import { PageHeader, Spinner, Alert, Input, Button, StatCard } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import { LANDLORD_NAV } from './landlordNav';
@@ -95,11 +95,11 @@ function PaymentReport({ properties }) {
       {loading && <div className="flex justify-center py-12"><Spinner size="lg" /></div>}
 
       {data && !loading && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <ReportCard label="Collected (ETB)" value={Number(data.totalCollected).toLocaleString()} color="green"  sub={`${data.approvedCount} payments`} />
-          <ReportCard label="Pending (ETB)"   value={Number(data.totalPending).toLocaleString()}   color="yellow" sub={`${data.pendingCount} payments`} />
-          <ReportCard label="Rejected (ETB)"  value={Number(data.totalRejected).toLocaleString()}  color="red"    sub={`${data.rejectedCount} payments`} />
-          <ReportCard label="Grand Total"     value={Number(data.grandTotal).toLocaleString()}     color="blue"   sub={`${data.totalCount} total`} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+          <StatCard label="Collected (ETB)" value={Number(data.totalCollected).toLocaleString()} color="green"  subtitle={`${data.approvedCount} payments`} />
+          <StatCard label="Pending (ETB)"   value={Number(data.totalPending).toLocaleString()}   color="yellow" subtitle={`${data.pendingCount} payments`} />
+          <StatCard label="Rejected (ETB)"  value={Number(data.totalRejected).toLocaleString()}  color="red"    subtitle={`${data.rejectedCount} payments`} />
+          <StatCard label="Grand Total"     value={Number(data.grandTotal).toLocaleString()}     color="blue"   subtitle={`${data.totalCount} total`} />
         </div>
       )}
     </div>
@@ -148,14 +148,14 @@ function OccupancyReport({ properties }) {
 
       {data && !loading && (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
-            <ReportCard label="Total Units"    value={data.totalUnits}       color="blue"   />
-            <ReportCard label="Occupied"       value={data.occupiedUnits}    color="green"  />
-            <ReportCard label="Available"      value={data.availableUnits}   color="slate"  />
-            <ReportCard label="Maintenance"    value={data.maintenanceUnits} color="yellow" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
+            <StatCard label="Total Units"    value={data.totalUnits}       color="blue"   />
+            <StatCard label="Occupied"       value={data.occupiedUnits}    color="green"  />
+            <StatCard label="Available"      value={data.availableUnits}   color="slate"  />
+            <StatCard label="Maintenance"    value={data.maintenanceUnits} color="yellow" />
           </div>
           {/* Occupancy rate bar */}
-          <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <div className="bg-white border border-slate-200/60 shadow-sm rounded-2xl p-6">
             <div className="flex justify-between text-sm mb-2">
               <span className="font-medium text-slate-700">Occupancy Rate</span>
               <span className="font-bold text-blue-600">{data.occupancyRate}%</span>
@@ -229,33 +229,35 @@ function RevenueReport({ properties }) {
 
       {data && !loading && (
         <>
-          <div className="grid grid-cols-2 gap-4 mb-5">
-            <ReportCard label="Total Revenue (ETB)" value={Number(data.totalRevenue).toLocaleString()} color="green" />
-            <ReportCard label="Avg Monthly (ETB)"   value={Number(data.averageMonthlyRevenue).toLocaleString()} color="blue" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <StatCard label="Total Revenue (ETB)" value={Number(data.totalRevenue).toLocaleString()} color="green" />
+            <StatCard label="Avg Monthly (ETB)"   value={Number(data.averageMonthlyRevenue).toLocaleString()} color="blue" />
           </div>
 
           {/* Monthly breakdown */}
           {data.byMonth?.length > 0 && (
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mb-4">
-              <p className="px-4 py-3 font-semibold text-slate-700 border-b border-slate-100">Monthly Breakdown</p>
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50">
-                  <tr>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Month</th>
-                    <th className="px-4 py-2 text-right text-xs font-semibold text-slate-500 uppercase">Revenue (ETB)</th>
-                    <th className="px-4 py-2 text-right text-xs font-semibold text-slate-500 uppercase">Payments</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {data.byMonth.map((m) => (
-                    <tr key={m.month} className="hover:bg-slate-50">
-                      <td className="px-4 py-2.5">{m.month}</td>
-                      <td className="px-4 py-2.5 text-right font-medium text-green-700">{Number(m.revenue).toLocaleString()}</td>
-                      <td className="px-4 py-2.5 text-right text-slate-500">{m.paymentCount}</td>
+            <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden mb-4 shadow-sm">
+              <p className="px-6 py-4 font-bold text-slate-800 border-b border-slate-100 bg-slate-50/50">Monthly Breakdown</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-50/50 border-b border-slate-100">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Month</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Revenue (ETB)</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Payments</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {data.byMonth.map((m) => (
+                      <tr key={m.month} className="hover:bg-blue-50/50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">{m.month}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right font-bold text-emerald-600">{Number(m.revenue).toLocaleString()}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-slate-500 font-medium">{m.paymentCount}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </>
@@ -306,60 +308,44 @@ function TenantReport({ properties }) {
 
       {data && !loading && (
         <>
-          <div className="grid grid-cols-3 gap-4 mb-5">
-            <ReportCard label="Active Tenants"     value={data.totalActiveTenants}     color="green" />
-            <ReportCard label="Historical Tenants" value={data.totalHistoricalTenants} color="slate" />
-            <ReportCard label="Total Unique"       value={data.totalTenants}           color="blue"  />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <StatCard label="Active Tenants"     value={data.totalActiveTenants}     color="green" />
+            <StatCard label="Historical Tenants" value={data.totalHistoricalTenants} color="slate" />
+            <StatCard label="Total Unique"       value={data.totalTenants}           color="blue"  />
           </div>
           {data.tenants?.length > 0 && (
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50">
-                  <tr>
-                    {['Name','Email','Status','Current Unit','Active Leases','Total Leases'].map((h) => (
-                      <th key={h} className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {data.tenants.map((t) => (
-                    <tr key={t.tenantId} className="hover:bg-slate-50">
-                      <td className="px-4 py-2.5 font-medium">{t.fullName}</td>
-                      <td className="px-4 py-2.5 text-slate-500 text-xs">{t.email}</td>
-                      <td className="px-4 py-2.5">
-                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${t.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                          {t.status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2.5">{t.currentUnit || '—'}</td>
-                      <td className="px-4 py-2.5 text-center">{t.activeLeases}</td>
-                      <td className="px-4 py-2.5 text-center">{t.totalLeases}</td>
+            <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-50/50 border-b border-slate-100">
+                    <tr>
+                      {['Name','Email','Status','Current Unit','Active Leases','Total Leases'].map((h) => (
+                        <th key={h} className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">{h}</th>
+                      ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {data.tenants.map((t) => (
+                      <tr key={t.tenantId} className="hover:bg-blue-50/50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap font-semibold text-slate-800">{t.fullName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-slate-500">{t.email}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`text-xs font-bold px-3 py-1 rounded-full ${t.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                            {t.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-slate-600 font-medium">{t.currentUnit || '—'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center font-bold text-slate-700">{t.activeLeases}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center text-slate-500">{t.totalLeases}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </>
       )}
-    </div>
-  );
-}
-
-// ── Shared stat card for reports ───────────────────────────────────────────────
-function ReportCard({ label, value, color = 'blue', sub }) {
-  const colors = {
-    blue:   'bg-blue-50   border-blue-200   text-blue-700',
-    green:  'bg-green-50  border-green-200  text-green-700',
-    red:    'bg-red-50    border-red-200    text-red-700',
-    yellow: 'bg-yellow-50 border-yellow-200 text-yellow-700',
-    slate:  'bg-slate-50  border-slate-200  text-slate-700',
-  };
-  return (
-    <div className={`rounded-xl border p-5 ${colors[color] || colors.blue}`}>
-      <p className="text-xs font-semibold uppercase tracking-wide opacity-70">{label}</p>
-      <p className="text-2xl font-bold mt-1">{value ?? '—'}</p>
-      {sub && <p className="text-xs mt-1 opacity-60">{sub}</p>}
     </div>
   );
 }

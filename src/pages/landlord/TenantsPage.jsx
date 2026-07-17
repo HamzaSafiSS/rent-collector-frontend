@@ -102,20 +102,22 @@ export default function TenantsPage() {
 
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="mb-6">
         {loading ? (
-          <TableSkeleton rows={8} cols={8} />
+          <TableSkeleton rows={8} cols={6} />
         ) : (
           <TenantTable data={tenants} onEdit={openEdit} onDelete={setDeleteTarget} />
         )}
-        <div className="px-4 border-t border-slate-100">
+      </div>
+      {tenants.length > 0 && (
+        <div className="mt-4 flex justify-end">
           <Pagination
             page={page} totalPages={totalPages}
             totalElements={totalElements} size={PAGE_SIZE}
             onPageChange={setPage}
           />
         </div>
-      </div>
+      )}
 
       {/* Edit Modal */}
       <Modal

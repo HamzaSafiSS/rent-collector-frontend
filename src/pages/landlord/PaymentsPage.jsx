@@ -127,20 +127,22 @@ export default function PaymentsPage() {
 
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="mb-6">
         {loading ? (
             <TableSkeleton rows={8} cols={columns.length} />
           ) : (
             <Table columns={columns} data={payments} emptyMessage="No payments found." />
           )}
-        <div className="px-4 border-t border-slate-100">
+      </div>
+      {payments.length > 0 && (
+        <div className="mt-4 flex justify-end">
           <Pagination
             page={page} totalPages={totalPages}
             totalElements={totalElements} size={PAGE_SIZE}
             onPageChange={setPage}
           />
         </div>
-      </div>
+      )}
 
       <ReviewModal
         payment={reviewPayment}

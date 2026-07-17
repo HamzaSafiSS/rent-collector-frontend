@@ -156,20 +156,22 @@ export default function LeasesPage() {
 
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-            {loading ? (
-            <TableSkeleton rows={8} cols={columns.length} />
-          ) : (
-            <Table columns={columns} data={leases} emptyMessage="No leases found." />
-          )}
-        <div className="px-4 border-t border-slate-100">
+      <div className="mb-6">
+        {loading ? (
+          <TableSkeleton rows={8} cols={columns.length} />
+        ) : (
+          <Table columns={columns} data={leases} emptyMessage="No leases found." />
+        )}
+      </div>
+      {leases.length > 0 && (
+        <div className="mt-4 flex justify-end">
           <Pagination
             page={page} totalPages={totalPages}
             totalElements={totalElements} size={PAGE_SIZE}
             onPageChange={setPage}
           />
         </div>
-      </div>
+      )}
 
       {/* Create Modal */}
       <Modal

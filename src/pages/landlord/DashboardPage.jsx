@@ -49,7 +49,7 @@ export default function LandlordDashboard() {
       ) : !stats ? (
         <p className="text-slate-500 text-sm">Could not load statistics.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <StatCard label="My Properties"    value={stats.totalProperties}  icon="🏗️" color="blue"   />
           <StatCard label="Total Units"      value={stats.totalUnits}       icon="🚪" color="slate"  />
           <StatCard label="Occupied Units"   value={stats.occupiedUnits}    icon="👥" color="green"  subtitle={`${stats.occupancyRate}% occupancy`} />

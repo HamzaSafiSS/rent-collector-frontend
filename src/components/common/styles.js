@@ -9,12 +9,12 @@ export const colors = {
 // Button variant classes
 export const buttonVariants = {
   primary: `
-    bg-blue-600 hover:bg-blue-700 active:bg-blue-800
-    text-white font-medium
+    bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 active:from-blue-700 active:to-blue-600
+    text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5
     border border-transparent
     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-    disabled:opacity-50 disabled:cursor-not-allowed
-    transition-colors duration-150
+    disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+    transition-all duration-200
   `,
   secondary: `
     bg-white hover:bg-slate-50 active:bg-slate-100
@@ -51,9 +51,9 @@ export const buttonVariants = {
 };
 
 export const buttonSizes = {
-  sm: 'px-3 py-1.5 text-sm rounded',
-  md: 'px-4 py-2 text-sm rounded-md',
-  lg: 'px-6 py-3 text-base rounded-lg',
+  sm: 'px-3 py-1.5 text-sm rounded-lg',
+  md: 'px-5 py-2.5 text-sm rounded-xl',
+  lg: 'px-6 py-3.5 text-base rounded-xl',
 };
 
 // Badge variant classes
@@ -67,12 +67,12 @@ export const badgeVariants = {
 
 // Input shared classes
 export const inputBase = `
-  w-full px-3 py-2 text-sm text-slate-900
-  border border-slate-300 rounded-md
+  w-full px-4 py-3 text-sm text-slate-900 bg-white/80 backdrop-blur-sm
+  border border-slate-300/80 rounded-xl shadow-sm
   placeholder-slate-400
-  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-  disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed
-  transition-colors duration-150
+  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent
+  disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed
+  transition-all duration-200
 `;
 
 export const inputError = `

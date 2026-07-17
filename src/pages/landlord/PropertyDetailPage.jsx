@@ -203,33 +203,41 @@ export default function PropertyDetailPage() {
       )}
 
       {/* Units summary */}
-      <div className="grid grid-cols-3 gap-4 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
         {['AVAILABLE', 'OCCUPIED', 'MAINTENANCE'].map((s) => {
           const count = units.filter((u) => u.status === s).length;
-          const colors = { AVAILABLE: 'green', OCCUPIED: 'blue', MAINTENANCE: 'yellow' };
           return (
-            <div key={s} className={`rounded-xl p-4 border text-center ${
-              s === 'AVAILABLE'   ? 'bg-green-50  border-green-200  text-green-700'  :
-              s === 'OCCUPIED'    ? 'bg-blue-50   border-blue-200   text-blue-700'   :
-                                    'bg-yellow-50 border-yellow-200 text-yellow-700'
+            <div key={s} className={`rounded-2xl p-6 border text-center shadow-sm relative overflow-hidden ${
+              s === 'AVAILABLE'   ? 'bg-white border-emerald-200/60'  :
+              s === 'OCCUPIED'    ? 'bg-white border-blue-200/60'   :
+                                    'bg-white border-amber-200/60'
             }`}>
-              <p className="text-2xl font-bold">{count}</p>
-              <p className="text-xs font-medium mt-1">{s}</p>
+              <div className={`absolute inset-0 opacity-10 ${
+                s === 'AVAILABLE' ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' :
+                s === 'OCCUPIED'  ? 'bg-gradient-to-br from-blue-400 to-indigo-600' :
+                                    'bg-gradient-to-br from-amber-400 to-orange-500'
+              }`}></div>
+              <p className={`text-4xl font-extrabold relative z-10 ${
+                s === 'AVAILABLE' ? 'text-emerald-600' :
+                s === 'OCCUPIED'  ? 'text-blue-600' :
+                                    'text-amber-600'
+              }`}>{count}</p>
+              <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{s}</p>
             </div>
           );
         })}
       </div>
 
       {/* Units table */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="font-semibold text-slate-700">Units ({totalElements})</h2>
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-slate-800">Units <span className="text-slate-400 font-medium text-base ml-1">({totalElements})</span></h2>
         </div>
         <Table
           columns={unitColumns}
           data={units}
           loading={unitsLoading}
-          emptyMessage="No units yet. Click 'Add Units' to create some."
+          emptyMessage="No units yet. Click '+ Add Units' to create some."
         />
       </div>
 

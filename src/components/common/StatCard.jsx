@@ -1,34 +1,35 @@
 export default function StatCard({ label, value, icon, color = 'blue', subtitle }) {
-  const colors = {
-    blue:   'bg-blue-50 text-blue-700 border-blue-200',
-    green:  'bg-green-50 text-green-700 border-green-200',
-    red:    'bg-red-50 text-red-700 border-red-200',
-    yellow: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    purple: 'bg-purple-50 text-purple-700 border-purple-200',
-    slate:  'bg-slate-50 text-slate-700 border-slate-200',
+  const textColors = {
+    blue:   'text-slate-800',
+    green:  'text-slate-800',
+    red:    'text-slate-800',
+    yellow: 'text-slate-800',
+    purple: 'text-slate-800',
+    slate:  'text-slate-800',
   };
 
   const iconColors = {
-    blue:   'bg-blue-100 text-blue-600',
-    green:  'bg-green-100 text-green-600',
-    red:    'bg-red-100 text-red-600',
-    yellow: 'bg-yellow-100 text-yellow-600',
-    purple: 'bg-purple-100 text-purple-600',
-    slate:  'bg-slate-100 text-slate-600',
+    blue:   'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-blue-500/30',
+    green:  'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-emerald-500/30',
+    red:    'bg-gradient-to-br from-red-400 to-rose-600 text-white shadow-red-500/30',
+    yellow: 'bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-orange-500/30',
+    purple: 'bg-gradient-to-br from-purple-500 to-fuchsia-600 text-white shadow-purple-500/30',
+    slate:  'bg-gradient-to-br from-slate-500 to-slate-700 text-white shadow-slate-500/30',
   };
 
   return (
-    <div className={`rounded-xl border p-5 ${colors[color] || colors.blue}`}>
-      <div className="flex items-center justify-between">
+    <div className={`rounded-2xl border border-slate-200/60 bg-white shadow-sm hover:shadow-md transition-shadow duration-300 p-6 overflow-hidden relative group`}>
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-slate-100 to-transparent opacity-50 rounded-bl-full -z-10 transform group-hover:scale-110 transition-transform duration-500"></div>
+      <div className="flex items-center justify-between z-10">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide opacity-70">{label}</p>
-          <p className="text-3xl font-bold mt-1">{value ?? '—'}</p>
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{label}</p>
+          <p className={`text-4xl font-extrabold mt-2 tracking-tight ${textColors[color] || textColors.blue}`}>{value ?? '—'}</p>
           {subtitle && (
-            <p className="text-xs mt-1 opacity-60">{subtitle}</p>
+            <p className="text-sm mt-2 font-medium text-slate-400">{subtitle}</p>
           )}
         </div>
         {icon && (
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${iconColors[color] || iconColors.blue}`}>
+          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg transform group-hover:rotate-6 transition-transform duration-300 ${iconColors[color] || iconColors.blue}`}>
             {icon}
           </div>
         )}

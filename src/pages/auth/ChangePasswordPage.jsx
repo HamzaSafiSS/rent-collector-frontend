@@ -84,25 +84,29 @@ export default function ChangePasswordPage() {
   // Show spinner while AuthContext is still checking the session
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen relative overflow-hidden bg-slate-950 flex items-center justify-center p-4">
+      {/* Animated Background Gradients */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/20 blur-[120px] mix-blend-screen pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-600/20 blur-[120px] mix-blend-screen pointer-events-none"></div>
+
+      <div className="w-full max-w-md relative z-10 animate-slide-in">
 
         {/* Brand */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-2xl mb-4 shadow-lg">
-            <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl mb-6 shadow-xl shadow-blue-500/30 transform transition-transform hover:scale-105 duration-300">
+            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-slate-800">Change Password</h1>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">Change Password</h1>
 
           {user?.status === 'PendingPasswordChange' ? (
             <div className="mt-3 mx-auto max-w-sm">
@@ -112,12 +116,12 @@ export default function ChangePasswordPage() {
               />
             </div>
           ) : (
-            <p className="text-slate-500 text-sm mt-1">Update your account password</p>
+            <p className="text-slate-400 text-sm mt-2 font-medium">Update your account password</p>
           )}
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
+        <div className="glass rounded-3xl p-8">
           {apiError && <Alert type="error"   message={apiError} className="mb-5" />}
           {success   && <Alert type="success" message={success}  className="mb-5" />}
 

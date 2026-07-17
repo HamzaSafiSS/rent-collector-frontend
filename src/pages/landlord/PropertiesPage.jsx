@@ -98,35 +98,54 @@ export default function PropertiesPage() {
       {loading ? (
         <CardGridSkeleton count={6} />
       ) : properties.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-4xl mb-3">🏗️</p>
-          <p className="text-slate-600 font-medium">No properties yet</p>
-          <p className="text-slate-400 text-sm mt-1">Create your first property to get started.</p>
-          <Button className="mt-4" onClick={() => setCreateOpen(true)}>Add Property</Button>
+        <div className="text-center py-24 bg-white rounded-3xl border border-slate-200/60 shadow-sm">
+          <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
+            <p className="text-4xl">🏗️</p>
+          </div>
+          <p className="text-xl text-slate-800 font-bold">No properties yet</p>
+          <p className="text-slate-500 text-sm mt-2 mb-6 max-w-sm mx-auto">You haven't added any properties to your portfolio. Create your first property to get started.</p>
+          <Button className="shadow-md" onClick={() => setCreateOpen(true)}>+ Add Property</Button>
         </div>
       ) : (
         <>
           {/* Property cards grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {properties.map((p) => (
               <div
                 key={p.id}
-                className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow cursor-pointer"
+                className="bg-white rounded-2xl border border-slate-200/60 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group relative overflow-hidden"
                 onClick={() => navigate(`/landlord/properties/${p.id}`)}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-xl">🏗️</div>
-                  <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
-                    <Button size="sm" variant="ghost" onClick={() => { setEditTarget(p); setFormError(''); }}>Edit</Button>
-                    <Button size="sm" variant="danger" onClick={() => setDeleteTarget(p)}>Delete</Button>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-transparent opacity-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-500"></div>
+                <div className="flex items-start justify-between mb-4 z-10">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl shadow-md text-white">
+                    🏗️
+                  </div>
+                  <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                    <button 
+                      className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      onClick={() => { setEditTarget(p); setFormError(''); }}
+                      title="Edit"
+                    >
+                      ✏️
+                    </button>
+                    <button 
+                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      onClick={() => setDeleteTarget(p)}
+                      title="Delete"
+                    >
+                      🗑️
+                    </button>
                   </div>
                 </div>
-                <h3 className="font-semibold text-slate-800 truncate">{p.name}</h3>
-                <p className="text-xs text-slate-500 mt-1 truncate">{p.address}</p>
+                <h3 className="text-lg font-bold text-slate-800 truncate z-10">{p.name}</h3>
+                <p className="text-sm text-slate-500 mt-1 truncate z-10">{p.address}</p>
                 {p.description && (
-                  <p className="text-xs text-slate-400 mt-2 line-clamp-2">{p.description}</p>
+                  <p className="text-sm text-slate-400 mt-3 line-clamp-2 z-10">{p.description}</p>
                 )}
-                <p className="text-xs text-blue-600 font-medium mt-3">View units →</p>
+                <div className="mt-5 flex items-center text-sm font-semibold text-blue-600 group-hover:text-blue-700 transition-colors z-10">
+                  View units <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                </div>
               </div>
             ))}
           </div>
