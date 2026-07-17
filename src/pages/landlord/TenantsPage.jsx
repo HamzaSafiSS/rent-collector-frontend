@@ -104,9 +104,9 @@ export default function TenantsPage() {
 
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
         {loading ? (
-          <TableSkeleton rows={8} cols={columns.length} />
+          <TableSkeleton rows={8} cols={8} />
         ) : (
-          <Table columns={columns} data={tenants} emptyMessage="No tenants found." />
+          <TenantTable data={tenants} onEdit={openEdit} onDelete={setDeleteTarget} />
         )}
         <div className="px-4 border-t border-slate-100">
           <Pagination

@@ -16,5 +16,5 @@ export const tenantApi = {
 
   // Admin view — all tenants platform-wide
   listAllTenants: (page = 0, size = 20) =>
-    api.get('/tenants', { params: { page, size } }),
+    api.get('/tenants/all', { params: { page, size } }),
 };
