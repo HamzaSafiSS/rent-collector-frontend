@@ -28,6 +28,10 @@ export const paymentApi = {
   getProofUrl: (id) =>
     `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1'}/payments/${id}/proof`,
 
+  // Fetch proof as a blob directly using Axios
+  getProofBlob: (id) =>
+    api.get(`/payments/${id}/proof`, { responseType: 'blob' }),
+
   // Approve / Reject
   approvePayment: (id) =>
     api.patch(`/payments/${id}/approve`),

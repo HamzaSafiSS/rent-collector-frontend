@@ -18,23 +18,10 @@ export default function ScreenshotViewer({ paymentId }) {
       setLoading(true);
       setError('');
 
-      // Fetch the file as a blob through Axios (carries Authorization header)
-      const response = await fetch(
-        paymentApi.getProofUrl(paymentId),
-        {
-          credentials: 'include',
-          headers: {
-            // The token is in memory — read it from the Axios instance's default headers
-            // In practice the withCredentials cookie handles auth for same-origin,
-            // but for cross-origin we pass the token explicitly
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error('Failed to load screenshot.');
-
-      const blob    = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
+      // Fetch the file as a blob using the Axios instance (automatically attaches Authorization header)
+      const response = await paymentApi.getProofBlob(paymentId);
+      
+      const blobUrl = URL.createObjectURL(response.data);
       setUrl(blobUrl);
     } catch {
       setError('Could not load screenshot.');
