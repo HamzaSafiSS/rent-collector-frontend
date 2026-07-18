@@ -46,28 +46,42 @@ export default function ReportsPage() {
   );
 }
 
+// ── helpers ────────────────────────────────────────────────────────────────────
+/** Normalise from/to so from <= to (by full YYYY-MM comparison). Returns { from, to, swapped }. */
+function normaliseRange(from, to) {
+  if (from && to && from > to) return { from: to, to: from, swapped: true };
+  return { from, to, swapped: false };
+}
+
 // ── Payment Report ─────────────────────────────────────────────────────────────
 function PaymentReport({ properties }) {
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
   const [filters, setFilters] = useState({ from: '', to: '', propertyId: '' });
+  const [rangeWarning, setRangeWarning] = useState('');
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (activeFilters) => {
     try {
-      setLoading(true); setError('');
+      setLoading(true); setError(''); setRangeWarning('');
+      const { from, to, swapped } = normaliseRange(activeFilters.from, activeFilters.to);
+      if (swapped) {
+        setFilters((p) => ({ ...p, from, to }));
+        setRangeWarning('"From" was after "To" — they have been swapped automatically.');
+      }
       const params = {};
-      if (filters.from)       params.from       = filters.from;
-      if (filters.to)         params.to         = filters.to;
-      if (filters.propertyId) params.propertyId = filters.propertyId;
+      if (from)                      params.from       = from;
+      if (to)                        params.to         = to;
+      if (activeFilters.propertyId)  params.propertyId = activeFilters.propertyId;
       const res = await reportApi.getPaymentReport(params);
       setData(res.data?.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to load payment report.');
     } finally { setLoading(false); }
-  }, [filters]);
+  }, []);
 
-  useEffect(() => { load(); }, [load]);
+  // Load once on mount (no filters)
+  useEffect(() => { load(filters); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -87,10 +101,11 @@ function PaymentReport({ properties }) {
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
           </div>
-          <Button onClick={load} loading={loading}>Refresh</Button>
+          <Button onClick={() => load(filters)} loading={loading}>Refresh</Button>
         </div>
       </div>
 
+      {rangeWarning && <Alert type="warning" message={rangeWarning} className="mb-4" />}
       {error   && <Alert type="error" message={error} className="mb-4" />}
       {loading && <div className="flex justify-center py-12"><Spinner size="lg" /></div>}
 
@@ -113,18 +128,18 @@ function OccupancyReport({ properties }) {
   const [error, setError]     = useState('');
   const [propertyId, setPropertyId] = useState('');
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (pid) => {
     try {
       setLoading(true); setError('');
-      const params = propertyId ? { propertyId } : {};
+      const params = pid ? { propertyId: pid } : {};
       const res = await reportApi.getOccupancyReport(params);
       setData(res.data?.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to load occupancy report.');
     } finally { setLoading(false); }
-  }, [propertyId]);
+  }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(propertyId); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -140,7 +155,7 @@ function OccupancyReport({ properties }) {
             {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
         </div>
-        <Button onClick={load} loading={loading}>Refresh</Button>
+        <Button onClick={() => load(propertyId)} loading={loading}>Refresh</Button>
       </div>
 
       {error   && <Alert type="error" message={error} className="mb-4" />}
@@ -181,19 +196,19 @@ function RevenueReport({ properties }) {
   const [year, setYear]       = useState(String(new Date().getFullYear()));
   const [propertyId, setPropertyId] = useState('');
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (y, pid) => {
     try {
       setLoading(true); setError('');
-      const params = { year };
-      if (propertyId) params.propertyId = propertyId;
+      const params = { year: y };
+      if (pid) params.propertyId = pid;
       const res = await reportApi.getRevenueReport(params);
       setData(res.data?.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to load revenue report.');
     } finally { setLoading(false); }
-  }, [year, propertyId]);
+  }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(year, propertyId); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -221,7 +236,7 @@ function RevenueReport({ properties }) {
             {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
         </div>
-        <Button onClick={load} loading={loading}>Refresh</Button>
+        <Button onClick={() => load(year, propertyId)} loading={loading}>Refresh</Button>
       </div>
 
       {error   && <Alert type="error" message={error} className="mb-4" />}
@@ -273,18 +288,18 @@ function TenantReport({ properties }) {
   const [error, setError]     = useState('');
   const [propertyId, setPropertyId] = useState('');
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (pid) => {
     try {
       setLoading(true); setError('');
-      const params = propertyId ? { propertyId } : {};
+      const params = pid ? { propertyId: pid } : {};
       const res = await reportApi.getTenantReport(params);
       setData(res.data?.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to load tenant report.');
     } finally { setLoading(false); }
-  }, [propertyId]);
+  }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(propertyId); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -300,7 +315,7 @@ function TenantReport({ properties }) {
             {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
         </div>
-        <Button onClick={load} loading={loading}>Refresh</Button>
+        <Button onClick={() => load(propertyId)} loading={loading}>Refresh</Button>
       </div>
 
       {error   && <Alert type="error" message={error} className="mb-4" />}

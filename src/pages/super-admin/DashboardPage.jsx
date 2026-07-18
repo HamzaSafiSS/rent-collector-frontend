@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PortalLayout from '../../components/common/PortalLayout';
 import { StatCard, PageHeader, Spinner } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
@@ -14,6 +15,7 @@ const NAV = [
 export default function SuperAdminDashboard() {
   const [stats, setStats]     = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
@@ -48,13 +50,13 @@ export default function SuperAdminDashboard() {
         <p className="text-slate-500 text-sm">Could not load statistics.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <StatCard label="Total Admins"      value={stats.totalAdmins}           icon="👤" color="blue"   />
-          <StatCard label="Total Landlords"   value={stats.totalLandlords}         icon="🏢" color="purple" />
-          <StatCard label="Total Tenants"     value={stats.totalTenants}           icon="👨‍👩‍👧" color="green" />
-          <StatCard label="Total Properties"  value={stats.totalProperties}        icon="🏗️" color="yellow" />
-          <StatCard label="Total Units"       value={stats.totalUnits}             icon="🚪" color="slate"  />
-          <StatCard label="Active Leases"     value={stats.totalActiveLeases}      icon="📄" color="green"  />
-          <StatCard label="Suspended Landlords" value={stats.suspendedLandlords}  icon="🚫" color="red"    />
+          <StatCard label="Total Admins"      value={stats.totalAdmins}           icon="👤" color="blue"   onClick={() => navigate('/super-admin/view/admins')} />
+          <StatCard label="Total Landlords"   value={stats.totalLandlords}         icon="🏢" color="purple" onClick={() => navigate('/super-admin/view/landlords')} />
+          <StatCard label="Total Tenants"     value={stats.totalTenants}           icon="👨‍👩‍👧" color="green" onClick={() => navigate('/super-admin/view/tenants')} />
+          <StatCard label="Total Properties"  value={stats.totalProperties}        icon="🏗️" color="yellow" onClick={() => navigate('/super-admin/view/properties')} />
+          <StatCard label="Total Units"       value={stats.totalUnits}             icon="🚪" color="slate"  onClick={() => navigate('/super-admin/view/units')} />
+          <StatCard label="Active Leases"     value={stats.totalActiveLeases}      icon="📄" color="green"  onClick={() => navigate('/super-admin/view/leases')} />
+          <StatCard label="Suspended Landlords" value={stats.suspendedLandlords}  icon="🚫" color="red"    onClick={() => navigate('/super-admin/view/suspended-landlords')} />
         </div>
       )}
     </PortalLayout>

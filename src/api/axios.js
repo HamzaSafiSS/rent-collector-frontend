@@ -18,7 +18,7 @@ export function setTokenGetter(fn) {
 api.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
-    if (token) {
+    if (token && !config.url?.includes('/auth/refresh')) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;

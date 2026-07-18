@@ -14,6 +14,7 @@ const ChangePasswordPage  = lazy(() => import('../pages/auth/ChangePasswordPage'
 const SuperAdminDashboard = lazy(() => import('../pages/super-admin/DashboardPage'));
 const ManageAdminsPage    = lazy(() => import('../pages/super-admin/ManageAdminsPage'));
 const SuperAdminAuditLog  = lazy(() => import('../pages/super-admin/AuditLogPage'));
+const SuperAdminViewList  = lazy(() => import('../pages/super-admin/ViewListPage'));
 
 // Admin pages
 const AdminDashboard      = lazy(() => import('../pages/admin/DashboardPage'));
@@ -95,6 +96,11 @@ export default function AppRoutes() {
         <Route path="/super-admin/audit-logs" element={
           <ProtectedRoute roles={['SUPER_ADMIN']}>
             <SuperAdminAuditLog />
+          </ProtectedRoute>
+        } />
+        <Route path="/super-admin/view/:category" element={
+          <ProtectedRoute roles={['SUPER_ADMIN']}>
+            <SuperAdminViewList />
           </ProtectedRoute>
         } />
 
