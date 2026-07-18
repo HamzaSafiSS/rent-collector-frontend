@@ -5,6 +5,7 @@ const STATUS_MAP = {
   APPROVED:             'success',
   PENDING:              'warning',
   REJECTED:             'danger',
+  UNPAID:               'danger',
   // User status
   Active:               'success',
   Suspended:            'danger',

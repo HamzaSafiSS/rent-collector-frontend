@@ -1,4 +1,4 @@
-export default function StatCard({ label, value, icon, color = 'blue', subtitle }) {
+export default function StatCard({ label, value, icon, color = 'blue', subtitle, onClick }) {
   const textColors = {
     blue:   'text-slate-800',
     green:  'text-slate-800',
@@ -18,12 +18,15 @@ export default function StatCard({ label, value, icon, color = 'blue', subtitle 
   };
 
   return (
-    <div className={`rounded-2xl border border-slate-200/60 bg-white shadow-sm hover:shadow-md transition-shadow duration-300 p-6 overflow-hidden relative group`}>
+    <div 
+      onClick={onClick}
+      className={`rounded-2xl border border-slate-200/60 bg-white shadow-sm hover:shadow-md transition-shadow duration-300 p-6 overflow-hidden relative group ${onClick ? 'cursor-pointer' : ''}`}
+    >
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-slate-100 to-transparent opacity-50 rounded-bl-full -z-10 transform group-hover:scale-110 transition-transform duration-500"></div>
       <div className="flex items-center justify-between z-10">
         <div>
           <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{label}</p>
-          <p className={`text-4xl font-extrabold mt-2 tracking-tight ${textColors[color] || textColors.blue}`}>{value ?? '—'}</p>
+          <p className={`text-3xl font-extrabold mt-2 tracking-tight ${textColors[color] || textColors.blue}`}>{value ?? '—'}</p>
           {subtitle && (
             <p className="text-sm mt-2 font-medium text-slate-400">{subtitle}</p>
           )}

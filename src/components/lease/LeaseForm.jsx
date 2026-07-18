@@ -1,18 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Input, Button, Alert } from '../common';
 
 export default function LeaseForm({ units = [], onSubmit, loading, error }) {
-  const [mode, setMode]   = useState('email'); // 'email' | 'id'
   const [form, setForm]   = useState({
-    tenantEmail: '', tenantId: '',
+    tenantEmail: '',
     unitId: '', startDate: '', monthlyRent: '',
   });
   const [errors, setErrors] = useState({});
 
   function validate() {
     const errs = {};
-    if (mode === 'email' && !form.tenantEmail.trim()) errs.tenantEmail = 'Tenant email is required.';
-    if (mode === 'id'    && !form.tenantId)           errs.tenantId    = 'Tenant ID is required.';
+    if (!form.tenantEmail.trim()) errs.tenantEmail = 'Tenant email is required.';
     if (!form.unitId)      errs.unitId      = 'Please select a unit.';
     if (!form.startDate)   errs.startDate   = 'Start date is required.';
     if (!form.monthlyRent) errs.monthlyRent = 'Monthly rent is required.';
@@ -35,9 +33,8 @@ export default function LeaseForm({ units = [], onSubmit, loading, error }) {
       unitId:      Number(form.unitId),
       startDate:   form.startDate,
       monthlyRent: Number(form.monthlyRent),
+      tenantEmail: form.tenantEmail.trim(),
     };
-    if (mode === 'email') payload.tenantEmail = form.tenantEmail.trim();
-    else                  payload.tenantId    = Number(form.tenantId);
 
     onSubmit(payload);
   }
@@ -46,51 +43,17 @@ export default function LeaseForm({ units = [], onSubmit, loading, error }) {
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       {error && <Alert type="error" message={error} />}
 
-      {/* Tenant mode toggle */}
-      <div>
-        <label className="block text-sm font-medium text-slate-700 mb-2">Tenant</label>
-        <div className="flex rounded-lg border border-slate-300 overflow-hidden">
-          {['email', 'id'].map((m) => (
-            <button
-              key={m}
-              type="button"
-              onClick={() => { setMode(m); setErrors({}); }}
-              className={`flex-1 py-2 text-sm font-medium transition-colors ${
-                mode === m
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-slate-600 hover:bg-slate-50'
-              }`}
-            >
-              {m === 'email' ? 'New tenant (email)' : 'Existing tenant (ID)'}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {mode === 'email' ? (
-        <Input
-          label="Tenant email"
-          name="tenantEmail"
-          type="email"
-          value={form.tenantEmail}
-          onChange={handleChange}
-          error={errors.tenantEmail}
-          disabled={loading}
-          placeholder="tenant@example.com"
-          hint="A temporary password will be emailed to this address."
-        />
-      ) : (
-        <Input
-          label="Tenant ID"
-          name="tenantId"
-          type="number"
-          value={form.tenantId}
-          onChange={handleChange}
-          error={errors.tenantId}
-          disabled={loading}
-          placeholder="e.g. 3"
-        />
-      )}
+      <Input
+        label="Tenant Email"
+        name="tenantEmail"
+        type="email"
+        value={form.tenantEmail}
+        onChange={handleChange}
+        error={errors.tenantEmail}
+        disabled={loading}
+        placeholder="tenant@example.com"
+        hint="Enter the email for a new or existing tenant."
+      />
 
       {/* Unit selector */}
       <div>

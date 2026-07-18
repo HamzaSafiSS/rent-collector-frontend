@@ -25,6 +25,7 @@ const AdminAuditLog       = lazy(() => import('../pages/admin/AuditLogPage'));
 const LandlordDashboard   = lazy(() => import('../pages/landlord/DashboardPage'));
 const PropertiesPage      = lazy(() => import('../pages/landlord/PropertiesPage'));
 const PropertyDetailPage  = lazy(() => import('../pages/landlord/PropertyDetailPage'));
+const GlobalUnitsPage     = lazy(() => import('../pages/landlord/GlobalUnitsPage'));
 const TenantsPage         = lazy(() => import('../pages/landlord/TenantsPage'));
 const LeasesPage          = lazy(() => import('../pages/landlord/LeasesPage'));
 const PaymentsPage        = lazy(() => import('../pages/landlord/PaymentsPage'));
@@ -128,6 +129,11 @@ export default function AppRoutes() {
         <Route path="/landlord/properties" element={
           <ProtectedRoute roles={['LANDLORD']}>
             <PropertiesPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/landlord/units" element={
+          <ProtectedRoute roles={['LANDLORD']}>
+            <GlobalUnitsPage />
           </ProtectedRoute>
         } />
         <Route path="/landlord/properties/:id" element={

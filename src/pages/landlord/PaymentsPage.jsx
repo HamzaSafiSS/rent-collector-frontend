@@ -5,9 +5,12 @@ import {
 } from '../../components/common';
 import ReviewModal from '../../components/payment/ReviewModal';
 import { paymentApi } from '../../api/paymentApi';
+import { reportApi } from '../../api/reportApi';
 import { useToast } from '../../context/ToastContext';
 import { LANDLORD_NAV } from './landlordNav';
 import { TableSkeleton } from '../../components/common';
+import StatCard from '../../components/common/StatCard';
+import Input from '../../components/common/Input';
 
 const PAGE_SIZE = 10;
 
@@ -22,6 +25,9 @@ export default function PaymentsPage() {
   const [fetchError, setFetchError]   = useState('');
 
   const [statusFilter, setStatusFilter] = useState('PENDING');
+  const [monthFilter, setMonthFilter]   = useState('');
+
+  const [reportData, setReportData]   = useState(null);
 
   const [reviewPayment, setReviewPayment] = useState(null);
   const [reviewLoading, setReviewLoading] = useState(false);
@@ -33,22 +39,35 @@ export default function PaymentsPage() {
       setFetchError('');
 
       const params = { page, size: PAGE_SIZE };
-      if (statusFilter) params.status = statusFilter;
+      if (statusFilter && statusFilter !== 'ALL') params.status = statusFilter;
+      if (monthFilter) params.month = monthFilter;
 
-      const res  = statusFilter === 'PENDING'
-        ? await paymentApi.getPendingPayments(page, PAGE_SIZE)
-        : await paymentApi.getLandlordPayments(params);
+      // get pending has its own endpoint, but if we have month filter, we can't use it easily since the endpoint doesn't support it directly. Actually we can just use the landlordPayments endpoint for pending if month is provided.
+      let res;
+      if (statusFilter === 'PENDING' && !monthFilter) {
+          res = await paymentApi.getPendingPayments(page, PAGE_SIZE);
+      } else {
+          res = await paymentApi.getLandlordPayments(params);
+      }
 
       const data = res.data?.data;
       setPayments(data?.content          || []);
       setTotalPages(data?.totalPages     || 0);
       setTotalElements(data?.totalElements || 0);
+
+      const reportParams = {};
+      if (monthFilter) {
+          reportParams.from = monthFilter;
+          reportParams.to = monthFilter;
+      }
+      const reportRes = await reportApi.getPaymentReport(reportParams);
+      setReportData(reportRes.data?.data);
     } catch {
       setFetchError('Failed to load payments.');
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter]);
+  }, [page, statusFilter, monthFilter]);
 
   useEffect(() => { loadPayments(); }, [loadPayments]);
 
@@ -108,21 +127,48 @@ export default function PaymentsPage() {
         subtitle={`${totalElements} payment${totalElements !== 1 ? 's' : ''}`}
       />
 
-      {/* Status filter tabs */}
-      <div className="flex gap-2 mb-4">
-        {['PENDING', 'APPROVED', 'REJECTED', ''].map((s) => (
-          <button
-            key={s}
-            onClick={() => { setStatusFilter(s); setPage(0); }}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-              statusFilter === s
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
-            }`}
-          >
-            {s || 'All'}
-          </button>
-        ))}
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-xl font-bold text-slate-800">Summary</h2>
+        <div className="w-48">
+          <Input 
+            type="month" 
+            value={monthFilter}
+            onChange={(e) => { setMonthFilter(e.target.value); setPage(0); }}
+            placeholder="Filter by month"
+          />
+        </div>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <StatCard 
+            label="Pending Payments"
+            value={reportData?.pendingCount || 0}
+            icon="⏳"
+            color={statusFilter === 'PENDING' ? 'blue' : 'slate'} 
+            onClick={() => { setStatusFilter('PENDING'); setPage(0); }}
+        />
+        <StatCard 
+            label="Approved Payments"
+            value={reportData?.approvedCount || 0}
+            icon="✅"
+            color={statusFilter === 'APPROVED' ? 'green' : 'slate'} 
+            onClick={() => { setStatusFilter('APPROVED'); setPage(0); }}
+        />
+        <StatCard 
+            label="Rejected Payments"
+            value={reportData?.rejectedCount || 0}
+            icon="❌"
+            color={statusFilter === 'REJECTED' ? 'red' : 'slate'} 
+            onClick={() => { setStatusFilter('REJECTED'); setPage(0); }}
+        />
+        <StatCard 
+            label="Unpaid Tenants"
+            value={reportData?.unpaidCount || 0}
+            icon="⚠️"
+            color={statusFilter === 'UNPAID' ? 'yellow' : 'slate'} 
+            onClick={() => { setStatusFilter('UNPAID'); setPage(0); }}
+        />
       </div>
 
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}

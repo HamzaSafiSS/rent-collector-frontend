@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import PortalLayout from '../../components/common/PortalLayout';
 import {
   PageHeader, Table, Badge, Button, Modal,
@@ -21,6 +21,8 @@ export default function PropertyDetailPage() {
   const [loading, setLoading]         = useState(true);
   const [unitsLoading, setUnitsLoading] = useState(true);
   const [error, setError]             = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filterStatus = searchParams.get('status') || 'ALL';
 
   // Add units modal
   const [addUnitsOpen, setAddUnitsOpen]  = useState(false);
@@ -203,24 +205,33 @@ export default function PropertyDetailPage() {
       )}
 
       {/* Units summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-        {['AVAILABLE', 'OCCUPIED', 'MAINTENANCE'].map((s) => {
-          const count = units.filter((u) => u.status === s).length;
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
+        {['ALL', 'AVAILABLE', 'OCCUPIED', 'MAINTENANCE'].map((s) => {
+          const count = s === 'ALL' ? units.length : units.filter((u) => u.status === s).length;
+          const isSelected = filterStatus === s;
           return (
-            <div key={s} className={`rounded-2xl p-6 border text-center shadow-sm relative overflow-hidden ${
+            <div 
+              key={s} 
+              onClick={() => setSearchParams(s === 'ALL' ? {} : { status: s })}
+              className={`rounded-2xl p-6 border text-center shadow-sm relative overflow-hidden cursor-pointer transition-transform hover:-translate-y-1 ${
+              isSelected ? 'ring-2 ring-blue-500 shadow-md' : ''
+            } ${
               s === 'AVAILABLE'   ? 'bg-white border-emerald-200/60'  :
               s === 'OCCUPIED'    ? 'bg-white border-blue-200/60'   :
-                                    'bg-white border-amber-200/60'
+              s === 'MAINTENANCE' ? 'bg-white border-amber-200/60'  :
+                                    'bg-white border-slate-200/60'
             }`}>
               <div className={`absolute inset-0 opacity-10 ${
                 s === 'AVAILABLE' ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' :
                 s === 'OCCUPIED'  ? 'bg-gradient-to-br from-blue-400 to-indigo-600' :
-                                    'bg-gradient-to-br from-amber-400 to-orange-500'
+                s === 'MAINTENANCE' ? 'bg-gradient-to-br from-amber-400 to-orange-500' :
+                                    'bg-gradient-to-br from-slate-400 to-slate-600'
               }`}></div>
-              <p className={`text-4xl font-extrabold relative z-10 ${
+              <p className={`text-3xl font-extrabold relative z-10 ${
                 s === 'AVAILABLE' ? 'text-emerald-600' :
                 s === 'OCCUPIED'  ? 'text-blue-600' :
-                                    'text-amber-600'
+                s === 'MAINTENANCE' ? 'text-amber-600' :
+                                    'text-slate-700'
               }`}>{count}</p>
               <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{s}</p>
             </div>
@@ -231,13 +242,13 @@ export default function PropertyDetailPage() {
       {/* Units table */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-800">Units <span className="text-slate-400 font-medium text-base ml-1">({totalElements})</span></h2>
+          <h2 className="text-xl font-bold text-slate-800">{filterStatus === 'ALL' ? 'All' : filterStatus} Units <span className="text-slate-400 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
         </div>
         <Table
           columns={unitColumns}
-          data={units}
+          data={units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus)}
           loading={unitsLoading}
-          emptyMessage="No units yet. Click '+ Add Units' to create some."
+          emptyMessage="No units match the current filter."
         />
       </div>
 

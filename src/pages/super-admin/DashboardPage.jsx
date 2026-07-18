@@ -43,7 +43,7 @@ export default function SuperAdminDashboard() {
       />
 
       {loading ? (
-        <StatCardsSkeleton count={9} />
+        <StatCardsSkeleton count={7} />
       ) : !stats ? (
         <p className="text-slate-500 text-sm">Could not load statistics.</p>
       ) : (
@@ -54,8 +54,6 @@ export default function SuperAdminDashboard() {
           <StatCard label="Total Properties"  value={stats.totalProperties}        icon="🏗️" color="yellow" />
           <StatCard label="Total Units"       value={stats.totalUnits}             icon="🚪" color="slate"  />
           <StatCard label="Active Leases"     value={stats.totalActiveLeases}      icon="📄" color="green"  />
-          <StatCard label="Pending Payments"  value={stats.totalPendingPayments}   icon="⏳" color="yellow" />
-          <StatCard label="Revenue Collected" value={`ETB ${(stats.totalRevenueCollected ?? 0).toLocaleString()}`} icon="💰" color="green" />
           <StatCard label="Suspended Landlords" value={stats.suspendedLandlords}  icon="🚫" color="red"    />
         </div>
       )}
