@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PortalLayout from '../../components/common/PortalLayout';
 import { StatCard, PageHeader, Spinner } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
@@ -13,6 +14,7 @@ const NAV = [
 export default function AdminDashboard() {
   const [stats, setStats]     = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     reportApi.getAdminOverview()
@@ -31,15 +33,11 @@ export default function AdminDashboard() {
         <p className="text-slate-500 text-sm">Could not load statistics.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <StatCard label="Total Landlords"      value={stats.totalLandlords}          icon="🏢" color="blue"   />
-          <StatCard label="Suspended Landlords"  value={stats.suspendedLandlords}       icon="🚫" color="red"    />
-          <StatCard label="Total Tenants"        value={stats.totalTenants}             icon="👥" color="green"  />
-          <StatCard label="Total Properties"     value={stats.totalProperties}          icon="🏗️" color="purple" />
-          <StatCard label="Total Units"          value={stats.totalUnits}               icon="🚪" color="slate"  />
-          <StatCard label="Pending Payments"     value={stats.totalPendingPayments}     icon="⏳" color="yellow" />
-          <StatCard label="Approved Payments"    value={stats.totalApprovedPayments}    icon="✅" color="green"  />
-          <StatCard label="Revenue Collected"    value={`ETB ${(stats.totalRevenueCollected ?? 0).toLocaleString()}`} icon="💰" color="green" />
-          <StatCard label="Maintenance Units"    value={stats.maintenanceUnits}         icon="🔧" color="yellow" />
+          <StatCard label="Total Landlords"      value={stats.totalLandlords}           icon="🏢" color="blue"   onClick={() => navigate('/admin/view/landlords')} />
+          <StatCard label="Suspended Landlords"  value={stats.suspendedLandlords}       icon="🚫" color="red"    onClick={() => navigate('/admin/view/suspended-landlords')} />
+          <StatCard label="Total Tenants"        value={stats.totalTenants}             icon="👥" color="green"  onClick={() => navigate('/admin/view/tenants')} />
+          <StatCard label="Total Properties"     value={stats.totalProperties}          icon="🏗️" color="purple" onClick={() => navigate('/admin/view/properties')} />
+          <StatCard label="Total Units"          value={stats.totalUnits}               icon="🚪" color="slate"  onClick={() => navigate('/admin/view/units')} />
         </div>
       )}
     </PortalLayout>

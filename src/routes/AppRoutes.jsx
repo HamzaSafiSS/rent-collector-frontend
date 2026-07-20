@@ -21,6 +21,7 @@ const AdminDashboard      = lazy(() => import('../pages/admin/DashboardPage'));
 const ManageLandlordsPage = lazy(() => import('../pages/admin/ManageLandlordsPage'));
 const ManageTenantsPage   = lazy(() => import('../pages/admin/ManageTenantsPage'));
 const AdminAuditLog       = lazy(() => import('../pages/admin/AuditLogPage'));
+const AdminViewList       = lazy(() => import('../pages/admin/ViewListPage'));
 
 // Landlord pages
 const LandlordDashboard   = lazy(() => import('../pages/landlord/DashboardPage'));
@@ -123,6 +124,11 @@ export default function AppRoutes() {
         <Route path="/admin/audit-logs" element={
           <ProtectedRoute roles={['ADMIN']}>
             <AdminAuditLog />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/view/:category" element={
+          <ProtectedRoute roles={['ADMIN']}>
+            <AdminViewList />
           </ProtectedRoute>
         } />
 

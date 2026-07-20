@@ -9,8 +9,9 @@ export const paymentApi = {
     }),
 
   // Tenant payment history
-  getMyPayments: (page = 0, size = 20) =>
-    api.get('/payments/my', { params: { page, size } }),
+  getMyPayments: (params = {}) => {
+    return api.get('/payments/my', { params });
+  },
 
   // Landlord — pending queue
   getPendingPayments: (page = 0, size = 20) =>
