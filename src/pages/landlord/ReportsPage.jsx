@@ -4,11 +4,13 @@ import { PageHeader, Spinner, Alert, Input, Button, StatCard } from '../../compo
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import { LANDLORD_NAV } from './landlordNav';
+import PropertySelector from '../../components/property/PropertySelector';
 
 const TABS = ['Payments', 'Occupancy', 'Revenue', 'Tenants'];
 
 export default function ReportsPage() {
   const [activeTab, setActiveTab] = useState('Payments');
+  const [selectedProperty, setSelectedProperty] = useState(null);
   const [properties, setProperties] = useState([]);
 
   useEffect(() => {
@@ -19,29 +21,44 @@ export default function ReportsPage() {
 
   return (
     <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
-      <PageHeader title="Reports" subtitle="Analyse your portfolio performance" />
-      
-      {/* Tab bar */}
-      <div className="flex gap-1 mb-6 bg-slate-100 rounded-xl p-1 w-fit">
-        {TABS.map((tab) => (
+      {!selectedProperty ? (
+        <>
+          <PageHeader title="Select Property" subtitle="Choose a property to view its reports" />
+          <PropertySelector onSelect={(p) => { setSelectedProperty(p); setActiveTab('Payments'); }} />
+        </>
+      ) : (
+        <>
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === tab
-                ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-slate-600 hover:text-slate-800'
-            }`}
+            onClick={() => setSelectedProperty(null)}
+            className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
           >
-            {tab}
+            ← Back to Properties
           </button>
-        ))}
-      </div>
+          <PageHeader title={`Reports — ${selectedProperty.name}`} subtitle="Analyse your portfolio performance" />
 
-      {activeTab === 'Payments'  && <PaymentReport  properties={properties} />}
-      {activeTab === 'Occupancy' && <OccupancyReport properties={properties} />}
-      {activeTab === 'Revenue'   && <RevenueReport   properties={properties} />}
-      {activeTab === 'Tenants'   && <TenantReport    properties={properties} />}
+          {/* Tab bar */}
+          <div className="flex gap-1 mb-6 bg-slate-100 rounded-xl p-1 w-fit">
+            {TABS.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeTab === tab
+                    ? 'bg-white text-blue-700 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-800'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {activeTab === 'Payments'  && <PaymentReport  properties={properties} lockedPropertyId={selectedProperty.id} />}
+          {activeTab === 'Occupancy' && <OccupancyReport properties={properties} lockedPropertyId={selectedProperty.id} />}
+          {activeTab === 'Revenue'   && <RevenueReport   properties={properties} lockedPropertyId={selectedProperty.id} />}
+          {activeTab === 'Tenants'   && <TenantReport    properties={properties} lockedPropertyId={selectedProperty.id} />}
+        </>
+      )}
     </PortalLayout>
   );
 }
@@ -54,11 +71,11 @@ function normaliseRange(from, to) {
 }
 
 // ── Payment Report ─────────────────────────────────────────────────────────────
-function PaymentReport({ properties }) {
+function PaymentReport({ properties, lockedPropertyId }) {
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
-  const [filters, setFilters] = useState({ from: '', to: '', propertyId: '' });
+  const [filters, setFilters] = useState({ from: '', to: '', propertyId: lockedPropertyId ? String(lockedPropertyId) : '' });
   const [rangeWarning, setRangeWarning] = useState('');
 
   const load = useCallback(async (activeFilters) => {
@@ -80,7 +97,7 @@ function PaymentReport({ properties }) {
     } finally { setLoading(false); }
   }, []);
 
-  // Load once on mount (no filters)
+  // Load on mount using locked property
   useEffect(() => { load(filters); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -90,17 +107,19 @@ function PaymentReport({ properties }) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
           <Input label="From month" type="month" value={filters.from}       onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))} />
           <Input label="To month"   type="month" value={filters.to}         onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))} />
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
-            <select
-              value={filters.propertyId}
-              onChange={(e) => setFilters((p) => ({ ...p, propertyId: e.target.value }))}
-              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All properties</option>
-              {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
-          </div>
+          {!lockedPropertyId && (
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
+              <select
+                value={filters.propertyId}
+                onChange={(e) => setFilters((p) => ({ ...p, propertyId: e.target.value }))}
+                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">All properties</option>
+                {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+              </select>
+            </div>
+          )}
           <Button onClick={() => load(filters)} loading={loading}>Refresh</Button>
         </div>
       </div>
@@ -122,11 +141,11 @@ function PaymentReport({ properties }) {
 }
 
 // ── Occupancy Report ───────────────────────────────────────────────────────────
-function OccupancyReport({ properties }) {
+function OccupancyReport({ properties, lockedPropertyId }) {
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
-  const [propertyId, setPropertyId] = useState('');
+  const [propertyId, setPropertyId] = useState(lockedPropertyId ? String(lockedPropertyId) : '');
 
   const load = useCallback(async (pid) => {
     try {
@@ -144,17 +163,19 @@ function OccupancyReport({ properties }) {
   return (
     <div>
       <div className="bg-white border border-slate-200 rounded-xl p-4 mb-5 flex gap-3 items-end">
-        <div className="flex-1 max-w-xs">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
-          <select
-            value={propertyId}
-            onChange={(e) => setPropertyId(e.target.value)}
-            className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All properties</option>
-            {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-          </select>
-        </div>
+        {!lockedPropertyId && (
+          <div className="flex-1 max-w-xs">
+            <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
+            <select
+              value={propertyId}
+              onChange={(e) => setPropertyId(e.target.value)}
+              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All properties</option>
+              {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+          </div>
+        )}
         <Button onClick={() => load(propertyId)} loading={loading}>Refresh</Button>
       </div>
 
@@ -189,12 +210,12 @@ function OccupancyReport({ properties }) {
 }
 
 // ── Revenue Report ─────────────────────────────────────────────────────────────
-function RevenueReport({ properties }) {
+function RevenueReport({ properties, lockedPropertyId }) {
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
   const [year, setYear]       = useState(String(new Date().getFullYear()));
-  const [propertyId, setPropertyId] = useState('');
+  const [propertyId, setPropertyId] = useState(lockedPropertyId ? String(lockedPropertyId) : '');
 
   const load = useCallback(async (y, pid) => {
     try {
@@ -225,17 +246,19 @@ function RevenueReport({ properties }) {
             ))}
           </select>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
-          <select
-            value={propertyId}
-            onChange={(e) => setPropertyId(e.target.value)}
-            className="px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All properties</option>
-            {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-          </select>
-        </div>
+        {!lockedPropertyId && (
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
+            <select
+              value={propertyId}
+              onChange={(e) => setPropertyId(e.target.value)}
+              className="px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All properties</option>
+              {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+          </div>
+        )}
         <Button onClick={() => load(year, propertyId)} loading={loading}>Refresh</Button>
       </div>
 
@@ -282,11 +305,11 @@ function RevenueReport({ properties }) {
 }
 
 // ── Tenant Report ──────────────────────────────────────────────────────────────
-function TenantReport({ properties }) {
+function TenantReport({ properties, lockedPropertyId }) {
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
-  const [propertyId, setPropertyId] = useState('');
+  const [propertyId, setPropertyId] = useState(lockedPropertyId ? String(lockedPropertyId) : '');
 
   const load = useCallback(async (pid) => {
     try {
@@ -304,17 +327,19 @@ function TenantReport({ properties }) {
   return (
     <div>
       <div className="bg-white border border-slate-200 rounded-xl p-4 mb-5 flex gap-3 items-end">
-        <div className="flex-1 max-w-xs">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
-          <select
-            value={propertyId}
-            onChange={(e) => setPropertyId(e.target.value)}
-            className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All properties</option>
-            {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-          </select>
-        </div>
+        {!lockedPropertyId && (
+          <div className="flex-1 max-w-xs">
+            <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
+            <select
+              value={propertyId}
+              onChange={(e) => setPropertyId(e.target.value)}
+              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All properties</option>
+              {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+          </div>
+        )}
         <Button onClick={() => load(propertyId)} loading={loading}>Refresh</Button>
       </div>
 

@@ -5,6 +5,7 @@ import {
   ConfirmDialog, Alert, Pagination,
 } from '../../components/common';
 import LeaseForm from '../../components/lease/LeaseForm';
+import PropertySelector from '../../components/property/PropertySelector';
 import { leaseApi } from '../../api/leaseApi';
 import { unitApi } from '../../api/unitApi';
 import { propertyApi } from '../../api/propertyApi';
@@ -16,6 +17,8 @@ const PAGE_SIZE = 10;
 
 export default function LeasesPage() {
   const toast = useToast();
+
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   const [leases, setLeases]           = useState([]);
   const [page, setPage]               = useState(0);
@@ -37,10 +40,11 @@ export default function LeasesPage() {
   const [termLoading, setTermLoading] = useState(false);
 
   const loadLeases = useCallback(async () => {
+    if (!selectedProperty) return;
     try {
       setLoading(true);
       setFetchError('');
-      const res  = await leaseApi.listLeases(page, PAGE_SIZE, statusFilter || null);
+      const res  = await leaseApi.listLeases(page, PAGE_SIZE, statusFilter || null, selectedProperty.id);
       const data = res.data?.data;
       setLeases(data?.content          || []);
       setTotalPages(data?.totalPages   || 0);
@@ -50,27 +54,20 @@ export default function LeasesPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter]);
+  }, [page, statusFilter, selectedProperty]);
 
-  useEffect(() => { loadLeases(); }, [loadLeases]);
+  useEffect(() => { loadLeases(); }, [loadLeases, selectedProperty]);
 
   // Load available units for the create form
   async function openCreateModal() {
+    if (!selectedProperty) return;
     setFormError('');
     setCreateOpen(true);
     try {
-      // Get all properties then collect their available units
-      const propRes    = await propertyApi.listMyProperties(0, 100);
-      const properties = propRes.data?.data?.content || [];
-      const unitPromises = properties.map((p) =>
-        unitApi.listUnits(p.id, 0, 200)
-          .then((r) => r.data?.data?.content || [])
-          .catch(() => [])
-      );
-      const allUnitArrays = await Promise.all(unitPromises);
-      const available = allUnitArrays
-        .flat()
-        .filter((u) => u.status === 'AVAILABLE');
+      // Fetch available units for the currently selected property
+      const res = await unitApi.listUnits(selectedProperty.id, 0, 200);
+      const units = res.data?.data?.content || [];
+      const available = units.filter((u) => u.status === 'AVAILABLE');
       setAvailableUnits(available);
     } catch {
       setAvailableUnits([]);
@@ -129,13 +126,29 @@ export default function LeasesPage() {
 
   return (
     <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
-      <PageHeader
-        title="Leases"
-        subtitle={`${totalElements} lease${totalElements !== 1 ? 's' : ''}`}
-        actions={
-          <Button onClick={openCreateModal}>+ New Lease</Button>
-        }
-      />
+      {!selectedProperty ? (
+        <>
+          <PageHeader
+            title="Select Property"
+            subtitle="Choose a property to view its leases"
+          />
+          <PropertySelector onSelect={(p) => { setSelectedProperty(p); setPage(0); setStatusFilter(''); }} />
+        </>
+      ) : (
+        <>
+          <button 
+            onClick={() => setSelectedProperty(null)} 
+            className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
+          >
+            ← Back to Properties
+          </button>
+          <PageHeader
+            title={`Leases - ${selectedProperty.name}`}
+            subtitle={`${totalElements} lease${totalElements !== 1 ? 's' : ''}`}
+            actions={
+              <Button onClick={openCreateModal}>+ New Lease</Button>
+            }
+          />
 
       {/* Status filter */}
       <div className="flex gap-2 mb-4">
@@ -200,6 +213,8 @@ export default function LeasesPage() {
         confirmText="Terminate"
         variant="danger"
       />
+        </>
+      )}
     </PortalLayout>
   );
 }

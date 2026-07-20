@@ -6,9 +6,9 @@ export const leaseApi = {
   createLease: (data) =>
     api.post('/leases', data),
 
-  listLeases: (page = 0, size = 20, status = null) =>
+  listLeases: (page = 0, size = 20, status = null, propertyId = null) =>
     api.get('/leases', {
-      params: { page, size, ...(status && { status }) },
+      params: { page, size, ...(status && { status }), ...(propertyId && { propertyId }) },
     }),
 
   getLeaseDetail: (id) =>

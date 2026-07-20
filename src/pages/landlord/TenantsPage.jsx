@@ -5,6 +5,7 @@ import {
   Alert, Pagination, Input, Button,
 } from '../../components/common';
 import TenantTable from '../../components/tenant/TenantTable';
+import PropertySelector from '../../components/property/PropertySelector';
 import { tenantApi } from '../../api/tenantApi';
 import { useToast } from '../../context/ToastContext';
 import { LANDLORD_NAV } from './landlordNav';
@@ -14,6 +15,8 @@ const PAGE_SIZE = 10;
 
 export default function TenantsPage() {
   const toast = useToast();
+
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   const [tenants, setTenants]         = useState([]);
   const [page, setPage]               = useState(0);
@@ -33,10 +36,11 @@ export default function TenantsPage() {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const loadTenants = useCallback(async () => {
+    if (!selectedProperty) return;
     try {
       setLoading(true);
       setFetchError('');
-      const res  = await tenantApi.listTenants(page, PAGE_SIZE);
+      const res  = await tenantApi.listTenants(page, PAGE_SIZE, selectedProperty.id);
       const data = res.data?.data;
       setTenants(data?.content          || []);
       setTotalPages(data?.totalPages    || 0);
@@ -46,9 +50,9 @@ export default function TenantsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, selectedProperty]);
 
-  useEffect(() => { loadTenants(); }, [loadTenants]);
+  useEffect(() => { loadTenants(); }, [loadTenants, selectedProperty]);
 
   // ── Edit ───────────────────────────────────────────────────────────────────
   function openEdit(tenant) {
@@ -95,12 +99,28 @@ export default function TenantsPage() {
 
   return (
     <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
-      <PageHeader
-        title="My Tenants"
-        subtitle={`${totalElements} tenant${totalElements !== 1 ? 's' : ''}`}
-      />
+      {!selectedProperty ? (
+        <>
+          <PageHeader
+            title="Select Property"
+            subtitle="Choose a property to view its tenants"
+          />
+          <PropertySelector onSelect={(p) => { setSelectedProperty(p); setPage(0); }} />
+        </>
+      ) : (
+        <>
+          <button 
+            onClick={() => setSelectedProperty(null)} 
+            className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
+          >
+            ← Back to Properties
+          </button>
+          <PageHeader
+            title={`Tenants - ${selectedProperty.name}`}
+            subtitle={`${totalElements} tenant${totalElements !== 1 ? 's' : ''}`}
+          />
 
-      {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
+          {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
       <div className="mb-6">
         {loading ? (
@@ -157,6 +177,8 @@ export default function TenantsPage() {
         confirmText="Delete"
         variant="danger"
       />
+        </>
+      )}
     </PortalLayout>
   );
 }

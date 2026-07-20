@@ -14,8 +14,8 @@ export const paymentApi = {
   },
 
   // Landlord — pending queue
-  getPendingPayments: (page = 0, size = 20) =>
-    api.get('/payments/pending', { params: { page, size } }),
+  getPendingPayments: (page = 0, size = 20, propertyId = null) =>
+    api.get('/payments/pending', { params: { page, size, ...(propertyId && { propertyId }) } }),
 
   // Landlord — all payments with optional filters
   getLandlordPayments: (params = {}) =>

@@ -9,6 +9,7 @@ import { reportApi } from '../../api/reportApi';
 import { useToast } from '../../context/ToastContext';
 import { LANDLORD_NAV } from './landlordNav';
 import { TableSkeleton } from '../../components/common';
+import PropertySelector from '../../components/property/PropertySelector';
 import StatCard from '../../components/common/StatCard';
 import Input from '../../components/common/Input';
 
@@ -16,6 +17,8 @@ const PAGE_SIZE = 10;
 
 export default function PaymentsPage() {
   const toast = useToast();
+
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   const [payments, setPayments]       = useState([]);
   const [page, setPage]               = useState(0);
@@ -34,18 +37,18 @@ export default function PaymentsPage() {
   const [reviewError, setReviewError]     = useState('');
 
   const loadPayments = useCallback(async () => {
+    if (!selectedProperty) return;
     try {
       setLoading(true);
       setFetchError('');
 
-      const params = { page, size: PAGE_SIZE };
+      const params = { page, size: PAGE_SIZE, propertyId: selectedProperty.id };
       if (statusFilter && statusFilter !== 'ALL') params.status = statusFilter;
       if (monthFilter) params.month = monthFilter;
 
-      // get pending has its own endpoint, but if we have month filter, we can't use it easily since the endpoint doesn't support it directly. Actually we can just use the landlordPayments endpoint for pending if month is provided.
       let res;
       if (statusFilter === 'PENDING' && !monthFilter) {
-          res = await paymentApi.getPendingPayments(page, PAGE_SIZE);
+          res = await paymentApi.getPendingPayments(page, PAGE_SIZE, selectedProperty.id);
       } else {
           res = await paymentApi.getLandlordPayments(params);
       }
@@ -55,7 +58,7 @@ export default function PaymentsPage() {
       setTotalPages(data?.totalPages     || 0);
       setTotalElements(data?.totalElements || 0);
 
-      const reportParams = {};
+      const reportParams = { propertyId: selectedProperty.id };
       if (monthFilter) {
           reportParams.from = monthFilter;
           reportParams.to = monthFilter;
@@ -67,7 +70,7 @@ export default function PaymentsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, monthFilter]);
+  }, [page, statusFilter, monthFilter, selectedProperty]);
 
   useEffect(() => { loadPayments(); }, [loadPayments]);
 
@@ -122,10 +125,33 @@ export default function PaymentsPage() {
 
   return (
     <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
-      <PageHeader
-        title="Payments"
-        subtitle={`${totalElements} payment${totalElements !== 1 ? 's' : ''}`}
-      />
+      {!selectedProperty ? (
+        <>
+          <PageHeader
+            title="Select Property"
+            subtitle="Choose a property to view its payments"
+          />
+          <PropertySelector
+            onSelect={(p) => {
+              setSelectedProperty(p);
+              setPage(0);
+              setStatusFilter('PENDING');
+              setMonthFilter('');
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <button
+            onClick={() => setSelectedProperty(null)}
+            className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
+          >
+            ← Back to Properties
+          </button>
+          <PageHeader
+            title={`Payments — ${selectedProperty.name}`}
+            subtitle={`${totalElements} payment${totalElements !== 1 ? 's' : ''}`}
+          />
 
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-xl font-bold text-slate-800">Summary</h2>
@@ -199,6 +225,8 @@ export default function PaymentsPage() {
         loading={reviewLoading}
         error={reviewError}
       />
+        </>
+      )}
     </PortalLayout>
   );
 }

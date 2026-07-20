@@ -2,8 +2,8 @@ import api from './axios';
 
 export const tenantApi = {
 
-  listTenants: (page = 0, size = 20) =>
-    api.get('/tenants', { params: { page, size } }),
+  listTenants: (page = 0, size = 20, propertyId = null) =>
+    api.get('/tenants', { params: { page, size, ...(propertyId && { propertyId }) } }),
 
   getTenant: (id) =>
     api.get(`/tenants/${id}`),

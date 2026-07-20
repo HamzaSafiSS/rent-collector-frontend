@@ -29,4 +29,4 @@ export function useProperties(page = 0, size = 20) {
   }, [fetchProperties]);
 
   return { properties, totalElements, totalPages, loading, error, refetch: fetchProperties };
-}
+}    

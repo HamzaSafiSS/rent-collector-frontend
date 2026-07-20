@@ -11,7 +11,6 @@ export default function UploadPaymentPage() {
 
   const [leases, setLeases]     = useState([]);
   const [leaseId, setLeaseId]   = useState('');
-  const [month, setMonth]       = useState('');
   const [amount, setAmount]     = useState('');
   const [file, setFile]         = useState(null);
 
@@ -19,6 +18,28 @@ export default function UploadPaymentPage() {
   const [apiError, setApiError] = useState('');
   const [loading, setLoading]   = useState(false);
   const [success, setSuccess]   = useState('');
+
+  // ── Month/Year picker state ───────────────────────────────────────────────
+  const [selectedMonthNum, setSelectedMonthNum] = useState('');
+  const [selectedYear,     setSelectedYear]     = useState('');
+
+  const MONTHS = [
+    { value: '01', label: 'January'   },
+    { value: '02', label: 'February'  },
+    { value: '03', label: 'March'     },
+    { value: '04', label: 'April'     },
+    { value: '05', label: 'May'       },
+    { value: '06', label: 'June'      },
+    { value: '07', label: 'July'      },
+    { value: '08', label: 'August'    },
+    { value: '09', label: 'September' },
+    { value: '10', label: 'October'   },
+    { value: '11', label: 'November'  },
+    { value: '12', label: 'December'  },
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const YEARS = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i); // 2 years back → 2 years forward
 
   useEffect(() => {
     leaseApi.getMyLeases(0, 50, 'ACTIVE')
@@ -30,10 +51,17 @@ export default function UploadPaymentPage() {
       .catch(() => {});
   }, []);
 
+  function buildPaymentMonth() {
+    if (selectedMonthNum && selectedYear) {
+      return `${selectedYear}-${selectedMonthNum}`;
+    }
+    return '';
+  }
+
   function validate() {
     const errs = {};
     if (!leaseId)        errs.leaseId = 'Please select a lease.';
-    if (!month)          errs.month   = 'Payment month is required.';
+    if (!buildPaymentMonth()) errs.month = 'Please select both a month and a year.';
     if (!amount || Number(amount) <= 0) errs.amount = 'Enter a valid amount.';
     if (!file)           errs.file    = 'Please select a file to upload.';
     return errs;
@@ -48,16 +76,18 @@ export default function UploadPaymentPage() {
 
     try {
       setLoading(true);
+      const paymentMonth = buildPaymentMonth(); // build fresh at submit time
       const formData = new FormData();
       formData.append('file',          file);
-      formData.append('paymentMonth',  month);
+      formData.append('paymentMonth',  paymentMonth);
       formData.append('amount',        amount);
       formData.append('leaseId',       leaseId);
 
       await paymentApi.uploadPayment(formData);
       setSuccess('Payment uploaded successfully. Your landlord will review it shortly.');
       toast.success('Payment uploaded.');
-      setMonth(''); setAmount(''); setFile(null); setErrors({});
+      setAmount(''); setFile(null); setErrors({});
+      setSelectedMonthNum(''); setSelectedYear('');
     } catch (err) {
       setApiError(err.response?.data?.message || 'Failed to upload payment.');
     } finally {
@@ -71,6 +101,19 @@ export default function UploadPaymentPage() {
       if (errors[field]) setErrors((p) => ({ ...p, [field]: '' }));
     };
   }
+
+  function handleMonthNumChange(e) {
+    setSelectedMonthNum(e.target.value);
+    if (errors.month) setErrors((p) => ({ ...p, month: '' }));
+  }
+
+  function handleYearChange(e) {
+    setSelectedYear(e.target.value);
+    if (errors.month) setErrors((p) => ({ ...p, month: '' }));
+  }
+
+  const selectClass =
+    'w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-50';
 
   return (
     <PortalLayout navItems={TENANT_NAV} portalLabel="Tenant">
@@ -90,7 +133,7 @@ export default function UploadPaymentPage() {
                 value={leaseId}
                 onChange={handleChange(setLeaseId, 'leaseId')}
                 disabled={loading || leases.length === 1}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-50"
+                className={selectClass}
               >
                 <option value="">Choose lease...</option>
                 {leases.map((l) => (
@@ -103,15 +146,43 @@ export default function UploadPaymentPage() {
               {leases.length === 0 && <p className="mt-1 text-xs text-yellow-600">No active leases found.</p>}
             </div>
 
-            {/* Payment month */}
-            <Input
-              label="Payment month"
-              type="month"
-              value={month}
-              onChange={handleChange(setMonth, 'month')}
-              error={errors.month}
-              disabled={loading}
-            />
+            {/* Payment month — two explicit dropdowns */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Payment Month</label>
+              <div className="flex gap-3">
+                <select
+                  id="payment-month-select"
+                  value={selectedMonthNum}
+                  onChange={handleMonthNumChange}
+                  disabled={loading}
+                  className={selectClass}
+                >
+                  <option value="">Month...</option>
+                  {MONTHS.map((m) => (
+                    <option key={m.value} value={m.value}>{m.label}</option>
+                  ))}
+                </select>
+                <select
+                  id="payment-year-select"
+                  value={selectedYear}
+                  onChange={handleYearChange}
+                  disabled={loading}
+                  className={selectClass}
+                >
+                  <option value="">Year...</option>
+                  {YEARS.map((y) => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+              </div>
+              {/* Preview what will be submitted */}
+              {selectedMonthNum && selectedYear && (
+                <p className="mt-1 text-xs text-green-600 font-medium">
+                  ✓ Will submit: {MONTHS.find(m => m.value === selectedMonthNum)?.label} {selectedYear}
+                </p>
+              )}
+              {errors.month && <p className="mt-1 text-xs text-red-600">{errors.month}</p>}
+            </div>
 
             {/* Amount */}
             <Input
