@@ -13,18 +13,28 @@ export default function PropertySelector({ onSelect }) {
       setError('');
       // Fetch a large page so we get all properties for the selector
       const res = await propertyApi.listMyProperties(0, 500);
-      setProperties(res.data?.data?.content || []);
+      const fetchedProperties = res.data?.data?.content || [];
+      setProperties(fetchedProperties);
+
+      if (fetchedProperties.length === 1) {
+        onSelect(fetchedProperties[0]);
+      }
     } catch {
       setError('Failed to load properties.');
     } finally {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => { loadProperties(); }, [loadProperties]);
 
   if (loading) {
     return <CardGridSkeleton count={3} />;
+  }
+
+  if (properties.length === 1) {
+    return null;
   }
 
   if (error) {

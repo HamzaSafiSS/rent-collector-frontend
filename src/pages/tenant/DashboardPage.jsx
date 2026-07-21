@@ -17,10 +17,11 @@ export default function TenantDashboard() {
     async function load() {
       try {
         const [leaseRes, payRes] = await Promise.all([
-          leaseApi.getMyLeases(0, 1, 'ACTIVE'), 
+          leaseApi.getMyLeases(0, 100, 'ACTIVE'), 
           paymentApi.getMyPayments({ page: 0, size: 500 }), 
         ]);
         
+        const leases = leaseRes.data?.data?.content || [];
         const activeLeases = leaseRes.data?.data?.totalElements || 0;
         const payments = payRes.data?.data?.content || [];
         
@@ -32,10 +33,43 @@ export default function TenantDashboard() {
             if (p.status === 'REJECTED') rejectedPayments++;
         });
 
+        const currentDate = new Date();
+        const currentYearMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+        const daysUntilDue = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate() - currentDate.getDate();
+
+        let unpaidLeases = 0;
+        let dueSoonLeases = 0;
+
+        leases.forEach(lease => {
+            const leasePayments = payments.filter(p => p.leaseId === lease.id && ['APPROVED', 'PENDING'].includes(p.status));
+            leasePayments.sort((a, b) => b.paymentMonth.localeCompare(a.paymentMonth));
+            
+            const latestPayment = leasePayments[0];
+            
+            if (!latestPayment) {
+                const startDateStr = lease.startDate.substring(0, 7);
+                if (currentYearMonth > startDateStr) {
+                    unpaidLeases++;
+                } else if (currentYearMonth === startDateStr && daysUntilDue <= 3) {
+                    dueSoonLeases++;
+                }
+            } else {
+                const lastPaidMonth = latestPayment.paymentMonth;
+                if (currentYearMonth > lastPaidMonth) {
+                    unpaidLeases++;
+                } else if (currentYearMonth === lastPaidMonth && daysUntilDue <= 3) {
+                    dueSoonLeases++;
+                }
+            }
+        });
+
         setStats({
           activeLeases,
           pendingPayments,
-          rejectedPayments
+          rejectedPayments,
+          unpaidLeases,
+          dueSoonLeases,
+          daysUntilDue
         });
       } catch (err) {
         setError(
@@ -59,7 +93,7 @@ export default function TenantDashboard() {
       ) : !stats && !error ? (
         <p className="text-slate-500 text-sm">Could not load statistics.</p>
       ) : stats ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard 
             label="Active Leases"    
             value={stats.activeLeases}  
@@ -81,6 +115,22 @@ export default function TenantDashboard() {
             color="red" 
             onClick={() => navigate('/tenant/payments')} 
           />
+          <StatCard 
+            label="Unpaid Leases" 
+            value={stats.unpaidLeases} 
+            icon="⚠️" 
+            color="orange" 
+            onClick={() => navigate('/tenant/payments')} 
+          />
+          {stats.daysUntilDue <= 3 && (
+            <StatCard 
+              label={`Due in ${stats.daysUntilDue} Days`}
+              value={stats.dueSoonLeases} 
+              icon="⏰" 
+              color="indigo" 
+              onClick={() => navigate('/tenant/payments')} 
+            />
+          )}
         </div>
       ) : null}
     </PortalLayout>

@@ -39,7 +39,35 @@ export default function UploadPaymentPage() {
   ];
 
   const currentYear = new Date().getFullYear();
-  const YEARS = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i); // 2 years back → 2 years forward
+  
+  // Calculate minimum year and month based on selected lease's start date
+  const selectedLease = leases.find((l) => String(l.id) === String(leaseId));
+  let minYear = currentYear - 2;
+  let minMonthNum = 1;
+
+  if (selectedLease?.startDate) {
+    const parts = selectedLease.startDate.split('-');
+    if (parts.length >= 2) {
+      minYear = parseInt(parts[0], 10);
+      minMonthNum = parseInt(parts[1], 10);
+    }
+  }
+
+  // Generate valid years starting from minYear up to currentYear + 2
+  const maxYear = Math.max(currentYear + 2, minYear);
+  const YEARS = Array.from(
+    { length: maxYear - minYear + 1 },
+    (_, i) => minYear + i
+  );
+
+  // Filter months based on the selected year
+  const filteredMonths = MONTHS.filter((m) => {
+    if (!selectedYear || !selectedLease?.startDate) return true;
+    if (Number(selectedYear) === minYear) {
+      return Number(m.value) >= minMonthNum;
+    }
+    return true;
+  });
 
   useEffect(() => {
     leaseApi.getMyLeases(0, 50, 'ACTIVE')
@@ -108,8 +136,41 @@ export default function UploadPaymentPage() {
   }
 
   function handleYearChange(e) {
-    setSelectedYear(e.target.value);
+    const newYear = e.target.value;
+    setSelectedYear(newYear);
     if (errors.month) setErrors((p) => ({ ...p, month: '' }));
+
+    // Reset month if it becomes invalid for the newly selected year
+    if (newYear && selectedMonthNum && Number(newYear) === minYear && Number(selectedMonthNum) < minMonthNum) {
+      setSelectedMonthNum('');
+    }
+  }
+
+  function handleLeaseChange(e) {
+    const newLeaseId = e.target.value;
+    setLeaseId(newLeaseId);
+    if (errors.leaseId) setErrors((p) => ({ ...p, leaseId: '' }));
+
+    const newLease = leases.find((l) => String(l.id) === String(newLeaseId));
+    if (newLease?.startDate) {
+      const parts = newLease.startDate.split('-');
+      if (parts.length >= 2) {
+        const newMinYear = parseInt(parts[0], 10);
+        const newMinMonth = parseInt(parts[1], 10);
+
+        if (selectedYear && Number(selectedYear) < newMinYear) {
+          setSelectedYear('');
+          setSelectedMonthNum('');
+        } else if (
+          selectedYear &&
+          selectedMonthNum &&
+          Number(selectedYear) === newMinYear &&
+          Number(selectedMonthNum) < newMinMonth
+        ) {
+          setSelectedMonthNum('');
+        }
+      }
+    }
   }
 
   const selectClass =
@@ -131,7 +192,7 @@ export default function UploadPaymentPage() {
               <label className="block text-sm font-medium text-slate-700 mb-1">Select Lease</label>
               <select
                 value={leaseId}
-                onChange={handleChange(setLeaseId, 'leaseId')}
+                onChange={handleLeaseChange}
                 disabled={loading || leases.length === 1}
                 className={selectClass}
               >
@@ -158,7 +219,7 @@ export default function UploadPaymentPage() {
                   className={selectClass}
                 >
                   <option value="">Month...</option>
-                  {MONTHS.map((m) => (
+                  {filteredMonths.map((m) => (
                     <option key={m.value} value={m.value}>{m.label}</option>
                   ))}
                 </select>

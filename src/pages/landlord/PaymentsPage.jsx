@@ -195,6 +195,15 @@ export default function PaymentsPage() {
             color={statusFilter === 'UNPAID' ? 'yellow' : 'slate'} 
             onClick={() => { setStatusFilter('UNPAID'); setPage(0); }}
         />
+        {(reportData?.daysUntilDue !== undefined && reportData.daysUntilDue <= 3) && (
+            <StatCard 
+                label={`Due in ${reportData.daysUntilDue} Days`}
+                value={reportData?.dueSoonCount || 0}
+                icon="⏰"
+                color="indigo" 
+                onClick={() => {}}
+            />
+        )}
       </div>
 
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}

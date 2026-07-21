@@ -148,7 +148,7 @@ export default function LandlordSignupPage() {
               name="password"
               type="password"
               autoComplete="new-password"
-              placeholder="Minimum 8 characters"
+              placeholder="Enter Password Minimum 8 characters"
               value={form.password}
               onChange={handleChange}
               error={errors.password}

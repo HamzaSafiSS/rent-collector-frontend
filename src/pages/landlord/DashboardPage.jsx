@@ -25,6 +25,7 @@ export default function LandlordDashboard() {
           totalProperties:   propRes.data?.data?.totalElements ?? 0,
           occupiedUnits:     occRes.data?.data?.occupiedUnits  ?? 0,
           availableUnits:    occRes.data?.data?.availableUnits ?? 0,
+          maintenanceUnits:  occRes.data?.data?.maintenanceUnits ?? 0,
           totalUnits:        occRes.data?.data?.totalUnits     ?? 0,
           occupancyRate:     occRes.data?.data?.occupancyRate  ?? 0,
         });
@@ -51,6 +52,7 @@ export default function LandlordDashboard() {
           <StatCard label="Total Units"      value={stats.totalUnits}       icon="🚪" color="slate" onClick={() => navigate('/landlord/units?status=ALL')} />
           <StatCard label="Occupied Units"   value={stats.occupiedUnits}    icon="👥" color="green" subtitle={`${stats.occupancyRate}% occupancy`} onClick={() => navigate('/landlord/units?status=OCCUPIED')} />
           <StatCard label="Available Units"  value={stats.availableUnits}   icon="✅" color="green" onClick={() => navigate('/landlord/units?status=AVAILABLE')} />
+          <StatCard label="Maintenance Units" value={stats.maintenanceUnits} icon="🔧" color="yellow" onClick={() => navigate('/landlord/units?status=MAINTENANCE')} />
         </div>
       )}
     </PortalLayout>
