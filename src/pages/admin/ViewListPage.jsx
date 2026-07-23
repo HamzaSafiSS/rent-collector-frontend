@@ -219,16 +219,15 @@ export default function AdminViewListPage() {
         content = config.filterFn(content);
       }
 
-      if (category === 'landlords') {
-        if (statusFilter) {
-          content = content.filter(l => l.status === statusFilter);
-        }
-        if (dateFilter) {
-          content = content.filter(l => {
-            if (!l.createdAt) return false;
-            return l.createdAt.startsWith(dateFilter);
-          });
-        }
+      if (statusFilter) {
+        content = content.filter(l => l.status && l.status.toLowerCase().includes(statusFilter.toLowerCase()));
+      }
+      if (dateFilter) {
+        content = content.filter(l => {
+          const d = l.createdAt || l.moveInDate || l.startDate;
+          if (!d) return false;
+          return String(d).startsWith(dateFilter);
+        });
       }
 
       setItems(content);
@@ -260,13 +259,24 @@ export default function AdminViewListPage() {
       key: '_view',
       header: '',
       render: (row) => {
-        if (category === 'landlords' || category === 'suspended-landlords') {
+        const pathMap = {
+          'landlords': `/admin/view/landlord-dashboard/${row.id}`,
+          'suspended-landlords': `/admin/view/landlord-dashboard/${row.id}`,
+          'tenants': `/admin/view/tenant-dashboard/${row.id}`,
+          'properties': `/admin/view/property-dashboard/${row.id}`,
+          'units': `/admin/view/unit-dashboard/${row.id}`,
+          'leases': `/admin/view/lease-dashboard/${row.id}`
+        };
+        const path = pathMap[category];
+        
+        if (path) {
           return (
-            <Button size="sm" variant="primary" onClick={() => navigate(`/admin/view/landlord-dashboard/${row.id}`)}>
+            <Button size="sm" variant="primary" onClick={() => navigate(path)}>
               View Dashboard
             </Button>
           );
         }
+        
         return (
           <Button size="sm" variant="ghost" onClick={() => setSelectedItem(row)}>
             View
@@ -291,9 +301,9 @@ export default function AdminViewListPage() {
         subtitle={`${totalElements} record${totalElements !== 1 ? 's' : ''}`}
       />
 
-      {(category === 'landlords' || category === 'suspended-landlords') && (
-        <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
-          <div className="text-sm font-medium text-slate-600">Filters:</div>
+      <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
+        <div className="text-sm font-medium text-slate-600">Filters:</div>
+        {category === 'landlords' || category === 'suspended-landlords' ? (
           <select 
             value={statusFilter} 
             onChange={e => setStatusFilter(e.target.value)}
@@ -304,22 +314,30 @@ export default function AdminViewListPage() {
             <option value="Suspended">Suspended</option>
             <option value="PendingPasswordChange">Pending</option>
           </select>
+        ) : (
           <input 
-            type="date" 
-            value={dateFilter} 
-            onChange={e => setDateFilter(e.target.value)}
+            type="text" 
+            placeholder="Filter by status..."
+            value={statusFilter} 
+            onChange={e => setStatusFilter(e.target.value)}
             className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
           />
-          {(statusFilter || dateFilter) && (
-            <button 
-              onClick={() => { setStatusFilter(''); setDateFilter(''); }}
-              className="text-sm text-blue-600 hover:underline"
-            >
-              Clear
-            </button>
-          )}
-        </div>
-      )}
+        )}
+        <input 
+          type="date" 
+          value={dateFilter} 
+          onChange={e => setDateFilter(e.target.value)}
+          className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
+        />
+        {(statusFilter || dateFilter) && (
+          <button 
+            onClick={() => { setStatusFilter(''); setDateFilter(''); }}
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Clear
+          </button>
+        )}
+      </div>
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 

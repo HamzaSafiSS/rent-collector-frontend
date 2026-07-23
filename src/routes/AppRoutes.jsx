@@ -23,6 +23,10 @@ const ManageTenantsPage   = lazy(() => import('../pages/admin/ManageTenantsPage'
 const AdminAuditLog       = lazy(() => import('../pages/admin/AuditLogPage'));
 const AdminViewList       = lazy(() => import('../pages/admin/ViewListPage'));
 const LandlordDashboardViewPage = lazy(() => import('../pages/admin/LandlordDashboardViewPage'));
+const TenantDashboardViewPage   = lazy(() => import('../pages/admin/TenantDashboardViewPage'));
+const PropertyDashboardViewPage = lazy(() => import('../pages/admin/PropertyDashboardViewPage'));
+const UnitDashboardViewPage     = lazy(() => import('../pages/admin/UnitDashboardViewPage'));
+const LeaseDashboardViewPage    = lazy(() => import('../pages/admin/LeaseDashboardViewPage'));
 
 // Landlord pages
 const LandlordDashboard   = lazy(() => import('../pages/landlord/DashboardPage'));
@@ -135,6 +139,26 @@ export default function AppRoutes() {
         <Route path="/admin/view/landlord-dashboard/:landlordId" element={
           <ProtectedRoute roles={['ADMIN']}>
             <LandlordDashboardViewPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/view/tenant-dashboard/:id" element={
+          <ProtectedRoute roles={['ADMIN']}>
+            <TenantDashboardViewPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/view/property-dashboard/:id" element={
+          <ProtectedRoute roles={['ADMIN']}>
+            <PropertyDashboardViewPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/view/unit-dashboard/:id" element={
+          <ProtectedRoute roles={['ADMIN']}>
+            <UnitDashboardViewPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/view/lease-dashboard/:id" element={
+          <ProtectedRoute roles={['ADMIN']}>
+            <LeaseDashboardViewPage />
           </ProtectedRoute>
         } />
 
