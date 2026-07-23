@@ -36,4 +36,18 @@ export const adminApi = {
 
   activateLandlord: (id) =>
     api.patch(`/users/landlords/${id}/activate`),
+
+  // ── Admin — Platform-wide leases ─────────────────────────────────────────
+  listAllLeases: (page = 0, size = 20) =>
+    api.get('/admin/leases', { params: { page, size } }),
+
+  // ── Admin — Landlord scoped read-only views ──────────────────────────────
+  getLandlordProperties: (id, page = 0, size = 20) =>
+    api.get(`/admin/landlords/${id}/properties`, { params: { page, size } }),
+
+  getLandlordTenants: (id, page = 0, size = 20) =>
+    api.get(`/tenants/admin/landlords/${id}`, { params: { page, size } }),
+
+  getLandlordLeases: (id, page = 0, size = 20) =>
+    api.get(`/admin/landlords/${id}/leases`, { params: { page, size } }),
 };

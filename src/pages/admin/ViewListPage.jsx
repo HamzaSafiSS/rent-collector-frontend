@@ -152,7 +152,28 @@ const CATEGORIES = {
       { label: 'Base Rent',      key: 'baseRent', currency: true },
       { label: 'Landlord',       key: 'landlordName' },
     ],
-  }
+  },
+  leases: {
+    title: 'All Leases',
+    icon: '📄',
+    fetchList: (page) => adminApi.listAllLeases(page, PAGE_SIZE),
+    columns: [
+      { key: 'tenantFullName', header: 'Tenant', render: (r) => r.tenantFullName || r.tenantEmail || '—' },
+      { key: 'propertyName',   header: 'Property' },
+      { key: 'unitNumber',     header: 'Unit' },
+      { key: 'monthlyRent',    header: 'Rent',   render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
+      { key: 'status',         header: 'Status', render: (r) => <Badge label={r.status} /> },
+    ],
+    detailFields: [
+      { label: 'Tenant Name',  key: 'tenantFullName' },
+      { label: 'Tenant Email', key: 'tenantEmail' },
+      { label: 'Property',     key: 'propertyName' },
+      { label: 'Unit',         key: 'unitNumber' },
+      { label: 'Rent',         key: 'monthlyRent', currency: true },
+      { label: 'Status',       key: 'status', badge: true },
+      { label: 'Start Date',   key: 'startDate', date: true },
+    ],
+  },
 };
 
 /* ─── Detail Value Renderer ────────────────────────────────────────────────── */
@@ -182,6 +203,9 @@ export default function AdminViewListPage() {
   // Detail modal
   const [selectedItem, setSelectedItem] = useState(null);
 
+  const [statusFilter, setStatusFilter] = useState('');
+  const [dateFilter, setDateFilter]     = useState('');
+
   const loadData = useCallback(async () => {
     if (!config) return;
     try {
@@ -195,6 +219,18 @@ export default function AdminViewListPage() {
         content = config.filterFn(content);
       }
 
+      if (category === 'landlords') {
+        if (statusFilter) {
+          content = content.filter(l => l.status === statusFilter);
+        }
+        if (dateFilter) {
+          content = content.filter(l => {
+            if (!l.createdAt) return false;
+            return l.createdAt.startsWith(dateFilter);
+          });
+        }
+      }
+
       setItems(content);
       setTotalPages(config.filterFn ? 1 : (data?.totalPages || 0));
       setTotalElements(config.filterFn ? content.length : (data?.totalElements || 0));
@@ -203,7 +239,7 @@ export default function AdminViewListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, config]);
+  }, [page, config, category, statusFilter, dateFilter]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
@@ -223,11 +259,20 @@ export default function AdminViewListPage() {
     {
       key: '_view',
       header: '',
-      render: (row) => (
-        <Button size="sm" variant="ghost" onClick={() => setSelectedItem(row)}>
-          View
-        </Button>
-      ),
+      render: (row) => {
+        if (category === 'landlords' || category === 'suspended-landlords') {
+          return (
+            <Button size="sm" variant="primary" onClick={() => navigate(`/admin/view/landlord-dashboard/${row.id}`)}>
+              View Dashboard
+            </Button>
+          );
+        }
+        return (
+          <Button size="sm" variant="ghost" onClick={() => setSelectedItem(row)}>
+            View
+          </Button>
+        );
+      },
     },
   ];
 
@@ -245,6 +290,36 @@ export default function AdminViewListPage() {
         title={config.title}
         subtitle={`${totalElements} record${totalElements !== 1 ? 's' : ''}`}
       />
+
+      {(category === 'landlords' || category === 'suspended-landlords') && (
+        <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
+          <div className="text-sm font-medium text-slate-600">Filters:</div>
+          <select 
+            value={statusFilter} 
+            onChange={e => setStatusFilter(e.target.value)}
+            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
+          >
+            <option value="">All Statuses</option>
+            <option value="Active">Active</option>
+            <option value="Suspended">Suspended</option>
+            <option value="PendingPasswordChange">Pending</option>
+          </select>
+          <input 
+            type="date" 
+            value={dateFilter} 
+            onChange={e => setDateFilter(e.target.value)}
+            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
+          />
+          {(statusFilter || dateFilter) && (
+            <button 
+              onClick={() => { setStatusFilter(''); setDateFilter(''); }}
+              className="text-sm text-blue-600 hover:underline"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+      )}
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 

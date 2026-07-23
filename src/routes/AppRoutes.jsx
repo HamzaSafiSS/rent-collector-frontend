@@ -22,6 +22,7 @@ const ManageLandlordsPage = lazy(() => import('../pages/admin/ManageLandlordsPag
 const ManageTenantsPage   = lazy(() => import('../pages/admin/ManageTenantsPage'));
 const AdminAuditLog       = lazy(() => import('../pages/admin/AuditLogPage'));
 const AdminViewList       = lazy(() => import('../pages/admin/ViewListPage'));
+const LandlordDashboardViewPage = lazy(() => import('../pages/admin/LandlordDashboardViewPage'));
 
 // Landlord pages
 const LandlordDashboard   = lazy(() => import('../pages/landlord/DashboardPage'));
@@ -129,6 +130,11 @@ export default function AppRoutes() {
         <Route path="/admin/view/:category" element={
           <ProtectedRoute roles={['ADMIN']}>
             <AdminViewList />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/view/landlord-dashboard/:landlordId" element={
+          <ProtectedRoute roles={['ADMIN']}>
+            <LandlordDashboardViewPage />
           </ProtectedRoute>
         } />
 

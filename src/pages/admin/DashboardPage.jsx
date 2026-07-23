@@ -5,21 +5,21 @@ import { StatCard, PageHeader, Spinner } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
 
 const NAV = [
-  { label: 'Dashboard',      to: '/admin/dashboard',  icon: '📊' },
-  { label: 'Landlords',      to: '/admin/landlords',  icon: '🏢' },
-  { label: 'Tenants',        to: '/admin/tenants',    icon: '👥' },
-  { label: 'Audit Logs',     to: '/admin/audit-logs', icon: '📋' },
+  { label: 'Dashboard', to: '/admin/dashboard', icon: '📊' },
+  { label: 'Landlords', to: '/admin/landlords', icon: '🏢' },
+  { label: 'Tenants', to: '/admin/tenants', icon: '👥' },
+  { label: 'Audit Logs', to: '/admin/audit-logs', icon: '📋' },
 ];
 
 export default function AdminDashboard() {
-  const [stats, setStats]     = useState(null);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     reportApi.getAdminOverview()
       .then((r) => setStats(r.data?.data))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
 
@@ -33,11 +33,12 @@ export default function AdminDashboard() {
         <p className="text-slate-500 text-sm">Could not load statistics.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <StatCard label="Total Landlords"      value={stats.totalLandlords}           icon="🏢" color="blue"   onClick={() => navigate('/admin/view/landlords')} />
-          <StatCard label="Suspended Landlords"  value={stats.suspendedLandlords}       icon="🚫" color="red"    onClick={() => navigate('/admin/view/suspended-landlords')} />
-          <StatCard label="Total Tenants"        value={stats.totalTenants}             icon="👥" color="green"  onClick={() => navigate('/admin/view/tenants')} />
-          <StatCard label="Total Properties"     value={stats.totalProperties}          icon="🏗️" color="purple" onClick={() => navigate('/admin/view/properties')} />
-          <StatCard label="Total Units"          value={stats.totalUnits}               icon="🚪" color="slate"  onClick={() => navigate('/admin/view/units')} />
+          <StatCard label="Total Landlords" value={stats.totalLandlords} icon="🏢" color="blue" onClick={() => navigate('/admin/view/landlords')} />
+          <StatCard label="Suspended Landlords" value={stats.suspendedLandlords} icon="🚫" color="red" onClick={() => navigate('/admin/view/suspended-landlords')} />
+          <StatCard label="Total Tenants" value={stats.totalTenants} icon="👥" color="green" onClick={() => navigate('/admin/view/tenants')} />
+          <StatCard label="Total Properties" value={stats.totalProperties} icon="🏗️" color="purple" onClick={() => navigate('/admin/view/properties')} />
+          <StatCard label="Total Units" value={stats.totalUnits} icon="🚪" color="slate" onClick={() => navigate('/admin/view/units')} />
+          <StatCard label="Total Leases" value={stats.totalLeases} icon="📄" color="indigo" onClick={() => navigate('/admin/view/leases')} />
         </div>
       )}
     </PortalLayout>
