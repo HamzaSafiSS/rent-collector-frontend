@@ -348,7 +348,7 @@ export default function AdminViewListPage() {
             )}
           </select>
         )}
-        {!['properties', 'landlords', 'suspended-landlords'].includes(category) ? (
+        {!['properties', 'landlords', 'suspended-landlords', 'tenants'].includes(category) ? (
           <input 
             type="date" 
             value={dateFilter} 
