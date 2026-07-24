@@ -72,7 +72,7 @@ export default function LandlordDashboardViewPage() {
       return [
         { key: 'name', header: 'Name' },
         { key: 'address', header: 'Address' },
-        { key: 'unitsCount', header: 'Units', render: (r) => r.units?.length || 0 },
+        { key: 'unitsCount', header: 'Units', render: (r) => r.unitsCount || 0 },
       ];
     }
     if (activeTab === 'tenants') {

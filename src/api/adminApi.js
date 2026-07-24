@@ -45,8 +45,8 @@ export const adminApi = {
   getLandlordProperties: (id, page = 0, size = 20) =>
     api.get(`/admin/landlords/${id}/properties`, { params: { page, size } }),
 
-  getLandlordTenants: (id, page = 0, size = 20) =>
-    api.get(`/tenants/admin/landlords/${id}`, { params: { page, size } }),
+  getLandlordTenants: (id, page = 0, size = 20, propertyId = null) =>
+    api.get(`/tenants/admin/landlords/${id}`, { params: { page, size, ...(propertyId && { propertyId }) } }),
 
   getLandlordLeases: (id, page = 0, size = 20) =>
     api.get(`/admin/landlords/${id}/leases`, { params: { page, size } }),

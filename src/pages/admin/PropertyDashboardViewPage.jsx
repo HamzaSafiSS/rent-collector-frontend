@@ -2,7 +2,9 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
+import { propertyApi } from '../../api/propertyApi';
 import { adminApi } from '../../api/adminApi';
+import { unitApi } from '../../api/unitApi';
 
 const NAV = [
   { label: 'Dashboard',  to: '/admin/dashboard',  icon: '📊' },
@@ -17,7 +19,9 @@ export default function PropertyDashboardViewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [property, setProperty] = useState(null);
   const [activeTab, setActiveTab] = useState('leases');
+  const [statusFilter, setStatusFilter] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -26,16 +30,36 @@ export default function PropertyDashboardViewPage() {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
+  useEffect(() => {
+    if (id) {
+      propertyApi.getPropertyDetail(id)
+        .then(res => setProperty(res.data.data))
+        .catch(err => console.error('Failed to load property', err));
+    }
+  }, [id]);
+
   const loadTabData = useCallback(async () => {
-    if (!id) return;
+    if (!id || !property) return;
     setLoading(true);
     try {
       let res;
       if (activeTab === 'leases') {
         res = await adminApi.getPropertyLeases(id, page, PAGE_SIZE);
+      } else if (activeTab === 'units') {
+        res = await unitApi.listUnits(id, page, PAGE_SIZE);
+      } else if (activeTab === 'tenants') {
+        res = await adminApi.getLandlordTenants(property.landlordId, page, PAGE_SIZE, id);
       }
       const data = res?.data?.data;
-      setItems(data?.content || []);
+      let content = data?.content || [];
+      
+      if (statusFilter) {
+        content = content.filter(item => 
+          item.status && String(item.status).toUpperCase() === String(statusFilter).toUpperCase()
+        );
+      }
+      
+      setItems(content);
       setTotalPages(data?.totalPages || 0);
     } catch (err) {
       console.error(err);
@@ -44,7 +68,7 @@ export default function PropertyDashboardViewPage() {
     } finally {
       setLoading(false);
     }
-  }, [id, activeTab, page]);
+  }, [id, activeTab, page, property, statusFilter]);
 
   useEffect(() => {
     loadTabData();
@@ -57,12 +81,34 @@ export default function PropertyDashboardViewPage() {
   const getColumns = () => {
     if (activeTab === 'leases') {
       return [
-        { key: 'tenantFullName', header: 'Tenant' },
+        { key: 'tenantFullName', header: 'Tenant', render: (r) => r.tenantFullName || r.tenantEmail || '—' },
         { key: 'unitNumber', header: 'Unit' },
         { key: 'monthlyRent', header: 'Rent', render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
         { key: 'status', header: 'Status', render: (r) => <Badge label={r.status} /> },
       ];
     }
+    if (activeTab === 'units') {
+      return [
+        { key: 'unitNumber', header: 'Unit No.' },
+        { key: 'status', header: 'Status', render: (r) => <Badge label={r.status} /> },
+        { key: 'baseRent', header: 'Base Rent', render: (r) => r.baseRent ? `ETB ${Number(r.baseRent).toLocaleString()}` : '—' },
+      ];
+    }
+    if (activeTab === 'tenants') {
+      return [
+        { key: 'fullName', header: 'Name', render: (r) => r.fullName || '—' },
+        { key: 'email', header: 'Email' },
+        { key: 'phoneNumber', header: 'Phone', render: (r) => r.phoneNumber || '—' },
+        { key: 'status', header: 'Status', render: (r) => <Badge label={r.status} /> },
+      ];
+    }
+    return [];
+  };
+
+  const getStatusOptions = () => {
+    if (activeTab === 'leases') return ['ACTIVE', 'TERMINATED', 'CANCELLED'];
+    if (activeTab === 'units') return ['AVAILABLE', 'OCCUPIED', 'MAINTENANCE'];
+    if (activeTab === 'tenants') return ['Active', 'Suspended', 'PendingPasswordChange'];
     return [];
   };
 
@@ -84,20 +130,36 @@ export default function PropertyDashboardViewPage() {
         </div>
       </div>
 
-      <div className="mb-6 flex gap-2 border-b border-slate-200">
-        {['leases'].map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-              activeTab === tab
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
+      <div className="mb-6 flex flex-wrap gap-4 justify-between items-center border-b border-slate-200">
+        <div className="flex gap-2">
+          {['leases', 'units', 'tenants'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === tab
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+        
+        <div className="mb-2 flex items-center gap-2">
+          <span className="text-sm font-medium text-slate-600">Status:</span>
+          <select
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value)}
+            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
           >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)}
-          </button>
-        ))}
+            <option value="">All</option>
+            {getStatusOptions().map(opt => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">

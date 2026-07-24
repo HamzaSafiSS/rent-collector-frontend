@@ -96,7 +96,7 @@ const CATEGORIES = {
     columns: [
       { key: 'name',        header: 'Name' },
       { key: 'address',     header: 'Address' },
-      { key: 'description', header: 'Description', render: (r) => r.description ? (r.description.length > 50 ? r.description.slice(0, 50) + '…' : r.description) : '—' },
+      { key: 'createdAt',   header: 'Created At',  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
       { key: 'landlordName',header: 'Landlord',    render: (r) => r.landlordName || r.landlordFullName || '—' },
     ],
     detailFields: [
@@ -205,6 +205,8 @@ export default function AdminViewListPage() {
 
   const [statusFilter, setStatusFilter] = useState('');
   const [dateFilter, setDateFilter]     = useState('');
+  const [monthFilter, setMonthFilter]   = useState('');
+  const [yearFilter, setYearFilter]     = useState('');
 
   const loadData = useCallback(async () => {
     if (!config) return;
@@ -229,6 +231,21 @@ export default function AdminViewListPage() {
           return String(d).startsWith(dateFilter);
         });
       }
+      if (monthFilter || yearFilter) {
+        content = content.filter(l => {
+          const d = l.createdAt || l.moveInDate || l.startDate;
+          if (!d) return false;
+          const dateObj = new Date(d);
+          if (isNaN(dateObj.getTime())) return false;
+          const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+          const y = String(dateObj.getFullYear());
+          
+          let match = true;
+          if (monthFilter && m !== monthFilter) match = false;
+          if (yearFilter && y !== yearFilter) match = false;
+          return match;
+        });
+      }
 
       setItems(content);
       setTotalPages(config.filterFn ? 1 : (data?.totalPages || 0));
@@ -238,7 +255,7 @@ export default function AdminViewListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, config, category, statusFilter, dateFilter]);
+  }, [page, config, category, statusFilter, dateFilter, monthFilter, yearFilter]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
@@ -303,35 +320,74 @@ export default function AdminViewListPage() {
 
       <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
         <div className="text-sm font-medium text-slate-600">Filters:</div>
-        {category === 'landlords' || category === 'suspended-landlords' ? (
+        {category !== 'properties' && (
           <select 
             value={statusFilter} 
             onChange={e => setStatusFilter(e.target.value)}
             className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
           >
             <option value="">All Statuses</option>
-            <option value="Active">Active</option>
-            <option value="Suspended">Suspended</option>
-            <option value="PendingPasswordChange">Pending</option>
+            {category === 'units' ? (
+              <>
+                <option value="AVAILABLE">Available</option>
+                <option value="OCCUPIED">Occupied</option>
+                <option value="MAINTENANCE">Maintenance</option>
+              </>
+            ) : category === 'leases' ? (
+              <>
+                <option value="ACTIVE">Active</option>
+                <option value="TERMINATED">Terminated</option>
+                <option value="CANCELLED">Cancelled</option>
+              </>
+            ) : (
+              <>
+                <option value="Active">Active</option>
+                <option value="Suspended">Suspended</option>
+                <option value="Pending">Pending</option>
+              </>
+            )}
           </select>
-        ) : (
+        )}
+        {!['properties', 'landlords', 'suspended-landlords'].includes(category) ? (
           <input 
-            type="text" 
-            placeholder="Filter by status..."
-            value={statusFilter} 
-            onChange={e => setStatusFilter(e.target.value)}
+            type="date" 
+            value={dateFilter} 
+            onChange={e => setDateFilter(e.target.value)}
             className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
           />
+        ) : (
+          <>
+            <select
+              value={monthFilter}
+              onChange={e => setMonthFilter(e.target.value)}
+              className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
+            >
+              <option value="">All Months</option>
+              <option value="01">January</option>
+              <option value="02">February</option>
+              <option value="03">March</option>
+              <option value="04">April</option>
+              <option value="05">May</option>
+              <option value="06">June</option>
+              <option value="07">July</option>
+              <option value="08">August</option>
+              <option value="09">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+            <input
+              type="number"
+              placeholder="Year"
+              value={yearFilter}
+              onChange={e => setYearFilter(e.target.value)}
+              className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500 w-24"
+            />
+          </>
         )}
-        <input 
-          type="date" 
-          value={dateFilter} 
-          onChange={e => setDateFilter(e.target.value)}
-          className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
-        />
-        {(statusFilter || dateFilter) && (
+        {(statusFilter || dateFilter || monthFilter || yearFilter) && (
           <button 
-            onClick={() => { setStatusFilter(''); setDateFilter(''); }}
+            onClick={() => { setStatusFilter(''); setDateFilter(''); setMonthFilter(''); setYearFilter(''); }}
             className="text-sm text-blue-600 hover:underline"
           >
             Clear
