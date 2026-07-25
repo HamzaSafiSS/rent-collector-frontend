@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import { StatCard, PageHeader, Spinner } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import { leaseApi } from '../../api/leaseApi';
-import { LANDLORD_NAV } from './landlordNav';
 import { StatCardsSkeleton } from '../../components/common';
 
 
@@ -39,7 +37,7 @@ export default function LandlordDashboard() {
   }, []);
 
   return (
-    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
+    <>
       <PageHeader title="Landlord Dashboard"/>
 
       {loading ? (
@@ -55,6 +53,6 @@ export default function LandlordDashboard() {
           <StatCard label="Maintenance Units" value={stats.maintenanceUnits} icon="🔧" color="yellow" onClick={() => navigate('/landlord/units?status=MAINTENANCE')} />
         </div>
       )}
-    </PortalLayout>
+    </>
   );
 }

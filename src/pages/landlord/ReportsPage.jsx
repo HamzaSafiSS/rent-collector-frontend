@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Spinner, Alert, Input, Button, StatCard } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
-import { LANDLORD_NAV } from './landlordNav';
 import PropertySelector from '../../components/property/PropertySelector';
 
 const TABS = ['Payments', 'Occupancy', 'Revenue', 'Tenants'];
@@ -20,7 +18,7 @@ export default function ReportsPage() {
   }, []);
 
   return (
-    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
+    <>
       {!selectedProperty ? (
         <>
           <PageHeader title="Select Property" subtitle="Choose a property to view its reports" />
@@ -59,7 +57,7 @@ export default function ReportsPage() {
           {activeTab === 'Tenants'   && <TenantReport    properties={properties} lockedPropertyId={selectedProperty.id} />}
         </>
       )}
-    </PortalLayout>
+    </>
   );
 }
 

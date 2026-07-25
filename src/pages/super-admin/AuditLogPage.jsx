@@ -1,14 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Button, Input, Pagination, Alert, Spinner } from '../../components/common';
 import AuditLogTable from '../../components/audit/AuditLogTable';
 import { auditApi } from '../../api/auditApi';
 
-const NAV = [
-  { label: 'Dashboard',     to: '/super-admin/dashboard',  icon: '📊' },
-  { label: 'Manage Admins', to: '/super-admin/admins',     icon: '👥' },
-  { label: 'Audit Logs',    to: '/super-admin/audit-logs', icon: '📋' },
-];
 
 const PAGE_SIZE = 20;
 
@@ -34,7 +28,10 @@ export default function AuditLogPage() {
   const [error, setError]         = useState('');
 
   const [filters, setFilters] = useState({
-    action: '', entityType: '', actorId: '', entityId: '', from: '', to: '',
+    action: '',
+    entityType: '',
+    from: '',
+    to: ''
   });
   const [appliedFilters, setAppliedFilters] = useState({});
 
@@ -71,19 +68,19 @@ export default function AuditLogPage() {
   }
 
   function handleClearFilters() {
-    const empty = { action: '', entityType: '', actorId: '', entityId: '', from: '', to: '' };
+    const empty = { action: '', entityType: '', from: '', to: '' };
     setFilters(empty);
     setAppliedFilters({});
     setPage(0);
   }
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Super Admin">
+    <>
       <PageHeader title="Audit Logs" subtitle={`${totalElements} total entries`} />
 
       {/* Filters */}
       <form onSubmit={handleApplyFilters} className="bg-white border border-slate-200 rounded-xl p-4 mb-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
 
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">Action</label>
@@ -113,19 +110,38 @@ export default function AuditLogPage() {
             </select>
           </div>
 
-          <Input label="Actor ID"   name="actorId"   type="number" value={filters.actorId}   onChange={handleFilterChange} placeholder="e.g. 2" />
-          <Input label="Entity ID"  name="entityId"  type="number" value={filters.entityId}  onChange={handleFilterChange} placeholder="e.g. 5" />
-          <Input label="From date"  name="from"      type="date"   value={filters.from}       onChange={handleFilterChange} />
-          <Input label="To date"    name="to"        type="date"   value={filters.to}         onChange={handleFilterChange} />
-        </div>
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">From Date</label>
+            <input
+              name="from"
+              type="date"
+              value={filters.from}
+              onChange={handleFilterChange}
+              className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <div className="flex gap-2 mt-3 justify-end">
-          <Button type="button" variant="secondary" size="sm" onClick={handleClearFilters}>
-            Clear
-          </Button>
-          <Button type="submit" size="sm">
-            Apply filters
-          </Button>
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">To Date</label>
+            <input
+              name="to"
+              type="date"
+              value={filters.to}
+              onChange={handleFilterChange}
+              className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <Button type="button" variant="secondary" size="sm" className="w-full" onClick={handleClearFilters}>
+              Clear Filters
+            </Button>
+          </div>
+          <div>
+            <Button type="submit" size="sm" className="w-full">
+              Apply Filters
+            </Button>
+          </div>
         </div>
       </form>
 
@@ -143,6 +159,6 @@ export default function AuditLogPage() {
           />
         </div>
       </div>
-    </PortalLayout>
+    </>
   );
 }

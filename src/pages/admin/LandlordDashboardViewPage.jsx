@@ -1,21 +1,23 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 
-const NAV = [
-  { label: 'Dashboard',  to: '/admin/dashboard',  icon: '📊' },
-  { label: 'Landlords',  to: '/admin/landlords',  icon: '🏢' },
-  { label: 'Tenants',    to: '/admin/tenants',    icon: '👥' },
-  { label: 'Audit Logs', to: '/admin/audit-logs', icon: '📋' },
-];
+import { useAuth } from '../../context/AuthContext';
+
+
 
 const PAGE_SIZE = 10;
 
 export default function LandlordDashboardViewPage() {
   const { landlordId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+  const navItems = isSuperAdmin ? SUPER_ADMIN_NAV : ADMIN_NAV;
+  const portalLabel = isSuperAdmin ? 'Super Admin' : 'Admin';
+  const backUrl = isSuperAdmin ? '/super-admin/view/landlords' : '/admin/view/landlords';
 
   const [landlord, setLandlord] = useState(null);
   const [activeTab, setActiveTab] = useState('properties');
@@ -97,17 +99,17 @@ export default function LandlordDashboardViewPage() {
 
   if (loading) {
     return (
-      <PortalLayout navItems={NAV} portalLabel="Admin">
+      <>
         <div className="py-20 flex justify-center"><Spinner size="lg" /></div>
-      </PortalLayout>
+      </>
     );
   }
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Admin">
+    <>
       {/* Breadcrumb */}
       <button
-        onClick={() => navigate('/admin/view/landlords')}
+        onClick={() => navigate(backUrl)}
         className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
       >
         ← Back to Landlords
@@ -172,6 +174,6 @@ export default function LandlordDashboardViewPage() {
           </div>
         </>
       )}
-    </PortalLayout>
+    </>
   );
 }

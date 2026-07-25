@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import {
   PageHeader, Table, Badge, Button, Alert, Pagination,
 } from '../../components/common';
@@ -7,7 +6,6 @@ import ReviewModal from '../../components/payment/ReviewModal';
 import { paymentApi } from '../../api/paymentApi';
 import { reportApi } from '../../api/reportApi';
 import { useToast } from '../../context/ToastContext';
-import { LANDLORD_NAV } from './landlordNav';
 import { TableSkeleton } from '../../components/common';
 import PropertySelector from '../../components/property/PropertySelector';
 import StatCard from '../../components/common/StatCard';
@@ -124,7 +122,7 @@ export default function PaymentsPage() {
   ];
 
   return (
-    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
+    <>
       {!selectedProperty ? (
         <>
           <PageHeader
@@ -236,6 +234,6 @@ export default function PaymentsPage() {
       />
         </>
       )}
-    </PortalLayout>
+    </>
   );
 }

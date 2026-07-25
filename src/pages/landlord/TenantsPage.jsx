@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import {
   PageHeader, Modal, ConfirmDialog,
   Alert, Pagination, Input, Button,
@@ -8,7 +7,6 @@ import TenantTable from '../../components/tenant/TenantTable';
 import PropertySelector from '../../components/property/PropertySelector';
 import { tenantApi } from '../../api/tenantApi';
 import { useToast } from '../../context/ToastContext';
-import { LANDLORD_NAV } from './landlordNav';
 import { TableSkeleton } from '../../components/common';
 
 const PAGE_SIZE = 10;
@@ -98,7 +96,7 @@ export default function TenantsPage() {
   }
 
   return (
-    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
+    <>
       {!selectedProperty ? (
         <>
           <PageHeader
@@ -179,6 +177,6 @@ export default function TenantsPage() {
       />
         </>
       )}
-    </PortalLayout>
+    </>
   );
 }

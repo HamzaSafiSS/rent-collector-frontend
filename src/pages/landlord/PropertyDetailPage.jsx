@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import {
   PageHeader, Table, Badge, Button, Modal,
   ConfirmDialog, Alert, Spinner, Input,
@@ -8,7 +7,6 @@ import {
 import { propertyApi } from '../../api/propertyApi';
 import { unitApi } from '../../api/unitApi';
 import { useToast } from '../../context/ToastContext';
-import { LANDLORD_NAV } from './landlordNav';
 
 export default function PropertyDetailPage() {
   const { id }    = useParams();
@@ -168,20 +166,20 @@ export default function PropertyDetailPage() {
   ];
 
   if (loading) return (
-    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
+    <>
       <div className="flex justify-center py-20"><Spinner size="lg" /></div>
-    </PortalLayout>
+    </>
   );
 
   if (error) return (
-    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
+    <>
       <Alert type="error" message={error} />
       <Button className="mt-4" variant="secondary" onClick={() => navigate('/landlord/properties')}>← Back</Button>
-    </PortalLayout>
+    </>
   );
 
   return (
-    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
+    <>
       {/* Breadcrumb */}
       <button onClick={() => navigate('/landlord/properties')} className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1">
         ← Back to Properties
@@ -311,6 +309,6 @@ export default function PropertyDetailPage() {
         confirmText="Delete"
         variant="danger"
       />
-    </PortalLayout>
+    </>
   );
 }

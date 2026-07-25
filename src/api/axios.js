@@ -26,17 +26,9 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ── Response interceptor — handle 401 and auto-refresh ───────────────────────
-// When any request gets a 401 (access token expired), this interceptor:
-// 1. Calls POST /auth/refresh (the HttpOnly cookie is sent automatically)
-// 2. Updates the in-memory access token via the setter
-// 3. Retries the original failed request with the new token
-// 4. If refresh itself fails (401 again), redirects to /login
 
 let isRefreshing = false;
 
-// Queue of requests that arrived while a refresh was already in progress.
-// They all wait for the new token, then retry together.
 let failedQueue = [];
 
 function processQueue(error, token = null) {
@@ -71,11 +63,6 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Skip interceptor for:
-    // 1. Requests that already retried
-    // 2. The /auth/refresh endpoint itself
-    // 3. The /auth/login endpoint
-    // 4. Any request that explicitly opts out
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&

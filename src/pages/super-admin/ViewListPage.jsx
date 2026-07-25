@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import {
   PageHeader, Table, Badge, Pagination, Alert, Modal, Button, Spinner,
 } from '../../components/common';
@@ -13,11 +12,6 @@ import { reportApi } from '../../api/reportApi';
 import { unitApi } from '../../api/unitApi';
 import { TableSkeleton } from '../../components/common';
 
-const NAV = [
-  { label: 'Dashboard',     to: '/super-admin/dashboard',  icon: '📊' },
-  { label: 'Manage Admins', to: '/super-admin/admins',     icon: '👥' },
-  { label: 'Audit Logs',    to: '/super-admin/audit-logs', icon: '📋' },
-];
 
 const PAGE_SIZE = 10;
 
@@ -175,9 +169,9 @@ const CATEGORIES = {
   },
 
   leases: {
-    title: 'Active Leases',
+    title: 'All Leases',
     icon: '📄',
-    fetchList: (page) => leaseApi.listLeases(page, PAGE_SIZE, 'ACTIVE'),
+    fetchList: (page) => adminApi.listAllLeases(page, PAGE_SIZE),
     columns: [
       { key: 'id',              header: 'ID' },
       { key: 'tenantFullName',  header: 'Tenant',   render: (r) => r.tenantFullName || '—' },
@@ -229,6 +223,10 @@ export default function ViewListPage() {
   // Detail modal
   const [selectedItem, setSelectedItem] = useState(null);
 
+  const [statusFilter, setStatusFilter] = useState('');
+  const [monthFilter, setMonthFilter]   = useState('');
+  const [yearFilter, setYearFilter]     = useState('');
+
   const loadData = useCallback(async () => {
     if (!config) return;
     try {
@@ -243,6 +241,25 @@ export default function ViewListPage() {
         content = config.filterFn(content);
       }
 
+      if (statusFilter) {
+        content = content.filter(l => l.status && l.status.toLowerCase().includes(statusFilter.toLowerCase()));
+      }
+      if (monthFilter || yearFilter) {
+        content = content.filter(l => {
+          const d = l.createdAt || l.moveInDate || l.startDate;
+          if (!d) return false;
+          const dateObj = new Date(d);
+          if (isNaN(dateObj.getTime())) return false;
+          const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+          const y = String(dateObj.getFullYear());
+          
+          let match = true;
+          if (monthFilter && m !== monthFilter) match = false;
+          if (yearFilter && y !== yearFilter) match = false;
+          return match;
+        });
+      }
+
       setItems(content);
       setTotalPages(config.filterFn ? 1 : (data?.totalPages || 0));
       setTotalElements(config.filterFn ? content.length : (data?.totalElements || 0));
@@ -251,19 +268,19 @@ export default function ViewListPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, config]);
+  }, [page, config, category, statusFilter, monthFilter, yearFilter]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
   // If invalid category, show error
   if (!config) {
     return (
-      <PortalLayout navItems={NAV} portalLabel="Super Admin">
+      <>
         <Alert type="error" message="Invalid category." />
         <Button className="mt-4" variant="secondary" onClick={() => navigate('/super-admin/dashboard')}>
           ← Back to Dashboard
         </Button>
-      </PortalLayout>
+      </>
     );
   }
 
@@ -273,16 +290,37 @@ export default function ViewListPage() {
     {
       key: '_view',
       header: '',
-      render: (row) => (
-        <Button size="sm" variant="ghost" onClick={() => setSelectedItem(row)}>
-          View
-        </Button>
-      ),
+      render: (row) => {
+        const pathMap = {
+          'admins': `/super-admin/view/admin-dashboard/${row.id}`,
+          'landlords': `/super-admin/view/landlord-dashboard/${row.id}`,
+          'suspended-landlords': `/super-admin/view/landlord-dashboard/${row.id}`,
+          'tenants': `/super-admin/view/tenant-dashboard/${row.id}`,
+          'properties': `/super-admin/view/property-dashboard/${row.id}`,
+          'units': `/super-admin/view/unit-dashboard/${row.id}`,
+          'leases': `/super-admin/view/lease-dashboard/${row.id}`
+        };
+        const path = pathMap[category];
+        
+        if (path) {
+          return (
+            <Button size="sm" variant="primary" onClick={() => navigate(path)}>
+              View Dashboard
+            </Button>
+          );
+        }
+        
+        return (
+          <Button size="sm" variant="ghost" onClick={() => setSelectedItem(row)}>
+            View
+          </Button>
+        );
+      },
     },
   ];
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Super Admin">
+    <>
       {/* Breadcrumb */}
       <button
         onClick={() => navigate('/super-admin/dashboard')}
@@ -295,6 +333,74 @@ export default function ViewListPage() {
         title={config.title}
         subtitle={`${totalElements} record${totalElements !== 1 ? 's' : ''}`}
       />
+
+      <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
+        <div className="text-sm font-medium text-slate-600">Filters:</div>
+        {category !== 'properties' && category !== 'admins' && (
+          <select 
+            value={statusFilter} 
+            onChange={e => setStatusFilter(e.target.value)}
+            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
+          >
+            <option value="">All Statuses</option>
+            {category === 'units' ? (
+              <>
+                <option value="AVAILABLE">Available</option>
+                <option value="OCCUPIED">Occupied</option>
+                <option value="MAINTENANCE">Maintenance</option>
+              </>
+            ) : category === 'leases' ? (
+              <>
+                <option value="ACTIVE">Active</option>
+                <option value="TERMINATED">Terminated</option>
+                <option value="CANCELLED">Cancelled</option>
+              </>
+            ) : (
+              <>
+                <option value="Active">Active</option>
+                <option value="Suspended">Suspended</option>
+                <option value="Pending">Pending</option>
+              </>
+            )}
+          </select>
+        )}
+        <>
+          <select
+            value={monthFilter}
+            onChange={e => setMonthFilter(e.target.value)}
+            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
+          >
+            <option value="">All Months</option>
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          <input
+            type="number"
+            placeholder="Year"
+            value={yearFilter}
+            onChange={e => setYearFilter(e.target.value)}
+            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500 w-24"
+          />
+        </>
+        {(statusFilter || monthFilter || yearFilter) && (
+          <button 
+            onClick={() => { setStatusFilter(''); setMonthFilter(''); setYearFilter(''); }}
+            className="text-sm text-blue-600 hover:underline"
+          >
+            Clear
+          </button>
+        )}
+      </div>
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
@@ -338,6 +444,6 @@ export default function ViewListPage() {
           </div>
         )}
       </Modal>
-    </PortalLayout>
+    </>
   );
 }

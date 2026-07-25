@@ -6,20 +6,20 @@ import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 
 export default function LandlordSignupPage() {
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const { signup } = useAuth();
 
   const [form, setForm] = useState({
-    fullName:    '',
-    email:       '',
-    password:    '',
+    fullName: '',
+    email: '',
+    password: '',
     confirmPassword: '',
     phoneNumber: '',
   });
 
-  const [errors, setErrors]     = useState({});
+  const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState('');
-  const [loading, setLoading]   = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function validate() {
     const errs = {};
@@ -72,13 +72,25 @@ export default function LandlordSignupPage() {
     }
   }
 
-  function handleChange(e) {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
+
+    if (name === "phoneNumber") {
+      const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
+
+      setForm((prev) => ({
+        ...prev,
+        phoneNumber: numbersOnly,
+      }));
+
+      return;
     }
-  }
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-slate-950 flex items-center justify-center p-4">
@@ -93,7 +105,7 @@ export default function LandlordSignupPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl mb-6 shadow-xl shadow-blue-500/30 transform transition-transform hover:scale-105 duration-300">
             <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
           </div>
           <h1 className="text-3xl font-extrabold text-white tracking-tight">Create Account</h1>
@@ -112,7 +124,7 @@ export default function LandlordSignupPage() {
               name="fullName"
               type="text"
               autoComplete="name"
-              placeholder="Hamza Safi"
+              placeholder="Full Name"
               value={form.fullName}
               onChange={handleChange}
               error={errors.fullName}
@@ -124,7 +136,7 @@ export default function LandlordSignupPage() {
               name="email"
               type="email"
               autoComplete="email"
-              placeholder="you@example.com"
+              placeholder="Email Address"
               value={form.email}
               onChange={handleChange}
               error={errors.email}
@@ -136,11 +148,13 @@ export default function LandlordSignupPage() {
               name="phoneNumber"
               type="tel"
               autoComplete="tel"
-              placeholder="0912345678 (optional)"
+              placeholder="Phone Number (optional)"
               value={form.phoneNumber}
               onChange={handleChange}
               error={errors.phoneNumber}
               disabled={loading}
+              inputMode="numeric"
+              maxLength={10}
             />
 
             <Input

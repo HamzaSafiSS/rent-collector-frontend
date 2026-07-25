@@ -1,14 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Table, Badge, Pagination, Alert } from '../../components/common';
 import { tenantApi } from '../../api/tenantApi';
 
-const NAV = [
-  { label: 'Dashboard',  to: '/admin/dashboard',  icon: '📊' },
-  { label: 'Landlords',  to: '/admin/landlords',  icon: '🏢' },
-  { label: 'Tenants',    to: '/admin/tenants',    icon: '👥' },
-  { label: 'Audit Logs', to: '/admin/audit-logs', icon: '📋' },
-];
 
 const PAGE_SIZE = 10;
 
@@ -49,7 +42,7 @@ export default function ManageTenantsPage() {
   useEffect(() => { loadTenants(); }, [loadTenants]);
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Admin">
+    <>
       <PageHeader
         title="All Tenants"
         subtitle={`${totalElements} tenant${totalElements !== 1 ? 's' : ''} platform-wide`}
@@ -67,6 +60,6 @@ export default function ManageTenantsPage() {
           />
         </div>
       </div>
-    </PortalLayout>
+    </>
   );
 }

@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, StatCard, StatCardsSkeleton, Alert } from '../../components/common';
 import { leaseApi } from '../../api/leaseApi';
 import { paymentApi } from '../../api/paymentApi';
-import { TENANT_NAV } from './tenantNav';
 
 export default function TenantDashboard() {
   const navigate = useNavigate();
@@ -83,7 +81,7 @@ export default function TenantDashboard() {
   }, []);
 
   return (
-    <PortalLayout navItems={TENANT_NAV} portalLabel="Tenant">
+    <>
       <PageHeader title="My Dashboard" subtitle="Your rental summary" />
 
       {error && <Alert type="error" message={error} className="mb-4" />}
@@ -133,6 +131,6 @@ export default function TenantDashboard() {
           )}
         </div>
       ) : null}
-    </PortalLayout>
+    </>
   );
 }

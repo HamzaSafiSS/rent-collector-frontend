@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import { StatCard, PageHeader, Spinner } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 import { reportApi } from '../../api/reportApi';
 import { StatCardsSkeleton } from '../../components/common';
 
-const NAV = [
-  { label: 'Dashboard',    to: '/super-admin/dashboard',  icon: '📊' },
-  { label: 'Manage Admins',to: '/super-admin/admins',     icon: '👥' },
-  { label: 'Audit Logs',   to: '/super-admin/audit-logs', icon: '📋' },
-];
 
 export default function SuperAdminDashboard() {
   const [stats, setStats]     = useState(null);
@@ -38,7 +32,7 @@ export default function SuperAdminDashboard() {
   }, []);
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Super Admin">
+    <>
       <PageHeader
         title="Super Admin Dashboard"
         subtitle="Platform-wide overview"
@@ -55,10 +49,10 @@ export default function SuperAdminDashboard() {
           <StatCard label="Total Tenants"     value={stats.totalTenants}           icon="👨‍👩‍👧" color="green" onClick={() => navigate('/super-admin/view/tenants')} />
           <StatCard label="Total Properties"  value={stats.totalProperties}        icon="🏗️" color="yellow" onClick={() => navigate('/super-admin/view/properties')} />
           <StatCard label="Total Units"       value={stats.totalUnits}             icon="🚪" color="slate"  onClick={() => navigate('/super-admin/view/units')} />
-          <StatCard label="Active Leases"     value={stats.totalActiveLeases}      icon="📄" color="green"  onClick={() => navigate('/super-admin/view/leases')} />
+          <StatCard label="Total Leases"      value={stats.totalLeases}            icon="📄" color="green"  onClick={() => navigate('/super-admin/view/leases')} />
           <StatCard label="Suspended Landlords" value={stats.suspendedLandlords}  icon="🚫" color="red"    onClick={() => navigate('/super-admin/view/suspended-landlords')} />
         </div>
       )}
-    </PortalLayout>
+    </>
   );
 }

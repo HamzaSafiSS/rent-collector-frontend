@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import {
   PageHeader, Table, Badge, Pagination, Alert, Modal, Button, Spinner,
 } from '../../components/common';
@@ -13,12 +12,6 @@ import { reportApi } from '../../api/reportApi';
 import { unitApi } from '../../api/unitApi';
 import { TableSkeleton } from '../../components/common';
 
-const NAV = [
-  { label: 'Dashboard',  to: '/admin/dashboard',  icon: '📊' },
-  { label: 'Landlords',  to: '/admin/landlords',  icon: '🏢' },
-  { label: 'Tenants',    to: '/admin/tenants',    icon: '👥' },
-  { label: 'Audit Logs', to: '/admin/audit-logs', icon: '📋' },
-];
 
 const PAGE_SIZE = 10;
 
@@ -261,12 +254,12 @@ export default function AdminViewListPage() {
 
   if (!config) {
     return (
-      <PortalLayout navItems={NAV} portalLabel="Admin">
+      <>
         <Alert type="error" message="Invalid category." />
         <Button className="mt-4" variant="secondary" onClick={() => navigate('/admin/dashboard')}>
           ← Back to Dashboard
         </Button>
-      </PortalLayout>
+      </>
     );
   }
 
@@ -304,7 +297,7 @@ export default function AdminViewListPage() {
   ];
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Admin">
+    <>
       {/* Breadcrumb */}
       <button
         onClick={() => navigate('/admin/dashboard')}
@@ -348,43 +341,34 @@ export default function AdminViewListPage() {
             )}
           </select>
         )}
-        {!['properties', 'landlords', 'suspended-landlords', 'tenants'].includes(category) ? (
-          <input 
-            type="date" 
-            value={dateFilter} 
-            onChange={e => setDateFilter(e.target.value)}
+        <>
+          <select
+            value={monthFilter}
+            onChange={e => setMonthFilter(e.target.value)}
             className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
+          >
+            <option value="">All Months</option>
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          <input
+            type="number"
+            placeholder="Year"
+            value={yearFilter}
+            onChange={e => setYearFilter(e.target.value)}
+            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500 w-24"
           />
-        ) : (
-          <>
-            <select
-              value={monthFilter}
-              onChange={e => setMonthFilter(e.target.value)}
-              className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
-            >
-              <option value="">All Months</option>
-              <option value="01">January</option>
-              <option value="02">February</option>
-              <option value="03">March</option>
-              <option value="04">April</option>
-              <option value="05">May</option>
-              <option value="06">June</option>
-              <option value="07">July</option>
-              <option value="08">August</option>
-              <option value="09">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-            <input
-              type="number"
-              placeholder="Year"
-              value={yearFilter}
-              onChange={e => setYearFilter(e.target.value)}
-              className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500 w-24"
-            />
-          </>
-        )}
+        </>
         {(statusFilter || dateFilter || monthFilter || yearFilter) && (
           <button 
             onClick={() => { setStatusFilter(''); setDateFilter(''); setMonthFilter(''); setYearFilter(''); }}
@@ -437,6 +421,6 @@ export default function AdminViewListPage() {
           </div>
         )}
       </Modal>
-    </PortalLayout>
+    </>
   );
 }

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Button, Input, Pagination, Alert } from '../../components/common';
 import AuditLogTable from '../../components/audit/AuditLogTable';
 import { auditApi } from '../../api/auditApi';
@@ -18,12 +17,6 @@ const ACTIONS = [
 
 const ENTITY_TYPES = ['', 'USER', 'PROPERTY', 'UNIT', 'LEASE', 'PAYMENT', 'TENANT'];
 
-const NAV = [
-  { label: 'Dashboard',  to: '/admin/dashboard',  icon: '📊' },
-  { label: 'Landlords',  to: '/admin/landlords',  icon: '🏢' },
-  { label: 'Tenants',    to: '/admin/tenants',    icon: '👥' },
-  { label: 'Audit Logs', to: '/admin/audit-logs', icon: '📋' },
-];
 
 const PAGE_SIZE = 20;
 
@@ -64,14 +57,14 @@ export default function AdminAuditLog() {
   useEffect(() => { loadLogs(); }, [loadLogs]);
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Admin">
+    <>
       <PageHeader title="Audit Logs" subtitle={`${totalElements} entries`} />
 
       <form
         onSubmit={(e) => { e.preventDefault(); setPage(0); setApplied({ ...filters }); }}
         className="bg-white border border-slate-200 rounded-xl p-4 mb-4"
       >
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">Action</label>
             <select
@@ -100,12 +93,38 @@ export default function AdminAuditLog() {
             </select>
           </div>
 
-          <Input label="From"      name="from"       type="date" value={filters.from} onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))} />
-          <Input label="To"        name="to"         type="date" value={filters.to}   onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))} />
-        </div>
-        <div className="flex gap-2 mt-3 justify-end">
-          <Button type="button" variant="secondary" size="sm" onClick={() => { setFilters({ action:'', entityType:'', from:'', to:'' }); setApplied({}); setPage(0); }}>Clear</Button>
-          <Button type="submit" size="sm">Apply</Button>
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">From Date</label>
+            <input
+              name="from"
+              type="date"
+              value={filters.from}
+              onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))}
+              className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">To Date</label>
+            <input
+              name="to"
+              type="date"
+              value={filters.to}
+              onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))}
+              className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <Button type="button" variant="secondary" size="sm" className="w-full" onClick={() => { setFilters({ action:'', entityType:'', from:'', to:'' }); setApplied({}); setPage(0); }}>
+              Clear Filters
+            </Button>
+          </div>
+          <div>
+            <Button type="submit" size="sm" className="w-full">
+              Apply Filters
+            </Button>
+          </div>
         </div>
       </form>
 
@@ -117,6 +136,6 @@ export default function AdminAuditLog() {
           <Pagination page={page} totalPages={totalPages} totalElements={totalElements} size={PAGE_SIZE} onPageChange={setPage} />
         </div>
       </div>
-    </PortalLayout>
+    </>
   );
 }

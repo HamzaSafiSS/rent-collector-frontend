@@ -1,16 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Table, Badge, Button, Pagination, Alert, ConfirmDialog } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 import { useToast } from '../../context/ToastContext';
 import { TableSkeleton } from '../../components/common';
 
-const NAV = [
-  { label: 'Dashboard',  to: '/admin/dashboard',  icon: '📊' },
-  { label: 'Landlords',  to: '/admin/landlords',  icon: '🏢' },
-  { label: 'Tenants',    to: '/admin/tenants',    icon: '👥' },
-  { label: 'Audit Logs', to: '/admin/audit-logs', icon: '📋' },
-];
 
 const PAGE_SIZE = 10;
 
@@ -90,7 +83,7 @@ export default function ManageLandlordsPage() {
   const action = confirmTarget?.action;
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Admin">
+    <>
       <PageHeader
         title="Manage Landlords"
         subtitle={`${totalElements} registered landlord${totalElements !== 1 ? 's' : ''}`}
@@ -127,6 +120,6 @@ export default function ManageLandlordsPage() {
         confirmText={action === 'suspend' ? 'Suspend' : 'Activate'}
         variant={action === 'suspend' ? 'danger' : 'success'}
       />
-    </PortalLayout>
+    </>
   );
 }

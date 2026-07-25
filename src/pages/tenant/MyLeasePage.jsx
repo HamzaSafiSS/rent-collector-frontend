@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Badge, Spinner, Alert } from '../../components/common';
 import { leaseApi } from '../../api/leaseApi';
-import { TENANT_NAV } from './tenantNav';
 
 export default function MyLeasePage() {
   const [leases, setLeases]   = useState([]);
@@ -19,7 +17,7 @@ export default function MyLeasePage() {
   }, []);
 
   return (
-    <PortalLayout navItems={TENANT_NAV} portalLabel="Tenant">
+    <>
       <PageHeader title="My Leases" subtitle="All your lease agreements" />
 
       {error   && <Alert type="error" message={error} />}
@@ -59,6 +57,6 @@ export default function MyLeasePage() {
           </div>
         ))}
       </div>
-    </PortalLayout>
+    </>
   );
 }

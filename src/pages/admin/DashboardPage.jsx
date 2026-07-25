@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import { StatCard, PageHeader, Spinner } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
 
-const NAV = [
-  { label: 'Dashboard', to: '/admin/dashboard', icon: '📊' },
-  { label: 'Landlords', to: '/admin/landlords', icon: '🏢' },
-  { label: 'Tenants', to: '/admin/tenants', icon: '👥' },
-  { label: 'Audit Logs', to: '/admin/audit-logs', icon: '📋' },
-];
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -24,7 +17,7 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Admin">
+    <>
       <PageHeader title="Admin Dashboard" subtitle="Platform overview" />
 
       {loading ? (
@@ -41,6 +34,6 @@ export default function AdminDashboard() {
           <StatCard label="Total Leases" value={stats.totalLeases} icon="📄" color="indigo" onClick={() => navigate('/admin/view/leases')} />
         </div>
       )}
-    </PortalLayout>
+    </>
   );
 }

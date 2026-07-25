@@ -2,6 +2,12 @@ import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { useAuth } from '../context/AuthContext';
+import { 
+  AdminLayout, 
+  SuperAdminLayout, 
+  LandlordLayout, 
+  TenantLayout 
+} from '../components/common/RoleLayouts';
 
 // ── Lazy-loaded pages — loaded only when needed, reduces initial bundle ────────
 
@@ -22,6 +28,7 @@ const ManageLandlordsPage = lazy(() => import('../pages/admin/ManageLandlordsPag
 const ManageTenantsPage   = lazy(() => import('../pages/admin/ManageTenantsPage'));
 const AdminAuditLog       = lazy(() => import('../pages/admin/AuditLogPage'));
 const AdminViewList       = lazy(() => import('../pages/admin/ViewListPage'));
+const AdminDashboardViewPage    = lazy(() => import('../pages/admin/AdminDashboardViewPage'));
 const LandlordDashboardViewPage = lazy(() => import('../pages/admin/LandlordDashboardViewPage'));
 const TenantDashboardViewPage   = lazy(() => import('../pages/admin/TenantDashboardViewPage'));
 const PropertyDashboardViewPage = lazy(() => import('../pages/admin/PropertyDashboardViewPage'));
@@ -43,7 +50,6 @@ const TenantDashboard     = lazy(() => import('../pages/tenant/DashboardPage'));
 const MyLeasePage         = lazy(() => import('../pages/tenant/MyLeasePage'));
 const UploadPaymentPage   = lazy(() => import('../pages/tenant/UploadPaymentPage'));
 const PaymentHistoryPage  = lazy(() => import('../pages/tenant/PaymentHistoryPage'));
-const AccountSettingsPage = lazy(() => import('../pages/tenant/AccountSettingsPage'));
 
 // ── Loading fallback ──────────────────────────────────────────────────────────
 function PageLoader() {
@@ -89,147 +95,52 @@ export default function AppRoutes() {
         } />
 
         {/* ── Super Admin Routes ── */}
-        <Route path="/super-admin/dashboard" element={
-          <ProtectedRoute roles={['SUPER_ADMIN']}>
-            <SuperAdminDashboard />
-          </ProtectedRoute>
-        } />
-        <Route path="/super-admin/admins" element={
-          <ProtectedRoute roles={['SUPER_ADMIN']}>
-            <ManageAdminsPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/super-admin/audit-logs" element={
-          <ProtectedRoute roles={['SUPER_ADMIN']}>
-            <SuperAdminAuditLog />
-          </ProtectedRoute>
-        } />
-        <Route path="/super-admin/view/:category" element={
-          <ProtectedRoute roles={['SUPER_ADMIN']}>
-            <SuperAdminViewList />
-          </ProtectedRoute>
-        } />
+        <Route path="/super-admin" element={<ProtectedRoute roles={['SUPER_ADMIN']}><SuperAdminLayout /></ProtectedRoute>}>
+          <Route path="dashboard" element={<SuperAdminDashboard />} />
+          <Route path="admins" element={<ManageAdminsPage />} />
+          <Route path="audit-logs" element={<SuperAdminAuditLog />} />
+          <Route path="view/:category" element={<SuperAdminViewList />} />
+          <Route path="view/admin-dashboard/:adminId" element={<AdminDashboardViewPage />} />
+          <Route path="view/landlord-dashboard/:landlordId" element={<LandlordDashboardViewPage />} />
+          <Route path="view/tenant-dashboard/:id" element={<TenantDashboardViewPage />} />
+          <Route path="view/property-dashboard/:id" element={<PropertyDashboardViewPage />} />
+          <Route path="view/unit-dashboard/:id" element={<UnitDashboardViewPage />} />
+          <Route path="view/lease-dashboard/:id" element={<LeaseDashboardViewPage />} />
+        </Route>
 
         {/* ── Admin Routes ── */}
-        <Route path="/admin/dashboard" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <AdminDashboard />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/landlords" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <ManageLandlordsPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/tenants" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <ManageTenantsPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/audit-logs" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <AdminAuditLog />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/view/:category" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <AdminViewList />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/view/landlord-dashboard/:landlordId" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <LandlordDashboardViewPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/view/tenant-dashboard/:id" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <TenantDashboardViewPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/view/property-dashboard/:id" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <PropertyDashboardViewPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/view/unit-dashboard/:id" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <UnitDashboardViewPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin/view/lease-dashboard/:id" element={
-          <ProtectedRoute roles={['ADMIN']}>
-            <LeaseDashboardViewPage />
-          </ProtectedRoute>
-        } />
+        <Route path="/admin" element={<ProtectedRoute roles={['ADMIN']}><AdminLayout /></ProtectedRoute>}>
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="landlords" element={<ManageLandlordsPage />} />
+          <Route path="tenants" element={<ManageTenantsPage />} />
+          <Route path="audit-logs" element={<AdminAuditLog />} />
+          <Route path="view/:category" element={<AdminViewList />} />
+          <Route path="view/landlord-dashboard/:landlordId" element={<LandlordDashboardViewPage />} />
+          <Route path="view/tenant-dashboard/:id" element={<TenantDashboardViewPage />} />
+          <Route path="view/property-dashboard/:id" element={<PropertyDashboardViewPage />} />
+          <Route path="view/unit-dashboard/:id" element={<UnitDashboardViewPage />} />
+          <Route path="view/lease-dashboard/:id" element={<LeaseDashboardViewPage />} />
+        </Route>
 
         {/* ── Landlord Routes ── */}
-        <Route path="/landlord/dashboard" element={
-          <ProtectedRoute roles={['LANDLORD']}>
-            <LandlordDashboard />
-          </ProtectedRoute>
-        } />
-        <Route path="/landlord/properties" element={
-          <ProtectedRoute roles={['LANDLORD']}>
-            <PropertiesPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/landlord/units" element={
-          <ProtectedRoute roles={['LANDLORD']}>
-            <GlobalUnitsPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/landlord/properties/:id" element={
-          <ProtectedRoute roles={['LANDLORD']}>
-            <PropertyDetailPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/landlord/tenants" element={
-          <ProtectedRoute roles={['LANDLORD']}>
-            <TenantsPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/landlord/leases" element={
-          <ProtectedRoute roles={['LANDLORD']}>
-            <LeasesPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/landlord/payments" element={
-          <ProtectedRoute roles={['LANDLORD']}>
-            <PaymentsPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/landlord/reports" element={
-          <ProtectedRoute roles={['LANDLORD']}>
-            <ReportsPage />
-          </ProtectedRoute>
-        } />
+        <Route path="/landlord" element={<ProtectedRoute roles={['LANDLORD']}><LandlordLayout /></ProtectedRoute>}>
+          <Route path="dashboard" element={<LandlordDashboard />} />
+          <Route path="properties" element={<PropertiesPage />} />
+          <Route path="units" element={<GlobalUnitsPage />} />
+          <Route path="properties/:id" element={<PropertyDetailPage />} />
+          <Route path="tenants" element={<TenantsPage />} />
+          <Route path="leases" element={<LeasesPage />} />
+          <Route path="payments" element={<PaymentsPage />} />
+          <Route path="reports" element={<ReportsPage />} />
+        </Route>
 
         {/* ── Tenant Routes ── */}
-        <Route path="/tenant/dashboard" element={
-          <ProtectedRoute roles={['TENANT']}>
-            <TenantDashboard />
-          </ProtectedRoute>
-        } />
-        <Route path="/tenant/lease" element={
-          <ProtectedRoute roles={['TENANT']}>
-            <MyLeasePage />
-          </ProtectedRoute>
-        } />
-        <Route path="/tenant/upload-payment" element={
-          <ProtectedRoute roles={['TENANT']}>
-            <UploadPaymentPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/tenant/payments" element={
-          <ProtectedRoute roles={['TENANT']}>
-            <PaymentHistoryPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/tenant/settings" element={
-          <ProtectedRoute roles={['TENANT']}>
-            <AccountSettingsPage />
-          </ProtectedRoute>
-        } />
+        <Route path="/tenant" element={<ProtectedRoute roles={['TENANT']}><TenantLayout /></ProtectedRoute>}>
+          <Route path="dashboard" element={<TenantDashboard />} />
+          <Route path="lease" element={<MyLeasePage />} />
+          <Route path="upload-payment" element={<UploadPaymentPage />} />
+          <Route path="payments" element={<PaymentHistoryPage />} />
+        </Route>
 
         {/* ── 404 Fallback ── */}
         <Route path="*" element={

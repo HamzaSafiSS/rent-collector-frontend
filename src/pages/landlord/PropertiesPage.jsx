@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import {
   PageHeader, Button, Modal, ConfirmDialog,
   Alert, Spinner, Pagination,
@@ -8,7 +7,6 @@ import {
 import PropertyForm from '../../components/property/PropertyForm';
 import { propertyApi } from '../../api/propertyApi';
 import { useToast } from '../../context/ToastContext';
-import { LANDLORD_NAV } from './landlordNav';
 import { CardGridSkeleton } from '../../components/common';
 
 const PAGE_SIZE = 9;
@@ -86,7 +84,7 @@ export default function PropertiesPage() {
   }
 
   return (
-    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
+    <>
       <PageHeader
         title="My Properties"
         subtitle={`${totalElements} propert${totalElements !== 1 ? 'ies' : 'y'}`}
@@ -174,6 +172,6 @@ export default function PropertiesPage() {
         confirmText="Delete"
         variant="danger"
       />
-    </PortalLayout>
+    </>
   );
 }

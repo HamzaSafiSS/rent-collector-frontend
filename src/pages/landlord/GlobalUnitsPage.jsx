@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Table, Badge, Button, Spinner } from '../../components/common';
 import { propertyApi } from '../../api/propertyApi';
 import { unitApi } from '../../api/unitApi';
-import { LANDLORD_NAV } from './landlordNav';
 
 export default function GlobalUnitsPage() {
   const navigate = useNavigate();
@@ -58,7 +56,7 @@ export default function GlobalUnitsPage() {
   const filteredUnits = units.filter(u => filterStatus === 'ALL' || u.status === filterStatus);
 
   return (
-    <PortalLayout navItems={LANDLORD_NAV} portalLabel="Landlord">
+    <>
       <PageHeader title="Global Units" subtitle="Manage all units across your properties" />
 
       {error && <div className="mb-4 text-red-600 bg-red-50 p-4 rounded-xl">{error}</div>}
@@ -108,6 +106,6 @@ export default function GlobalUnitsPage() {
           emptyMessage="No units match the current filter."
         />
       </div>
-    </PortalLayout>
+    </>
   );
 }

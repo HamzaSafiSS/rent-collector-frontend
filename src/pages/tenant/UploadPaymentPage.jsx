@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, FileUpload, Input, Button, Alert } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
 import { leaseApi } from '../../api/leaseApi';
 import { useToast } from '../../context/ToastContext';
-import { TENANT_NAV } from './tenantNav';
 
 export default function UploadPaymentPage() {
   const toast = useToast();
@@ -177,7 +175,7 @@ export default function UploadPaymentPage() {
     'w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-50';
 
   return (
-    <PortalLayout navItems={TENANT_NAV} portalLabel="Tenant">
+    <>
       <PageHeader title="Upload Payment" subtitle="Submit your payment proof for review" />
 
       <div className="max-w-lg">
@@ -273,6 +271,6 @@ export default function UploadPaymentPage() {
           </form>
         </div>
       </div>
-    </PortalLayout>
+    </>
   );
 }

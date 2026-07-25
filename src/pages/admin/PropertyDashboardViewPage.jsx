@@ -1,23 +1,25 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
 import { propertyApi } from '../../api/propertyApi';
 import { adminApi } from '../../api/adminApi';
 import { unitApi } from '../../api/unitApi';
 
-const NAV = [
-  { label: 'Dashboard',  to: '/admin/dashboard',  icon: '📊' },
-  { label: 'Landlords',  to: '/admin/landlords',  icon: '🏢' },
-  { label: 'Tenants',    to: '/admin/tenants',    icon: '👥' },
-  { label: 'Audit Logs', to: '/admin/audit-logs', icon: '📋' },
-];
+import { useAuth } from '../../context/AuthContext';
+
+
 
 const PAGE_SIZE = 10;
 
 export default function PropertyDashboardViewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+  const navItems = isSuperAdmin ? SUPER_ADMIN_NAV : ADMIN_NAV;
+  const portalLabel = isSuperAdmin ? 'Super Admin' : 'Admin';
+  const backUrl = isSuperAdmin ? '/super-admin/view/properties' : '/admin/view/properties';
 
   const [property, setProperty] = useState(null);
   const [activeTab, setActiveTab] = useState('leases');
@@ -113,9 +115,9 @@ export default function PropertyDashboardViewPage() {
   };
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Admin">
+    <>
       <button
-        onClick={() => navigate('/admin/view/properties')}
+        onClick={() => navigate(backUrl)}
         className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
       >
         ← Back to Properties
@@ -189,6 +191,6 @@ export default function PropertyDashboardViewPage() {
           />
         </div>
       </div>
-    </PortalLayout>
+    </>
   );
 }

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import {
   PageHeader, Table, Badge, Button, Modal,
   ConfirmDialog, Pagination, Spinner, Alert,
@@ -9,11 +8,6 @@ import { adminApi } from '../../api/adminApi';
 import { useToast } from '../../context/ToastContext';
 import { TableSkeleton } from '../../components/common';
 
-const NAV = [
-  { label: 'Dashboard',     to: '/super-admin/dashboard',  icon: '📊' },
-  { label: 'Manage Admins', to: '/super-admin/admins',     icon: '👥' },
-  { label: 'Audit Logs',    to: '/super-admin/audit-logs', icon: '📋' },
-];
 
 const PAGE_SIZE = 10;
 
@@ -146,7 +140,7 @@ export default function ManageAdminsPage() {
   ];
 
   return (
-    <PortalLayout navItems={NAV} portalLabel="Super Admin">
+    <>
       <PageHeader
         title="Manage Admins"
         subtitle={`${totalElements} admin account${totalElements !== 1 ? 's' : ''}`}
@@ -208,6 +202,6 @@ export default function ManageAdminsPage() {
         confirmText="Delete"
         variant="danger"
       />
-    </PortalLayout>
+    </>
   );
 }

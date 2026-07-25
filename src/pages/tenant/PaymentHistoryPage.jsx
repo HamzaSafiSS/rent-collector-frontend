@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import PortalLayout from '../../components/common/PortalLayout';
 import { PageHeader, Badge, Spinner, Alert, Pagination, Input } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
 import PaymentDetailModal from '../../components/payment/PaymentDetailModal';
-import { TENANT_NAV } from './tenantNav';
 
 const PAGE_SIZE = 10;
 
@@ -52,7 +50,7 @@ export default function PaymentHistoryPage() {
   }
 
   return (
-    <PortalLayout navItems={TENANT_NAV} portalLabel="Tenant">
+    <>
       <PageHeader title="Payment History" subtitle={`${totalElements} payment${totalElements !== 1 ? 's' : ''}`} />
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -144,6 +142,6 @@ export default function PaymentHistoryPage() {
         isOpen={detailOpen}
         onClose={closeDetail}
       />
-    </PortalLayout>
+    </>
   );
 }
