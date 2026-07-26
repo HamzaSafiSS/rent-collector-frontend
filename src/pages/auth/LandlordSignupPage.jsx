@@ -124,7 +124,7 @@ export default function LandlordSignupPage() {
               name="fullName"
               type="text"
               autoComplete="name"
-              placeholder="Full Name"
+              placeholder="Hamza Safi"
               value={form.fullName}
               onChange={handleChange}
               error={errors.fullName}
@@ -136,7 +136,7 @@ export default function LandlordSignupPage() {
               name="email"
               type="email"
               autoComplete="email"
-              placeholder="Email Address"
+              placeholder="example@gmail.com"
               value={form.email}
               onChange={handleChange}
               error={errors.email}
@@ -148,7 +148,7 @@ export default function LandlordSignupPage() {
               name="phoneNumber"
               type="tel"
               autoComplete="tel"
-              placeholder="Phone Number (optional)"
+              placeholder="0991234577 (optional)"
               value={form.phoneNumber}
               onChange={handleChange}
               error={errors.phoneNumber}
