@@ -67,7 +67,7 @@ export const badgeVariants = {
 
 // Input shared classes
 export const inputBase = `
-  w-full px-4 py-3 text-sm text-slate-900 bg-white/80 backdrop-blur-sm
+  w-full px-3 py-2 text-sm text-slate-900 bg-white/80 backdrop-blur-sm
   border border-slate-300/80 rounded-xl shadow-sm
   placeholder-slate-400
   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent

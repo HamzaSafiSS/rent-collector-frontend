@@ -74,7 +74,7 @@ export default function LoginPage() {
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/20 blur-[120px] mix-blend-screen pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-600/20 blur-[120px] mix-blend-screen pointer-events-none"></div>
 
-      <div className="w-full max-w-md relative z-10 animate-slide-in">
+      <div className="w-full max-w-sm relative z-10 animate-slide-in">
 
         {/* Logo / Brand */}
         <div className="text-center mb-10">
@@ -89,12 +89,12 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="glass rounded-3xl p-8">
+        <div className="glass rounded-3xl p-6 text-slate-200">
           {apiError && (
             <Alert type="error" message={apiError} className="mb-6" />
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <Input
               label="Email address"
               name="email"
@@ -123,7 +123,6 @@ export default function LoginPage() {
               type="submit"
               fullWidth
               loading={loading}
-              size="lg"
             >
               Sign in
             </Button>
