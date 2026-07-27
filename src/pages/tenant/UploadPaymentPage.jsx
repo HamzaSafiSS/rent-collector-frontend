@@ -187,7 +187,9 @@ export default function UploadPaymentPage() {
 
             {/* Lease selector */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Select Lease</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                <span className="text-red-500 mr-1" aria-hidden="true">*</span>Select Lease
+              </label>
               <select
                 value={leaseId}
                 onChange={handleLeaseChange}
@@ -207,7 +209,9 @@ export default function UploadPaymentPage() {
 
             {/* Payment month — two explicit dropdowns */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Payment Month</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                <span className="text-red-500 mr-1" aria-hidden="true">*</span>Payment Month
+              </label>
               <div className="flex gap-3">
                 <select
                   id="payment-month-select"
@@ -253,14 +257,15 @@ export default function UploadPaymentPage() {
               error={errors.amount}
               disabled={loading}
               placeholder="e.g. 6500"
+              required
             />
 
-            {/* File upload */}
             <div>
               <FileUpload
                 label="Payment proof (screenshot / receipt)"
                 onFileSelect={(f) => { setFile(f); if (errors.file) setErrors((p) => ({ ...p, file: '' })); }}
                 disabled={loading}
+                required
               />
               {errors.file && <p className="mt-1 text-xs text-red-600">{errors.file}</p>}
             </div>

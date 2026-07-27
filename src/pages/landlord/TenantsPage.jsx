@@ -151,6 +151,7 @@ export default function TenantsPage() {
             value={editForm.fullName}
             onChange={(e) => setEditForm((p) => ({ ...p, fullName: e.target.value }))}
             disabled={editLoading}
+            required
           />
           <Input
             label="Phone number"

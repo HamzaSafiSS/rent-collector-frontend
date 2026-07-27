@@ -49,13 +49,13 @@ export default function AdminForm({ initial, onSubmit, loading, error, isEdit })
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       {error && <Alert type="error" message={error} />}
 
-      <Input label="Full name"    name="fullName"    value={form.fullName}    onChange={handleChange} error={errors.fullName}    disabled={loading} />
+      <Input label="Full name"    name="fullName"    value={form.fullName}    onChange={handleChange} error={errors.fullName}    disabled={loading} required />
       {!isEdit && (
-        <Input label="Email"      name="email"       type="email" value={form.email} onChange={handleChange} error={errors.email} disabled={loading} />
+        <Input label="Email"      name="email"       type="email" value={form.email} onChange={handleChange} error={errors.email} disabled={loading} required />
       )}
       <Input label="Phone number (optional)" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} disabled={loading} />
       {!isEdit && (
-        <Input label="Password"   name="password"    type="password" value={form.password} onChange={handleChange} error={errors.password} disabled={loading} />
+        <Input label="Password"   name="password"    type="password" value={form.password} onChange={handleChange} error={errors.password} disabled={loading} required />
       )}
 
       <div className="flex justify-end pt-2">

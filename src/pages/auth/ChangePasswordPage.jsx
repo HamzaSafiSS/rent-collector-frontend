@@ -136,6 +136,7 @@ export default function ChangePasswordPage() {
               onChange={handleChange}
               error={errors.currentPassword}
               disabled={submitting || !!success}
+              required
             />
             <Input
               label="New password"
@@ -147,6 +148,7 @@ export default function ChangePasswordPage() {
               onChange={handleChange}
               error={errors.newPassword}
               disabled={submitting || !!success}
+              required
             />
             <Input
               label="Confirm new password"
@@ -158,6 +160,7 @@ export default function ChangePasswordPage() {
               onChange={handleChange}
               error={errors.confirmPassword}
               disabled={submitting || !!success}
+              required
             />
             <Button
               type="submit"

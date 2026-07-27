@@ -9,6 +9,7 @@ export default function FileUpload({
   maxSizeMB = DEFAULT_MAX_MB,
   label = 'Upload File',
   className = '',
+  required = false,
 }) {
   const inputRef              = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -51,6 +52,7 @@ export default function FileUpload({
     <div className={`w-full ${className}`}>
       {label && (
         <label className="block text-sm font-medium text-slate-700 mb-1">
+          {required && <span className="text-red-500 mr-1" aria-hidden="true">*</span>}
           {label}
         </label>
       )}

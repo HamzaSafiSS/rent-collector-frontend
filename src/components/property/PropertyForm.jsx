@@ -32,8 +32,8 @@ export default function PropertyForm({ initial, onSubmit, loading, error }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       {error && <Alert type="error" message={error} />}
-      <Input label="Property name" name="name"        value={form.name}        onChange={handleChange} error={errors.name}    disabled={loading} placeholder="e.g. Bole Sunshine Apartments" />
-      <Input label="Address"       name="address"     value={form.address}     onChange={handleChange} error={errors.address} disabled={loading} placeholder="Full street address" />
+      <Input label="Property name" name="name"        value={form.name}        onChange={handleChange} error={errors.name}    disabled={loading} placeholder="e.g. Bole Sunshine Apartments" required />
+      <Input label="Address"       name="address"     value={form.address}     onChange={handleChange} error={errors.address} disabled={loading} placeholder="Full street address" required />
       <div>
         <label className="block text-sm font-medium text-slate-700 mb-1">Description (optional)</label>
         <textarea

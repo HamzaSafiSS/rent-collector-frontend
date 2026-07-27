@@ -16,8 +16,8 @@ export default function Input({
           htmlFor={inputId}
           className="block text-sm font-medium leading-none text-current mb-2"
         >
+          {required && <span className="text-red-500 mr-1" aria-hidden="true">*</span>}
           {label}
-          {required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
         </label>
       )}
       <input

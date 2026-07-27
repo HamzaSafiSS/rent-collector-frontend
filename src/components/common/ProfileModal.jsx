@@ -88,9 +88,9 @@ export default function ProfileModal({ isOpen, onClose }) {
               {success && <Alert type="success" message={success} />}
 
               <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-                <Input label="Current password" name="currentPassword" type="password" value={form.currentPassword} onChange={handleChange} error={errors.currentPassword} disabled={loading || !!success} />
-                <Input label="New password" name="newPassword" type="password" value={form.newPassword} onChange={handleChange} error={errors.newPassword} disabled={loading || !!success} />
-                <Input label="Confirm password" name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} error={errors.confirmPassword} disabled={loading || !!success} />
+                <Input label="Current password" name="currentPassword" type="password" value={form.currentPassword} onChange={handleChange} error={errors.currentPassword} disabled={loading || !!success} required />
+                <Input label="New password" name="newPassword" type="password" value={form.newPassword} onChange={handleChange} error={errors.newPassword} disabled={loading || !!success} required />
+                <Input label="Confirm password" name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} error={errors.confirmPassword} disabled={loading || !!success} required />
                 <Button type="submit" loading={loading} disabled={!!success} className="w-full">Update Password</Button>
               </form>
             </div>

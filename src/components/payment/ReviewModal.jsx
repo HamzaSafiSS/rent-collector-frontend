@@ -53,13 +53,19 @@ export default function ReviewModal({
             ) : (
               <div className="space-y-3">
                 {commentError && <Alert type="error" message={commentError} />}
-                <textarea
-                  value={rejectComment}
-                  onChange={(e) => { setRejectComment(e.target.value); setCommentError(''); }}
-                  placeholder="Explain the rejection reason to the tenant..."
-                  rows={3}
-                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    <span className="text-red-500 mr-1" aria-hidden="true">*</span>Rejection Reason
+                  </label>
+                  <textarea
+                    value={rejectComment}
+                    onChange={(e) => { setRejectComment(e.target.value); setCommentError(''); }}
+                    placeholder="Explain the rejection reason to the tenant..."
+                    rows={3}
+                    className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                    required
+                  />
+                </div>
                 <div className="flex gap-3 justify-end">
                   <Button variant="secondary" onClick={() => { setShowRejectForm(false); setCommentError(''); }} disabled={loading}>Back</Button>
                   <Button variant="danger"    onClick={handleReject} loading={loading}>Confirm Rejection</Button>

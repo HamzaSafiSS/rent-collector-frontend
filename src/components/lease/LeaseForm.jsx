@@ -53,11 +53,14 @@ export default function LeaseForm({ units = [], onSubmit, loading, error }) {
         disabled={loading}
         placeholder="tenant@example.com"
         hint="Enter the email for a new or existing tenant."
+        required
       />
 
       {/* Unit selector */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Unit</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          <span className="text-red-500 mr-1" aria-hidden="true">*</span>Unit
+        </label>
         <select
           name="unitId"
           value={form.unitId}
@@ -82,6 +85,7 @@ export default function LeaseForm({ units = [], onSubmit, loading, error }) {
         onChange={handleChange}
         error={errors.startDate}
         disabled={loading}
+        required
       />
 
       <Input
@@ -94,6 +98,7 @@ export default function LeaseForm({ units = [], onSubmit, loading, error }) {
         error={errors.monthlyRent}
         disabled={loading}
         placeholder="e.g. 6500"
+        required
       />
 
       <div className="flex justify-end pt-2">

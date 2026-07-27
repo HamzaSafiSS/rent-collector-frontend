@@ -129,6 +129,7 @@ export default function LandlordSignupPage() {
               onChange={handleChange}
               error={errors.fullName}
               disabled={loading}
+              required
             />
 
             <Input
@@ -141,6 +142,7 @@ export default function LandlordSignupPage() {
               onChange={handleChange}
               error={errors.email}
               disabled={loading}
+              required
             />
 
             <Input
@@ -167,6 +169,7 @@ export default function LandlordSignupPage() {
               onChange={handleChange}
               error={errors.password}
               disabled={loading}
+              required
             />
 
             <Input
@@ -179,6 +182,7 @@ export default function LandlordSignupPage() {
               onChange={handleChange}
               error={errors.confirmPassword}
               disabled={loading}
+              required
             />
 
             <Button

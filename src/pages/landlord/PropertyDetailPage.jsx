@@ -263,6 +263,7 @@ export default function PropertyDetailPage() {
             placeholder="e.g. A, Block-B, Studio"
             disabled={addLoading}
             hint="Units will be named: prefix-1, prefix-2 ..."
+            required
           />
           <Input
             label="Number of units"
@@ -275,6 +276,7 @@ export default function PropertyDetailPage() {
             error={addErrors.numberOfUnits}
             placeholder="e.g. 20"
             disabled={addLoading}
+            required
           />
           <div className="flex justify-end pt-2">
             <Button type="submit" loading={addLoading}>Create units</Button>
@@ -291,6 +293,7 @@ export default function PropertyDetailPage() {
             onChange={(e) => { setRenameValue(e.target.value); setRenameError(''); }}
             error={renameError}
             disabled={renameLoading}
+            required
           />
           <div className="flex justify-end">
             <Button type="submit" loading={renameLoading}>Save</Button>
