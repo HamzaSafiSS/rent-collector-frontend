@@ -81,7 +81,7 @@ export default function TenantDashboard() {
   }, []);
 
   return (
-    <>
+    <div className="text-[75%]">
       <PageHeader title="My Dashboard" subtitle="Your rental summary" />
 
       {error && <Alert type="error" message={error} className="mb-4" />}
@@ -131,6 +131,6 @@ export default function TenantDashboard() {
           )}
         </div>
       ) : null}
-    </>
+    </div>
   );
 }

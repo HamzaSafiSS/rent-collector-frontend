@@ -37,7 +37,7 @@ export default function LandlordDashboard() {
   }, []);
 
   return (
-    <>
+    <div className="text-[75%]">
       <PageHeader title="Landlord Dashboard"/>
 
       {loading ? (
@@ -53,6 +53,6 @@ export default function LandlordDashboard() {
           <StatCard label="Maintenance Units" value={stats.maintenanceUnits} icon="🔧" color="yellow" onClick={() => navigate('/landlord/units?status=MAINTENANCE')} />
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from './Modal';
 import Input from './Input';
 import Button from './Button';
@@ -19,6 +19,16 @@ export default function ProfileModal({ isOpen, onClose }) {
   const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
+
+  useEffect(() => {
+    if (!isOpen) {
+      setShowPasswordForm(false);
+      setForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setApiError('');
+      setSuccess('');
+      setErrors({});
+    }
+  }, [isOpen]);
 
   function validate() {
     const errs = {};
@@ -64,15 +74,17 @@ export default function ProfileModal({ isOpen, onClose }) {
       <div className="space-y-6 text-sm">
         
         {/* Profile Details */}
-        <div className="space-y-3">
-          <div className="flex gap-4"><p className="text-slate-500 w-24">Full name</p><p className="font-medium text-slate-800">{user?.fullName}</p></div>
-          <div className="flex gap-4"><p className="text-slate-500 w-24">Email</p>    <p className="font-medium text-slate-800">{user?.email}</p></div>
-          <div className="flex gap-4"><p className="text-slate-500 w-24">Role</p>     <p className="font-medium text-slate-800 capitalize">{user?.role?.replace('_', ' ').toLowerCase()}</p></div>
-          <div className="flex gap-4"><p className="text-slate-500 w-24">Status</p>   <p className="font-medium text-slate-800">{user?.status}</p></div>
-        </div>
+        {!showPasswordForm && (
+          <div className="space-y-3">
+            <div className="flex gap-4"><p className="text-slate-500 w-24">Full name</p><p className="font-medium text-slate-800">{user?.fullName}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">Email</p>    <p className="font-medium text-slate-800">{user?.email}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">Role</p>     <p className="font-medium text-slate-800 capitalize">{user?.role?.replace('_', ' ').toLowerCase()}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">Status</p>   <p className="font-medium text-slate-800">{user?.status}</p></div>
+          </div>
+        )}
 
         {/* Change Password Toggle */}
-        <div className="pt-4 border-t border-slate-100">
+        <div className={!showPasswordForm ? "pt-4 border-t border-slate-100" : ""}>
           {!showPasswordForm ? (
             <Button variant="outline" onClick={() => setShowPasswordForm(true)} className="w-full">
               Change Password
@@ -81,7 +93,6 @@ export default function ProfileModal({ isOpen, onClose }) {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-slate-700">Change Password</h3>
-                <button type="button" onClick={() => { setShowPasswordForm(false); setApiError(''); setSuccess(''); }} className="text-slate-400 hover:text-slate-600">Cancel</button>
               </div>
 
               {apiError && <Alert type="error" message={apiError} />}

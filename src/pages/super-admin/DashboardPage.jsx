@@ -32,7 +32,7 @@ export default function SuperAdminDashboard() {
   }, []);
 
   return (
-    <>
+    <div className="text-[75%]">
       <PageHeader
         title="Super Admin Dashboard"
         subtitle="Platform-wide overview"
@@ -53,6 +53,6 @@ export default function SuperAdminDashboard() {
           <StatCard label="Suspended Landlords" value={stats.suspendedLandlords}  icon="🚫" color="red"    onClick={() => navigate('/super-admin/view/suspended-landlords')} />
         </div>
       )}
-    </>
+    </div>
   );
 }

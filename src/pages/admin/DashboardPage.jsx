@@ -17,7 +17,7 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <>
+    <div className="text-[75%]">
       <PageHeader title="Admin Dashboard" subtitle="Platform overview" />
 
       {loading ? (
@@ -34,6 +34,6 @@ export default function AdminDashboard() {
           <StatCard label="Total Leases" value={stats.totalLeases} icon="📄" color="indigo" onClick={() => navigate('/admin/view/leases')} />
         </div>
       )}
-    </>
+    </div>
   );
 }

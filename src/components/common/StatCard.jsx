@@ -26,7 +26,7 @@ export default function StatCard({ label, value, icon, color = 'blue', subtitle,
       <div className="flex items-center justify-between z-10">
         <div>
           <p className="text-xs font-bold uppercase tracking-wider text-slate-500">{label}</p>
-          <p className={`text-3xl font-extrabold mt-2 tracking-tight ${textColors[color] || textColors.blue}`}>{value ?? '—'}</p>
+          <p className={`text-2xl font-extrabold mt-2 tracking-tight ${textColors[color] || textColors.blue}`}>{value ?? '—'}</p>
           {subtitle && (
             <p className="text-sm mt-2 font-medium text-slate-400">{subtitle}</p>
           )}

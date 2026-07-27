@@ -105,6 +105,7 @@ export default function LoginPage() {
               onChange={handleChange}
               error={errors.email}
               disabled={loading}
+              required
             />
 
             <Input
@@ -117,6 +118,7 @@ export default function LoginPage() {
               onChange={handleChange}
               error={errors.password}
               disabled={loading}
+              required
             />
 
             <Button
