@@ -7,7 +7,7 @@ import { auditApi } from '../../api/auditApi';
 import { leaseApi } from '../../api/leaseApi';
 import { StatCardsSkeleton } from '../../components/common';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 
 
@@ -85,38 +85,63 @@ export default function LandlordDashboard() {
     async function loadRevenue() {
       try {
         setRevenueLoading(true);
-        const year = new Date().getFullYear();
-        const res = await reportApi.getRevenueReport({ year });
-        const monthly = res.data?.data?.monthlyRevenue || res.data?.data || [];
+        const today = new Date();
+        const currentYear = today.getFullYear();
         
-        // Normalize into chart-friendly format
+        const [resCurrent, resPrev] = await Promise.all([
+          reportApi.getRevenueReport({ year: currentYear }).catch(() => null),
+          reportApi.getRevenueReport({ year: currentYear - 1 }).catch(() => null)
+        ]);
+
         const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+        const parseMonthly = (res) => {
+          if (!res) return Array(12).fill(0);
+          const monthly = res.data?.data?.monthlyRevenue || res.data?.data || [];
+          let parsed = Array(12).fill(0);
+          if (Array.isArray(monthly)) {
+            monthly.forEach((item, idx) => {
+              if (idx < 12) parsed[idx] = item.revenue ?? item.amount ?? item.total ?? 0;
+            });
+          } else if (typeof monthly === 'object') {
+            Object.entries(monthly).forEach(([key, value]) => {
+              const parts = key.split('-');
+              if (parts.length >= 2) {
+                const mIdx = parseInt(parts[1], 10) - 1;
+                if (mIdx >= 0 && mIdx < 12) parsed[mIdx] = typeof value === 'number' ? value : 0;
+              } else {
+                const mIdx = months.indexOf(key);
+                if (mIdx >= 0) parsed[mIdx] = typeof value === 'number' ? value : 0;
+              }
+            });
+          }
+          return parsed;
+        };
+
+        const currentYearData = parseMonthly(resCurrent);
+        const prevYearData = parseMonthly(resPrev);
+
         let chartData = [];
-
-        if (Array.isArray(monthly)) {
-          // If API returns array of {month, revenue} or similar
-          chartData = monthly.map((item, idx) => ({
-            month: item.month || months[idx] || `M${idx + 1}`,
-            revenue: item.revenue ?? item.amount ?? item.total ?? 0,
-          }));
-        } else if (typeof monthly === 'object') {
-          // If API returns { "2026-01": 1200, "2026-02": 1500 } or similar
-          chartData = Object.entries(monthly).map(([key, value]) => ({
-            month: key,
-            revenue: typeof value === 'number' ? value : 0,
-          }));
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date(today.getFullYear(), today.getMonth() - 1 - i, 1);
+          const y = d.getFullYear();
+          const m = d.getMonth();
+          const revenue = y === currentYear ? currentYearData[m] : (y === currentYear - 1 ? prevYearData[m] : 0);
+          chartData.push({
+            month: months[m],
+            revenue: revenue || 0
+          });
         }
-
-        // If we got empty data, generate placeholder months
-        if (chartData.length === 0) {
-          chartData = months.map(m => ({ month: m, revenue: 0 }));
-        }
-
         setRevenueData(chartData);
       } catch {
-        // Chart will show empty state
         const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        setRevenueData(months.map(m => ({ month: m, revenue: 0 })));
+        const today = new Date();
+        let chartData = [];
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date(today.getFullYear(), today.getMonth() - 1 - i, 1);
+          chartData.push({ month: months[d.getMonth()], revenue: 0 });
+        }
+        setRevenueData(chartData);
       } finally {
         setRevenueLoading(false);
       }
@@ -197,48 +222,46 @@ export default function LandlordDashboard() {
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={280}>
-              <AreaChart data={revenueData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-                <defs>
-                  <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
-                  </linearGradient>
-                </defs>
+              <BarChart data={revenueData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: '#64748b', fontSize: 12 }}
+                  tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }}
                   axisLine={{ stroke: '#334155' }}
                   tickLine={false}
+                  dy={10}
                 />
                 <YAxis
-                  tick={{ fill: '#64748b', fontSize: 12 }}
+                  tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
-                  tickFormatter={(v) => v >= 1000 ? `$${(v / 1000).toFixed(0)}k` : `$${v}`}
+                  domain={[0, 10000000]}
+                  ticks={[0, 2000000, 4000000, 6000000, 8000000, 10000000]}
+                  tickFormatter={(v) => v >= 1000000 ? `ETB ${(v / 1000000).toFixed(0)}M` : (v >= 1000 ? `ETB ${(v / 1000).toFixed(0)}k` : `ETB ${v}`)}
+                  dx={-10}
                 />
                 <Tooltip
+                  cursor={{ fill: '#1e293b' }}
                   contentStyle={{
-                    backgroundColor: '#1e293b',
+                    backgroundColor: '#111827',
                     border: '1px solid #334155',
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+                    borderRadius: '8px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
                     color: '#e2e8f0',
-                    fontSize: '13px',
+                    fontSize: '14px',
                   }}
-                  labelStyle={{ color: '#94a3b8', fontWeight: 600 }}
-                  formatter={(value) => [`$${Number(value).toLocaleString()}`, 'Revenue']}
+                  itemStyle={{ color: '#10b981', fontWeight: 600 }}
+                  labelStyle={{ display: 'none' }}
+                  formatter={(value) => [`ETB ${Number(value).toLocaleString()}`, '']}
+                  separator=""
                 />
-                <Area
-                  type="monotone"
-                  dataKey="revenue"
-                  stroke="#10b981"
-                  strokeWidth={2.5}
-                  fill="url(#revenueGradient)"
-                  dot={{ r: 4, fill: '#10b981', stroke: '#0b1120', strokeWidth: 2 }}
-                  activeDot={{ r: 6, fill: '#10b981', stroke: '#0b1120', strokeWidth: 3 }}
+                <Bar 
+                  dataKey="revenue" 
+                  fill="#10b981" 
+                  radius={[4, 4, 0, 0]} 
+                  barSize={40}
                 />
-              </AreaChart>
+              </BarChart>
             </ResponsiveContainer>
           )}
         </div>
