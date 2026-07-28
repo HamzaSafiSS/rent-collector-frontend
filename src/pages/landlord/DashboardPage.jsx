@@ -7,7 +7,7 @@ import { auditApi } from '../../api/auditApi';
 import { leaseApi } from '../../api/leaseApi';
 import { StatCardsSkeleton } from '../../components/common';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 
 
@@ -222,7 +222,7 @@ export default function LandlordDashboard() {
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={revenueData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
+              <ComposedChart data={revenueData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                 <XAxis
                   dataKey="month"
@@ -239,29 +239,37 @@ export default function LandlordDashboard() {
                   ticks={[0, 2000000, 4000000, 6000000, 8000000, 10000000]}
                   tickFormatter={(v) => v >= 1000000 ? `ETB ${(v / 1000000).toFixed(0)}M` : (v >= 1000 ? `ETB ${(v / 1000).toFixed(0)}k` : `ETB ${v}`)}
                   dx={-10}
+                  width={80}
                 />
                 <Tooltip
                   cursor={{ fill: '#1e293b' }}
-                  contentStyle={{
-                    backgroundColor: '#111827',
-                    border: '1px solid #334155',
-                    borderRadius: '8px',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
-                    color: '#e2e8f0',
-                    fontSize: '14px',
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="bg-[#111827] border border-slate-700 rounded-lg p-2.5 shadow-xl text-sm font-semibold text-emerald-400">
+                          ETB {Number(payload[0].value).toLocaleString()}
+                        </div>
+                      );
+                    }
+                    return null;
                   }}
-                  itemStyle={{ color: '#10b981', fontWeight: 600 }}
-                  labelStyle={{ display: 'none' }}
-                  formatter={(value) => [`ETB ${Number(value).toLocaleString()}`, '']}
-                  separator=""
                 />
                 <Bar 
                   dataKey="revenue" 
                   fill="#10b981" 
                   radius={[4, 4, 0, 0]} 
                   barSize={40}
+                  fillOpacity={0.8}
                 />
-              </BarChart>
+                <Line 
+                  type="monotone" 
+                  dataKey="revenue" 
+                  stroke="#34d399" 
+                  strokeWidth={3}
+                  dot={{ r: 4, fill: "#111827", stroke: "#34d399", strokeWidth: 2 }}
+                  activeDot={{ r: 6, fill: "#34d399", stroke: "#fff", strokeWidth: 2 }}
+                />
+              </ComposedChart>
             </ResponsiveContainer>
           )}
         </div>

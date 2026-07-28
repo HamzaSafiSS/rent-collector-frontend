@@ -68,7 +68,7 @@ export const badgeVariants = {
 // Input shared classes — Dark Mode
 export const inputBase = `
   w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 backdrop-blur-sm
-  border border-slate-600/50 rounded-xl shadow-sm
+  border border-slate-600/50 rounded-xl shadow-sm [color-scheme:dark]
   placeholder-slate-500
   focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:bg-slate-800 focus:border-emerald-500/50
   disabled:bg-slate-800/30 disabled:text-slate-500 disabled:cursor-not-allowed

@@ -169,7 +169,7 @@ export default function PropertiesPage() {
                     {/* Fallback placeholder — shown when no image */}
                     {!p.imageUrl && (
                       <div className="flex w-full h-full bg-gradient-to-br from-slate-800 to-slate-900 items-center justify-center">
-                        <svg className="w-16 h-16 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-16 h-16 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1v1H9V7zm5 0h1v1h-1V7zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1z" />
                         </svg>
                       </div>

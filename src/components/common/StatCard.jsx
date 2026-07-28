@@ -12,15 +12,15 @@ export default function StatCard({ label, value, icon, color = 'emerald', subtit
   };
 
   const iconColors = {
-    blue:    'bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-sky-500/25',
-    green:   'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-emerald-500/25',
-    emerald: 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-emerald-500/25',
-    red:     'bg-gradient-to-br from-red-400 to-rose-600 text-white shadow-red-500/25',
-    yellow:  'bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-amber-500/25',
-    purple:  'bg-gradient-to-br from-purple-500 to-fuchsia-600 text-white shadow-purple-500/25',
-    slate:   'bg-gradient-to-br from-slate-500 to-slate-600 text-white shadow-slate-500/25',
-    indigo:  'bg-gradient-to-br from-indigo-400 to-indigo-600 text-white shadow-indigo-500/25',
-    orange:  'bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-orange-500/25',
+    blue:    'bg-gradient-to-br from-sky-200 to-blue-300 text-black shadow-sky-400/25',
+    green:   'bg-gradient-to-br from-emerald-200 to-emerald-400 text-black shadow-emerald-400/25',
+    emerald: 'bg-gradient-to-br from-emerald-200 to-emerald-400 text-black shadow-emerald-400/25',
+    red:     'bg-gradient-to-br from-red-200 to-rose-300 text-black shadow-red-400/25',
+    yellow:  'bg-gradient-to-br from-amber-200 to-orange-300 text-black shadow-amber-400/25',
+    purple:  'bg-gradient-to-br from-purple-200 to-fuchsia-300 text-black shadow-purple-400/25',
+    slate:   'bg-gradient-to-br from-slate-200 to-slate-300 text-black shadow-slate-400/25',
+    indigo:  'bg-gradient-to-br from-indigo-200 to-indigo-300 text-black shadow-indigo-400/25',
+    orange:  'bg-gradient-to-br from-orange-200 to-orange-300 text-black shadow-orange-400/25',
   };
 
   return (
