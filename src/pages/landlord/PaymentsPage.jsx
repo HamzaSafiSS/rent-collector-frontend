@@ -142,7 +142,7 @@ export default function PaymentsPage() {
         <>
           <button
             onClick={() => setSelectedProperty(null)}
-            className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
+            className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
             ← Back to Properties
           </button>
@@ -152,7 +152,7 @@ export default function PaymentsPage() {
           />
 
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-xl font-bold text-slate-800">Summary</h2>
+        <h2 className="text-xl font-bold text-slate-100">Summary</h2>
         <div className="w-48">
           <Input 
             type="month" 

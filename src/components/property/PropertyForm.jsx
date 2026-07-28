@@ -35,14 +35,14 @@ export default function PropertyForm({ initial, onSubmit, loading, error }) {
       <Input label="Property name" name="name"        value={form.name}        onChange={handleChange} error={errors.name}    disabled={loading} placeholder="e.g. Bole Sunshine Apartments" required />
       <Input label="Address"       name="address"     value={form.address}     onChange={handleChange} error={errors.address} disabled={loading} placeholder="Full street address" required />
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Description (optional)</label>
+        <label className="block text-sm font-medium text-slate-300 mb-1">Description (optional)</label>
         <textarea
           name="description"
           value={form.description}
           onChange={handleChange}
           disabled={loading}
           rows={3}
-          className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-50"
+          className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-800/30 disabled:text-slate-500 placeholder-slate-500 transition-all duration-200"
           placeholder="Brief description of the property..."
         />
       </div>

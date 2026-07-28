@@ -79,16 +79,16 @@ export default function AuditLogPage() {
       <PageHeader title="Audit Logs" subtitle={`${totalElements} total entries`} />
 
       {/* Filters */}
-      <form onSubmit={handleApplyFilters} className="bg-white border border-slate-200 rounded-xl p-4 mb-4">
+      <form onSubmit={handleApplyFilters} className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-4">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
 
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Action</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">Action</label>
             <select
               name="action"
               value={filters.action}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ACTIONS.map((a) => (
                 <option key={a} value={a}>{a || 'All actions'}</option>
@@ -97,12 +97,12 @@ export default function AuditLogPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Entity Type</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">Entity Type</label>
             <select
               name="entityType"
               value={filters.entityType}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ENTITY_TYPES.map((t) => (
                 <option key={t} value={t}>{t || 'All types'}</option>
@@ -111,24 +111,24 @@ export default function AuditLogPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">From Date</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">From Date</label>
             <input
               name="from"
               type="date"
               value={filters.from}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">To Date</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">To Date</label>
             <input
               name="to"
               type="date"
               value={filters.to}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
@@ -147,7 +147,7 @@ export default function AuditLogPage() {
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden">
         <AuditLogTable data={logs} loading={loading} />
         <div className="px-4 border-t border-slate-100">
           <Pagination

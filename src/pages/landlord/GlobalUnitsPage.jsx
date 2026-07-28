@@ -44,8 +44,8 @@ export default function GlobalUnitsPage() {
   }, []);
 
   const columns = [
-    { key: 'propertyName', header: 'Property', render: (r) => <span className="font-medium text-slate-700">{r.propertyName}</span> },
-    { key: 'unitNumber',   header: 'Unit',     render: (r) => <span className="font-bold text-slate-800">{r.unitNumber}</span> },
+    { key: 'propertyName', header: 'Property', render: (r) => <span className="font-medium text-slate-300">{r.propertyName}</span> },
+    { key: 'unitNumber',   header: 'Unit',     render: (r) => <span className="font-bold text-slate-100">{r.unitNumber}</span> },
     { key: 'status',       header: 'Status',   render: (r) => <Badge label={r.status} /> },
     { key: 'baseRent',     header: 'Base Rent',render: (r) => `ETB ${Number(r.baseRent).toLocaleString()}` },
     { key: 'actions',      header: 'Actions',  render: (r) => (
@@ -59,7 +59,7 @@ export default function GlobalUnitsPage() {
     <>
       <PageHeader title="Global Units" subtitle="Manage all units across your properties" />
 
-      {error && <div className="mb-4 text-red-600 bg-red-50 p-4 rounded-xl">{error}</div>}
+      {error && <div className="mb-4 text-red-400 bg-red-500/10 p-4 rounded-xl">{error}</div>}
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
         {['ALL', 'AVAILABLE', 'OCCUPIED', 'MAINTENANCE'].map((s) => {
@@ -70,12 +70,12 @@ export default function GlobalUnitsPage() {
               key={s} 
               onClick={() => setSearchParams(s === 'ALL' ? {} : { status: s })}
               className={`rounded-2xl p-6 border text-center shadow-sm relative overflow-hidden cursor-pointer transition-transform hover:-translate-y-1 ${
-              isSelected ? 'ring-2 ring-blue-500 shadow-md' : ''
+              isSelected ? 'ring-2 ring-emerald-500/50 shadow-md' : ''
             } ${
-              s === 'AVAILABLE'   ? 'bg-white border-emerald-200/60'  :
-              s === 'OCCUPIED'    ? 'bg-white border-blue-200/60'   :
-              s === 'MAINTENANCE' ? 'bg-white border-amber-200/60'  :
-                                    'bg-white border-slate-200/60'
+              s === 'AVAILABLE'   ? 'bg-[#111827] border-emerald-500/20'  :
+              s === 'OCCUPIED'    ? 'bg-[#111827] border-sky-500/20'   :
+              s === 'MAINTENANCE' ? 'bg-[#111827] border-amber-500/20'  :
+                                    'bg-[#111827] border-slate-700/50/60'
             }`}>
               <div className={`absolute inset-0 opacity-10 ${
                 s === 'AVAILABLE' ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' :
@@ -84,10 +84,10 @@ export default function GlobalUnitsPage() {
                                     'bg-gradient-to-br from-slate-400 to-slate-600'
               }`}></div>
               <p className={`text-3xl font-extrabold relative z-10 ${
-                s === 'AVAILABLE' ? 'text-emerald-600' :
-                s === 'OCCUPIED'  ? 'text-blue-600' :
+                s === 'AVAILABLE' ? 'text-emerald-400' :
+                s === 'OCCUPIED'  ? 'text-emerald-400' :
                 s === 'MAINTENANCE' ? 'text-amber-600' :
-                                    'text-slate-700'
+                                    'text-slate-300'
               }`}>{count}</p>
               <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{s}</p>
             </div>
@@ -97,7 +97,7 @@ export default function GlobalUnitsPage() {
 
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-800">{filterStatus === 'ALL' ? 'All' : filterStatus} Units <span className="text-slate-400 font-medium text-base ml-1">({filteredUnits.length})</span></h2>
+          <h2 className="text-xl font-bold text-slate-100">{filterStatus === 'ALL' ? 'All' : filterStatus} Units <span className="text-slate-400 font-medium text-base ml-1">({filteredUnits.length})</span></h2>
         </div>
         <Table
           columns={columns}

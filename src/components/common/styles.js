@@ -1,50 +1,50 @@
 export const colors = {
-  primary:   'blue',
-  success:   'green',
+  primary:   'emerald',
+  success:   'emerald',
   danger:    'red',
-  warning:   'yellow',
+  warning:   'amber',
   neutral:   'slate',
 };
 
-// Button variant classes
+// Button variant classes — Dark Mode
 export const buttonVariants = {
   primary: `
-    bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 active:from-blue-700 active:to-blue-600
-    text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5
+    bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 active:from-emerald-700 active:to-emerald-600
+    text-white font-semibold shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/30 hover:-translate-y-0.5
     border border-transparent
-    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+    focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-900
     disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
     transition-all duration-200
   `,
   secondary: `
-    bg-white hover:bg-slate-50 active:bg-slate-100
-    text-slate-700 font-medium
-    border border-slate-300
-    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+    bg-slate-800 hover:bg-slate-700 active:bg-slate-600
+    text-slate-200 font-medium
+    border border-slate-600/50
+    focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-900
     disabled:opacity-50 disabled:cursor-not-allowed
     transition-colors duration-150
   `,
   danger: `
-    bg-red-600 hover:bg-red-700 active:bg-red-800
+    bg-red-600/90 hover:bg-red-600 active:bg-red-700
     text-white font-medium
     border border-transparent
-    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-slate-900
     disabled:opacity-50 disabled:cursor-not-allowed
     transition-colors duration-150
   `,
   ghost: `
-    bg-transparent hover:bg-slate-100 active:bg-slate-200
-    text-slate-600 font-medium
+    bg-transparent hover:bg-slate-800 active:bg-slate-700
+    text-slate-400 hover:text-slate-200 font-medium
     border border-transparent
-    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+    focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-900
     disabled:opacity-50 disabled:cursor-not-allowed
     transition-colors duration-150
   `,
   success: `
-    bg-green-600 hover:bg-green-700 active:bg-green-800
+    bg-emerald-600/90 hover:bg-emerald-600 active:bg-emerald-700
     text-white font-medium
     border border-transparent
-    focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+    focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-900
     disabled:opacity-50 disabled:cursor-not-allowed
     transition-colors duration-150
   `,
@@ -56,25 +56,25 @@ export const buttonSizes = {
   lg: 'px-6 py-3.5 text-base rounded-xl',
 };
 
-// Badge variant classes
+// Badge variant classes — Dark Mode
 export const badgeVariants = {
-  success: 'bg-green-100 text-green-800 border border-green-200',
-  danger:  'bg-red-100  text-red-800  border border-red-200',
-  warning: 'bg-yellow-100 text-yellow-800 border border-yellow-200',
-  info:    'bg-blue-100 text-blue-800 border border-blue-200',
-  neutral: 'bg-slate-100 text-slate-700 border border-slate-200',
+  success: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25',
+  danger:  'bg-red-500/15 text-red-400 border border-red-500/25',
+  warning: 'bg-amber-500/15 text-amber-400 border border-amber-500/25',
+  info:    'bg-sky-500/15 text-sky-400 border border-sky-500/25',
+  neutral: 'bg-slate-500/15 text-slate-400 border border-slate-500/25',
 };
 
-// Input shared classes
+// Input shared classes — Dark Mode
 export const inputBase = `
-  w-full px-3 py-2 text-sm text-slate-900 bg-white/80 backdrop-blur-sm
-  border border-slate-300/80 rounded-xl shadow-sm
-  placeholder-slate-400
-  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent
-  disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed
+  w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 backdrop-blur-sm
+  border border-slate-600/50 rounded-xl shadow-sm
+  placeholder-slate-500
+  focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:bg-slate-800 focus:border-emerald-500/50
+  disabled:bg-slate-800/30 disabled:text-slate-500 disabled:cursor-not-allowed
   transition-all duration-200
 `;
 
 export const inputError = `
-  border-red-400 focus:ring-red-500 focus:border-red-500
+  border-red-500/60 focus:ring-red-500/50 focus:border-red-500/60
 `;

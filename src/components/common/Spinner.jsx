@@ -8,7 +8,7 @@ export default function Spinner({ size = 'md', className = '' }) {
   return (
     <div
       className={`
-        animate-spin rounded-full border-slate-200 border-t-blue-600
+        animate-spin rounded-full border-slate-700 border-t-emerald-500
         ${sizes[size]} ${className}
       `}
     />

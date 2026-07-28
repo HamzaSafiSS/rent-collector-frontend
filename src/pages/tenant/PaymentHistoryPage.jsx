@@ -55,9 +55,9 @@ export default function PaymentHistoryPage() {
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="w-full sm:w-48">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">Status</label>
           <select
-            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            className="w-full px-3 py-2 bg-[#111827] border border-slate-600/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-sm"
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
           >
@@ -68,7 +68,7 @@ export default function PaymentHistoryPage() {
           </select>
         </div>
         <div className="w-full sm:w-48">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Month</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">Month</label>
           <Input 
             type="month" 
             value={monthFilter}
@@ -82,7 +82,7 @@ export default function PaymentHistoryPage() {
       {loading && <div className="flex justify-center py-20"><Spinner size="lg" /></div>}
 
       {!loading && !error && payments.length === 0 && (
-        <div className="text-center py-20 bg-white border border-slate-200 rounded-xl">
+        <div className="text-center py-20 bg-[#111827] border border-slate-700/50 rounded-xl">
           <p className="text-3xl mb-3">💳</p>
           <p className="text-slate-500">No payments found.</p>
         </div>
@@ -91,12 +91,12 @@ export default function PaymentHistoryPage() {
       {!loading && !error && payments.length > 0 && (
         <div className="space-y-3">
           {payments.map((p) => (
-            <div key={p.id} className="bg-white border border-slate-200 rounded-xl p-4">
+            <div key={p.id} className="bg-[#111827] border border-slate-700/50 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-lg">💳</div>
+                  <div className="w-10 h-10 bg-emerald-500/15 rounded-lg flex items-center justify-center text-lg">💳</div>
                   <div>
-                    <p className="font-semibold text-slate-800">ETB {Number(p.amount).toLocaleString()}</p>
+                    <p className="font-semibold text-slate-100">ETB {Number(p.amount).toLocaleString()}</p>
                     <p className="text-xs text-slate-500 mt-0.5">
                       {p.paymentMonth} · Uploaded {p.uploadedAt ? new Date(p.uploadedAt).toLocaleDateString() : '—'}
                     </p>
@@ -106,7 +106,7 @@ export default function PaymentHistoryPage() {
                   {p.status === 'REJECTED' && (
                     <button
                       onClick={() => openDetail(p)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-blue-200 rounded-lg hover:bg-emerald-500/15 hover:text-emerald-300 transition-colors"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -120,9 +120,9 @@ export default function PaymentHistoryPage() {
               </div>
 
               {p.status === 'REJECTED' && p.landLoardComment && (
-                <div className="mt-3 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
-                  <p className="text-xs font-medium text-red-700">Rejection reason:</p>
-                  <p className="text-xs text-red-600 mt-0.5">{p.landLoardComment}</p>
+                <div className="mt-3 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+                  <p className="text-xs font-medium text-red-400">Rejection reason:</p>
+                  <p className="text-xs text-red-400 mt-0.5">{p.landLoardComment}</p>
                 </div>
               )}
             </div>

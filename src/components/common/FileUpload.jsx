@@ -51,8 +51,8 @@ export default function FileUpload({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-slate-700 mb-1">
-          {required && <span className="text-red-500 mr-1" aria-hidden="true">*</span>}
+        <label className="block text-sm font-medium text-slate-300 mb-1">
+          {required && <span className="text-red-400 mr-1" aria-hidden="true">*</span>}
           {label}
         </label>
       )}
@@ -68,30 +68,30 @@ export default function FileUpload({
           flex flex-col items-center justify-center gap-2
           cursor-pointer transition-colors duration-150
           ${dragging
-            ? 'border-blue-400 bg-blue-50'
-            : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50'}
+            ? 'border-emerald-400 bg-emerald-500/5'
+            : 'border-slate-600 hover:border-emerald-400/50 hover:bg-slate-800/50'}
         `}
       >
         {/* Upload icon */}
-        <svg className="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-8 h-8 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
         </svg>
 
         {selectedFile ? (
           <div className="text-center">
-            <p className="text-sm font-medium text-blue-700">{selectedFile.name}</p>
+            <p className="text-sm font-medium text-emerald-400">{selectedFile.name}</p>
             <p className="text-xs text-slate-500 mt-0.5">
               {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
             </p>
           </div>
         ) : (
           <div className="text-center">
-            <p className="text-sm text-slate-600">
-              <span className="font-medium text-blue-600">Click to upload</span>
+            <p className="text-sm text-slate-400">
+              <span className="font-medium text-emerald-400">Click to upload</span>
               {' '}or drag and drop
             </p>
-            <p className="text-xs text-slate-400 mt-1">JPEG, PNG, PDF — max {maxSizeMB}MB</p>
+            <p className="text-xs text-slate-500 mt-1">JPEG, PNG, PDF — max {maxSizeMB}MB</p>
           </div>
         )}
 
@@ -106,7 +106,7 @@ export default function FileUpload({
 
       {/* Error */}
       {error && (
-        <p className="mt-1.5 text-xs text-red-600">{error}</p>
+        <p className="mt-1.5 text-xs text-red-400">{error}</p>
       )}
     </div>
   );

@@ -76,15 +76,15 @@ export default function ProfileModal({ isOpen, onClose }) {
         {/* Profile Details */}
         {!showPasswordForm && (
           <div className="space-y-3">
-            <div className="flex gap-4"><p className="text-slate-500 w-24">Full name</p><p className="font-medium text-slate-800">{user?.fullName}</p></div>
-            <div className="flex gap-4"><p className="text-slate-500 w-24">Email</p>    <p className="font-medium text-slate-800">{user?.email}</p></div>
-            <div className="flex gap-4"><p className="text-slate-500 w-24">Role</p>     <p className="font-medium text-slate-800 capitalize">{user?.role?.replace('_', ' ').toLowerCase()}</p></div>
-            <div className="flex gap-4"><p className="text-slate-500 w-24">Status</p>   <p className="font-medium text-slate-800">{user?.status}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">Full name</p><p className="font-medium text-slate-200">{user?.fullName}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">Email</p>    <p className="font-medium text-slate-200">{user?.email}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">Role</p>     <p className="font-medium text-slate-200 capitalize">{user?.role?.replace('_', ' ').toLowerCase()}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">Status</p>   <p className="font-medium text-slate-200">{user?.status}</p></div>
           </div>
         )}
 
         {/* Change Password Toggle */}
-        <div className={!showPasswordForm ? "pt-4 border-t border-slate-100" : ""}>
+        <div className={!showPasswordForm ? "pt-4 border-t border-slate-700/50" : ""}>
           {!showPasswordForm ? (
             <Button variant="outline" onClick={() => setShowPasswordForm(true)} className="w-full">
               Change Password
@@ -92,7 +92,7 @@ export default function ProfileModal({ isOpen, onClose }) {
           ) : (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-slate-700">Change Password</h3>
+                <h3 className="font-semibold text-slate-200">Change Password</h3>
               </div>
 
               {apiError && <Alert type="error" message={apiError} />}

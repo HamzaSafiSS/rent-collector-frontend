@@ -29,10 +29,10 @@ export function ToastProvider({ children }) {
   };
 
   const styles = {
-    success: 'bg-green-600',
+    success: 'bg-emerald-600',
     error:   'bg-red-600',
-    warning: 'bg-yellow-500',
-    info:    'bg-blue-600',
+    warning: 'bg-amber-600',
+    info:    'bg-sky-600',
   };
 
   const icons = {

@@ -16,8 +16,8 @@ export default function Pagination({
     <div className="flex items-center justify-between py-3 px-1">
       {/* Info text */}
       <p className="text-sm text-slate-500">
-        Showing <span className="font-medium text-slate-700">{from}–{to}</span>{' '}
-        of <span className="font-medium text-slate-700">{totalElements}</span> results
+        Showing <span className="font-medium text-slate-300">{from}–{to}</span>{' '}
+        of <span className="font-medium text-slate-300">{totalElements}</span> results
       </p>
 
       {/* Page buttons */}
@@ -41,8 +41,8 @@ export default function Pagination({
               className={`
                 w-8 h-8 rounded text-sm font-medium transition-colors
                 ${i === page
-                  ? 'bg-blue-600 text-white'
-                  : 'text-slate-600 hover:bg-slate-100'}
+                  ? 'bg-emerald-600 text-white'
+                  : 'text-slate-400 hover:bg-slate-800'}
               `}
             >
               {i + 1}

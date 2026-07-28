@@ -32,10 +32,10 @@ export default function MyLeasePage() {
 
       <div className="space-y-4">
         {leases.map((lease) => (
-          <div key={lease.id} className="bg-white border border-slate-200 rounded-xl p-6">
+          <div key={lease.id} className="bg-[#111827] border border-slate-700/50 rounded-xl p-6">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h3 className="font-semibold text-slate-800 text-lg">{lease.propertyName}</h3>
+                <h3 className="font-semibold text-slate-100 text-lg">{lease.propertyName}</h3>
                 <p className="text-slate-500 text-sm mt-0.5">Unit: {lease.unitNumber}</p>
               </div>
               <Badge label={lease.status} />

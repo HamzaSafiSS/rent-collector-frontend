@@ -181,7 +181,7 @@ export default function PropertyDetailPage() {
   return (
     <>
       {/* Breadcrumb */}
-      <button onClick={() => navigate('/landlord/properties')} className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1">
+      <button onClick={() => navigate('/landlord/properties')} className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1">
         ← Back to Properties
       </button>
 
@@ -197,7 +197,7 @@ export default function PropertyDetailPage() {
 
       {/* Property info card */}
       {property?.description && (
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5 text-sm text-slate-600">
+        <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 mb-5 text-sm text-slate-400">
           {property.description}
         </div>
       )}
@@ -212,24 +212,24 @@ export default function PropertyDetailPage() {
               key={s} 
               onClick={() => setSearchParams(s === 'ALL' ? {} : { status: s })}
               className={`rounded-2xl p-6 border text-center shadow-sm relative overflow-hidden cursor-pointer transition-transform hover:-translate-y-1 ${
-              isSelected ? 'ring-2 ring-blue-500 shadow-md' : ''
+              isSelected ? 'ring-2 ring-emerald-500 shadow-md' : ''
             } ${
-              s === 'AVAILABLE'   ? 'bg-white border-emerald-200/60'  :
-              s === 'OCCUPIED'    ? 'bg-white border-blue-200/60'   :
-              s === 'MAINTENANCE' ? 'bg-white border-amber-200/60'  :
-                                    'bg-white border-slate-200/60'
+              s === 'AVAILABLE'   ? 'bg-[#111827] border-emerald-500/20'  :
+              s === 'OCCUPIED'    ? 'bg-[#111827] border-sky-500/20'   :
+              s === 'MAINTENANCE' ? 'bg-[#111827] border-amber-500/20'  :
+                                    'bg-[#111827] border-slate-700/50'
             }`}>
               <div className={`absolute inset-0 opacity-10 ${
                 s === 'AVAILABLE' ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' :
-                s === 'OCCUPIED'  ? 'bg-gradient-to-br from-blue-400 to-indigo-600' :
+                s === 'OCCUPIED'  ? 'bg-gradient-to-br from-sky-400 to-blue-600' :
                 s === 'MAINTENANCE' ? 'bg-gradient-to-br from-amber-400 to-orange-500' :
                                     'bg-gradient-to-br from-slate-400 to-slate-600'
               }`}></div>
               <p className={`text-3xl font-extrabold relative z-10 ${
-                s === 'AVAILABLE' ? 'text-emerald-600' :
-                s === 'OCCUPIED'  ? 'text-blue-600' :
-                s === 'MAINTENANCE' ? 'text-amber-600' :
-                                    'text-slate-700'
+                s === 'AVAILABLE' ? 'text-emerald-400' :
+                s === 'OCCUPIED'  ? 'text-sky-400' :
+                s === 'MAINTENANCE' ? 'text-amber-400' :
+                                    'text-slate-200'
               }`}>{count}</p>
               <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{s}</p>
             </div>
@@ -240,7 +240,7 @@ export default function PropertyDetailPage() {
       {/* Units table */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-800">{filterStatus === 'ALL' ? 'All' : filterStatus} Units <span className="text-slate-400 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
+          <h2 className="text-xl font-bold text-slate-100">{filterStatus === 'ALL' ? 'All' : filterStatus} Units <span className="text-slate-500 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
         </div>
         <Table
           columns={unitColumns}

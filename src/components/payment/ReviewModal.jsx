@@ -43,7 +43,7 @@ export default function ReviewModal({
       size="lg"
       footer={
         payment.status === 'PENDING' ? (
-          <div className="px-6 py-4 border-t border-slate-200">
+          <div className="px-6 py-4 border-t border-slate-700/50">
             {!showRejectForm ? (
               <div className="flex gap-3 justify-end">
                 <Button variant="secondary" onClick={handleClose} disabled={loading}>Cancel</Button>
@@ -54,15 +54,15 @@ export default function ReviewModal({
               <div className="space-y-3">
                 {commentError && <Alert type="error" message={commentError} />}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    <span className="text-red-500 mr-1" aria-hidden="true">*</span>Rejection Reason
+                  <label className="block text-sm font-medium text-slate-300 mb-1">
+                    <span className="text-red-400 mr-1" aria-hidden="true">*</span>Rejection Reason
                   </label>
                   <textarea
                     value={rejectComment}
                     onChange={(e) => { setRejectComment(e.target.value); setCommentError(''); }}
                     placeholder="Explain the rejection reason to the tenant..."
                     rows={3}
-                    className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 placeholder-slate-500"
                     required
                   />
                 </div>
@@ -74,7 +74,7 @@ export default function ReviewModal({
             )}
           </div>
         ) : (
-          <div className="px-6 py-4 border-t border-slate-200 flex justify-end">
+          <div className="px-6 py-4 border-t border-slate-700/50 flex justify-end">
             <Button variant="secondary" onClick={handleClose}>Close</Button>
           </div>
         )
@@ -98,15 +98,15 @@ export default function ReviewModal({
 
       {/* Rejection comment (if already rejected) */}
       {payment.status === 'REJECTED' && payment.landLoardComment && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-          <p className="text-xs font-semibold text-red-700 mb-1">Rejection Reason:</p>
-          <p className="text-sm text-red-600">{payment.landLoardComment}</p>
+        <div className="bg-red-500/10 border border-red-500/25 rounded-lg p-3 mb-4">
+          <p className="text-xs font-semibold text-red-400 mb-1">Rejection Reason:</p>
+          <p className="text-sm text-red-300">{payment.landLoardComment}</p>
         </div>
       )}
 
       {/* Screenshot */}
-      <div className="border-t border-slate-100 pt-4">
-        <p className="text-sm font-medium text-slate-700 mb-2">Payment Proof</p>
+      <div className="border-t border-slate-700/50 pt-4">
+        <p className="text-sm font-medium text-slate-300 mb-2">Payment Proof</p>
         <ScreenshotViewer paymentId={payment.id} />
       </div>
     </Modal>
@@ -117,7 +117,7 @@ function DetailRow({ label, value }) {
   return (
     <div>
       <p className="text-xs text-slate-500 font-medium">{label}</p>
-      <p className="text-sm text-slate-800 mt-0.5">{value ?? '—'}</p>
+      <p className="text-sm text-slate-200 mt-0.5">{value ?? '—'}</p>
     </div>
   );
 }

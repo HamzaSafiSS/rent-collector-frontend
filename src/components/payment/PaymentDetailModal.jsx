@@ -17,7 +17,7 @@ export default function PaymentDetailModal({ payment, isOpen, onClose }) {
       title="Payment Details"
       size="lg"
       footer={
-        <div className="px-6 py-4 border-t border-slate-200 flex justify-end">
+        <div className="px-6 py-4 border-t border-slate-700/50 flex justify-end">
           <Button variant="secondary" onClick={onClose}>Close</Button>
         </div>
       }
@@ -37,15 +37,15 @@ export default function PaymentDetailModal({ payment, isOpen, onClose }) {
 
       {/* Rejection reason */}
       {payment.status === 'REJECTED' && payment.landLoardComment && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-          <p className="text-xs font-semibold text-red-700 mb-1">Rejection Reason:</p>
-          <p className="text-sm text-red-600">{payment.landLoardComment}</p>
+        <div className="bg-red-500/10 border border-red-500/25 rounded-lg p-3 mb-4">
+          <p className="text-xs font-semibold text-red-400 mb-1">Rejection Reason:</p>
+          <p className="text-sm text-red-300">{payment.landLoardComment}</p>
         </div>
       )}
 
       {/* Screenshot */}
-      <div className="border-t border-slate-100 pt-4">
-        <p className="text-sm font-medium text-slate-700 mb-2">Payment Proof</p>
+      <div className="border-t border-slate-700/50 pt-4">
+        <p className="text-sm font-medium text-slate-300 mb-2">Payment Proof</p>
         <ScreenshotViewer paymentId={payment.id} />
       </div>
     </Modal>
@@ -56,7 +56,7 @@ function DetailRow({ label, value }) {
   return (
     <div>
       <p className="text-xs text-slate-500 font-medium">{label}</p>
-      <p className="text-sm text-slate-800 mt-0.5">{value ?? '—'}</p>
+      <p className="text-sm text-slate-200 mt-0.5">{value ?? '—'}</p>
     </div>
   );
 }

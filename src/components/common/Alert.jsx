@@ -1,23 +1,23 @@
 const variants = {
   success: {
-    wrapper: 'bg-green-50 border border-green-200 text-green-800',
+    wrapper: 'bg-emerald-500/10 border border-emerald-500/25 text-emerald-300',
     icon: '✓',
-    iconClass: 'text-green-600',
+    iconClass: 'text-emerald-400',
   },
   error: {
-    wrapper: 'bg-red-50 border border-red-200 text-red-800',
+    wrapper: 'bg-red-500/10 border border-red-500/25 text-red-300',
     icon: '✕',
-    iconClass: 'text-red-600',
+    iconClass: 'text-red-400',
   },
   warning: {
-    wrapper: 'bg-yellow-50 border border-yellow-200 text-yellow-800',
+    wrapper: 'bg-amber-500/10 border border-amber-500/25 text-amber-300',
     icon: '⚠',
-    iconClass: 'text-yellow-600',
+    iconClass: 'text-amber-400',
   },
   info: {
-    wrapper: 'bg-blue-50 border border-blue-200 text-blue-800',
+    wrapper: 'bg-sky-500/10 border border-sky-500/25 text-sky-300',
     icon: 'i',
-    iconClass: 'text-blue-600',
+    iconClass: 'text-sky-400',
   },
 };
 

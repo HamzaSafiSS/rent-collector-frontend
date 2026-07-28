@@ -28,22 +28,22 @@ export default function ReportsPage() {
         <>
           <button
             onClick={() => setSelectedProperty(null)}
-            className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
+            className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
             ← Back to Properties
           </button>
           <PageHeader title={`Reports — ${selectedProperty.name}`} subtitle="Analyse your portfolio performance" />
 
           {/* Tab bar */}
-          <div className="flex gap-1 mb-6 bg-slate-100 rounded-xl p-1 w-fit">
+          <div className="flex gap-1 mb-6 bg-slate-800/50 rounded-xl p-1 w-fit">
             {TABS.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeTab === tab
-                    ? 'bg-white text-blue-700 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-800'
+                    ? 'bg-emerald-500/15 text-emerald-400 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
                 {tab}
@@ -101,17 +101,17 @@ function PaymentReport({ properties, lockedPropertyId }) {
   return (
     <div>
       {/* Filters */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 mb-5">
+      <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-5">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
           <Input label="From month" type="month" value={filters.from}       onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))} />
           <Input label="To month"   type="month" value={filters.to}         onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))} />
           {!lockedPropertyId && (
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Property</label>
               <select
                 value={filters.propertyId}
                 onChange={(e) => setFilters((p) => ({ ...p, propertyId: e.target.value }))}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
               >
                 <option value="">All properties</option>
                 {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -160,14 +160,14 @@ function OccupancyReport({ properties, lockedPropertyId }) {
 
   return (
     <div>
-      <div className="bg-white border border-slate-200 rounded-xl p-4 mb-5 flex gap-3 items-end">
+      <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-5 flex gap-3 items-end">
         {!lockedPropertyId && (
           <div className="flex-1 max-w-xs">
-            <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
+            <label className="block text-sm font-medium text-slate-300 mb-1">Property</label>
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               <option value="">All properties</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -189,14 +189,14 @@ function OccupancyReport({ properties, lockedPropertyId }) {
             <StatCard label="Maintenance"    value={data.maintenanceUnits} color="yellow" />
           </div>
           {/* Occupancy rate bar */}
-          <div className="bg-white border border-slate-200/60 shadow-sm rounded-2xl p-6">
+          <div className="bg-[#111827] border border-slate-700/50 shadow-sm rounded-2xl p-6">
             <div className="flex justify-between text-sm mb-2">
-              <span className="font-medium text-slate-700">Occupancy Rate</span>
-              <span className="font-bold text-blue-600">{data.occupancyRate}%</span>
+              <span className="font-medium text-slate-300">Occupancy Rate</span>
+              <span className="font-bold text-emerald-400">{data.occupancyRate}%</span>
             </div>
-            <div className="w-full bg-slate-100 rounded-full h-4">
+            <div className="w-full bg-slate-700 rounded-full h-4">
               <div
-                className="bg-blue-600 h-4 rounded-full transition-all duration-500"
+                className="bg-emerald-500 h-4 rounded-full transition-all duration-500"
                 style={{ width: `${Math.min(data.occupancyRate, 100)}%` }}
               />
             </div>
@@ -231,13 +231,13 @@ function RevenueReport({ properties, lockedPropertyId }) {
 
   return (
     <div>
-      <div className="bg-white border border-slate-200 rounded-xl p-4 mb-5 flex gap-3 items-end flex-wrap">
+      <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-5 flex gap-3 items-end flex-wrap">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Year</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">Year</label>
           <select
             value={year}
             onChange={(e) => setYear(e.target.value)}
-            className="px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
           >
             {[2024, 2025, 2026, 2027].map((y) => (
               <option key={y} value={y}>{y}</option>
@@ -246,11 +246,11 @@ function RevenueReport({ properties, lockedPropertyId }) {
         </div>
         {!lockedPropertyId && (
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
+            <label className="block text-sm font-medium text-slate-300 mb-1">Property</label>
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
-              className="px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               <option value="">All properties</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -272,11 +272,11 @@ function RevenueReport({ properties, lockedPropertyId }) {
 
           {/* Monthly breakdown */}
           {data.byMonth?.length > 0 && (
-            <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden mb-4 shadow-sm">
-              <p className="px-6 py-4 font-bold text-slate-800 border-b border-slate-100 bg-slate-50/50">Monthly Breakdown</p>
+            <div className="bg-[#111827] border border-slate-700/50 rounded-2xl overflow-hidden mb-4 shadow-sm">
+              <p className="px-6 py-4 font-bold text-slate-100 border-b border-slate-100 bg-slate-800/50/50">Monthly Breakdown</p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="bg-slate-50/50 border-b border-slate-100">
+                  <thead className="bg-slate-800/50/50 border-b border-slate-100">
                     <tr>
                       <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Month</th>
                       <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Revenue (ETB)</th>
@@ -285,9 +285,9 @@ function RevenueReport({ properties, lockedPropertyId }) {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {data.byMonth.map((m) => (
-                      <tr key={m.month} className="hover:bg-blue-50/50 transition-colors">
+                      <tr key={m.month} className="hover:bg-emerald-500/5/50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">{m.month}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right font-bold text-emerald-600">{Number(m.revenue).toLocaleString()}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right font-bold text-emerald-400">{Number(m.revenue).toLocaleString()}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-slate-500 font-medium">{m.paymentCount}</td>
                       </tr>
                     ))}
@@ -324,14 +324,14 @@ function TenantReport({ properties, lockedPropertyId }) {
 
   return (
     <div>
-      <div className="bg-white border border-slate-200 rounded-xl p-4 mb-5 flex gap-3 items-end">
+      <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-5 flex gap-3 items-end">
         {!lockedPropertyId && (
           <div className="flex-1 max-w-xs">
-            <label className="block text-sm font-medium text-slate-700 mb-1">Property</label>
+            <label className="block text-sm font-medium text-slate-300 mb-1">Property</label>
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               <option value="">All properties</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -352,10 +352,10 @@ function TenantReport({ properties, lockedPropertyId }) {
             <StatCard label="Total Unique"       value={data.totalTenants}           color="blue"  />
           </div>
           {data.tenants?.length > 0 && (
-            <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-sm">
+            <div className="bg-[#111827] border border-slate-700/50 rounded-2xl overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead className="bg-slate-50/50 border-b border-slate-100">
+                  <thead className="bg-slate-800/50/50 border-b border-slate-100">
                     <tr>
                       {['Name','Email','Status','Current Unit','Active Leases','Total Leases'].map((h) => (
                         <th key={h} className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">{h}</th>
@@ -364,16 +364,16 @@ function TenantReport({ properties, lockedPropertyId }) {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {data.tenants.map((t) => (
-                      <tr key={t.tenantId} className="hover:bg-blue-50/50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap font-semibold text-slate-800">{t.fullName}</td>
+                      <tr key={t.tenantId} className="hover:bg-emerald-500/5/50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap font-semibold text-slate-100">{t.fullName}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-slate-500">{t.email}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`text-xs font-bold px-3 py-1 rounded-full ${t.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                          <span className={`text-xs font-bold px-3 py-1 rounded-full ${t.status === 'Active' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-amber-500/15 text-amber-400'}`}>
                             {t.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-slate-600 font-medium">{t.currentUnit || '—'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center font-bold text-slate-700">{t.activeLeases}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-slate-400 font-medium">{t.currentUnit || '—'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center font-bold text-slate-300">{t.activeLeases}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-center text-slate-500">{t.totalLeases}</td>
                       </tr>
                     ))}

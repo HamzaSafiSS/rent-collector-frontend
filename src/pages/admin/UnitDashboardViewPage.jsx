@@ -72,7 +72,7 @@ export default function UnitDashboardViewPage() {
     <>
       <button
         onClick={() => navigate(backUrl)}
-        className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
+        className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
       >
         ← Back to Units
       </button>
@@ -81,20 +81,20 @@ export default function UnitDashboardViewPage() {
 
       <div className="flex items-center justify-between mb-6">
         <PageHeader title={`Unit Dashboard`} subtitle={`Unit ID: ${id}`} />
-        <div className="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-200 shadow-sm">
+        <div className="bg-amber-500/15 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-200 shadow-sm">
           Read-Only View
         </div>
       </div>
 
-      <div className="mb-6 flex gap-2 border-b border-slate-200">
+      <div className="mb-6 flex gap-2 border-b border-slate-700/50">
         {['leases'].map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === tab
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-emerald-600 text-emerald-400'
+                : 'border-transparent text-slate-500 hover:text-slate-100'
             }`}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -102,14 +102,14 @@ export default function UnitDashboardViewPage() {
         ))}
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-          <h3 className="font-semibold text-slate-800 capitalize">{activeTab}</h3>
+      <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden shadow-sm">
+        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-800/50">
+          <h3 className="font-semibold text-slate-100 capitalize">{activeTab}</h3>
         </div>
         
         <div className="relative min-h-[200px]">
           {loading ? (
-            <div className="absolute inset-0 bg-white/50 flex justify-center pt-10 z-10">
+            <div className="absolute inset-0 bg-[#111827]/70 flex justify-center pt-10 z-10">
               <Spinner size="md" />
             </div>
           ) : null}

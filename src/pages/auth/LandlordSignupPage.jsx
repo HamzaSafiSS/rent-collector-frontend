@@ -95,14 +95,14 @@ export default function LandlordSignupPage() {
   return (
     <div className="min-h-screen relative overflow-hidden bg-slate-950 flex items-center justify-center p-4">
       {/* Animated Background Gradients */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/20 blur-[120px] mix-blend-screen pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-600/20 blur-[120px] mix-blend-screen pointer-events-none"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-600/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-800/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
 
       <div className="w-full max-w-sm relative z-10 animate-slide-in">
 
         {/* Brand */}
         <div className="text-center mb-4">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl mb-4 shadow-xl shadow-blue-500/30 transform transition-transform hover:scale-105 duration-300">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-tr from-emerald-600 to-emerald-400 rounded-2xl mb-4 shadow-xl shadow-emerald-500/30 transform transition-transform hover:scale-105 duration-300">
             <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -198,7 +198,7 @@ export default function LandlordSignupPage() {
             Already have an account?{' '}
             <Link
               to="/login"
-              className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
+              className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
             >
               Sign in
             </Link>

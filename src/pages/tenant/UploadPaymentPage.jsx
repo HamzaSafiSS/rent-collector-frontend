@@ -172,14 +172,14 @@ export default function UploadPaymentPage() {
   }
 
   const selectClass =
-    'w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-50';
+    'w-full px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:bg-slate-800/50';
 
   return (
     <>
       <PageHeader title="Upload Payment" subtitle="Submit your payment proof for review" />
 
       <div className="max-w-lg">
-        <div className="bg-white border border-slate-200 rounded-xl p-6">
+        <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-6">
           {apiError && <Alert type="error"   message={apiError}  className="mb-5" />}
           {success  && <Alert type="success" message={success}   className="mb-5" />}
 
@@ -187,7 +187,7 @@ export default function UploadPaymentPage() {
 
             {/* Lease selector */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-300 mb-1">
                 <span className="text-red-500 mr-1" aria-hidden="true">*</span>Select Lease
               </label>
               <select
@@ -203,13 +203,13 @@ export default function UploadPaymentPage() {
                   </option>
                 ))}
               </select>
-              {errors.leaseId && <p className="mt-1 text-xs text-red-600">{errors.leaseId}</p>}
+              {errors.leaseId && <p className="mt-1 text-xs text-red-400">{errors.leaseId}</p>}
               {leases.length === 0 && <p className="mt-1 text-xs text-yellow-600">No active leases found.</p>}
             </div>
 
             {/* Payment month — two explicit dropdowns */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-300 mb-1">
                 <span className="text-red-500 mr-1" aria-hidden="true">*</span>Payment Month
               </label>
               <div className="flex gap-3">
@@ -244,7 +244,7 @@ export default function UploadPaymentPage() {
                   ✓ Will submit: {MONTHS.find(m => m.value === selectedMonthNum)?.label} {selectedYear}
                 </p>
               )}
-              {errors.month && <p className="mt-1 text-xs text-red-600">{errors.month}</p>}
+              {errors.month && <p className="mt-1 text-xs text-red-400">{errors.month}</p>}
             </div>
 
             {/* Amount */}
@@ -267,7 +267,7 @@ export default function UploadPaymentPage() {
                 disabled={loading}
                 required
               />
-              {errors.file && <p className="mt-1 text-xs text-red-600">{errors.file}</p>}
+              {errors.file && <p className="mt-1 text-xs text-red-400">{errors.file}</p>}
             </div>
 
             <Button type="submit" fullWidth loading={loading} disabled={leases.length === 0}>

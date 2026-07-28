@@ -18,7 +18,7 @@ export default function ConfirmDialog({
       title={title}
       size="sm"
       footer={
-        <div className="px-6 py-4 border-t border-slate-200 flex justify-end gap-3">
+        <div className="px-6 py-4 border-t border-slate-700/50 flex justify-end gap-3">
           <Button variant="secondary" onClick={onClose} disabled={loading}>
             Cancel
           </Button>
@@ -29,7 +29,7 @@ export default function ConfirmDialog({
       }
     >
       {message && (
-        <p className="text-sm text-slate-600 leading-relaxed">{message}</p>
+        <p className="text-sm text-slate-400 leading-relaxed">{message}</p>
       )}
     </Modal>
   );

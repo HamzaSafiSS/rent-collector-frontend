@@ -109,7 +109,7 @@ export default function TenantsPage() {
         <>
           <button 
             onClick={() => setSelectedProperty(null)} 
-            className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
+            className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
             ← Back to Properties
           </button>

@@ -91,7 +91,7 @@ export default function ManageLandlordsPage() {
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden">
         {loading ? (
           <TableSkeleton rows={8} cols={columns.length} />
         ) : (

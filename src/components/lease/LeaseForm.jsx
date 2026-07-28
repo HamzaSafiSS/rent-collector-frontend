@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Input, Button, Alert } from '../common';
 
+const selectClass = 'w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-800/30 disabled:text-slate-500 transition-all duration-200';
+
 export default function LeaseForm({ units = [], onSubmit, loading, error }) {
   const [form, setForm]   = useState({
     tenantEmail: '',
@@ -58,23 +60,23 @@ export default function LeaseForm({ units = [], onSubmit, loading, error }) {
 
       {/* Unit selector */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
-          <span className="text-red-500 mr-1" aria-hidden="true">*</span>Unit
+        <label className="block text-sm font-medium text-slate-300 mb-1">
+          <span className="text-red-400 mr-1" aria-hidden="true">*</span>Unit
         </label>
         <select
           name="unitId"
           value={form.unitId}
           onChange={handleChange}
           disabled={loading}
-          className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-50"
+          className={selectClass}
         >
           <option value="">Select a unit...</option>
           {units.map((u) => (
             <option key={u.id} value={u.id}>{u.unitNumber}</option>
           ))}
         </select>
-        {errors.unitId && <p className="mt-1 text-xs text-red-600">{errors.unitId}</p>}
-        {units.length === 0 && <p className="mt-1 text-xs text-yellow-600">No available units. All units are occupied or in maintenance.</p>}
+        {errors.unitId && <p className="mt-1 text-xs text-red-400">{errors.unitId}</p>}
+        {units.length === 0 && <p className="mt-1 text-xs text-amber-400">No available units. All units are occupied or in maintenance.</p>}
       </div>
 
       <Input

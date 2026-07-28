@@ -136,7 +136,7 @@ export default function LeasesPage() {
         <>
           <button 
             onClick={() => setSelectedProperty(null)} 
-            className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
+            className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
             ← Back to Properties
           </button>
@@ -156,8 +156,8 @@ export default function LeasesPage() {
             onClick={() => { setStatusFilter(s); setPage(0); }}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
               statusFilter === s
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
+                ? 'bg-emerald-600 text-white border-emerald-600'
+                : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700'
             }`}
           >
             {s || 'All'}

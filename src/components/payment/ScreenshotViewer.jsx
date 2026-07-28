@@ -35,7 +35,7 @@ export default function ScreenshotViewer({ paymentId }) {
       {!url && !loading && (
         <button
           onClick={handleLoad}
-          className="text-sm text-blue-600 hover:underline font-medium"
+          className="text-sm text-emerald-400 hover:text-emerald-300 hover:underline font-medium transition-colors"
         >
           View screenshot
         </button>
@@ -47,7 +47,7 @@ export default function ScreenshotViewer({ paymentId }) {
         </div>
       )}
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && <p className="text-sm text-red-400">{error}</p>}
 
       {url && (
         <div className="mt-2">
@@ -55,13 +55,13 @@ export default function ScreenshotViewer({ paymentId }) {
             src={url}
             alt="Payment proof"
             onLoad={() => setLoaded(true)}
-            className={`max-w-full rounded-lg border border-slate-200 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+            className={`max-w-full rounded-lg border border-slate-700 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
             style={{ maxHeight: '400px', objectFit: 'contain' }}
           />
           <a
             href={url}
             download={`payment-proof-${paymentId}`}
-            className="text-xs text-blue-600 hover:underline mt-2 block"
+            className="text-xs text-emerald-400 hover:text-emerald-300 hover:underline mt-2 block transition-colors"
           >
             Download
           </a>

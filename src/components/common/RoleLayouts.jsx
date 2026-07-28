@@ -19,8 +19,8 @@ const SUPER_ADMIN_NAV = [
 
 function PageLoaderInner() {
   return (
-    <div className="flex-1 flex items-center justify-center bg-slate-50/50 min-h-[50vh]">
-      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" />
+    <div className="flex-1 flex items-center justify-center min-h-[50vh]">
+      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-500" />
     </div>
   );
 }

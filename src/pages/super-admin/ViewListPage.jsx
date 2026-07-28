@@ -324,7 +324,7 @@ export default function ViewListPage() {
       {/* Breadcrumb */}
       <button
         onClick={() => navigate('/super-admin/dashboard')}
-        className="text-sm text-blue-600 hover:underline mb-4 flex items-center gap-1"
+        className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
       >
         ← Back to Dashboard
       </button>
@@ -334,13 +334,13 @@ export default function ViewListPage() {
         subtitle={`${totalElements} record${totalElements !== 1 ? 's' : ''}`}
       />
 
-      <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-50 p-3 rounded-lg border border-slate-200">
-        <div className="text-sm font-medium text-slate-600">Filters:</div>
+      <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+        <div className="text-sm font-medium text-slate-400">Filters:</div>
         {category !== 'properties' && category !== 'admins' && (
           <select 
             value={statusFilter} 
             onChange={e => setStatusFilter(e.target.value)}
-            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
+            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">All Statuses</option>
             {category === 'units' ? (
@@ -368,7 +368,7 @@ export default function ViewListPage() {
           <select
             value={monthFilter}
             onChange={e => setMonthFilter(e.target.value)}
-            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500"
+            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">All Months</option>
             <option value="01">January</option>
@@ -389,13 +389,13 @@ export default function ViewListPage() {
             placeholder="Year"
             value={yearFilter}
             onChange={e => setYearFilter(e.target.value)}
-            className="text-sm border border-slate-300 rounded px-2 py-1 outline-none focus:border-blue-500 w-24"
+            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
           />
         </>
         {(statusFilter || monthFilter || yearFilter) && (
           <button 
             onClick={() => { setStatusFilter(''); setMonthFilter(''); setYearFilter(''); }}
-            className="text-sm text-blue-600 hover:underline"
+            className="text-sm text-emerald-400 hover:underline"
           >
             Clear
           </button>
@@ -404,7 +404,7 @@ export default function ViewListPage() {
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden">
         {loading ? (
           <TableSkeleton rows={8} cols={columnsWithView.length} />
         ) : (
@@ -436,7 +436,7 @@ export default function ViewListPage() {
                 className="flex items-center justify-between py-3 px-1 border-b border-slate-100 last:border-0"
               >
                 <span className="text-sm font-semibold text-slate-500">{field.label}</span>
-                <span className="text-sm font-medium text-slate-800 text-right max-w-[60%] break-words">
+                <span className="text-sm font-medium text-slate-100 text-right max-w-[60%] break-words">
                   <DetailValue field={field} item={selectedItem} />
                 </span>
               </div>
