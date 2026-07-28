@@ -105,7 +105,7 @@ const CATEGORIES = {
 
   properties: {
     title: 'All Properties',
-    icon: '🏗️',
+    icon: '🏢',
     fetchList: (page) => propertyApi.listAllProperties(page, PAGE_SIZE),
     columns: [
       { key: 'name',        header: 'Name' },

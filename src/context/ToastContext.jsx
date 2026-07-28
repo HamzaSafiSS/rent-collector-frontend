@@ -21,25 +21,25 @@ export function ToastProvider({ children }) {
   }, []);
 
   const toast = {
-    success: (msg, duration)  => addToast(msg, 'success', duration),
-    error:   (msg, duration)  => addToast(msg, 'error',   duration ?? 6000),
-    warning: (msg, duration)  => addToast(msg, 'warning', duration),
-    info:    (msg, duration)  => addToast(msg, 'info',    duration),
+    success: (msg, duration) => addToast(msg, 'success', duration),
+    error: (msg, duration) => addToast(msg, 'error', duration ?? 6000),
+    warning: (msg, duration) => addToast(msg, 'warning', duration),
+    info: (msg, duration) => addToast(msg, 'info', duration),
     dismiss: removeToast,
   };
 
   const styles = {
     success: 'bg-emerald-600',
-    error:   'bg-red-600',
+    error: 'bg-red-600',
     warning: 'bg-amber-600',
-    info:    'bg-sky-600',
+    info: 'bg-sky-600',
   };
 
   const icons = {
     success: '✓',
-    error:   '✕',
+    error: '✕',
     warning: '⚠',
-    info:    'ℹ',
+    info: 'ℹ',
   };
 
   return (

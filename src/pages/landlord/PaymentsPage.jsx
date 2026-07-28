@@ -168,38 +168,38 @@ export default function PaymentsPage() {
         <StatCard 
             label="Pending Payments"
             value={reportData?.pendingCount || 0}
-            icon="⏳"
+            icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
             color={statusFilter === 'PENDING' ? 'blue' : 'slate'} 
             onClick={() => { setStatusFilter('PENDING'); setPage(0); }}
         />
         <StatCard 
             label="Approved Payments"
             value={reportData?.approvedCount || 0}
-            icon="✅"
+            icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>}
             color={statusFilter === 'APPROVED' ? 'green' : 'slate'} 
             onClick={() => { setStatusFilter('APPROVED'); setPage(0); }}
         />
         <StatCard 
             label="Rejected Payments"
             value={reportData?.rejectedCount || 0}
-            icon="❌"
+            icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>}
             color={statusFilter === 'REJECTED' ? 'red' : 'slate'} 
             onClick={() => { setStatusFilter('REJECTED'); setPage(0); }}
         />
         <StatCard 
             label="Unpaid Tenants"
             value={reportData?.unpaidCount || 0}
-            icon="⚠️"
+            icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>}
             color={statusFilter === 'UNPAID' ? 'yellow' : 'slate'} 
             onClick={() => { setStatusFilter('UNPAID'); setPage(0); }}
         />
-        {(reportData?.daysUntilDue !== undefined && reportData.daysUntilDue <= 3) && (
+        {reportData?.dueSoonCount > 0 && (
             <StatCard 
-                label={`Due in ${reportData.daysUntilDue} Days`}
-                value={reportData?.dueSoonCount || 0}
-                icon="⏰"
-                color="indigo" 
-                onClick={() => {}}
+                label="Due Soon (≤ 3 days)"
+                value={reportData.dueSoonCount}
+                icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+                color={statusFilter === 'DUE_SOON' ? 'orange' : 'slate'} 
+                onClick={() => { setStatusFilter('DUE_SOON'); setPage(0); }}
             />
         )}
       </div>

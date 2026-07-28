@@ -49,7 +49,7 @@ export default function PropertySelector({ onSelect }) {
     return (
       <div className="text-center py-24 bg-[#111827] rounded-3xl border border-slate-700/50 shadow-sm">
         <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-5">
-          <p className="text-4xl">🏗️</p>
+          <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1v1H9V7zm5 0h1v1h-1V7zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1z" /></svg>
         </div>
         <p className="text-xl text-slate-200 font-bold">No properties available</p>
         <p className="text-slate-500 text-sm mt-2 mb-6 max-w-sm mx-auto">
@@ -70,7 +70,7 @@ export default function PropertySelector({ onSelect }) {
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-500"></div>
           <div className="flex items-start justify-between mb-4 z-10">
             <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-xl flex items-center justify-center text-2xl shadow-md text-white">
-              🏗️
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1v1H9V7zm5 0h1v1h-1V7zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1z" /></svg>
             </div>
           </div>
           <h3 className="text-lg font-bold text-slate-100 truncate z-10">{p.name}</h3>
