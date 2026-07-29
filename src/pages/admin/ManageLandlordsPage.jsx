@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader, Table, Badge, Button, Pagination, Alert, ConfirmDialog } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 import { useToast } from '../../context/ToastContext';
 import { TableSkeleton } from '../../components/common';
 
-
 const PAGE_SIZE = 10;
 
 export default function ManageLandlordsPage() {
+  const navigate = useNavigate();
   const toast = useToast();
   const [landlords, setLandlords]     = useState([]);
   const [page, setPage]               = useState(0);
@@ -66,16 +67,25 @@ export default function ManageLandlordsPage() {
     {
       key: 'actions', header: 'Actions',
       render: (row) => (
-        <Button
-          size="sm"
-          variant={row.status === 'Suspended' ? 'success' : 'secondary'}
-          onClick={() => setConfirmTarget({
-            landlord: row,
-            action: row.status === 'Suspended' ? 'activate' : 'suspend',
-          })}
-        >
-          {row.status === 'Suspended' ? 'Activate' : 'Suspend'}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant="primary"
+            onClick={() => navigate(`/admin/view/landlord-dashboard/${row.id}`)}
+          >
+            View Dashboard
+          </Button>
+          <Button
+            size="sm"
+            variant={row.status === 'Suspended' ? 'success' : 'secondary'}
+            onClick={() => setConfirmTarget({
+              landlord: row,
+              action: row.status === 'Suspended' ? 'activate' : 'suspend',
+            })}
+          >
+            {row.status === 'Suspended' ? 'Activate' : 'Suspend'}
+          </Button>
+        </div>
       ),
     },
   ];

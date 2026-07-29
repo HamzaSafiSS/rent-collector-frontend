@@ -1,27 +1,37 @@
 import { useCallback, useEffect, useState } from 'react';
-import { PageHeader, Table, Badge, Pagination, Alert } from '../../components/common';
+import { useNavigate } from 'react-router-dom';
+import { PageHeader, Table, Badge, Pagination, Alert, Button } from '../../components/common';
 import { tenantApi } from '../../api/tenantApi';
-
 
 const PAGE_SIZE = 10;
 
-const COLUMNS = [
-  { key: 'fullName',    header: 'Name' },
-  { key: 'email',       header: 'Email' },
-  { key: 'phoneNumber', header: 'Phone',      render: (r) => r.phoneNumber || '—' },
-  { key: 'status',      header: 'Status',     render: (r) => <Badge label={r.status} /> },
-  { key: 'unitNumber',  header: 'Current Unit',render: (r) => r.unitNumber || '—' },
-  { key: 'moveInDate',  header: 'Move-in',    render: (r) => r.moveInDate || '—' },
-  { key: 'activeLeaseCount', header: 'Active Leases', render: (r) => r.activeLeaseCount ?? 0 },
-];
-
 export default function ManageTenantsPage() {
+  const navigate = useNavigate();
   const [tenants, setTenants]         = useState([]);
   const [page, setPage]               = useState(0);
   const [totalPages, setTotalPages]   = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading]         = useState(true);
   const [error, setError]             = useState('');
+
+  const COLUMNS = [
+    { key: 'fullName',    header: 'Name' },
+    { key: 'email',       header: 'Email' },
+    { key: 'phoneNumber', header: 'Phone',      render: (r) => r.phoneNumber || '—' },
+    { key: 'status',      header: 'Status',     render: (r) => <Badge label={r.status} /> },
+    { key: 'unitNumber',  header: 'Current Unit',render: (r) => r.unitNumber || '—' },
+    { key: 'moveInDate',  header: 'Move-in',    render: (r) => r.moveInDate || '—' },
+    { key: 'activeLeaseCount', header: 'Active Leases', render: (r) => r.activeLeaseCount ?? 0 },
+    { 
+      key: 'actions', 
+      header: 'Actions',
+      render: (r) => (
+        <Button size="sm" variant="primary" onClick={() => navigate(`/admin/view/tenant-dashboard/${r.id}`)}>
+          View Dashboard
+        </Button>
+      )
+    }
+  ];
 
   const loadTenants = useCallback(async () => {
     try {
