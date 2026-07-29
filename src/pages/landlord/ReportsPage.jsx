@@ -167,7 +167,7 @@ function OccupancyReport({ properties, lockedPropertyId }) {
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               <option value="">All properties</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -237,7 +237,7 @@ function RevenueReport({ properties, lockedPropertyId }) {
           <select
             value={year}
             onChange={(e) => setYear(e.target.value)}
-            className="px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+            className="px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
           >
             {[2024, 2025, 2026, 2027].map((y) => (
               <option key={y} value={y}>{y}</option>
@@ -250,7 +250,7 @@ function RevenueReport({ properties, lockedPropertyId }) {
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
-              className="px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               <option value="">All properties</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -331,7 +331,7 @@ function TenantReport({ properties, lockedPropertyId }) {
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               <option value="">All properties</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
