@@ -193,15 +193,6 @@ export default function PaymentsPage() {
             color={statusFilter === 'UNPAID' ? 'yellow' : 'slate'} 
             onClick={() => { setStatusFilter('UNPAID'); setPage(0); }}
         />
-        {reportData?.dueSoonCount > 0 && (
-            <StatCard 
-                label="Due Soon (≤ 3 days)"
-                value={reportData.dueSoonCount}
-                icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-                color={statusFilter === 'DUE_SOON' ? 'orange' : 'slate'} 
-                onClick={() => { setStatusFilter('DUE_SOON'); setPage(0); }}
-            />
-        )}
       </div>
 
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
