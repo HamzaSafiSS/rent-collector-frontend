@@ -70,13 +70,6 @@ export default function ManageLandlordsPage() {
         <div className="flex gap-2">
           <Button
             size="sm"
-            variant="primary"
-            onClick={() => navigate(`/admin/view/landlord-dashboard/${row.id}`)}
-          >
-            View Dashboard
-          </Button>
-          <Button
-            size="sm"
             variant={row.status === 'Suspended' ? 'success' : 'secondary'}
             onClick={() => setConfirmTarget({
               landlord: row,
@@ -84,6 +77,13 @@ export default function ManageLandlordsPage() {
             })}
           >
             {row.status === 'Suspended' ? 'Activate' : 'Suspend'}
+          </Button>
+          <Button
+            size="sm"
+            variant="primary"
+            onClick={() => navigate(`/admin/view/landlord-dashboard/${row.id}`)}
+          >
+            View Dashboard
           </Button>
         </div>
       ),

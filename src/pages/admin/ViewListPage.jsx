@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  PageHeader, Table, Badge, Pagination, Alert, Modal, Button, Spinner,
+  PageHeader, Table, Badge, Pagination, Alert, Modal, Button, Spinner, ConfirmDialog,
 } from '../../components/common';
+import { useToast } from '../../context/ToastContext';
 import { adminApi } from '../../api/adminApi';
 import { tenantApi } from '../../api/tenantApi';
 import { propertyApi } from '../../api/propertyApi';
@@ -196,6 +197,31 @@ export default function AdminViewListPage() {
   // Detail modal
   const [selectedItem, setSelectedItem] = useState(null);
 
+  const toast = useToast();
+  const [confirmTarget, setConfirmTarget] = useState(null);
+  const [actionLoading, setActionLoading] = useState(false);
+
+  async function handleConfirmAction() {
+    if (!confirmTarget) return;
+    const { item, action } = confirmTarget;
+    try {
+      setActionLoading(true);
+      if (action === 'suspend') {
+        await adminApi.suspendLandlord(item.id);
+        toast.success(`${item.fullName} suspended.`);
+      } else {
+        await adminApi.activateLandlord(item.id);
+        toast.success(`${item.fullName} activated.`);
+      }
+      setConfirmTarget(null);
+      loadData();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Action failed.');
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
   const [statusFilter, setStatusFilter] = useState('');
   const [dateFilter, setDateFilter]     = useState('');
   const [monthFilter, setMonthFilter]   = useState('');
@@ -281,9 +307,23 @@ export default function AdminViewListPage() {
         
         if (path) {
           return (
-            <Button size="sm" variant="primary" onClick={() => navigate(path)}>
-              View Dashboard
-            </Button>
+            <div className="flex gap-2">
+              {(category === 'landlords' || category === 'suspended-landlords') && (
+                <Button
+                  size="sm"
+                  variant={row.status === 'Suspended' ? 'success' : 'secondary'}
+                  onClick={() => setConfirmTarget({
+                    item: row,
+                    action: row.status === 'Suspended' ? 'activate' : 'suspend',
+                  })}
+                >
+                  {row.status === 'Suspended' ? 'Activate' : 'Suspend'}
+                </Button>
+              )}
+              <Button size="sm" variant="primary" onClick={() => navigate(path)}>
+                View Dashboard
+              </Button>
+            </div>
           );
         }
         
@@ -421,6 +461,21 @@ export default function AdminViewListPage() {
           </div>
         )}
       </Modal>
+
+      <ConfirmDialog
+        isOpen={!!confirmTarget}
+        onClose={() => setConfirmTarget(null)}
+        onConfirm={handleConfirmAction}
+        loading={actionLoading}
+        title={confirmTarget?.action === 'suspend' ? 'Suspend Landlord' : 'Activate Landlord'}
+        message={
+          confirmTarget?.action === 'suspend'
+            ? `Suspend "${confirmTarget?.item?.fullName}"? They will be immediately locked out.`
+            : `Activate "${confirmTarget?.item?.fullName}"? They will regain full access.`
+        }
+        confirmText={confirmTarget?.action === 'suspend' ? 'Suspend' : 'Activate'}
+        variant={confirmTarget?.action === 'suspend' ? 'danger' : 'success'}
+      />
     </>
   );
 }
