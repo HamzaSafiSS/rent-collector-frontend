@@ -13,10 +13,9 @@ export default function LeaseDashboardViewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
-  const navItems = isSuperAdmin ? SUPER_ADMIN_NAV : ADMIN_NAV;
-  const portalLabel = isSuperAdmin ? 'Super Admin' : 'Admin';
+
+
   const backUrl = isSuperAdmin ? '/super-admin/view/leases' : '/admin/view/leases';
 
   const [activeTab, setActiveTab] = useState('payments');
@@ -106,7 +105,6 @@ export default function LeaseDashboardViewPage() {
         <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-800/50">
           <h3 className="font-semibold text-slate-100 capitalize">{activeTab}</h3>
         </div>
-        
         <div className="relative min-h-[200px]">
           {loading ? (
             <div className="absolute inset-0 bg-[#111827]/70 flex justify-center pt-10 z-10">

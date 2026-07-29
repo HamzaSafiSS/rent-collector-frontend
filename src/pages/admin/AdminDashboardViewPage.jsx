@@ -10,10 +10,9 @@ export default function AdminDashboardViewPage() {
   const { adminId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
-  const navItems = isSuperAdmin ? SUPER_ADMIN_NAV : ADMIN_NAV;
-  const portalLabel = isSuperAdmin ? 'Super Admin' : 'Admin';
+
+
   const backUrl = isSuperAdmin ? '/super-admin/view/admins' : '/admin/dashboard';
 
   const [adminData, setAdminData] = useState(null);
