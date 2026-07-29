@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/common/Input';
@@ -8,7 +8,17 @@ import Alert from '../../components/common/Alert';
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (user?.status === 'PendingPasswordChange') {
+        navigate('/change-password', { replace: true });
+      } else if (user?.role) {
+        navigateByRole(user.role, navigate);
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});

@@ -5,7 +5,6 @@ export default function AdminForm({ initial, onSubmit, loading, error, isEdit })
   const [form, setForm] = useState({
     fullName:    '',
     email:       '',
-    password:    '',
     phoneNumber: '',
   });
   const [errors, setErrors] = useState({});
@@ -15,7 +14,6 @@ export default function AdminForm({ initial, onSubmit, loading, error, isEdit })
       setForm({
         fullName:    initial.fullName    || '',
         email:       initial.email       || '',
-        password:    '',
         phoneNumber: initial.phoneNumber || '',
       });
     }
@@ -26,8 +24,6 @@ export default function AdminForm({ initial, onSubmit, loading, error, isEdit })
     if (!form.fullName.trim()) errs.fullName = 'Full name is required.';
     if (!isEdit) {
       if (!form.email.trim())    errs.email    = 'Email is required.';
-      if (!form.password)        errs.password = 'Password is required.';
-      else if (form.password.length < 8) errs.password = 'Minimum 8 characters.';
     }
     return errs;
   }
@@ -54,9 +50,6 @@ export default function AdminForm({ initial, onSubmit, loading, error, isEdit })
         <Input label="Email"      name="email"       type="email" value={form.email} onChange={handleChange} error={errors.email} disabled={loading} required />
       )}
       <Input label="Phone number (optional)" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} disabled={loading} />
-      {!isEdit && (
-        <Input label="Password"   name="password"    type="password" value={form.password} onChange={handleChange} error={errors.password} disabled={loading} required />
-      )}
 
       <div className="flex justify-end pt-2">
         <Button type="submit" loading={loading}>
