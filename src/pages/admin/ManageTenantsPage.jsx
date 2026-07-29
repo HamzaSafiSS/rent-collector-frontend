@@ -21,7 +21,6 @@ export default function ManageTenantsPage() {
     { key: 'status',      header: 'Status',     render: (r) => <Badge label={r.status} /> },
     { key: 'unitNumber',  header: 'Current Unit',render: (r) => r.unitNumber || '—' },
     { key: 'moveInDate',  header: 'Move-in',    render: (r) => r.moveInDate || '—' },
-    { key: 'activeLeaseCount', header: 'Active Leases', render: (r) => r.activeLeaseCount ?? 0 },
     { 
       key: 'actions', 
       header: 'Actions',

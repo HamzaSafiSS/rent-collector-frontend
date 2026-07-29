@@ -173,6 +173,20 @@ export default function ChangePasswordPage() {
               Change password
             </Button>
           </form>
+
+          {/* Escape hatch for trapped users (e.g. pending password change) */}
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={async () => {
+                await logout();
+                navigate('/login', { replace: true });
+              }}
+              className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            >
+              Sign out and return to login
+            </button>
+          </div>
         </div>
 
       </div>
