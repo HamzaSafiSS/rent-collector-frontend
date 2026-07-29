@@ -44,6 +44,7 @@ const TenantsPage         = lazy(() => import('../pages/landlord/TenantsPage'));
 const LeasesPage          = lazy(() => import('../pages/landlord/LeasesPage'));
 const PaymentsPage        = lazy(() => import('../pages/landlord/PaymentsPage'));
 const ReportsPage         = lazy(() => import('../pages/landlord/ReportsPage'));
+const DueSoonPage         = lazy(() => import('../pages/landlord/DueSoonPage'));
 
 // Tenant pages
 const TenantDashboard     = lazy(() => import('../pages/tenant/DashboardPage'));
@@ -131,6 +132,7 @@ export default function AppRoutes() {
           <Route path="tenants" element={<TenantsPage />} />
           <Route path="leases" element={<LeasesPage />} />
           <Route path="payments" element={<PaymentsPage />} />
+          <Route path="due-soon" element={<DueSoonPage />} />
           <Route path="reports" element={<ReportsPage />} />
         </Route>
 

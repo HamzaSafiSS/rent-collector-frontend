@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { StatCard, PageHeader, Spinner } from '../../components/common';
+import { StatCard, PageHeader, Spinner, Badge } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import { auditApi } from '../../api/auditApi';
 import { leaseApi } from '../../api/leaseApi';
+import { paymentApi } from '../../api/paymentApi';
 import { StatCardsSkeleton } from '../../components/common';
 import {
   ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -202,7 +203,7 @@ export default function LandlordDashboard() {
             value={stats.dueSoonCount}
             icon={<svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
             color="orange" 
-            onClick={() => navigate('/landlord/payments')} 
+            onClick={() => navigate('/landlord/due-soon')} 
           />
         </div>
       )}
