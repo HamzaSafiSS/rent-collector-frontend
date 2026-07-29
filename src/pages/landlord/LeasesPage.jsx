@@ -30,6 +30,7 @@ export default function LeasesPage() {
   // Create lease
   const [createOpen, setCreateOpen]   = useState(false);
   const [availableUnits, setAvailableUnits] = useState([]);
+  const [totalUnits, setTotalUnits]   = useState(0);
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError]     = useState('');
 
@@ -65,10 +66,12 @@ export default function LeasesPage() {
       // Fetch available units for the currently selected property
       const res = await unitApi.listUnits(selectedProperty.id, 0, 200);
       const units = res.data?.data?.content || [];
+      setTotalUnits(units.length);
       const available = units.filter((u) => u.status === 'AVAILABLE');
       setAvailableUnits(available);
     } catch {
       setAvailableUnits([]);
+      setTotalUnits(0);
     }
   }
 
@@ -194,6 +197,7 @@ export default function LeasesPage() {
       >
         <LeaseForm
           units={availableUnits}
+          totalUnits={totalUnits}
           onSubmit={handleCreate}
           loading={formLoading}
           error={formError}

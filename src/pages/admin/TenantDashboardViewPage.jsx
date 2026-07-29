@@ -14,7 +14,7 @@ export default function TenantDashboardViewPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
-  const backUrl = isSuperAdmin ? '/super-admin/view/tenants' : '/admin/view/tenants';
+  const backUrl = isSuperAdmin ? '/super-admin/view/tenants' : '/admin/tenants';
 
   const [activeTab, setActiveTab] = useState('leases');
   const [loading, setLoading] = useState(false);

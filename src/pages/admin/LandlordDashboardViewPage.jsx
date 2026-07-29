@@ -16,7 +16,7 @@ export default function LandlordDashboardViewPage() {
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
 
 
-  const backUrl = isSuperAdmin ? '/super-admin/view/landlords' : '/admin/view/landlords';
+  const backUrl = isSuperAdmin ? '/super-admin/view/landlords' : '/admin/landlords';
 
   const [landlord, setLandlord] = useState(null);
   const [activeTab, setActiveTab] = useState('properties');

@@ -3,7 +3,7 @@ import { Input, Button, Alert } from '../common';
 
 const selectClass = 'w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-800/30 disabled:text-slate-500 transition-all duration-200';
 
-export default function LeaseForm({ units = [], onSubmit, loading, error }) {
+export default function LeaseForm({ units = [], totalUnits = 0, onSubmit, loading, error }) {
   const [form, setForm]   = useState({
     tenantEmail: '',
     unitId: '', startDate: '', monthlyRent: '',
@@ -76,7 +76,11 @@ export default function LeaseForm({ units = [], onSubmit, loading, error }) {
           ))}
         </select>
         {errors.unitId && <p className="mt-1 text-xs text-red-400">{errors.unitId}</p>}
-        {units.length === 0 && <p className="mt-1 text-xs text-amber-400">No available units. All units are occupied or in maintenance.</p>}
+        {totalUnits === 0 ? (
+          <p className="mt-1 text-xs text-amber-400">This property has no units yet. Please create units first.</p>
+        ) : units.length === 0 ? (
+          <p className="mt-1 text-xs text-amber-400">No available units. All units are occupied or in maintenance.</p>
+        ) : null}
       </div>
 
       <Input
