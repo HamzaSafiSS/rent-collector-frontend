@@ -33,8 +33,6 @@ export default function TenantDashboard() {
 
         const currentDate = new Date();
         const currentYearMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
-        const daysUntilDue = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate() - currentDate.getDate();
-
         let unpaidLeases = 0;
         let dueSoonLeases = 0;
 
@@ -44,18 +42,37 @@ export default function TenantDashboard() {
             
             const latestPayment = leasePayments[0];
             
-            if (!latestPayment) {
-                const startDateStr = lease.startDate.substring(0, 7);
-                if (currentYearMonth > startDateStr) {
-                    unpaidLeases++;
-                } else if (currentYearMonth === startDateStr && daysUntilDue <= 3) {
-                    dueSoonLeases++;
-                }
+            let targetYearMonthStr;
+            let sourceMonthStr = !latestPayment ? lease.startDate.substring(0, 7) : latestPayment.paymentMonth;
+            
+            const parts = sourceMonthStr.split('-');
+            let y = parseInt(parts[0], 10);
+            let m = parseInt(parts[1], 10);
+            m += 1;
+            if (m > 12) { m = 1; y += 1; }
+            targetYearMonthStr = `${y}-${String(m).padStart(2, '0')}`;
+
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth();
+            const targetParts = targetYearMonthStr.split('-');
+            const targetYear = parseInt(targetParts[0], 10);
+            const targetMonth = parseInt(targetParts[1], 10) - 1;
+            
+            const startDateObj = new Date(lease.startDate);
+            const startDay = startDateObj.getDate();
+            
+            const lastDayOfTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+            const dueDay = Math.min(startDay, lastDayOfTargetMonth);
+            
+            const dueDateObj = new Date(targetYear, targetMonth, dueDay);
+            dueDateObj.setHours(23, 59, 59, 999);
+            
+            if (currentDate > dueDateObj) {
+                unpaidLeases++;
             } else {
-                const lastPaidMonth = latestPayment.paymentMonth;
-                if (currentYearMonth > lastPaidMonth) {
-                    unpaidLeases++;
-                } else if (currentYearMonth === lastPaidMonth && daysUntilDue <= 3) {
+                const diffTime = dueDateObj.getTime() - currentDate.getTime();
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays >= 0 && diffDays <= 3) {
                     dueSoonLeases++;
                 }
             }
@@ -66,8 +83,7 @@ export default function TenantDashboard() {
           pendingPayments,
           rejectedPayments,
           unpaidLeases,
-          dueSoonLeases,
-          daysUntilDue
+          dueSoonLeases
         });
       } catch (err) {
         setError(
@@ -120,9 +136,9 @@ export default function TenantDashboard() {
             color="orange" 
             onClick={() => navigate('/tenant/payments')} 
           />
-          {stats.daysUntilDue <= 3 && (
+          {stats.dueSoonLeases > 0 && (
             <StatCard 
-              label={`Due in ${stats.daysUntilDue} Days`}
+              label="Due Soon (≤ 3 Days)"
               value={stats.dueSoonLeases} 
               icon={<svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} 
               color="indigo" 
