@@ -22,7 +22,7 @@ export default function PropertyForm({ initial, onSubmit, loading, error }) {
 
   function validate() {
     const errs = {};
-    if (!form.name.trim())    errs.name    = 'Property name is required.';
+    if (!form.name.trim()) errs.name = 'Property name is required.';
     if (!form.address.trim()) errs.address = 'Address is required.';
     return errs;
   }
@@ -142,8 +142,8 @@ export default function PropertyForm({ initial, onSubmit, loading, error }) {
         {errors.image && <p className="text-red-400 text-xs mt-1">{errors.image}</p>}
       </div>
 
-      <Input label="Property name" name="name"        value={form.name}        onChange={handleChange} error={errors.name}    disabled={loading} placeholder="e.g. Bole Sunshine Apartments" required />
-      <Input label="Address"       name="address"     value={form.address}     onChange={handleChange} error={errors.address} disabled={loading} placeholder="Full street address" required />
+      <Input label="Property name" name="name" value={form.name} onChange={handleChange} error={errors.name} disabled={loading} placeholder="e.g. Bole Sunshine Apartments" required />
+      <Input label="Address" name="address" value={form.address} onChange={handleChange} error={errors.address} disabled={loading} placeholder="Full street address" required />
       <div>
         <label className="block text-sm font-medium text-slate-300 mb-1">Description (optional)</label>
         <textarea

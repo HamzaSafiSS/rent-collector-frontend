@@ -110,20 +110,24 @@ export default function PropertiesPage() {
   return (
     <>
       {/* Portfolio Header */}
-      <div className="bg-gradient-to-r from-[#0c1a2e] to-[#111827] rounded-2xl border border-slate-700/50 p-6 mb-8">
-        <div className="flex items-start justify-between">
+      <div className="bg-gradient-to-r from-[#0c1a2e] to-[#111827] rounded-2xl border border-slate-700/50 p-4 sm:p-6 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <p className="text-xs font-bold tracking-widest text-emerald-400 uppercase mb-1">Portfolio Management</p>
-            <h1 className="text-2xl font-bold text-white">
+            <h1 className="text-xl sm:text-2xl font-bold text-white">
               {totalElements} Real Estate Propert{totalElements !== 1 ? 'ies' : 'y'}
             </h1>
             {properties.length > 0 && (
-              <p className="text-sm text-slate-400 mt-1 max-w-lg">
+              <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg">
                 Managing {properties.reduce((sum, p) => sum + (propertyStats[p.id]?.total || p.unitsCount || 0), 0)} units across {propertyNames}.
               </p>
             )}
           </div>
-          <Button onClick={() => { setCreateOpen(true); setFormError(''); }}>
+          <Button 
+            size="sm"
+            className="text-xs sm:text-sm px-3.5 py-2 sm:px-5 sm:py-2.5 self-start sm:self-auto shrink-0 shadow-md"
+            onClick={() => { setCreateOpen(true); setFormError(''); }}
+          >
             + Add New Property
           </Button>
         </div>
@@ -140,7 +144,7 @@ export default function PropertiesPage() {
           </div>
           <p className="text-xl text-slate-200 font-bold">No properties yet</p>
           <p className="text-slate-500 text-sm mt-2 mb-6 max-w-sm mx-auto">You haven't added any properties to your portfolio. Create your first property to get started.</p>
-          <Button className="shadow-md" onClick={() => setCreateOpen(true)}>+ Add Property</Button>
+          <Button size="sm" className="shadow-md text-xs sm:text-sm px-4 py-2 sm:px-5 sm:py-2.5" onClick={() => setCreateOpen(true)}>+ Add Property</Button>
         </div>
       ) : (
         <>
