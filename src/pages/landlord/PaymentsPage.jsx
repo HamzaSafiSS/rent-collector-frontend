@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import {
   PageHeader, Table, Badge, Button, Alert, Pagination,
 } from '../../components/common';
@@ -15,6 +15,7 @@ const PAGE_SIZE = 10;
 
 export default function PaymentsPage() {
   const toast = useToast();
+  const detailsRef = useRef(null);
 
   const [selectedProperty, setSelectedProperty] = useState(null);
 
@@ -33,6 +34,14 @@ export default function PaymentsPage() {
   const [reviewPayment, setReviewPayment] = useState(null);
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviewError, setReviewError]     = useState('');
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+    setPage(0);
+    setTimeout(() => {
+      detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  };
 
   const loadPayments = useCallback(async () => {
     if (!selectedProperty) return;
@@ -169,39 +178,51 @@ export default function PaymentsPage() {
             label="Pending Payments"
             value={reportData?.pendingCount || 0}
             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-            color={statusFilter === 'PENDING' ? 'blue' : 'slate'} 
-            onClick={() => { setStatusFilter('PENDING'); setPage(0); }}
+            color="blue"
+            isSelected={statusFilter === 'PENDING'}
+            onClick={() => handleCardClick('PENDING')}
         />
         <StatCard 
             label="Approved Payments"
             value={reportData?.approvedCount || 0}
             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>}
-            color={statusFilter === 'APPROVED' ? 'green' : 'slate'} 
-            onClick={() => { setStatusFilter('APPROVED'); setPage(0); }}
+            color="green"
+            isSelected={statusFilter === 'APPROVED'}
+            onClick={() => handleCardClick('APPROVED')}
         />
         <StatCard 
             label="Rejected Payments"
             value={reportData?.rejectedCount || 0}
             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>}
-            color={statusFilter === 'REJECTED' ? 'red' : 'slate'} 
-            onClick={() => { setStatusFilter('REJECTED'); setPage(0); }}
+            color="red"
+            isSelected={statusFilter === 'REJECTED'}
+            onClick={() => handleCardClick('REJECTED')}
         />
         <StatCard 
             label="Unpaid Tenants"
             value={reportData?.unpaidCount || 0}
             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>}
-            color={statusFilter === 'UNPAID' ? 'yellow' : 'slate'} 
-            onClick={() => { setStatusFilter('UNPAID'); setPage(0); }}
+            color="yellow"
+            isSelected={statusFilter === 'UNPAID'}
+            onClick={() => handleCardClick('UNPAID')}
         />
       </div>
 
-      {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
+      <div ref={detailsRef} className="mb-6 scroll-mt-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+            Payment Details
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              {statusFilter}
+            </span>
+          </h2>
+        </div>
+        {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
-      <div className="mb-6">
         {loading ? (
             <TableSkeleton rows={8} cols={columns.length} />
           ) : (
-            <Table columns={columns} data={payments} emptyMessage="No payments found." />
+            <Table columns={columns} data={payments} emptyMessage={`No ${statusFilter.toLowerCase()} payments found.`} />
           )}
       </div>
       {payments.length > 0 && (
