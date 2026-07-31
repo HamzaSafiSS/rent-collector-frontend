@@ -1,6 +1,14 @@
 import { useEffect, useRef } from 'react';
 
-export default function Modal({ isOpen, onClose, title, size = 'md', children, footer }) {
+export default function Modal({
+  isOpen,
+  onClose,
+  title,
+  size = 'md',
+  position = 'center',
+  children,
+  footer,
+}) {
   const dialogRef = useRef(null);
 
   // Close on Escape
@@ -30,9 +38,26 @@ export default function Modal({ isOpen, onClose, title, size = 'md', children, f
 
   const widths = { sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-lg', xl: 'max-w-2xl' };
 
+  const positions = {
+    center: 'items-center justify-center p-4 sm:p-6',
+    medium: 'items-center justify-center p-4 sm:p-6',
+    top: 'items-start justify-center p-4 pt-10 sm:p-6 sm:pt-12',
+    bottom: 'items-end sm:items-center justify-center p-0 sm:p-6',
+  };
+
+  const cardRounded = {
+    bottom: 'rounded-t-3xl sm:rounded-2xl',
+    center: 'rounded-2xl',
+    medium: 'rounded-2xl',
+    top: 'rounded-2xl',
+  };
+
+  const currentPos = positions[position] || positions.center;
+  const currentRadius = cardRounded[position] || cardRounded.center;
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/60 backdrop-blur-sm animate-slide-in"
+      className={`fixed inset-0 z-50 flex ${currentPos} bg-black/60 backdrop-blur-sm animate-slide-in`}
       role="presentation"
       onClick={onClose}
     >
@@ -42,7 +67,7 @@ export default function Modal({ isOpen, onClose, title, size = 'md', children, f
         aria-modal="true"
         aria-labelledby="modal-title"
         tabIndex={-1}
-        className={`relative w-full ${widths[size] || widths.md} bg-[#111827] rounded-t-3xl sm:rounded-2xl shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] focus:outline-none border border-slate-700/50`}
+        className={`relative w-full ${widths[size] || widths.md} bg-[#111827] ${currentRadius} shadow-2xl flex flex-col max-h-[90vh] sm:max-h-[90vh] focus:outline-none border border-slate-700/50`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-700/50">
