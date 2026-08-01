@@ -51,6 +51,7 @@ const TenantDashboard     = lazy(() => import('../pages/tenant/DashboardPage'));
 const MyLeasePage         = lazy(() => import('../pages/tenant/MyLeasePage'));
 const UploadPaymentPage   = lazy(() => import('../pages/tenant/UploadPaymentPage'));
 const PaymentHistoryPage  = lazy(() => import('../pages/tenant/PaymentHistoryPage'));
+const HowToPayPage        = lazy(() => import('../pages/tenant/HowToPayPage'));
 
 // ── Loading fallback ──────────────────────────────────────────────────────────
 function PageLoader() {
@@ -141,6 +142,7 @@ export default function AppRoutes() {
           <Route path="dashboard" element={<TenantDashboard />} />
           <Route path="lease" element={<MyLeasePage />} />
           <Route path="upload-payment" element={<UploadPaymentPage />} />
+          <Route path="how-to-pay" element={<HowToPayPage />} />
           <Route path="payments" element={<PaymentHistoryPage />} />
         </Route>
 
