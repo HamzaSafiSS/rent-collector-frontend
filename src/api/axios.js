@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // ── Base instance ─────────────────────────────────────────────────────────────
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
   withCredentials: true,  // Required: sends HttpOnly refreshToken cookie on every request
   headers: {
     'Content-Type': 'application/json',

@@ -34,7 +34,7 @@ export const propertyApi = {
     api.delete(`/properties/${id}`),
 
   getPropertyImageUrl: (id) =>
-    `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1'}/properties/${id}/image`,
+    `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/properties/${id}/image`,
 
   getPropertyImageBlob: (id) =>
     api.get(`/properties/${id}/image`, { responseType: 'blob' }),

@@ -27,7 +27,7 @@ export const paymentApi = {
 
   // Proof screenshot URL — for use in <img src> or download link
   getProofUrl: (id) =>
-    `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1'}/payments/${id}/proof`,
+    `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/payments/${id}/proof`,
 
   // Fetch proof as a blob directly using Axios
   getProofBlob: (id) =>

@@ -67,7 +67,7 @@ useEffect(() => {
   async function trySilentRefresh() {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1'}/auth/refresh`,
+        `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/auth/refresh`,
         {
           method: 'POST',
           credentials: 'include',
@@ -93,7 +93,7 @@ useEffect(() => {
 
       try {
         const profileRes = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1'}/users/me`,
+          `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/users/me`,
           {
             credentials: 'include',
             headers: {

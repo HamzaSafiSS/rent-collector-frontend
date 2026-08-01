@@ -14,7 +14,7 @@ export default function PropertyForm({ initial, onSubmit, loading, error }) {
       setForm({ name: initial.name || '', address: initial.address || '', description: initial.description || '' });
       // If editing and property has an image, show it
       if (initial.id && initial.imageUrl) {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1';
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || '/api/v1';
         setImagePreview(`${baseUrl}/properties/${initial.id}/image`);
       }
     }

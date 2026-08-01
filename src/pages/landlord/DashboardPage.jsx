@@ -100,21 +100,48 @@ export default function LandlordDashboard() {
 
         const parseMonthly = (res) => {
           if (!res) return Array(12).fill(0);
-          const monthly = res.data?.data?.monthlyRevenue || res.data?.data || [];
+          const dataObj = res.data?.data;
+          const monthly = dataObj?.byMonth || dataObj?.monthlyRevenue || (Array.isArray(dataObj) ? dataObj : []);
+          
           let parsed = Array(12).fill(0);
           if (Array.isArray(monthly)) {
             monthly.forEach((item, idx) => {
-              if (idx < 12) parsed[idx] = item.revenue ?? item.amount ?? item.total ?? 0;
+              let mIdx = idx;
+              if (item.month !== undefined) {
+                if (typeof item.month === 'number') {
+                  mIdx = item.month - 1;
+                } else if (typeof item.month === 'string') {
+                  if (item.month.includes('-')) {
+                    // Handle "YYYY-MM" format
+                    const parts = item.month.split('-');
+                    if (parts.length >= 2) {
+                      mIdx = parseInt(parts[1], 10) - 1;
+                    }
+                  } else {
+                    const num = parseInt(item.month, 10);
+                    if (!isNaN(num)) {
+                      mIdx = num - 1;
+                    } else {
+                      const formatted = item.month.charAt(0).toUpperCase() + item.month.slice(1, 3).toLowerCase();
+                      const found = months.indexOf(formatted);
+                      if (found >= 0) mIdx = found;
+                    }
+                  }
+                }
+              }
+              if (mIdx >= 0 && mIdx < 12) {
+                parsed[mIdx] = Number(item.revenue ?? item.amount ?? item.total ?? 0);
+              }
             });
           } else if (typeof monthly === 'object') {
             Object.entries(monthly).forEach(([key, value]) => {
               const parts = key.split('-');
               if (parts.length >= 2) {
                 const mIdx = parseInt(parts[1], 10) - 1;
-                if (mIdx >= 0 && mIdx < 12) parsed[mIdx] = typeof value === 'number' ? value : 0;
+                if (mIdx >= 0 && mIdx < 12) parsed[mIdx] = typeof value === 'number' ? value : Number(value || 0);
               } else {
                 const mIdx = months.indexOf(key);
-                if (mIdx >= 0) parsed[mIdx] = typeof value === 'number' ? value : 0;
+                if (mIdx >= 0) parsed[mIdx] = typeof value === 'number' ? value : Number(value || 0);
               }
             });
           }
