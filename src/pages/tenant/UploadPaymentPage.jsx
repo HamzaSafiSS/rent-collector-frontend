@@ -11,6 +11,8 @@ export default function UploadPaymentPage() {
   const [leaseId, setLeaseId]   = useState('');
   const [amount, setAmount]     = useState('');
   const [file, setFile]         = useState(null);
+  
+  const [paymentInfo, setPaymentInfo] = useState(null);
 
   const [errors, setErrors]     = useState({});
   const [apiError, setApiError] = useState('');
@@ -72,10 +74,26 @@ export default function UploadPaymentPage() {
       .then((r) => {
         const active = r.data?.data?.content || [];
         setLeases(active);
-        if (active.length === 1) setLeaseId(String(active[0].id));
+        if (active.length === 1) {
+            setLeaseId(String(active[0].id));
+            fetchPaymentInfo(active[0].id);
+        }
       })
       .catch(() => {});
   }, []);
+
+  const fetchPaymentInfo = async (id) => {
+      if (!id) {
+          setPaymentInfo(null);
+          return;
+      }
+      try {
+          const res = await paymentApi.getPaymentInfoForLease(id);
+          setPaymentInfo(res.data?.data);
+      } catch (err) {
+          setPaymentInfo(null);
+      }
+  };
 
   function buildPaymentMonth() {
     if (selectedMonthNum && selectedYear) {
@@ -147,6 +165,7 @@ export default function UploadPaymentPage() {
   function handleLeaseChange(e) {
     const newLeaseId = e.target.value;
     setLeaseId(newLeaseId);
+    fetchPaymentInfo(newLeaseId);
     if (errors.leaseId) setErrors((p) => ({ ...p, leaseId: '' }));
 
     const newLease = leases.find((l) => String(l.id) === String(newLeaseId));
@@ -182,6 +201,18 @@ export default function UploadPaymentPage() {
         <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-6">
           {apiError && <Alert type="error"   message={apiError}  className="mb-5" />}
           {success  && <Alert type="success" message={success}   className="mb-5" />}
+
+          {paymentInfo && (
+            <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+              <h3 className="text-emerald-400 font-semibold mb-2">Payment Instructions</h3>
+              <div className="space-y-1 text-sm text-slate-300">
+                {paymentInfo.companyName && <p><span className="text-slate-400">Company:</span> {paymentInfo.companyName}</p>}
+                {paymentInfo.landlordName && <p><span className="text-slate-400">Name:</span> {paymentInfo.landlordName}</p>}
+                {paymentInfo.accountNumber && <p><span className="text-slate-400">Account:</span> <span className="font-mono text-emerald-300">{paymentInfo.accountNumber}</span></p>}
+                {paymentInfo.phoneNumber && <p><span className="text-slate-400">Phone:</span> {paymentInfo.phoneNumber}</p>}
+              </div>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-5" noValidate>
 

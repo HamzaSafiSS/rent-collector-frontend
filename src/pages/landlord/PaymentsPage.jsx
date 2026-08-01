@@ -10,6 +10,7 @@ import { TableSkeleton } from '../../components/common';
 import PropertySelector from '../../components/property/PropertySelector';
 import StatCard from '../../components/common/StatCard';
 import Input from '../../components/common/Input';
+import PaymentInfoModal from '../../components/payment/PaymentInfoModal';
 
 const PAGE_SIZE = 10;
 
@@ -34,6 +35,37 @@ export default function PaymentsPage() {
   const [reviewPayment, setReviewPayment] = useState(null);
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviewError, setReviewError]     = useState('');
+
+  const [isPaymentInfoModalOpen, setIsPaymentInfoModalOpen] = useState(false);
+  const [paymentInfoData, setPaymentInfoData] = useState(null);
+  const [paymentInfoLoading, setPaymentInfoLoading] = useState(false);
+
+  const fetchPaymentInfo = async () => {
+    try {
+      const res = await paymentApi.getPaymentInfo();
+      setPaymentInfoData(res.data?.data);
+    } catch (err) {
+      console.error('Failed to fetch payment info:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPaymentInfo();
+  }, []);
+
+  const handleSavePaymentInfo = async (data) => {
+    try {
+      setPaymentInfoLoading(true);
+      await paymentApi.savePaymentInfo(data);
+      toast.success('Payment information saved.');
+      setIsPaymentInfoModalOpen(false);
+      fetchPaymentInfo(); // refresh data
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to save payment info.');
+    } finally {
+      setPaymentInfoLoading(false);
+    }
+  };
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
@@ -134,10 +166,15 @@ export default function PaymentsPage() {
     <>
       {!selectedProperty ? (
         <>
-          <PageHeader
-            title="Select Property"
-            subtitle="Choose a property to view its payments"
-          />
+          <div className="flex items-center justify-between">
+            <PageHeader
+              title="Select Property"
+              subtitle="Choose a property to view its payments"
+            />
+            <Button onClick={() => setIsPaymentInfoModalOpen(true)}>
+              {paymentInfoData ? 'Edit Payment Info' : 'Add Payment Info'}
+            </Button>
+          </div>
           <PropertySelector
             onSelect={(p) => {
               setSelectedProperty(p);
@@ -155,10 +192,15 @@ export default function PaymentsPage() {
           >
             ← Back to Properties
           </button>
-          <PageHeader
-            title={`Payments — ${selectedProperty.name}`}
-            subtitle={`${totalElements} payment${totalElements !== 1 ? 's' : ''}`}
-          />
+          <div className="flex items-center justify-between">
+            <PageHeader
+              title={`Payments — ${selectedProperty.name}`}
+              subtitle={`${totalElements} payment${totalElements !== 1 ? 's' : ''}`}
+            />
+            <Button onClick={() => setIsPaymentInfoModalOpen(true)}>
+              {paymentInfoData ? 'Edit Payment Info' : 'Add Payment Info'}
+            </Button>
+          </div>
 
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-xl font-bold text-slate-100">Summary</h2>
@@ -246,6 +288,14 @@ export default function PaymentsPage() {
       />
         </>
       )}
+
+      <PaymentInfoModal
+        isOpen={isPaymentInfoModalOpen}
+        onClose={() => setIsPaymentInfoModalOpen(false)}
+        initialData={paymentInfoData}
+        onSave={handleSavePaymentInfo}
+        loading={paymentInfoLoading}
+      />
     </>
   );
 }

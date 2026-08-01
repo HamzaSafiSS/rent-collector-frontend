@@ -43,4 +43,12 @@ export const paymentApi = {
   // Admin platform-wide view
   getAllPaymentsAdmin: (page = 0, size = 20) =>
     api.get('/admin/payments', { params: { page, size } }),
+
+  // Landlord Payment Info
+  getPaymentInfo: () =>
+    api.get('/payment-info'),
+  savePaymentInfo: (data) =>
+    api.put('/payment-info', data),
+  getPaymentInfoForLease: (leaseId) =>
+    api.get(`/payment-info/lease/${leaseId}`),
 };
