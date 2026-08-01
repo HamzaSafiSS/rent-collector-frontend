@@ -172,9 +172,18 @@ export default function PaymentsPage() {
               subtitle="Choose a property to view its payments"
             />
             <Button onClick={() => setIsPaymentInfoModalOpen(true)}>
-              {paymentInfoData ? 'Edit Payment Info' : 'Add Payment Info'}
+              Add Payment Method
             </Button>
           </div>
+          {paymentInfoData && paymentInfoData.length > 0 && (
+            <div className="mb-6 flex flex-wrap gap-3">
+              {paymentInfoData.map((info) => (
+                <div key={info.id} className="text-sm px-3 py-2 bg-slate-800 border border-slate-700/50 rounded-lg text-slate-300">
+                  <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? 'Bank' : 'Wallet'}</span>: {info.institutionName} ({info.accountHolderName})
+                </div>
+              ))}
+            </div>
+          )}
           <PropertySelector
             onSelect={(p) => {
               setSelectedProperty(p);
@@ -198,9 +207,18 @@ export default function PaymentsPage() {
               subtitle={`${totalElements} payment${totalElements !== 1 ? 's' : ''}`}
             />
             <Button onClick={() => setIsPaymentInfoModalOpen(true)}>
-              {paymentInfoData ? 'Edit Payment Info' : 'Add Payment Info'}
+              Add Payment Method
             </Button>
           </div>
+          {paymentInfoData && paymentInfoData.length > 0 && (
+            <div className="mb-6 flex flex-wrap gap-3">
+              {paymentInfoData.map((info) => (
+                <div key={info.id} className="text-sm px-3 py-2 bg-slate-800 border border-slate-700/50 rounded-lg text-slate-300">
+                  <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? 'Bank' : 'Wallet'}</span>: {info.institutionName} ({info.accountHolderName})
+                </div>
+              ))}
+            </div>
+          )}
 
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-xl font-bold text-slate-100">Summary</h2>
@@ -292,7 +310,6 @@ export default function PaymentsPage() {
       <PaymentInfoModal
         isOpen={isPaymentInfoModalOpen}
         onClose={() => setIsPaymentInfoModalOpen(false)}
-        initialData={paymentInfoData}
         onSave={handleSavePaymentInfo}
         loading={paymentInfoLoading}
       />

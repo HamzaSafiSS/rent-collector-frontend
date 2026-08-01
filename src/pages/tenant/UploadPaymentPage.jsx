@@ -202,14 +202,19 @@ export default function UploadPaymentPage() {
           {apiError && <Alert type="error"   message={apiError}  className="mb-5" />}
           {success  && <Alert type="success" message={success}   className="mb-5" />}
 
-          {paymentInfo && (
+          {paymentInfo && paymentInfo.length > 0 && (
             <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-2">Payment Instructions</h3>
-              <div className="space-y-1 text-sm text-slate-300">
-                {paymentInfo.companyName && <p><span className="text-slate-400">Company:</span> {paymentInfo.companyName}</p>}
-                {paymentInfo.landlordName && <p><span className="text-slate-400">Name:</span> {paymentInfo.landlordName}</p>}
-                {paymentInfo.accountNumber && <p><span className="text-slate-400">Account:</span> <span className="font-mono text-emerald-300">{paymentInfo.accountNumber}</span></p>}
-                {paymentInfo.phoneNumber && <p><span className="text-slate-400">Phone:</span> {paymentInfo.phoneNumber}</p>}
+              <h3 className="text-emerald-400 font-semibold mb-3">Payment Instructions</h3>
+              <div className="space-y-4">
+                {paymentInfo.map(info => (
+                  <div key={info.id} className="text-sm text-slate-300 border-l-2 border-emerald-500/50 pl-3">
+                    <p className="font-semibold text-slate-200 mb-1">{info.paymentType === 'BANK' ? 'Bank Transfer' : 'Digital Wallet'}</p>
+                    {info.institutionName && <p><span className="text-slate-400">{info.paymentType === 'BANK' ? 'Bank' : 'Wallet'}:</span> {info.institutionName}</p>}
+                    {info.accountHolderName && <p><span className="text-slate-400">Name:</span> {info.accountHolderName}</p>}
+                    {info.accountNumber && <p><span className="text-slate-400">Account:</span> <span className="font-mono text-emerald-300">{info.accountNumber}</span></p>}
+                    {info.phoneNumber && <p><span className="text-slate-400">Phone:</span> {info.phoneNumber}</p>}
+                  </div>
+                ))}
               </div>
             </div>
           )}
