@@ -8,7 +8,7 @@ import { leaseApi } from '../../api/leaseApi';
 import { paymentApi } from '../../api/paymentApi';
 import { StatCardsSkeleton } from '../../components/common';
 import {
-  ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 
 
@@ -272,8 +272,8 @@ export default function LandlordDashboard() {
                   tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
-                  domain={[0, 10000000]}
-                  ticks={[0, 2000000, 4000000, 6000000, 8000000, 10000000]}
+                  domain={[0, 100000]}
+                  ticks={[0, 20000, 40000, 60000, 80000, 100000]}
                   tickFormatter={(v) => v >= 1000000 ? `ETB ${(v / 1000000).toFixed(0)}M` : (v >= 1000 ? `ETB ${(v / 1000).toFixed(0)}k` : `ETB ${v}`)}
                   dx={-10}
                   width={80}
@@ -297,14 +297,6 @@ export default function LandlordDashboard() {
                   radius={[4, 4, 0, 0]} 
                   barSize={40}
                   fillOpacity={0.8}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="revenue" 
-                  stroke="#34d399" 
-                  strokeWidth={3}
-                  dot={{ r: 4, fill: "#111827", stroke: "#34d399", strokeWidth: 2 }}
-                  activeDot={{ r: 6, fill: "#34d399", stroke: "#fff", strokeWidth: 2 }}
                 />
               </ComposedChart>
             </ResponsiveContainer>
