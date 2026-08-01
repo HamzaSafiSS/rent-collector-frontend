@@ -103,10 +103,14 @@ useEffect(() => {
           }
         );
 
-        if (profileRes.ok) {
-          const profileData = await profileRes.json();
-          setUser(profileData?.data);
-        }
+          if (profileRes.ok) {
+            const profileData = await profileRes.json();
+            const profile = profileData?.data;
+            if (profile) {
+              profile.role = getRoleFromToken(newToken);
+            }
+            setUser(profile);
+          }
       } catch {
       }
 

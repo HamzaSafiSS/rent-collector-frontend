@@ -7,7 +7,7 @@ export default function HowToPayPage() {
   const [leases, setLeases] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [leaseId, setLeaseId] = useState('');
   const [paymentInfo, setPaymentInfo] = useState([]);
   const [infoLoading, setInfoLoading] = useState(false);
@@ -54,7 +54,7 @@ export default function HowToPayPage() {
   return (
     <>
       <PageHeader title="How to Pay" subtitle="Payment instructions from your landlord" />
-      
+
       <div className="max-w-lg">
         <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-6">
           {error && <Alert type="error" message={error} className="mb-5" />}
