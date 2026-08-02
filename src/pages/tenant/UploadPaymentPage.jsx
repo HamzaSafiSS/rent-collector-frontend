@@ -193,7 +193,7 @@ export default function UploadPaymentPage() {
   }
 
   const selectClass =
-    'w-full px-3 py-2 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:bg-slate-800/50';
+    'w-full px-3 py-2 text-sm bg-[#111827] text-slate-100 border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:bg-slate-800/50';
 
   return (
     <>
@@ -234,9 +234,9 @@ export default function UploadPaymentPage() {
                 disabled={loading || leases.length === 1}
                 className={selectClass}
               >
-                <option value="">{t('payments.chooseLease')}</option>
+                <option className="bg-[#111827] text-slate-100" value="">{t('payments.chooseLease')}</option>
                 {leases.map((l) => (
-                  <option key={l.id} value={l.id}>
+                  <option className="bg-[#111827] text-slate-100" key={l.id} value={l.id}>
                     {l.propertyName} — {t('units.unit')} {l.unitNumber} (ETB {Number(l.monthlyRent).toLocaleString()}/{t('payments.mo')})
                   </option>
                 ))}
@@ -258,9 +258,9 @@ export default function UploadPaymentPage() {
                   disabled={loading}
                   className={selectClass}
                 >
-                  <option value="">{t('payments.monthSelectPlaceholder')}</option>
+                  <option className="bg-[#111827] text-slate-100" value="">{t('payments.monthSelectPlaceholder')}</option>
                   {filteredMonths.map((m) => (
-                    <option key={m.value} value={m.value}>{m.label}</option>
+                    <option className="bg-[#111827] text-slate-100" key={m.value} value={m.value}>{m.label}</option>
                   ))}
                 </select>
                 <select
@@ -270,9 +270,9 @@ export default function UploadPaymentPage() {
                   disabled={loading}
                   className={selectClass}
                 >
-                  <option value="">{t('payments.yearSelectPlaceholder')}</option>
+                  <option className="bg-[#111827] text-slate-100" value="">{t('payments.yearSelectPlaceholder')}</option>
                   {YEARS.map((y) => (
-                    <option key={y} value={y}>{y}</option>
+                    <option className="bg-[#111827] text-slate-100" key={y} value={y}>{y}</option>
                   ))}
                 </select>
               </div>

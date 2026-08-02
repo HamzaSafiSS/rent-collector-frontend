@@ -59,14 +59,14 @@ export default function PaymentHistoryPage() {
         <div className="w-full sm:w-48">
           <label className="block text-sm font-medium text-slate-300 mb-1">{t('leases.status')}</label>
           <select
-            className="w-full px-3 py-2 bg-[#111827] border border-slate-600/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-sm"
+            className="w-full px-3 py-2 bg-[#111827] text-slate-100 border border-slate-600/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-sm"
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
           >
-            <option value="ALL">{t('payments.allStatuses')}</option>
-            <option value="PENDING">{t('payments.statusPending')}</option>
-            <option value="APPROVED">{t('payments.statusApproved')}</option>
-            <option value="REJECTED">{t('payments.statusRejected')}</option>
+            <option className="bg-[#111827] text-slate-100" value="ALL">{t('payments.allStatuses')}</option>
+            <option className="bg-[#111827] text-slate-100" value="PENDING">{t('payments.statusPending')}</option>
+            <option className="bg-[#111827] text-slate-100" value="APPROVED">{t('payments.statusApproved')}</option>
+            <option className="bg-[#111827] text-slate-100" value="REJECTED">{t('payments.statusRejected')}</option>
           </select>
         </div>
         <div className="w-full sm:w-48">
