@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PageHeader, FileUpload, Input, Button, Alert } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
 import { leaseApi } from '../../api/leaseApi';
 import { useToast } from '../../context/ToastContext';
 
 export default function UploadPaymentPage() {
+  const { t } = useTranslation();
   const toast = useToast();
 
   const [leases, setLeases]     = useState([]);
@@ -24,18 +26,18 @@ export default function UploadPaymentPage() {
   const [selectedYear,     setSelectedYear]     = useState('');
 
   const MONTHS = [
-    { value: '01', label: 'January'   },
-    { value: '02', label: 'February'  },
-    { value: '03', label: 'March'     },
-    { value: '04', label: 'April'     },
-    { value: '05', label: 'May'       },
-    { value: '06', label: 'June'      },
-    { value: '07', label: 'July'      },
-    { value: '08', label: 'August'    },
-    { value: '09', label: 'September' },
-    { value: '10', label: 'October'   },
-    { value: '11', label: 'November'  },
-    { value: '12', label: 'December'  },
+    { value: '01', label: t('months.january') },
+    { value: '02', label: t('months.february') },
+    { value: '03', label: t('months.march') },
+    { value: '04', label: t('months.april') },
+    { value: '05', label: t('months.may') },
+    { value: '06', label: t('months.june') },
+    { value: '07', label: t('months.july') },
+    { value: '08', label: t('months.august') },
+    { value: '09', label: t('months.september') },
+    { value: '10', label: t('months.october') },
+    { value: '11', label: t('months.november') },
+    { value: '12', label: t('months.december') },
   ];
 
   const currentYear = new Date().getFullYear();
@@ -104,10 +106,10 @@ export default function UploadPaymentPage() {
 
   function validate() {
     const errs = {};
-    if (!leaseId)        errs.leaseId = 'Please select a lease.';
-    if (!buildPaymentMonth()) errs.month = 'Please select both a month and a year.';
-    if (!amount || Number(amount) <= 0) errs.amount = 'Enter a valid amount.';
-    if (!file)           errs.file    = 'Please select a file to upload.';
+    if (!leaseId)        errs.leaseId = t('validation.selectLeaseRequired');
+    if (!buildPaymentMonth()) errs.month = t('validation.monthAndYearRequired');
+    if (!amount || Number(amount) <= 0) errs.amount = t('validation.validAmountRequired');
+    if (!file)           errs.file    = t('validation.fileRequired');
     return errs;
   }
 
@@ -128,12 +130,12 @@ export default function UploadPaymentPage() {
       formData.append('leaseId',       leaseId);
 
       await paymentApi.uploadPayment(formData);
-      setSuccess('Payment uploaded successfully. Your landlord will review it shortly.');
-      toast.success('Payment uploaded.');
+      setSuccess(t('payments.uploadSuccessDesc'));
+      toast.success(t('payments.uploadSuccessToast'));
       setAmount(''); setFile(null); setErrors({});
       setSelectedMonthNum(''); setSelectedYear('');
     } catch (err) {
-      setApiError(err.response?.data?.message || 'Failed to upload payment.');
+      setApiError(err.response?.data?.message || t('payments.failedUploadPayment'));
     } finally {
       setLoading(false);
     }
@@ -195,7 +197,7 @@ export default function UploadPaymentPage() {
 
   return (
     <>
-      <PageHeader title="Upload Payment" subtitle="Submit your payment proof for review" />
+      <PageHeader title={t('payments.uploadPaymentTitle')} subtitle={t('payments.uploadPaymentSubtitle')} />
 
       <div className="max-w-lg">
         <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-6">
@@ -204,15 +206,15 @@ export default function UploadPaymentPage() {
 
           {paymentInfo && paymentInfo.length > 0 && (
             <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-              <h3 className="text-emerald-400 font-semibold mb-3">Payment Instructions</h3>
+              <h3 className="text-emerald-400 font-semibold mb-3">{t('payments.instructionsTitle')}</h3>
               <div className="space-y-4">
                 {paymentInfo.map(info => (
                   <div key={info.id} className="text-sm text-slate-300 border-l-2 border-emerald-500/50 pl-3">
-                    <p className="font-semibold text-slate-200 mb-1">{info.paymentType === 'BANK' ? 'Bank Transfer' : 'Digital Wallet'}</p>
-                    {info.institutionName && <p><span className="text-slate-400">{info.paymentType === 'BANK' ? 'Bank' : 'Wallet'}:</span> {info.institutionName}</p>}
-                    {info.accountHolderName && <p><span className="text-slate-400">Name:</span> {info.accountHolderName}</p>}
-                    {info.accountNumber && <p><span className="text-slate-400">Account:</span> <span className="font-mono text-emerald-300">{info.accountNumber}</span></p>}
-                    {info.phoneNumber && <p><span className="text-slate-400">Phone:</span> {info.phoneNumber}</p>}
+                    <p className="font-semibold text-slate-200 mb-1">{info.paymentType === 'BANK' ? t('payments.bankTransfer') : t('payments.digitalWallet')}</p>
+                    {info.institutionName && <p><span className="text-slate-400">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}:</span> {info.institutionName}</p>}
+                    {info.accountHolderName && <p><span className="text-slate-400">{t('payments.name')}:</span> {info.accountHolderName}</p>}
+                    {info.accountNumber && <p><span className="text-slate-400">{t('payments.account')}:</span> <span className="font-mono text-emerald-300">{info.accountNumber}</span></p>}
+                    {info.phoneNumber && <p><span className="text-slate-400">{t('payments.phone')}:</span> {info.phoneNumber}</p>}
                   </div>
                 ))}
               </div>
@@ -224,7 +226,7 @@ export default function UploadPaymentPage() {
             {/* Lease selector */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">
-                <span className="text-red-500 mr-1" aria-hidden="true">*</span>Select Lease
+                <span className="text-red-500 mr-1" aria-hidden="true">*</span>{t('payments.selectLeaseLabel')}
               </label>
               <select
                 value={leaseId}
@@ -232,21 +234,21 @@ export default function UploadPaymentPage() {
                 disabled={loading || leases.length === 1}
                 className={selectClass}
               >
-                <option value="">Choose lease...</option>
+                <option value="">{t('payments.chooseLease')}</option>
                 {leases.map((l) => (
                   <option key={l.id} value={l.id}>
-                    {l.propertyName} — Unit {l.unitNumber} (ETB {Number(l.monthlyRent).toLocaleString()}/mo)
+                    {l.propertyName} — {t('units.unit')} {l.unitNumber} (ETB {Number(l.monthlyRent).toLocaleString()}/{t('payments.mo')})
                   </option>
                 ))}
               </select>
               {errors.leaseId && <p className="mt-1 text-xs text-red-400">{errors.leaseId}</p>}
-              {leases.length === 0 && <p className="mt-1 text-xs text-yellow-600">No active leases found.</p>}
+              {leases.length === 0 && <p className="mt-1 text-xs text-yellow-600">{t('payments.noActiveLeasesFound')}</p>}
             </div>
 
             {/* Payment month — two explicit dropdowns */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">
-                <span className="text-red-500 mr-1" aria-hidden="true">*</span>Payment Month
+                <span className="text-red-500 mr-1" aria-hidden="true">*</span>{t('payments.paymentMonthLabel')}
               </label>
               <div className="flex gap-3">
                 <select
@@ -256,7 +258,7 @@ export default function UploadPaymentPage() {
                   disabled={loading}
                   className={selectClass}
                 >
-                  <option value="">Month...</option>
+                  <option value="">{t('payments.monthSelectPlaceholder')}</option>
                   {filteredMonths.map((m) => (
                     <option key={m.value} value={m.value}>{m.label}</option>
                   ))}
@@ -268,7 +270,7 @@ export default function UploadPaymentPage() {
                   disabled={loading}
                   className={selectClass}
                 >
-                  <option value="">Year...</option>
+                  <option value="">{t('payments.yearSelectPlaceholder')}</option>
                   {YEARS.map((y) => (
                     <option key={y} value={y}>{y}</option>
                   ))}
@@ -277,7 +279,7 @@ export default function UploadPaymentPage() {
               {/* Preview what will be submitted */}
               {selectedMonthNum && selectedYear && (
                 <p className="mt-1 text-xs text-green-600 font-medium">
-                  ✓ Will submit: {MONTHS.find(m => m.value === selectedMonthNum)?.label} {selectedYear}
+                  ✓ {t('payments.willSubmitPreview', { month: MONTHS.find(m => m.value === selectedMonthNum)?.label, year: selectedYear })}
                 </p>
               )}
               {errors.month && <p className="mt-1 text-xs text-red-400">{errors.month}</p>}
@@ -285,20 +287,20 @@ export default function UploadPaymentPage() {
 
             {/* Amount */}
             <Input
-              label="Amount (ETB)"
+              label={t('payments.amountETBLabel')}
               type="number"
               min="1"
               value={amount}
               onChange={handleChange(setAmount, 'amount')}
               error={errors.amount}
               disabled={loading}
-              placeholder="e.g. 6500"
+              placeholder={t('payments.amountPlaceholder')}
               required
             />
 
             <div>
               <FileUpload
-                label="Payment proof (screenshot / receipt)"
+                label={t('payments.paymentProofLabel')}
                 onFileSelect={(f) => { setFile(f); if (errors.file) setErrors((p) => ({ ...p, file: '' })); }}
                 disabled={loading}
                 required
@@ -307,7 +309,7 @@ export default function UploadPaymentPage() {
             </div>
 
             <Button type="submit" fullWidth loading={loading} disabled={leases.length === 0}>
-              Upload payment proof
+              {t('payments.uploadProofBtn')}
             </Button>
           </form>
         </div>

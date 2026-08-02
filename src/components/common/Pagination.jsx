@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Button from './Button';
 
 export default function Pagination({
@@ -7,6 +8,7 @@ export default function Pagination({
   size,
   onPageChange,
 }) {
+  const { t } = useTranslation();
   if (totalPages <= 1) return null;
 
   const from = page * size + 1;
@@ -16,8 +18,8 @@ export default function Pagination({
     <div className="flex items-center justify-between py-3 px-1">
       {/* Info text */}
       <p className="text-sm text-slate-500">
-        Showing <span className="font-medium text-slate-300">{from}–{to}</span>{' '}
-        of <span className="font-medium text-slate-300">{totalElements}</span> results
+        {t('common.showing')} <span className="font-medium text-slate-300">{from}–{to}</span>{' '}
+        {t('common.of')} <span className="font-medium text-slate-300">{totalElements}</span> {t('common.results')}
       </p>
 
       {/* Page buttons */}
@@ -28,7 +30,7 @@ export default function Pagination({
           disabled={page === 0}
           onClick={() => onPageChange(page - 1)}
         >
-          ← Previous
+          {t('common.previous')}
         </Button>
 
         {/* Page numbers — show up to 5 centered around current page */}
@@ -55,7 +57,7 @@ export default function Pagination({
           disabled={page >= totalPages - 1}
           onClick={() => onPageChange(page + 1)}
         >
-          Next →
+          {t('common.next')}
         </Button>
       </div>
     </div>

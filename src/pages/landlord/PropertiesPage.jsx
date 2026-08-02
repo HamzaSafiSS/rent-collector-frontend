@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   PageHeader, Button, Modal, ConfirmDialog,
   Alert, Spinner, Pagination,
@@ -14,6 +15,7 @@ import { CardGridSkeleton } from '../../components/common';
 const PAGE_SIZE = 9;
 
 export default function PropertiesPage() {
+  const { t }    = useTranslation();
   const navigate = useNavigate();
   const toast    = useToast();
 
@@ -60,11 +62,11 @@ export default function PropertiesPage() {
       }));
       setPropertyStats(statsMap);
     } catch {
-      setFetchError('Failed to load properties.');
+      setFetchError(t('properties.failedLoadProperties'));
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, t]);
 
   useEffect(() => { loadProperties(); }, [loadProperties]);
 
@@ -72,11 +74,11 @@ export default function PropertiesPage() {
     try {
       setFormLoading(true); setFormError('');
       await propertyApi.createProperty(form, imageFile);
-      toast.success('Property created.');
+      toast.success(t('properties.propertyCreated'));
       setCreateOpen(false);
       loadProperties();
     } catch (err) {
-      setFormError(err.response?.data?.message || 'Failed to create property.');
+      setFormError(err.response?.data?.message || t('properties.failedCreateProperty'));
     } finally { setFormLoading(false); }
   }
 
@@ -84,11 +86,11 @@ export default function PropertiesPage() {
     try {
       setFormLoading(true); setFormError('');
       await propertyApi.updateProperty(editTarget.id, form, imageFile);
-      toast.success('Property updated.');
+      toast.success(t('properties.propertyUpdated'));
       setEditTarget(null);
       loadProperties();
     } catch (err) {
-      setFormError(err.response?.data?.message || 'Failed to update property.');
+      setFormError(err.response?.data?.message || t('properties.failedUpdateProperty'));
     } finally { setFormLoading(false); }
   }
 
@@ -96,11 +98,11 @@ export default function PropertiesPage() {
     try {
       setFormLoading(true);
       await propertyApi.deleteProperty(deleteTarget.id);
-      toast.success('Property deleted.');
+      toast.success(t('properties.propertyDeleted'));
       setDeleteTarget(null);
       loadProperties();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Cannot delete property.');
+      toast.error(err.response?.data?.message || t('properties.cannotDeleteProperty'));
       setDeleteTarget(null);
     } finally { setFormLoading(false); }
   }
@@ -113,13 +115,18 @@ export default function PropertiesPage() {
       <div className="bg-gradient-to-r from-[#0c1a2e] to-[#111827] rounded-2xl border border-slate-700/50 p-4 sm:p-6 mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-bold tracking-widest text-emerald-400 uppercase mb-1">Portfolio Management</p>
+            <p className="text-xs font-bold tracking-widest text-emerald-400 uppercase mb-1">{t('properties.portfolioManagement')}</p>
             <h1 className="text-xl sm:text-2xl font-bold text-white">
-              {totalElements} Real Estate Propert{totalElements !== 1 ? 'ies' : 'y'}
+              {totalElements !== 1 
+                ? t('properties.realEstateProperties', { count: totalElements })
+                : t('properties.realEstateProperty', { count: totalElements })}
             </h1>
             {properties.length > 0 && (
               <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg">
-                Managing {properties.reduce((sum, p) => sum + (propertyStats[p.id]?.total || p.unitsCount || 0), 0)} units across {propertyNames}.
+                {t('properties.managingUnits', {
+                  units: properties.reduce((sum, p) => sum + (propertyStats[p.id]?.total || p.unitsCount || 0), 0),
+                  names: propertyNames
+                })}
               </p>
             )}
           </div>
@@ -128,7 +135,7 @@ export default function PropertiesPage() {
             className="text-xs sm:text-sm px-3.5 py-2 sm:px-5 sm:py-2.5 self-start sm:self-auto shrink-0 shadow-md"
             onClick={() => { setCreateOpen(true); setFormError(''); }}
           >
-            + Add New Property
+            {t('properties.addNewProperty')}
           </Button>
         </div>
       </div>
@@ -142,9 +149,9 @@ export default function PropertiesPage() {
           <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-5">
             <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1v1H9V7zm5 0h1v1h-1V7zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1z" /></svg>
           </div>
-          <p className="text-xl text-slate-200 font-bold">No properties yet</p>
-          <p className="text-slate-500 text-sm mt-2 mb-6 max-w-sm mx-auto">You haven't added any properties to your portfolio. Create your first property to get started.</p>
-          <Button size="sm" className="shadow-md text-xs sm:text-sm px-4 py-2 sm:px-5 sm:py-2.5" onClick={() => setCreateOpen(true)}>+ Add Property</Button>
+          <p className="text-xl text-slate-200 font-bold">{t('properties.noPropertiesYet')}</p>
+          <p className="text-slate-500 text-sm mt-2 mb-6 max-w-sm mx-auto">{t('properties.noPropertiesDescription')}</p>
+          <Button size="sm" className="shadow-md text-xs sm:text-sm px-4 py-2 sm:px-5 sm:py-2.5" onClick={() => setCreateOpen(true)}>{t('properties.addProperty')}</Button>
         </div>
       ) : (
         <>
@@ -170,7 +177,7 @@ export default function PropertiesPage() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : null}
-                    {/* Fallback placeholder — shown when no image */}
+                    {/* Fallback placeholder */}
                     {!p.imageUrl && (
                       <div className="flex w-full h-full bg-gradient-to-br from-slate-800 to-slate-900 items-center justify-center">
                         <svg className="w-16 h-16 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -195,14 +202,14 @@ export default function PropertiesPage() {
                       <button
                         className="p-1.5 bg-slate-900/80 backdrop-blur text-slate-300 hover:text-emerald-400 rounded-lg transition-colors"
                         onClick={() => { setEditTarget(p); setFormError(''); }}
-                        title="Edit"
+                        title={t('common.edit')}
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                       </button>
                       <button
                         className="p-1.5 bg-slate-900/80 backdrop-blur text-slate-300 hover:text-red-400 rounded-lg transition-colors"
                         onClick={() => setDeleteTarget(p)}
-                        title="Delete"
+                        title={t('common.delete')}
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                       </button>
@@ -213,15 +220,15 @@ export default function PropertiesPage() {
                   <div className="px-4 py-3 border-t border-slate-700/50">
                     <div className="grid grid-cols-3 gap-2 text-center">
                       <div>
-                        <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">Total Units</p>
+                        <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">{t('properties.totalUnitsLabel')}</p>
                         <p className="text-lg font-bold text-white mt-0.5">{stats.total}</p>
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">Occupancy</p>
+                        <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">{t('properties.occupancyLabel')}</p>
                         <p className="text-lg font-bold text-emerald-400 mt-0.5">{occupancy}%</p>
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">Available</p>
+                        <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">{t('properties.availableLabel')}</p>
                         <p className="text-lg font-bold text-white mt-0.5">{stats.available}</p>
                       </div>
                     </div>
@@ -229,9 +236,9 @@ export default function PropertiesPage() {
 
                   {/* Footer */}
                   <div className="px-4 py-2.5 border-t border-slate-700/30 flex items-center justify-between">
-                    <span className="text-xs text-slate-500">{stats.occupied} Occupied / {stats.available} Available</span>
+                    <span className="text-xs text-slate-500">{t('properties.occupiedSlashAvailable', { occupied: stats.occupied, available: stats.available })}</span>
                     <span className="text-xs font-semibold text-emerald-400 group-hover:text-emerald-300 transition-colors flex items-center gap-0.5">
-                      Filter Units <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                      {t('properties.filterUnits')} <span className="group-hover:translate-x-0.5 transition-transform">→</span>
                     </span>
                   </div>
                 </div>
@@ -245,11 +252,11 @@ export default function PropertiesPage() {
         </>
       )}
 
-      <Modal isOpen={createOpen} onClose={() => setCreateOpen(false)} title="Add New Property" footer={null}>
+      <Modal isOpen={createOpen} onClose={() => setCreateOpen(false)} title={t('properties.addNewPropertyTitle')} footer={null}>
         <PropertyForm onSubmit={handleCreate} loading={formLoading} error={formError} />
       </Modal>
 
-      <Modal isOpen={!!editTarget} onClose={() => setEditTarget(null)} title="Edit Property" footer={null}>
+      <Modal isOpen={!!editTarget} onClose={() => setEditTarget(null)} title={t('properties.editPropertyTitle')} footer={null}>
         <PropertyForm initial={editTarget} onSubmit={handleUpdate} loading={formLoading} error={formError} />
       </Modal>
 
@@ -258,9 +265,9 @@ export default function PropertiesPage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDelete}
         loading={formLoading}
-        title="Delete Property"
-        message={`Delete "${deleteTarget?.name}"? All associated units must be available. This cannot be undone.`}
-        confirmText="Delete"
+        title={t('properties.deletePropertyTitle')}
+        message={t('properties.deletePropertyMessage', { name: deleteTarget?.name })}
+        confirmText={t('common.delete')}
         variant="danger"
       />
     </>

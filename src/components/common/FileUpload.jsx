@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const DEFAULT_ACCEPT = 'image/jpeg,image/png,application/pdf';
 const DEFAULT_MAX_MB = 10;
@@ -7,11 +8,12 @@ export default function FileUpload({
   onFileSelect,
   accept = DEFAULT_ACCEPT,
   maxSizeMB = DEFAULT_MAX_MB,
-  label = 'Upload File',
+  label,
   className = '',
   required = false,
 }) {
-  const inputRef              = useRef(null);
+  const { t }                           = useTranslation();
+  const inputRef                        = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError]               = useState(null);
   const [dragging, setDragging]         = useState(false);
@@ -23,14 +25,14 @@ export default function FileUpload({
     // Validate MIME type
     const allowed = accept.split(',').map((t) => t.trim());
     if (!allowed.includes(file.type)) {
-      setError(`Invalid file type. Allowed: JPEG, PNG, PDF.`);
+      setError(t('validation.invalidFileType'));
       return;
     }
 
     // Validate size
     const sizeMB = file.size / (1024 * 1024);
     if (sizeMB > maxSizeMB) {
-      setError(`File too large. Maximum size is ${maxSizeMB}MB.`);
+      setError(t('validation.fileTooLarge', { size: maxSizeMB }));
       return;
     }
 
@@ -88,10 +90,10 @@ export default function FileUpload({
         ) : (
           <div className="text-center">
             <p className="text-sm text-slate-400">
-              <span className="font-medium text-emerald-400">Click to upload</span>
-              {' '}or drag and drop
+              <span className="font-medium text-emerald-400">{t('fileUpload.clickToUpload')}</span>
+              {' '}{t('fileUpload.orDragDrop')}
             </p>
-            <p className="text-xs text-slate-500 mt-1">JPEG, PNG, PDF — max {maxSizeMB}MB</p>
+            <p className="text-xs text-slate-500 mt-1">{t('fileUpload.fileFormats', { size: maxSizeMB })}</p>
           </div>
         )}
 

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   PageHeader, Table, Badge, Button, Alert, Pagination,
 } from '../../components/common';
@@ -15,6 +16,7 @@ import PaymentInfoModal from '../../components/payment/PaymentInfoModal';
 const PAGE_SIZE = 10;
 
 export default function PaymentsPage() {
+  const { t } = useTranslation();
   const toast = useToast();
   const detailsRef = useRef(null);
 
@@ -57,11 +59,11 @@ export default function PaymentsPage() {
     try {
       setPaymentInfoLoading(true);
       await paymentApi.savePaymentInfo(data);
-      toast.success('Payment information saved.');
+      toast.success(t('payments.paymentInfoSaved'));
       setIsPaymentInfoModalOpen(false);
       fetchPaymentInfo(); // refresh data
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to save payment info.');
+      toast.error(err.response?.data?.message || t('payments.failedSavePaymentInfo'));
     } finally {
       setPaymentInfoLoading(false);
     }
@@ -105,11 +107,11 @@ export default function PaymentsPage() {
       const reportRes = await reportApi.getPaymentReport(reportParams);
       setReportData(reportRes.data?.data);
     } catch {
-      setFetchError('Failed to load payments.');
+      setFetchError(t('payments.failedLoadPayments'));
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, monthFilter, selectedProperty]);
+  }, [page, statusFilter, monthFilter, selectedProperty, t]);
 
   useEffect(() => { loadPayments(); }, [loadPayments]);
 
@@ -118,11 +120,11 @@ export default function PaymentsPage() {
       setReviewLoading(true);
       setReviewError('');
       await paymentApi.approvePayment(paymentId);
-      toast.success('Payment approved.');
+      toast.success(t('payments.paymentApproved'));
       setReviewPayment(null);
       loadPayments();
     } catch (err) {
-      setReviewError(err.response?.data?.message || 'Failed to approve payment.');
+      setReviewError(err.response?.data?.message || t('payments.failedApprovePayment'));
     } finally {
       setReviewLoading(false);
     }
@@ -133,30 +135,30 @@ export default function PaymentsPage() {
       setReviewLoading(true);
       setReviewError('');
       await paymentApi.rejectPayment(paymentId, comment);
-      toast.success('Payment rejected.');
+      toast.success(t('payments.paymentRejected'));
       setReviewPayment(null);
       loadPayments();
     } catch (err) {
-      setReviewError(err.response?.data?.message || 'Failed to reject payment.');
+      setReviewError(err.response?.data?.message || t('payments.failedRejectPayment'));
     } finally {
       setReviewLoading(false);
     }
   }
 
   const columns = [
-    { key: 'id',            header: 'ID' },
-    { key: 'tenantFullName',header: 'Tenant',     render: (r) => r.tenantFullName || '—' },
-    { key: 'unitNumber',    header: 'Unit' },
-    { key: 'propertyName',  header: 'Property' },
-    { key: 'paymentMonth',  header: 'Month' },
-    { key: 'amount',        header: 'Amount (ETB)', render: (r) => Number(r.amount).toLocaleString() },
-    { key: 'status',        header: 'Status',      render: (r) => <Badge label={r.status} /> },
-    { key: 'uploadedAt',    header: 'Uploaded',    render: (r) => r.uploadedAt ? new Date(r.uploadedAt).toLocaleDateString() : '—' },
+    { key: 'id',            header: t('payments.id') },
+    { key: 'tenantFullName',header: t('leases.tenant'),     render: (r) => r.tenantFullName || '—' },
+    { key: 'unitNumber',    header: t('units.unit') },
+    { key: 'propertyName',  header: t('leases.property') },
+    { key: 'paymentMonth',  header: t('payments.month') },
+    { key: 'amount',        header: t('payments.amountETB'), render: (r) => Number(r.amount).toLocaleString() },
+    { key: 'status',        header: t('leases.status'),      render: (r) => <Badge label={r.status} /> },
+    { key: 'uploadedAt',    header: t('payments.uploaded'),    render: (r) => r.uploadedAt ? new Date(r.uploadedAt).toLocaleDateString() : '—' },
     {
-      key: 'actions', header: 'Actions',
+      key: 'actions', header: t('common.actions'),
       render: (row) => (
         <Button size="sm" variant="ghost" onClick={() => { setReviewPayment(row); setReviewError(''); }}>
-          {row.status === 'PENDING' ? 'Review' : 'View'}
+          {row.status === 'PENDING' ? t('payments.review') : t('common.view')}
         </Button>
       ),
     },
@@ -168,18 +170,18 @@ export default function PaymentsPage() {
         <>
           <div className="flex items-center justify-between">
             <PageHeader
-              title="Select Property"
-              subtitle="Choose a property to view its payments"
+              title={t('common.selectProperty')}
+              subtitle={t('payments.selectPropertyPayments')}
             />
             <Button onClick={() => setIsPaymentInfoModalOpen(true)}>
-              Add Payment Method
+              {t('payments.addPaymentMethod')}
             </Button>
           </div>
           {paymentInfoData && paymentInfoData.length > 0 && (
             <div className="mb-6 flex flex-wrap gap-3">
               {paymentInfoData.map((info) => (
                 <div key={info.id} className="text-sm px-3 py-2 bg-slate-800 border border-slate-700/50 rounded-lg text-slate-300">
-                  <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? 'Bank' : 'Wallet'}</span>: {info.institutionName} ({info.accountHolderName})
+                  <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName} ({info.accountHolderName})
                 </div>
               ))}
             </div>
@@ -199,35 +201,35 @@ export default function PaymentsPage() {
             onClick={() => setSelectedProperty(null)}
             className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
-            ← Back to Properties
+            {t('common.backToProperties')}
           </button>
           <div className="flex items-center justify-between">
             <PageHeader
-              title={`Payments — ${selectedProperty.name}`}
-              subtitle={`${totalElements} payment${totalElements !== 1 ? 's' : ''}`}
+              title={t('payments.paymentsTitle', { name: selectedProperty.name })}
+              subtitle={totalElements !== 1 ? t('payments.paymentCount', { count: totalElements }) : t('payments.paymentCountSingular', { count: totalElements })}
             />
             <Button onClick={() => setIsPaymentInfoModalOpen(true)}>
-              Add Payment Method
+              {t('payments.addPaymentMethod')}
             </Button>
           </div>
           {paymentInfoData && paymentInfoData.length > 0 && (
             <div className="mb-6 flex flex-wrap gap-3">
               {paymentInfoData.map((info) => (
                 <div key={info.id} className="text-sm px-3 py-2 bg-slate-800 border border-slate-700/50 rounded-lg text-slate-300">
-                  <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? 'Bank' : 'Wallet'}</span>: {info.institutionName} ({info.accountHolderName})
+                  <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName} ({info.accountHolderName})
                 </div>
               ))}
             </div>
           )}
 
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-xl font-bold text-slate-100">Summary</h2>
+        <h2 className="text-xl font-bold text-slate-100">{t('payments.summary')}</h2>
         <div className="w-48">
           <Input 
             type="month" 
             value={monthFilter}
             onChange={(e) => { setMonthFilter(e.target.value); setPage(0); }}
-            placeholder="Filter by month"
+            placeholder={t('payments.filterByMonth')}
           />
         </div>
       </div>
@@ -235,7 +237,7 @@ export default function PaymentsPage() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard 
-            label="Pending Payments"
+            label={t('payments.pendingPayments')}
             value={reportData?.pendingCount || 0}
             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
             color="blue"
@@ -243,7 +245,7 @@ export default function PaymentsPage() {
             onClick={() => handleCardClick('PENDING')}
         />
         <StatCard 
-            label="Approved Payments"
+            label={t('payments.approvedPayments')}
             value={reportData?.approvedCount || 0}
             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>}
             color="green"
@@ -251,7 +253,7 @@ export default function PaymentsPage() {
             onClick={() => handleCardClick('APPROVED')}
         />
         <StatCard 
-            label="Rejected Payments"
+            label={t('payments.rejectedPayments')}
             value={reportData?.rejectedCount || 0}
             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>}
             color="red"
@@ -259,7 +261,7 @@ export default function PaymentsPage() {
             onClick={() => handleCardClick('REJECTED')}
         />
         <StatCard 
-            label="Unpaid Tenants"
+            label={t('payments.unpaidTenants')}
             value={reportData?.unpaidCount || 0}
             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>}
             color="yellow"
@@ -271,7 +273,7 @@ export default function PaymentsPage() {
       <div ref={detailsRef} className="mb-6 scroll-mt-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            Payment Details
+            {t('payments.paymentDetails')}
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               {statusFilter}
             </span>
@@ -282,7 +284,7 @@ export default function PaymentsPage() {
         {loading ? (
             <TableSkeleton rows={8} cols={columns.length} />
           ) : (
-            <Table columns={columns} data={payments} emptyMessage={`No ${statusFilter.toLowerCase()} payments found.`} />
+            <Table columns={columns} data={payments} emptyMessage={t('payments.noPaymentsFound', { status: statusFilter })} />
           )}
       </div>
       {payments.length > 0 && (

@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import Button from './Button';
 import ProfileModal from './ProfileModal';
+import LanguageToggle from './LanguageToggle';
 
 // Props:
 //   navItems — array of { label, to, icon }
@@ -11,6 +12,7 @@ import ProfileModal from './ProfileModal';
 //   children — page content
 
 export default function PortalLayout({ navItems, portalLabel, children }) {
+  const { t }            = useTranslation();
   const { user, logout } = useAuth();
   const navigate         = useNavigate();
   const toast            = useToast();
@@ -19,7 +21,7 @@ export default function PortalLayout({ navItems, portalLabel, children }) {
 
   async function handleLogout() {
     await logout();
-    toast.success('Logged out successfully.');
+    toast.success(t('common.loggedOutSuccess'));
     navigate('/login', { replace: true });
   }
 
@@ -41,7 +43,7 @@ export default function PortalLayout({ navItems, portalLabel, children }) {
             <path d="M14 21V15H17V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <div>
-            <p className="text-white font-bold text-base tracking-tight">Rent Collector</p>
+            <p className="text-white font-bold text-base tracking-tight">{t('common.appName')}</p>
             <p className="text-emerald-400 font-medium text-xs tracking-wide uppercase mt-0.5">{portalLabel}</p>
           </div>
         </div>
@@ -87,7 +89,7 @@ export default function PortalLayout({ navItems, portalLabel, children }) {
             className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-400 bg-slate-800/50 hover:bg-slate-700/70 hover:text-white transition-all duration-200 border border-slate-700/50"
           >
             <span className="text-lg group-hover:-translate-x-1 transition-transform">🚪</span>
-            Sign out
+            {t('common.signOut')}
           </button>
         </div>
       </aside>
@@ -117,21 +119,26 @@ export default function PortalLayout({ navItems, portalLabel, children }) {
 
         {/* Page title on mobile */}
         <span className="lg:hidden font-bold text-white text-lg tracking-tight flex-1">
-          Rent Collector
+          {t('common.appName')}
         </span>
 
         <div className="hidden lg:flex flex-1" />
 
-        <div 
-          className="hidden lg:flex items-center gap-3 cursor-pointer hover:bg-slate-800/50 p-2 rounded-xl transition-colors"
-          onClick={() => setProfileOpen(true)}
-        >
-          <div className="text-right">
-            <p className="text-sm font-semibold text-slate-200">{user?.fullName}</p>
-            <p className="text-xs text-slate-500">{portalLabel}</p>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold uppercase">
-            {user?.fullName?.charAt(0) || 'U'}
+        {/* Language Toggle in header (to the left of profile) */}
+        <div className="flex items-center gap-3">
+          <LanguageToggle />
+
+          <div 
+            className="hidden lg:flex items-center gap-3 cursor-pointer hover:bg-slate-800/50 p-2 rounded-xl transition-colors"
+            onClick={() => setProfileOpen(true)}
+          >
+            <div className="text-right">
+              <p className="text-sm font-semibold text-slate-200">{user?.fullName}</p>
+              <p className="text-xs text-slate-500">{portalLabel}</p>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold uppercase">
+              {user?.fullName?.charAt(0) || 'U'}
+            </div>
           </div>
         </div>
       </header>

@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
+import LanguageToggle from '../../components/common/LanguageToggle';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { login, isAuthenticated, user } = useAuth();
@@ -30,8 +33,8 @@ export default function LoginPage() {
 
   function validate() {
     const errs = {};
-    if (!form.email.trim()) errs.email = 'Email is required.';
-    if (!form.password.trim()) errs.password = 'Password is required.';
+    if (!form.email.trim()) errs.email = t('validation.emailRequired');
+    if (!form.password.trim()) errs.password = t('validation.passwordRequired');
     return errs;
   }
 
@@ -62,7 +65,7 @@ export default function LoginPage() {
         navigateByRole(result.role, navigate);
       }
     } catch (err) {
-      const message = err.response?.data?.message || 'Login failed. Please try again.';
+      const message = err.response?.data?.message || t('auth.loginFailed');
       setApiError(message);
     } finally {
       setLoading(false);
@@ -80,6 +83,11 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-slate-950 flex items-center justify-center p-4">
+      {/* Top right language toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <LanguageToggle />
+      </div>
+
       {/* Animated Background Gradients */}
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-600/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-800/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
@@ -93,8 +101,8 @@ export default function LoginPage() {
             <path d="M10 21V9L21 9V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M14 21V15H17V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Rent Collector</h1>
-          <p className="text-slate-400 text-sm mt-2 font-medium">Welcome back. Please sign in.</p>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">{t('common.appName')}</h1>
+          <p className="text-slate-400 text-sm mt-2 font-medium">{t('auth.welcomeBack')}</p>
         </div>
 
         {/* Card */}
@@ -105,11 +113,11 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <Input
-              label="Email address"
+              label={t('auth.emailLabel')}
               name="email"
               type="email"
               autoComplete="email"
-              placeholder="you@example.com"
+              placeholder={t('auth.emailPlaceholder')}
               value={form.email}
               onChange={handleChange}
               error={errors.email}
@@ -118,11 +126,11 @@ export default function LoginPage() {
             />
 
             <Input
-              label="Password"
+              label={t('auth.passwordLabel')}
               name="password"
               type="password"
               autoComplete="current-password"
-              placeholder="••••••••"
+              placeholder={t('auth.passwordPlaceholder')}
               value={form.password}
               onChange={handleChange}
               error={errors.password}
@@ -135,18 +143,18 @@ export default function LoginPage() {
               fullWidth
               loading={loading}
             >
-              Sign in
+              {t('auth.signIn')}
             </Button>
           </form>
 
           {/* Signup link — only for new landlords */}
           <p className="text-center text-sm text-slate-400 mt-8">
-            New landlord?{' '}
+            {t('auth.newLandlord')}{' '}
             <Link
               to="/signup"
               className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
             >
-              Create an account
+              {t('auth.createAccount')}
             </Link>
           </p>
         </div>

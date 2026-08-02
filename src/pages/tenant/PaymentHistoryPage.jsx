@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PageHeader, Badge, Spinner, Alert, Pagination, Input } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
 import PaymentDetailModal from '../../components/payment/PaymentDetailModal';
@@ -6,6 +7,7 @@ import PaymentDetailModal from '../../components/payment/PaymentDetailModal';
 const PAGE_SIZE = 10;
 
 export default function PaymentHistoryPage() {
+  const { t } = useTranslation();
   const [payments, setPayments]       = useState([]);
   const [page, setPage]               = useState(0);
   const [totalPages, setTotalPages]   = useState(0);
@@ -33,9 +35,9 @@ export default function PaymentHistoryPage() {
       setPayments(data?.content          || []);
       setTotalPages(data?.totalPages     || 0);
       setTotalElements(data?.totalElements || 0);
-    } catch { setError('Failed to load payment history.'); }
+    } catch { setError(t('payments.failedLoadPaymentHistory')); }
     finally  { setLoading(false); }
-  }, [page, statusFilter, monthFilter]);
+  }, [page, statusFilter, monthFilter, t]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -51,29 +53,29 @@ export default function PaymentHistoryPage() {
 
   return (
     <>
-      <PageHeader title="Payment History" subtitle={`${totalElements} payment${totalElements !== 1 ? 's' : ''}`} />
+      <PageHeader title={t('payments.paymentHistoryTitle')} subtitle={totalElements !== 1 ? t('payments.paymentCount', { count: totalElements }) : t('payments.paymentCountSingular', { count: totalElements })} />
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="w-full sm:w-48">
-          <label className="block text-sm font-medium text-slate-300 mb-1">Status</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">{t('leases.status')}</label>
           <select
             className="w-full px-3 py-2 bg-[#111827] border border-slate-600/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-sm"
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
           >
-            <option value="ALL">All Statuses</option>
-            <option value="PENDING">Pending</option>
-            <option value="APPROVED">Approved</option>
-            <option value="REJECTED">Rejected</option>
+            <option value="ALL">{t('payments.allStatuses')}</option>
+            <option value="PENDING">{t('payments.statusPending')}</option>
+            <option value="APPROVED">{t('payments.statusApproved')}</option>
+            <option value="REJECTED">{t('payments.statusRejected')}</option>
           </select>
         </div>
         <div className="w-full sm:w-48">
-          <label className="block text-sm font-medium text-slate-300 mb-1">Month</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">{t('payments.month')}</label>
           <Input 
             type="month" 
             value={monthFilter}
             onChange={(e) => { setMonthFilter(e.target.value); setPage(0); }}
-            placeholder="Filter by month"
+            placeholder={t('payments.filterByMonth')}
           />
         </div>
       </div>
@@ -84,7 +86,7 @@ export default function PaymentHistoryPage() {
       {!loading && !error && payments.length === 0 && (
         <div className="text-center py-20 bg-[#111827] border border-slate-700/50 rounded-xl">
           <p className="text-3xl mb-3">💳</p>
-          <p className="text-slate-500">No payments found.</p>
+          <p className="text-slate-500">{t('payments.noPaymentsFoundSimple')}</p>
         </div>
       )}
 
@@ -98,7 +100,7 @@ export default function PaymentHistoryPage() {
                   <div>
                     <p className="font-semibold text-slate-100">ETB {Number(p.amount).toLocaleString()}</p>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      {p.paymentMonth} · Uploaded {p.uploadedAt ? new Date(p.uploadedAt).toLocaleDateString() : '—'}
+                      {p.paymentMonth} · {t('payments.uploaded')} {p.uploadedAt ? new Date(p.uploadedAt).toLocaleDateString() : '—'}
                     </p>
                   </div>
                 </div>
@@ -112,7 +114,7 @@ export default function PaymentHistoryPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
-                      View
+                      {t('common.view')}
                     </button>
                   )}
                   <Badge label={p.status} />
@@ -121,7 +123,7 @@ export default function PaymentHistoryPage() {
 
               {p.status === 'REJECTED' && p.landLoardComment && (
                 <div className="mt-3 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-                  <p className="text-xs font-medium text-red-400">Rejection reason:</p>
+                  <p className="text-xs font-medium text-red-400">{t('payments.rejectionReasonDisplay')}</p>
                   <p className="text-xs text-red-400 mt-0.5">{p.landLoardComment}</p>
                 </div>
               )}

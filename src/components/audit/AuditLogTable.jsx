@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Table, Badge } from '../common';
 
 const ACTION_COLORS = {
@@ -21,29 +22,31 @@ const ACTION_COLORS = {
   TENANT_DELETED: 'danger',
 };
 
-const COLUMNS = [
-  { key: 'id', header: 'ID' },
-  { key: 'actorEmail', header: 'Actor', render: (r) => <span className="font-mono text-xs">{r.actorEmail}</span> },
-  { key: 'actorRole', header: 'Role', render: (r) => <Badge label={r.actorRole} variant="neutral" /> },
-  { key: 'action', header: 'Action', render: (r) => <Badge label={r.action} variant={ACTION_COLORS[r.action] || 'neutral'} /> },
-  { key: 'entityType', header: 'Entity' },
-  {
-    key: 'description', header: 'Description', render: (r) => (
-      <span className="text-xs text-slate-500 max-w-xs truncate block" title={r.description}>
-        {r.description || '—'}
-      </span>
-    )
-  },
-  { key: 'createdAt', header: 'Time', render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleString() : '—' },
-];
-
 export default function AuditLogTable({ data, loading, emptyMessage }) {
+  const { t } = useTranslation();
+
+  const columns = [
+    { key: 'id', header: t('audit.id') },
+    { key: 'actorEmail', header: t('audit.actor'), render: (r) => <span className="font-mono text-xs">{r.actorEmail}</span> },
+    { key: 'actorRole', header: t('audit.role'), render: (r) => <Badge label={r.actorRole} variant="neutral" /> },
+    { key: 'action', header: t('audit.actionCol'), render: (r) => <Badge label={r.action} variant={ACTION_COLORS[r.action] || 'neutral'} /> },
+    { key: 'entityType', header: t('audit.entity') },
+    {
+      key: 'description', header: t('audit.description'), render: (r) => (
+        <span className="text-xs text-slate-500 max-w-xs truncate block" title={r.description}>
+          {r.description || '—'}
+        </span>
+      )
+    },
+    { key: 'createdAt', header: t('audit.time'), render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleString() : '—' },
+  ];
+
   return (
     <Table
-      columns={COLUMNS}
+      columns={columns}
       data={data}
       loading={loading}
-      emptyMessage={emptyMessage || 'No audit log entries.'}
+      emptyMessage={emptyMessage || t('audit.noAuditEntries')}
     />
   );
 }

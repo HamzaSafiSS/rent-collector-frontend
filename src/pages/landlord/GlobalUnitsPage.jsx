@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { PageHeader, Table, Badge, Button, Spinner } from '../../components/common';
 import { propertyApi } from '../../api/propertyApi';
 import { unitApi } from '../../api/unitApi';
 
 export default function GlobalUnitsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const filterStatus = searchParams.get('status') || 'ALL';
@@ -35,21 +37,21 @@ export default function GlobalUnitsPage() {
         const unitsArrays = await Promise.all(unitPromises);
         setUnits(unitsArrays.flat());
       } catch (err) {
-        setError('Failed to load global units.');
+        setError(t('units.failedLoadGlobalUnits'));
       } finally {
         setLoading(false);
       }
     }
     loadAllUnits();
-  }, []);
+  }, [t]);
 
   const columns = [
-    { key: 'propertyName', header: 'Property', render: (r) => <span className="font-medium text-slate-300">{r.propertyName}</span> },
-    { key: 'unitNumber',   header: 'Unit',     render: (r) => <span className="font-bold text-slate-100">{r.unitNumber}</span> },
-    { key: 'status',       header: 'Status',   render: (r) => <Badge label={r.status} /> },
-    { key: 'baseRent',     header: 'Base Rent',render: (r) => `ETB ${Number(r.baseRent).toLocaleString()}` },
-    { key: 'actions',      header: 'Actions',  render: (r) => (
-      <Button size="sm" variant="secondary" onClick={() => navigate(`/landlord/properties/${r.propertyId}`)}>View Property</Button>
+    { key: 'propertyName', header: t('units.property'), render: (r) => <span className="font-medium text-slate-300">{r.propertyName}</span> },
+    { key: 'unitNumber',   header: t('units.unit'),     render: (r) => <span className="font-bold text-slate-100">{r.unitNumber}</span> },
+    { key: 'status',       header: t('units.status'),   render: (r) => <Badge label={r.status} /> },
+    { key: 'baseRent',     header: t('units.baseRent'),render: (r) => `ETB ${Number(r.baseRent).toLocaleString()}` },
+    { key: 'actions',      header: t('common.actions'),  render: (r) => (
+      <Button size="sm" variant="secondary" onClick={() => navigate(`/landlord/properties/${r.propertyId}`)}>{t('common.viewProperty')}</Button>
     )}
   ];
 
@@ -57,7 +59,7 @@ export default function GlobalUnitsPage() {
 
   return (
     <>
-      <PageHeader title="Global Units" subtitle="Manage all units across your properties" />
+      <PageHeader title={t('units.globalUnitsTitle')} subtitle={t('units.globalUnitsSubtitle')} />
 
       {error && <div className="mb-4 text-red-400 bg-red-500/10 p-4 rounded-xl">{error}</div>}
 
@@ -65,6 +67,7 @@ export default function GlobalUnitsPage() {
         {['ALL', 'AVAILABLE', 'OCCUPIED', 'MAINTENANCE'].map((s) => {
           const count = s === 'ALL' ? units.length : units.filter((u) => u.status === s).length;
           const isSelected = filterStatus === s;
+          const labelText = s === 'ALL' ? t('common.all') : t(`dashboard.${s.toLowerCase()}Units`, { defaultValue: s });
           return (
             <div 
               key={s} 
@@ -89,7 +92,7 @@ export default function GlobalUnitsPage() {
                 s === 'MAINTENANCE' ? 'text-amber-600' :
                                     'text-slate-300'
               }`}>{count}</p>
-              <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{s}</p>
+              <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{labelText}</p>
             </div>
           );
         })}
@@ -97,13 +100,13 @@ export default function GlobalUnitsPage() {
 
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-100">{filterStatus === 'ALL' ? 'All' : filterStatus} Units <span className="text-slate-400 font-medium text-base ml-1">({filteredUnits.length})</span></h2>
+          <h2 className="text-xl font-bold text-slate-100">{filterStatus === 'ALL' ? t('units.allUnits') : filterStatus} <span className="text-slate-400 font-medium text-base ml-1">({filteredUnits.length})</span></h2>
         </div>
         <Table
           columns={columns}
           data={filteredUnits}
           loading={loading}
-          emptyMessage="No units match the current filter."
+          emptyMessage={t('common.noResultsFilter')}
         />
       </div>
     </>

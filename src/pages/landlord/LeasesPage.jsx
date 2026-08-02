@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   PageHeader, Table, Badge, Button, Modal,
   ConfirmDialog, Alert, Pagination,
@@ -7,13 +8,13 @@ import LeaseForm from '../../components/lease/LeaseForm';
 import PropertySelector from '../../components/property/PropertySelector';
 import { leaseApi } from '../../api/leaseApi';
 import { unitApi } from '../../api/unitApi';
-import { propertyApi } from '../../api/propertyApi';
 import { useToast } from '../../context/ToastContext';
 import { TableSkeleton } from '../../components/common';
 
 const PAGE_SIZE = 10;
 
 export default function LeasesPage() {
+  const { t } = useTranslation();
   const toast = useToast();
 
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -49,11 +50,11 @@ export default function LeasesPage() {
       setTotalPages(data?.totalPages   || 0);
       setTotalElements(data?.totalElements || 0);
     } catch {
-      setFetchError('Failed to load leases.');
+      setFetchError(t('leases.failedLoadLeases'));
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, selectedProperty]);
+  }, [page, statusFilter, selectedProperty, t]);
 
   useEffect(() => { loadLeases(); }, [loadLeases, selectedProperty]);
 
@@ -80,12 +81,12 @@ export default function LeasesPage() {
       setFormLoading(true);
       setFormError('');
       const res = await leaseApi.createLease(payload);
-      const msg = res.data?.message || 'Lease created.';
+      const msg = res.data?.message || t('leases.leaseCreated');
       toast.success(msg);
       setCreateOpen(false);
       loadLeases();
     } catch (err) {
-      setFormError(err.response?.data?.message || 'Failed to create lease.');
+      setFormError(err.response?.data?.message || t('leases.failedCreateLease'));
     } finally {
       setFormLoading(false);
     }
@@ -95,11 +96,11 @@ export default function LeasesPage() {
     try {
       setTermLoading(true);
       await leaseApi.terminateLease(terminateTarget.id, null);
-      toast.success('Lease terminated.');
+      toast.success(t('leases.leaseTerminated'));
       setTerminateTarget(null);
       loadLeases();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to terminate lease.');
+      toast.error(err.response?.data?.message || t('leases.failedTerminateLease'));
       setTerminateTarget(null);
     } finally {
       setTermLoading(false);
@@ -107,21 +108,21 @@ export default function LeasesPage() {
   }
 
   const columns = [
-    { key: 'id',            header: 'ID' },
-    { key: 'tenantFullName',header: 'Tenant',     render: (r) => r.tenantFullName || '—' },
-    { key: 'tenantEmail',   header: 'Email',      render: (r) => <span className="text-xs">{r.tenantEmail || '—'}</span> },
-    { key: 'unitNumber',    header: 'Unit' },
-    { key: 'propertyName',  header: 'Property' },
-    { key: 'monthlyRent',   header: 'Rent (ETB)', render: (r) => Number(r.monthlyRent).toLocaleString() },
-    { key: 'startDate',     header: 'Start Date' },
-    { key: 'status',        header: 'Status',     render: (r) => <Badge label={r.status} /> },
+    { key: 'id',            header: t('leases.id') },
+    { key: 'tenantFullName',header: t('leases.tenant'),     render: (r) => r.tenantFullName || '—' },
+    { key: 'tenantEmail',   header: t('leases.email'),      render: (r) => <span className="text-xs">{r.tenantEmail || '—'}</span> },
+    { key: 'unitNumber',    header: t('units.unit') },
+    { key: 'propertyName',  header: t('leases.property') },
+    { key: 'monthlyRent',   header: t('leases.rentETB'), render: (r) => Number(r.monthlyRent).toLocaleString() },
+    { key: 'startDate',     header: t('leases.startDateCol') },
+    { key: 'status',        header: t('leases.status'),     render: (r) => <Badge label={r.status} /> },
     {
-      key: 'actions', header: 'Actions',
+      key: 'actions', header: t('common.actions'),
       render: (row) => row.status === 'ACTIVE' ? (
         <Button size="sm" variant="danger" onClick={() => setTerminateTarget(row)}>
-          Terminate
+          {t('leases.terminate')}
         </Button>
-      ) : <span className="text-xs text-slate-400">Terminated</span>,
+      ) : <span className="text-xs text-slate-400">{t('leases.terminated')}</span>,
     },
   ];
 
@@ -130,8 +131,8 @@ export default function LeasesPage() {
       {!selectedProperty ? (
         <>
           <PageHeader
-            title="Select Property"
-            subtitle="Choose a property to view its leases"
+            title={t('common.selectProperty')}
+            subtitle={t('leases.selectPropertyLeases')}
           />
           <PropertySelector onSelect={(p) => { setSelectedProperty(p); setPage(0); setStatusFilter(''); }} />
         </>
@@ -141,13 +142,13 @@ export default function LeasesPage() {
             onClick={() => setSelectedProperty(null)} 
             className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
-            ← Back to Properties
+            {t('common.backToProperties')}
           </button>
           <PageHeader
-            title={`Leases - ${selectedProperty.name}`}
-            subtitle={`${totalElements} lease${totalElements !== 1 ? 's' : ''}`}
+            title={t('leases.leasesTitle', { name: selectedProperty.name })}
+            subtitle={totalElements !== 1 ? t('leases.leaseCount', { count: totalElements }) : t('leases.leaseCountSingular', { count: totalElements })}
             actions={
-              <Button onClick={openCreateModal}>+ New Lease</Button>
+              <Button onClick={openCreateModal}>{t('leases.newLease')}</Button>
             }
           />
 
@@ -163,7 +164,7 @@ export default function LeasesPage() {
                 : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700'
             }`}
           >
-            {s || 'All'}
+            {s ? (s === 'ACTIVE' ? t('leases.active') : t('leases.terminated')) : t('common.all')}
           </button>
         ))}
       </div>
@@ -174,7 +175,7 @@ export default function LeasesPage() {
         {loading ? (
           <TableSkeleton rows={8} cols={columns.length} />
         ) : (
-          <Table columns={columns} data={leases} emptyMessage="No leases found." />
+          <Table columns={columns} data={leases} emptyMessage={t('leases.noLeasesFound')} />
         )}
       </div>
       {leases.length > 0 && (
@@ -191,7 +192,7 @@ export default function LeasesPage() {
       <Modal
         isOpen={createOpen}
         onClose={() => setCreateOpen(false)}
-        title="Create New Lease"
+        title={t('leases.createNewLease')}
         size="lg"
         footer={null}
       >
@@ -210,9 +211,9 @@ export default function LeasesPage() {
         onClose={() => setTerminateTarget(null)}
         onConfirm={handleTerminate}
         loading={termLoading}
-        title="Terminate Lease"
-        message={`Terminate lease for "${terminateTarget?.tenantFullName}" in unit "${terminateTarget?.unitNumber}"? The unit will be freed immediately.`}
-        confirmText="Terminate"
+        title={t('leases.terminateLeaseTitle')}
+        message={t('leases.terminateLeaseMessage', { tenant: terminateTarget?.tenantFullName, unit: terminateTarget?.unitNumber })}
+        confirmText={t('leases.terminate')}
         variant="danger"
       />
         </>

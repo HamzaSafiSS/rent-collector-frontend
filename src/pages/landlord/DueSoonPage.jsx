@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { PageHeader, Table, Alert, Pagination, TableSkeleton } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
 
 const PAGE_SIZE = 10;
 
 export default function DueSoonPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [tenants, setTenants] = useState([]);
@@ -25,22 +27,22 @@ export default function DueSoonPage() {
       setTotalPages(data?.totalPages || 0);
       setTotalElements(data?.totalElements || 0);
     } catch (err) {
-      setFetchError('Failed to load tenants due soon.');
+      setFetchError(t('dueSoon.failedLoad'));
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, t]);
 
   useEffect(() => {
     loadDueSoonTenants();
   }, [loadDueSoonTenants]);
 
   const columns = [
-    { key: 'tenantFullName', header: 'Tenant', render: (r) => r.tenantFullName || '—' },
-    { key: 'tenantEmail', header: 'Email' },
-    { key: 'propertyName', header: 'Property' },
-    { key: 'unitNumber', header: 'Unit' },
-    { key: 'amount', header: 'Amount Due (ETB)', render: (r) => Number(r.amount).toLocaleString() },
+    { key: 'tenantFullName', header: t('leases.tenant'), render: (r) => r.tenantFullName || '—' },
+    { key: 'tenantEmail', header: t('leases.email') },
+    { key: 'propertyName', header: t('leases.property') },
+    { key: 'unitNumber', header: t('units.unit') },
+    { key: 'amount', header: t('dueSoon.amountDueETB'), render: (r) => Number(r.amount).toLocaleString() },
   ];
 
   return (
@@ -49,12 +51,12 @@ export default function DueSoonPage() {
         onClick={() => navigate(-1)}
         className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
       >
-        ← Back
+        {t('common.back')}
       </button>
 
       <PageHeader
-        title="Tenants Due Soon (≤ 3 days)"
-        subtitle={`${totalElements} tenant${totalElements !== 1 ? 's' : ''} have upcoming payments`}
+        title={t('dueSoon.title')}
+        subtitle={totalElements !== 1 ? t('dueSoon.subtitle', { count: totalElements }) : t('dueSoon.subtitleSingular', { count: totalElements })}
       />
 
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
@@ -63,7 +65,7 @@ export default function DueSoonPage() {
         {loading ? (
           <TableSkeleton rows={8} cols={columns.length} />
         ) : (
-          <Table columns={columns} data={tenants} emptyMessage="No tenants currently due soon." />
+          <Table columns={columns} data={tenants} emptyMessage={t('dueSoon.noTenantsDue')} />
         )}
       </div>
 

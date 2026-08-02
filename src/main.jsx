@@ -6,6 +6,7 @@ import { ToastProvider } from './context/ToastContext';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import App from './App';
 import './index.css';
+import './i18n/i18n'; // Initialize i18n before app renders
 // Prevent unhandled promise rejections (e.g. from failed refresh on mount)
 // from crashing the entire React tree
 window.addEventListener('unhandledrejection', (event) => {

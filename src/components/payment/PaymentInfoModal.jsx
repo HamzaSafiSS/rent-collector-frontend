@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, Button, Input } from '../common';
-import { useToast } from '../../context/ToastContext';
 
 export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('WALLET'); // 'WALLET' or 'BANK'
 
   const [formData, setFormData] = useState({
@@ -38,10 +39,10 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Add Payment Method" size="md" footer={null}>
+    <Modal isOpen={isOpen} onClose={onClose} title={t('payments.addPaymentMethodTitle')} size="md" footer={null}>
       <form onSubmit={handleSubmit} className="p-6">
         <p className="text-sm text-slate-400 mb-4">
-          Add a new payment method for tenants to see when they pay rent.
+          {t('payments.addPaymentMethodDesc')}
         </p>
 
         {/* Tabs */}
@@ -55,7 +56,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
             }`}
             onClick={() => setActiveTab('WALLET')}
           >
-            Wallet
+            {t('payments.wallet')}
           </button>
           <button
             type="button"
@@ -66,7 +67,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
             }`}
             onClick={() => setActiveTab('BANK')}
           >
-            Bank
+            {t('payments.bank')}
           </button>
         </div>
 
@@ -74,54 +75,54 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
           {activeTab === 'BANK' ? (
             <>
               <Input
-                label="Bank Name"
+                label={t('payments.bankNameLabel')}
                 name="institutionName"
                 value={formData.institutionName}
                 onChange={handleChange}
-                placeholder="e.g. CBE, Awash Bank, Dashen Bank"
+                placeholder={t('payments.bankNamePlaceholder')}
                 required
               />
               <Input
-                label="Account Holder Name"
+                label={t('payments.accountHolderLabel')}
                 name="accountHolderName"
                 value={formData.accountHolderName}
                 onChange={handleChange}
-                placeholder="e.g. Hamza Safi"
+                placeholder={t('payments.accountHolderPlaceholder')}
                 required
               />
               <Input
-                label="Account Number"
+                label={t('payments.accountNumberLabel')}
                 name="accountNumber"
                 value={formData.accountNumber}
                 onChange={handleChange}
-                placeholder="e.g. 1000123456789"
+                placeholder={t('payments.accountNumberPlaceholder')}
                 required
               />
             </>
           ) : (
             <>
               <Input
-                label="Wallet Name"
+                label={t('payments.walletNameLabel')}
                 name="institutionName"
                 value={formData.institutionName}
                 onChange={handleChange}
-                placeholder="e.g. Telebirr, CBE Birr"
+                placeholder={t('payments.walletNamePlaceholder')}
                 required
               />
               <Input
-                label="Account Holder Name"
+                label={t('payments.accountHolderLabel')}
                 name="accountHolderName"
                 value={formData.accountHolderName}
                 onChange={handleChange}
-                placeholder="e.g. Hamza Safi"
+                placeholder={t('payments.accountHolderPlaceholder')}
                 required
               />
               <Input
-                label="Phone Number"
+                label={t('payments.phoneNumberLabel')}
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                placeholder="e.g. 0911234567"
+                placeholder={t('payments.phoneNumberPlaceholder')}
                 required
               />
             </>
@@ -130,10 +131,10 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
 
         <div className="flex justify-end gap-3 mt-8">
           <Button type="button" variant="ghost" onClick={onClose} disabled={loading}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button type="submit" disabled={loading}>
-            {loading ? 'Saving...' : 'Save Payment Method'}
+            {loading ? t('common.saving') : t('payments.savePaymentMethodBtn')}
           </Button>
         </div>
       </form>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { PageHeader, Table, Badge, Button, Pagination, Alert, ConfirmDialog } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 import { useToast } from '../../context/ToastContext';
@@ -8,6 +9,7 @@ import { TableSkeleton } from '../../components/common';
 const PAGE_SIZE = 10;
 
 export default function ManageLandlordsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const toast = useToast();
   const [landlords, setLandlords]     = useState([]);
@@ -29,11 +31,11 @@ export default function ManageLandlordsPage() {
       setTotalPages(data?.totalPages    || 0);
       setTotalElements(data?.totalElements || 0);
     } catch {
-      setError('Failed to load landlords.');
+      setError(t('admin.failedLoadLandlords'));
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, t]);
 
   useEffect(() => { loadLandlords(); }, [loadLandlords]);
 
@@ -44,28 +46,28 @@ export default function ManageLandlordsPage() {
       setActionLoading(true);
       if (action === 'suspend') {
         await adminApi.suspendLandlord(landlord.id);
-        toast.success(`${landlord.fullName} suspended.`);
+        toast.success(t('admin.landlordSuspended', { name: landlord.fullName }));
       } else {
         await adminApi.activateLandlord(landlord.id);
-        toast.success(`${landlord.fullName} activated.`);
+        toast.success(t('admin.landlordActivated', { name: landlord.fullName }));
       }
       setConfirmTarget(null);
       loadLandlords();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Action failed.');
+      toast.error(err.response?.data?.message || t('admin.actionFailed'));
     } finally {
       setActionLoading(false);
     }
   }
 
   const columns = [
-    { key: 'fullName',    header: 'Name' },
-    { key: 'email',       header: 'Email' },
-    { key: 'phoneNumber', header: 'Phone',   render: (r) => r.phoneNumber || '—' },
-    { key: 'status',      header: 'Status',  render: (r) => <Badge label={r.status} /> },
-    { key: 'createdAt',   header: 'Joined',  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+    { key: 'fullName',    header: t('tenants.name') },
+    { key: 'email',       header: t('tenants.email') },
+    { key: 'phoneNumber', header: t('tenants.phone'),   render: (r) => r.phoneNumber || '—' },
+    { key: 'status',      header: t('tenants.status'),  render: (r) => <Badge label={r.status} /> },
+    { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     {
-      key: 'actions', header: 'Actions',
+      key: 'actions', header: t('common.actions'),
       render: (row) => (
         <div className="flex gap-2">
           <Button
@@ -76,14 +78,14 @@ export default function ManageLandlordsPage() {
               action: row.status === 'Suspended' ? 'activate' : 'suspend',
             })}
           >
-            {row.status === 'Suspended' ? 'Activate' : 'Suspend'}
+            {row.status === 'Suspended' ? t('admin.activate') : t('admin.suspend')}
           </Button>
           <Button
             size="sm"
             variant="primary"
             onClick={() => navigate(`/admin/view/landlord-dashboard/${row.id}`)}
           >
-            View Dashboard
+            {t('admin.viewDashboard')}
           </Button>
         </div>
       ),
@@ -95,8 +97,8 @@ export default function ManageLandlordsPage() {
   return (
     <>
       <PageHeader
-        title="Manage Landlords"
-        subtitle={`${totalElements} registered landlord${totalElements !== 1 ? 's' : ''}`}
+        title={t('admin.manageLandlordsTitle')}
+        subtitle={totalElements !== 1 ? t('admin.landlordsCount', { count: totalElements }) : t('admin.landlordsCountSingular', { count: totalElements })}
       />
 
       {error && <Alert type="error" message={error} className="mb-4" />}
@@ -105,7 +107,7 @@ export default function ManageLandlordsPage() {
         {loading ? (
           <TableSkeleton rows={8} cols={columns.length} />
         ) : (
-          <Table columns={columns} data={landlords} emptyMessage="No landlords found." />
+          <Table columns={columns} data={landlords} emptyMessage={t('admin.noLandlordsFound')} />
         )}
         <div className="px-4 border-t border-slate-100">
           <Pagination
@@ -121,13 +123,13 @@ export default function ManageLandlordsPage() {
         onClose={() => setConfirmTarget(null)}
         onConfirm={handleConfirmAction}
         loading={actionLoading}
-        title={action === 'suspend' ? 'Suspend Landlord' : 'Activate Landlord'}
+        title={action === 'suspend' ? t('admin.suspendLandlordTitle') : t('admin.activateLandlordTitle')}
         message={
           action === 'suspend'
-            ? `Suspend "${confirmTarget?.landlord?.fullName}"? They will be immediately locked out.`
-            : `Activate "${confirmTarget?.landlord?.fullName}"? They will regain full access.`
+            ? t('admin.suspendLandlordMsg', { name: confirmTarget?.landlord?.fullName })
+            : t('admin.activateLandlordMsg', { name: confirmTarget?.landlord?.fullName })
         }
-        confirmText={action === 'suspend' ? 'Suspend' : 'Activate'}
+        confirmText={action === 'suspend' ? t('admin.suspend') : t('admin.activate')}
         variant={action === 'suspend' ? 'danger' : 'success'}
       />
     </>

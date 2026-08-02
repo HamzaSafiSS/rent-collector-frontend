@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PageHeader, Spinner, Alert, Input, Button, StatCard } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import PropertySelector from '../../components/property/PropertySelector';
 
-const TABS = ['Payments', 'Occupancy', 'Revenue', 'Tenants'];
-
 export default function ReportsPage() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('Payments');
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [properties, setProperties] = useState([]);
@@ -17,11 +17,18 @@ export default function ReportsPage() {
       .catch(() => {});
   }, []);
 
+  const TABS = [
+    { key: 'Payments', label: t('reports.tabPayments') },
+    { key: 'Occupancy', label: t('reports.tabOccupancy') },
+    { key: 'Revenue', label: t('reports.tabRevenue') },
+    { key: 'Tenants', label: t('reports.tabTenants') },
+  ];
+
   return (
     <>
       {!selectedProperty ? (
         <>
-          <PageHeader title="Select Property" subtitle="Choose a property to view its reports" />
+          <PageHeader title={t('common.selectProperty')} subtitle={t('reports.selectPropertyReports')} />
           <PropertySelector onSelect={(p) => { setSelectedProperty(p); setActiveTab('Payments'); }} />
         </>
       ) : (
@@ -30,23 +37,23 @@ export default function ReportsPage() {
             onClick={() => setSelectedProperty(null)}
             className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
-            ← Back to Properties
+            {t('common.backToProperties')}
           </button>
-          <PageHeader title={`Reports — ${selectedProperty.name}`} subtitle="Analyse your portfolio performance" />
+          <PageHeader title={t('reports.reportsTitle', { name: selectedProperty.name })} subtitle={t('reports.reportsSubtitle')} />
 
           {/* Tab bar */}
           <div className="flex gap-1 mb-6 bg-slate-800/50 rounded-xl p-1 w-fit">
             {TABS.map((tab) => (
               <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
                 className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === tab
+                  activeTab === tab.key
                     ? 'bg-emerald-500/15 text-emerald-400 shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                {tab}
+                {tab.label}
               </button>
             ))}
           </div>
@@ -70,6 +77,7 @@ function normaliseRange(from, to) {
 
 // ── Payment Report ─────────────────────────────────────────────────────────────
 function PaymentReport({ properties, lockedPropertyId }) {
+  const { t } = useTranslation();
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
@@ -82,7 +90,7 @@ function PaymentReport({ properties, lockedPropertyId }) {
       const { from, to, swapped } = normaliseRange(activeFilters.from, activeFilters.to);
       if (swapped) {
         setFilters((p) => ({ ...p, from, to }));
-        setRangeWarning('"From" was after "To" — they have been swapped automatically.');
+        setRangeWarning(t('reports.rangeSwappedWarning'));
       }
       const params = {};
       if (from)                      params.from       = from;
@@ -91,9 +99,9 @@ function PaymentReport({ properties, lockedPropertyId }) {
       const res = await reportApi.getPaymentReport(params);
       setData(res.data?.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load payment report.');
+      setError(err.response?.data?.message || t('reports.failedLoadPaymentReport'));
     } finally { setLoading(false); }
-  }, []);
+  }, [t]);
 
   // Load on mount using locked property
   useEffect(() => { load(filters); }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -103,22 +111,22 @@ function PaymentReport({ properties, lockedPropertyId }) {
       {/* Filters */}
       <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-5">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
-          <Input label="From month" type="month" value={filters.from}       onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))} />
-          <Input label="To month"   type="month" value={filters.to}         onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))} />
+          <Input label={t('reports.fromMonth')} type="month" value={filters.from}       onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))} />
+          <Input label={t('reports.toMonth')}   type="month" value={filters.to}         onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))} />
           {!lockedPropertyId && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Property</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1">{t('reports.property')}</label>
               <select
                 value={filters.propertyId}
                 onChange={(e) => setFilters((p) => ({ ...p, propertyId: e.target.value }))}
                 className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
               >
-                <option value="">All properties</option>
+                <option value="">{t('reports.allProperties')}</option>
                 {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
               </select>
             </div>
           )}
-          <Button onClick={() => load(filters)} loading={loading}>Refresh</Button>
+          <Button onClick={() => load(filters)} loading={loading}>{t('reports.refresh')}</Button>
         </div>
       </div>
 
@@ -128,10 +136,10 @@ function PaymentReport({ properties, lockedPropertyId }) {
 
       {data && !loading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-          <StatCard label="Collected (ETB)" value={Number(data.totalCollected).toLocaleString()} color="green"  subtitle={`${data.approvedCount} payments`} />
-          <StatCard label="Pending (ETB)"   value={Number(data.totalPending).toLocaleString()}   color="yellow" subtitle={`${data.pendingCount} payments`} />
-          <StatCard label="Rejected (ETB)"  value={Number(data.totalRejected).toLocaleString()}  color="red"    subtitle={`${data.rejectedCount} payments`} />
-          <StatCard label="Grand Total"     value={Number(data.grandTotal).toLocaleString()}     color="blue"   subtitle={`${data.totalCount} total`} />
+          <StatCard label={t('reports.collectedETB')} value={Number(data.totalCollected).toLocaleString()} color="green"  subtitle={t('reports.paymentsCount', { count: data.approvedCount })} />
+          <StatCard label={t('reports.pendingETB')}   value={Number(data.totalPending).toLocaleString()}   color="yellow" subtitle={t('reports.paymentsCount', { count: data.pendingCount })} />
+          <StatCard label={t('reports.rejectedETB')}  value={Number(data.totalRejected).toLocaleString()}  color="red"    subtitle={t('reports.paymentsCount', { count: data.rejectedCount })} />
+          <StatCard label={t('reports.grandTotal')}     value={Number(data.grandTotal).toLocaleString()}     color="blue"   subtitle={t('reports.totalCount', { count: data.totalCount })} />
         </div>
       )}
     </div>
@@ -140,6 +148,7 @@ function PaymentReport({ properties, lockedPropertyId }) {
 
 // ── Occupancy Report ───────────────────────────────────────────────────────────
 function OccupancyReport({ properties, lockedPropertyId }) {
+  const { t } = useTranslation();
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
@@ -152,9 +161,9 @@ function OccupancyReport({ properties, lockedPropertyId }) {
       const res = await reportApi.getOccupancyReport(params);
       setData(res.data?.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load occupancy report.');
+      setError(err.response?.data?.message || t('reports.failedLoadOccupancyReport'));
     } finally { setLoading(false); }
-  }, []);
+  }, [t]);
 
   useEffect(() => { load(propertyId); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -163,18 +172,18 @@ function OccupancyReport({ properties, lockedPropertyId }) {
       <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-5 flex gap-3 items-end">
         {!lockedPropertyId && (
           <div className="flex-1 max-w-xs">
-            <label className="block text-sm font-medium text-slate-300 mb-1">Property</label>
+            <label className="block text-sm font-medium text-slate-300 mb-1">{t('reports.property')}</label>
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
               className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
-              <option value="">All properties</option>
+              <option value="">{t('reports.allProperties')}</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
           </div>
         )}
-        <Button onClick={() => load(propertyId)} loading={loading}>Refresh</Button>
+        <Button onClick={() => load(propertyId)} loading={loading}>{t('reports.refresh')}</Button>
       </div>
 
       {error   && <Alert type="error" message={error} className="mb-4" />}
@@ -183,15 +192,15 @@ function OccupancyReport({ properties, lockedPropertyId }) {
       {data && !loading && (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
-            <StatCard label="Total Units"    value={data.totalUnits}       color="blue"   />
-            <StatCard label="Occupied"       value={data.occupiedUnits}    color="green"  />
-            <StatCard label="Available"      value={data.availableUnits}   color="slate"  />
-            <StatCard label="Maintenance"    value={data.maintenanceUnits} color="yellow" />
+            <StatCard label={t('reports.totalUnits')}    value={data.totalUnits}       color="blue"   />
+            <StatCard label={t('reports.occupied')}       value={data.occupiedUnits}    color="green"  />
+            <StatCard label={t('reports.available')}      value={data.availableUnits}   color="slate"  />
+            <StatCard label={t('reports.maintenance')}    value={data.maintenanceUnits} color="yellow" />
           </div>
           {/* Occupancy rate bar */}
           <div className="bg-[#111827] border border-slate-700/50 shadow-sm rounded-2xl p-6">
             <div className="flex justify-between text-sm mb-2">
-              <span className="font-medium text-slate-300">Occupancy Rate</span>
+              <span className="font-medium text-slate-300">{t('reports.occupancyRate')}</span>
               <span className="font-bold text-emerald-400">{data.occupancyRate}%</span>
             </div>
             <div className="w-full bg-slate-700 rounded-full h-4">
@@ -209,6 +218,7 @@ function OccupancyReport({ properties, lockedPropertyId }) {
 
 // ── Revenue Report ─────────────────────────────────────────────────────────────
 function RevenueReport({ properties, lockedPropertyId }) {
+  const { t } = useTranslation();
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
@@ -223,9 +233,9 @@ function RevenueReport({ properties, lockedPropertyId }) {
       const res = await reportApi.getRevenueReport(params);
       setData(res.data?.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load revenue report.');
+      setError(err.response?.data?.message || t('reports.failedLoadRevenueReport'));
     } finally { setLoading(false); }
-  }, []);
+  }, [t]);
 
   useEffect(() => { load(year, propertyId); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -233,7 +243,7 @@ function RevenueReport({ properties, lockedPropertyId }) {
     <div>
       <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-5 flex gap-3 items-end flex-wrap">
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Year</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">{t('reports.year')}</label>
           <select
             value={year}
             onChange={(e) => setYear(e.target.value)}
@@ -246,18 +256,18 @@ function RevenueReport({ properties, lockedPropertyId }) {
         </div>
         {!lockedPropertyId && (
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Property</label>
+            <label className="block text-sm font-medium text-slate-300 mb-1">{t('reports.property')}</label>
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
               className="px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
-              <option value="">All properties</option>
+              <option value="">{t('reports.allProperties')}</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
           </div>
         )}
-        <Button onClick={() => load(year, propertyId)} loading={loading}>Refresh</Button>
+        <Button onClick={() => load(year, propertyId)} loading={loading}>{t('reports.refresh')}</Button>
       </div>
 
       {error   && <Alert type="error" message={error} className="mb-4" />}
@@ -266,21 +276,21 @@ function RevenueReport({ properties, lockedPropertyId }) {
       {data && !loading && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <StatCard label="Total Revenue (ETB)" value={Number(data.totalRevenue).toLocaleString()} color="green" />
-            <StatCard label="Avg Monthly (ETB)"   value={Number(data.averageMonthlyRevenue).toLocaleString()} color="blue" />
+            <StatCard label={t('reports.totalRevenueETB')} value={Number(data.totalRevenue).toLocaleString()} color="green" />
+            <StatCard label={t('reports.avgMonthlyETB')}   value={Number(data.averageMonthlyRevenue).toLocaleString()} color="blue" />
           </div>
 
           {/* Monthly breakdown */}
           {data.byMonth?.length > 0 && (
             <div className="bg-[#111827] border border-slate-700/50 rounded-2xl overflow-hidden mb-4 shadow-sm">
-              <p className="px-6 py-4 font-bold text-slate-100 border-b border-slate-100 bg-slate-800/50/50">Monthly Breakdown</p>
+              <p className="px-6 py-4 font-bold text-slate-100 border-b border-slate-100 bg-slate-800/50/50">{t('reports.monthlyBreakdown')}</p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead className="bg-slate-800/50/50 border-b border-slate-100">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Month</th>
-                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Revenue (ETB)</th>
-                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Payments</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">{t('reports.monthCol')}</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">{t('reports.revenueETBCol')}</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">{t('reports.paymentsCol')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -304,6 +314,7 @@ function RevenueReport({ properties, lockedPropertyId }) {
 
 // ── Tenant Report ──────────────────────────────────────────────────────────────
 function TenantReport({ properties, lockedPropertyId }) {
+  const { t } = useTranslation();
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
@@ -316,9 +327,9 @@ function TenantReport({ properties, lockedPropertyId }) {
       const res = await reportApi.getTenantReport(params);
       setData(res.data?.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load tenant report.');
+      setError(err.response?.data?.message || t('reports.failedLoadTenantReport'));
     } finally { setLoading(false); }
-  }, []);
+  }, [t]);
 
   useEffect(() => { load(propertyId); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -327,18 +338,18 @@ function TenantReport({ properties, lockedPropertyId }) {
       <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-5 flex gap-3 items-end">
         {!lockedPropertyId && (
           <div className="flex-1 max-w-xs">
-            <label className="block text-sm font-medium text-slate-300 mb-1">Property</label>
+            <label className="block text-sm font-medium text-slate-300 mb-1">{t('reports.property')}</label>
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
               className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
-              <option value="">All properties</option>
+              <option value="">{t('reports.allProperties')}</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
           </div>
         )}
-        <Button onClick={() => load(propertyId)} loading={loading}>Refresh</Button>
+        <Button onClick={() => load(propertyId)} loading={loading}>{t('reports.refresh')}</Button>
       </div>
 
       {error   && <Alert type="error" message={error} className="mb-4" />}
@@ -347,9 +358,9 @@ function TenantReport({ properties, lockedPropertyId }) {
       {data && !loading && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <StatCard label="Active Tenants"     value={data.totalActiveTenants}     color="green" />
-            <StatCard label="Historical Tenants" value={data.totalHistoricalTenants} color="slate" />
-            <StatCard label="Total Unique"       value={data.totalTenants}           color="blue"  />
+            <StatCard label={t('reports.activeTenants')}     value={data.totalActiveTenants}     color="green" />
+            <StatCard label={t('reports.historicalTenants')} value={data.totalHistoricalTenants} color="slate" />
+            <StatCard label={t('reports.totalUniqueTenants')}value={data.totalTenants}           color="blue"  />
           </div>
           {data.tenants?.length > 0 && (
             <div className="bg-[#111827] border border-slate-700/50 rounded-2xl overflow-hidden shadow-sm">
@@ -357,7 +368,7 @@ function TenantReport({ properties, lockedPropertyId }) {
                 <table className="w-full text-sm">
                   <thead className="bg-slate-800/50/50 border-b border-slate-100">
                     <tr>
-                      {['Name','Email','Status','Current Unit','Active Leases','Total Leases'].map((h) => (
+                      {[t('tenants.name'), t('tenants.email'), t('tenants.status'), t('tenants.currentUnit'), t('tenants.activeLeases'), t('reports.totalLeasesCol')].map((h) => (
                         <th key={h} className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">{h}</th>
                       ))}
                     </tr>

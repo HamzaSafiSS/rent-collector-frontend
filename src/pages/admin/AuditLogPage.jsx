@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PageHeader, Button, Input, Pagination, Alert } from '../../components/common';
 import AuditLogTable from '../../components/audit/AuditLogTable';
 import { auditApi } from '../../api/auditApi';
@@ -21,6 +22,7 @@ const ENTITY_TYPES = ['', 'USER', 'PROPERTY', 'UNIT', 'LEASE', 'PAYMENT', 'TENAN
 const PAGE_SIZE = 20;
 
 export default function AdminAuditLog() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [logs, setLogs]                 = useState([]);
   const [page, setPage]                 = useState(0);
@@ -50,15 +52,15 @@ export default function AdminAuditLog() {
       setLogs(filtered);
       setTotalPages(data?.totalPages || 0);
       setTotalElements(data?.totalElements || 0);
-    } catch { setError('Failed to load audit logs.'); }
+    } catch { setError(t('audit.failedLoadLogs')); }
     finally  { setLoading(false); }
-  }, [page, applied, user?.email]);
+  }, [page, applied, user?.email, t]);
 
   useEffect(() => { loadLogs(); }, [loadLogs]);
 
   return (
     <>
-      <PageHeader title="Audit Logs" subtitle={`${totalElements} entries`} />
+      <PageHeader title={t('audit.auditLogsTitle')} subtitle={t('audit.entriesCount', { count: totalElements })} />
 
       <form
         onSubmit={(e) => { e.preventDefault(); setPage(0); setApplied({ ...filters }); }}
@@ -66,7 +68,7 @@ export default function AdminAuditLog() {
       >
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Action</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.action')}</label>
             <select
               name="action"
               value={filters.action}
@@ -74,27 +76,27 @@ export default function AdminAuditLog() {
               className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ACTIONS.map((a) => (
-                <option key={a} value={a}>{a || 'All actions'}</option>
+                <option key={a} value={a}>{a || t('audit.allActions')}</option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Entity Type</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.entityType')}</label>
             <select
               name="entityType"
               value={filters.entityType}
               onChange={(e) => setFilters((p) => ({ ...p, entityType: e.target.value }))}
               className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
-              {ENTITY_TYPES.map((t) => (
-                <option key={t} value={t}>{t || 'All types'}</option>
+              {ENTITY_TYPES.map((type) => (
+                <option key={type} value={type}>{type || t('audit.allTypes')}</option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">From Date</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.fromDate')}</label>
             <input
               name="from"
               type="date"
@@ -105,7 +107,7 @@ export default function AdminAuditLog() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">To Date</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.toDate')}</label>
             <input
               name="to"
               type="date"
@@ -117,12 +119,12 @@ export default function AdminAuditLog() {
 
           <div>
             <Button type="button" variant="secondary" size="sm" className="w-full" onClick={() => { setFilters({ action:'', entityType:'', from:'', to:'' }); setApplied({}); setPage(0); }}>
-              Clear Filters
+              {t('audit.clearFilters')}
             </Button>
           </div>
           <div>
             <Button type="submit" size="sm" className="w-full">
-              Apply Filters
+              {t('audit.applyFilters')}
             </Button>
           </div>
         </div>
