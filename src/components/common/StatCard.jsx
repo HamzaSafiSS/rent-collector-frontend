@@ -47,10 +47,10 @@ export default function StatCard({ label, value, icon, color = 'emerald', subtit
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-50 rounded-bl-full -z-10 transform group-hover:scale-110 transition-transform duration-500"></div>
       <div className="flex items-center justify-between z-10">
         <div>
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-400">{label}</p>
+          <p className="text-sm font-semibold text-slate-300 tracking-wide">{label}</p>
           <p className={`text-2xl font-extrabold mt-2 tracking-tight ${textColors[color] || textColors.emerald}`}>{value ?? '—'}</p>
           {subtitle && (
-            <p className="text-sm mt-2 font-medium text-slate-500">{subtitle}</p>
+            <p className="text-sm mt-2 font-medium text-slate-400">{subtitle}</p>
           )}
         </div>
         {icon && (

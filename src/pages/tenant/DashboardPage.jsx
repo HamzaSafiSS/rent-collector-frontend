@@ -96,7 +96,7 @@ export default function TenantDashboard() {
   }, [t]);
 
   return (
-    <div className="text-[75%]">
+    <div>
       <PageHeader title={t('dashboard.myDashboard')} subtitle={t('dashboard.rentalSummary')} />
 
       {error && <Alert type="error" message={error} className="mb-4" />}
