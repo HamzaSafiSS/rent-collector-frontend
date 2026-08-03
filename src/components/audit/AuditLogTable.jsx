@@ -29,8 +29,8 @@ export default function AuditLogTable({ data, loading, emptyMessage }) {
     { key: 'id', header: t('audit.id') },
     { key: 'actorEmail', header: t('audit.actor'), render: (r) => <span className="font-mono text-xs">{r.actorEmail}</span> },
     { key: 'actorRole', header: t('audit.role'), render: (r) => <Badge label={r.actorRole} variant="neutral" /> },
-    { key: 'action', header: t('audit.actionCol'), render: (r) => <Badge label={r.action} variant={ACTION_COLORS[r.action] || 'neutral'} /> },
-    { key: 'entityType', header: t('audit.entity') },
+    { key: 'action', header: t('audit.actionCol'), render: (r) => <Badge label={r.action ? t(`audit.action_${r.action}`) : ''} variant={ACTION_COLORS[r.action] || 'neutral'} /> },
+    { key: 'entityType', header: t('audit.entity'), render: (r) => r.entityType ? t(`audit.type_${r.entityType}`) : '—' },
     {
       key: 'description', header: t('audit.description'), render: (r) => (
         <span className="text-xs text-slate-500 max-w-xs truncate block" title={r.description}>
