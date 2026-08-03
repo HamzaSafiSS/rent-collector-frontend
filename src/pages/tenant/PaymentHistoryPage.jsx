@@ -3,11 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { PageHeader, Badge, Spinner, Alert, Pagination, Input } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
 import PaymentDetailModal from '../../components/payment/PaymentDetailModal';
+import EthiopianMonthPicker from '../../components/common/EthiopianMonthPicker';
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
 
 export default function PaymentHistoryPage() {
   const { t } = useTranslation();
+  const { formatDate } = useCalendarDate();
   const [payments, setPayments]       = useState([]);
   const [page, setPage]               = useState(0);
   const [totalPages, setTotalPages]   = useState(0);
@@ -71,8 +74,7 @@ export default function PaymentHistoryPage() {
         </div>
         <div className="w-full sm:w-48">
           <label className="block text-sm font-medium text-slate-300 mb-1">{t('payments.month')}</label>
-          <Input 
-            type="month" 
+          <EthiopianMonthPicker
             value={monthFilter}
             onChange={(e) => { setMonthFilter(e.target.value); setPage(0); }}
             placeholder={t('payments.filterByMonth')}
@@ -100,7 +102,7 @@ export default function PaymentHistoryPage() {
                   <div>
                     <p className="font-semibold text-slate-100">ETB {Number(p.amount).toLocaleString()}</p>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      {p.paymentMonth} · {t('payments.uploaded')} {p.uploadedAt ? new Date(p.uploadedAt).toLocaleDateString() : '—'}
+                      {p.paymentMonth} · {t('payments.uploaded')} {p.uploadedAt ? formatDate(p.uploadedAt) : '—'}
                     </p>
                   </div>
                 </div>

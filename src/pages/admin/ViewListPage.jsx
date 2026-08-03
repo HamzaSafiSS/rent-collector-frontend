@@ -13,12 +13,13 @@ import { paymentApi } from '../../api/paymentApi';
 import { reportApi } from '../../api/reportApi';
 import { unitApi } from '../../api/unitApi';
 import { TableSkeleton } from '../../components/common';
-
+import useCalendarDate from '../../hooks/useCalendarDate';
+import { toEthiopian, getEthiopianMonths } from '../../utils/ethiopianDateUtils';
 
 const PAGE_SIZE = 10;
 
 /* ─── Category config ──────────────────────────────────────────────────────── */
-const getCategories = (t) => ({
+const getCategories = (t, formatDate) => ({
   landlords: {
     title: t('admin.manageLandlordsTitle'),
     icon: '🏢',
@@ -28,7 +29,7 @@ const getCategories = (t) => ({
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
       { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? formatDate(r.createdAt) : '—' },
     ],
     detailFields: [
       { label: t('admin.name'),    key: 'fullName' },
@@ -50,7 +51,7 @@ const getCategories = (t) => ({
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
       { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? formatDate(r.createdAt) : '—' },
     ],
     detailFields: [
       { label: t('admin.name'),    key: 'fullName' },
@@ -71,7 +72,7 @@ const getCategories = (t) => ({
       { key: 'phoneNumber', header: t('tenants.phone'),      render: (r) => r.phoneNumber || '—' },
       { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       { key: 'unitNumber',  header: t('admin.currentUnit'),render: (r) => r.unitNumber || '—' },
-      { key: 'moveInDate',  header: t('tenants.moveInDate', 'Move-in'),    render: (r) => r.moveInDate || '—' },
+      { key: 'moveInDate',  header: t('tenants.moveInDate', 'Move-in'),    render: (r) => r.moveInDate ? formatDate(r.moveInDate) : '—' },
     ],
     detailFields: [
       { label: t('tenants.name'),      key: 'fullName' },
@@ -91,7 +92,7 @@ const getCategories = (t) => ({
     columns: [
       { key: 'name',        header: t('properties.propertyNameLabel', 'Property Name') },
       { key: 'address',     header: t('properties.addressLabel', 'Address') },
-      { key: 'createdAt',   header: t('properties.createdAt', 'Created At'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+      { key: 'createdAt',   header: t('properties.createdAt', 'Created At'),  render: (r) => r.createdAt ? formatDate(r.createdAt) : '—' },
       { key: 'landlordName',header: t('nav.landlords'),    render: (r) => r.landlordName || r.landlordFullName || '—' },
     ],
     detailFields: [
@@ -158,7 +159,7 @@ const getCategories = (t) => ({
       { key: 'unitNumber',     header: t('units.unitNumber', 'Unit') },
       { key: 'monthlyRent',    header: t('leases.monthlyRentETB', 'Rent'),   render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
       { key: 'status',         header: t('leases.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-      { key: 'startDate',      header: t('leases.startDateCol', 'Start Date'), render: (r) => r.startDate ? new Date(r.startDate).toLocaleDateString() : '—' },
+      { key: 'startDate',      header: t('leases.startDateCol', 'Start Date'), render: (r) => r.startDate ? formatDate(r.startDate) : '—' },
     ],
     detailFields: [
       { label: t('nav.tenants'),        key: 'tenantFullName', fallbackKey: 'tenantEmail' },
@@ -172,11 +173,11 @@ const getCategories = (t) => ({
 });
 
 /* ─── Detail Value Renderer ────────────────────────────────────────────────── */
-function DetailValue({ field, item }) {
+function DetailValue({ field, item, formatDate, t }) {
   const value = item[field.key] ?? (field.fallbackKey ? item[field.fallbackKey] : null);
   if (value === null || value === undefined || value === '') return <span className="text-slate-400">—</span>;
   if (field.badge) return <Badge statusKey={value} label={value ? t(`common.status${value.charAt(0) + value.slice(1).toLowerCase()}`, { defaultValue: value }) : ''} />;
-  if (field.date) return <span>{new Date(value).toLocaleDateString()}</span>;
+  if (field.date) return <span>{formatDate ? formatDate(value) : new Date(value).toLocaleDateString()}</span>;
   if (field.currency) return <span>ETB {Number(value).toLocaleString()}</span>;
   return <span>{value}</span>;
 }
@@ -186,8 +187,9 @@ export default function AdminViewListPage() {
   const { category } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { formatDate, isEthiopian } = useCalendarDate();
 
-  const config = React.useMemo(() => getCategories(t)[category], [t, category]);
+  const config = React.useMemo(() => getCategories(t, formatDate)[category], [t, category, formatDate]);
 
   const [items, setItems]               = useState([]);
   const [page, setPage]                 = useState(0);
@@ -258,8 +260,16 @@ export default function AdminViewListPage() {
           if (!d) return false;
           const dateObj = new Date(d);
           if (isNaN(dateObj.getTime())) return false;
-          const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-          const y = String(dateObj.getFullYear());
+          
+          let m, y;
+          if (isEthiopian) {
+            const eth = toEthiopian(dateObj.getFullYear(), dateObj.getMonth() + 1, dateObj.getDate());
+            m = String(eth.month).padStart(2, '0');
+            y = String(eth.year);
+          } else {
+            m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            y = String(dateObj.getFullYear());
+          }
           
           let match = true;
           if (monthFilter && m !== monthFilter) match = false;
@@ -390,18 +400,15 @@ export default function AdminViewListPage() {
             className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">{t('common.allMonths')}</option>
-            <option value="01">{t('common.month01')}</option>
-            <option value="02">{t('common.month02')}</option>
-            <option value="03">{t('common.month03')}</option>
-            <option value="04">{t('common.month04')}</option>
-            <option value="05">{t('common.month05')}</option>
-            <option value="06">{t('common.month06')}</option>
-            <option value="07">{t('common.month07')}</option>
-            <option value="08">{t('common.month08')}</option>
-            <option value="09">{t('common.month09')}</option>
-            <option value="10">{t('common.month10')}</option>
-            <option value="11">{t('common.month11')}</option>
-            <option value="12">{t('common.month12')}</option>
+            {isEthiopian 
+              ? getEthiopianMonths().map(m => (
+                  <option key={m.month} value={m.value}>{m.labelAm}</option>
+                ))
+              : [1,2,3,4,5,6,7,8,9,10,11,12].map(m => {
+                  const val = String(m).padStart(2, '0');
+                  return <option key={val} value={val}>{t(`common.month${val}`)}</option>;
+                })
+            }
           </select>
           <input
             type="number"
@@ -456,7 +463,7 @@ export default function AdminViewListPage() {
               >
                 <span className="text-sm font-semibold text-slate-500">{field.label}</span>
                 <span className="text-sm font-medium text-slate-100 text-right max-w-[60%] break-words">
-                  <DetailValue field={field} item={selectedItem} />
+                  <DetailValue field={field} item={selectedItem} formatDate={formatDate} t={t} />
                 </span>
               </div>
             ))}

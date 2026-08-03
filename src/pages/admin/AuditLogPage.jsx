@@ -5,6 +5,7 @@ import { PageHeader, Button, Input, Pagination, Alert } from '../../components/c
 import AuditLogTable from '../../components/audit/AuditLogTable';
 import { auditApi } from '../../api/auditApi';
 import { useAuth } from '../../context/AuthContext';
+import EthiopianDatePicker from '../../components/common/EthiopianDatePicker';
 
 const ACTIONS = [
   '', 'USER_LOGIN', 'USER_LOGOUT', 'PASSWORD_CHANGED', 'TEMP_PASSWORD_ISSUED',
@@ -105,24 +106,20 @@ export default function AdminAuditLog() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.fromDate')}</label>
-            <input
+            <EthiopianDatePicker
+              label={t('audit.fromDate')}
               name="from"
-              type="date"
               value={filters.from}
               onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))}
-              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.toDate')}</label>
-            <input
+            <EthiopianDatePicker
+              label={t('audit.toDate')}
               name="to"
-              type="date"
               value={filters.to}
               onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))}
-              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 

@@ -4,6 +4,7 @@ import { PageHeader, FileUpload, Input, Button, Alert } from '../../components/c
 import { paymentApi } from '../../api/paymentApi';
 import { leaseApi } from '../../api/leaseApi';
 import { useToast } from '../../context/ToastContext';
+import EthiopianMonthPicker from '../../components/common/EthiopianMonthPicker';
 
 export default function UploadPaymentPage() {
   const { t } = useTranslation();
@@ -22,54 +23,9 @@ export default function UploadPaymentPage() {
   const [success, setSuccess]   = useState('');
 
   // ── Month/Year picker state ───────────────────────────────────────────────
-  const [selectedMonthNum, setSelectedMonthNum] = useState('');
-  const [selectedYear,     setSelectedYear]     = useState('');
+  const [paymentMonth, setPaymentMonth] = useState('');
 
-  const MONTHS = [
-    { value: '01', label: t('common.month01') },
-    { value: '02', label: t('common.month02') },
-    { value: '03', label: t('common.month03') },
-    { value: '04', label: t('common.month04') },
-    { value: '05', label: t('common.month05') },
-    { value: '06', label: t('common.month06') },
-    { value: '07', label: t('common.month07') },
-    { value: '08', label: t('common.month08') },
-    { value: '09', label: t('common.month09') },
-    { value: '10', label: t('common.month10') },
-    { value: '11', label: t('common.month11') },
-    { value: '12', label: t('common.month12') },
-  ];
-
-  const currentYear = new Date().getFullYear();
-  
-  // Calculate minimum year and month based on selected lease's start date
   const selectedLease = leases.find((l) => String(l.id) === String(leaseId));
-  let minYear = currentYear - 2;
-  let minMonthNum = 1;
-
-  if (selectedLease?.startDate) {
-    const parts = selectedLease.startDate.split('-');
-    if (parts.length >= 2) {
-      minYear = parseInt(parts[0], 10);
-      minMonthNum = parseInt(parts[1], 10);
-    }
-  }
-
-  // Generate valid years starting from minYear up to currentYear + 2
-  const maxYear = Math.max(currentYear + 2, minYear);
-  const YEARS = Array.from(
-    { length: maxYear - minYear + 1 },
-    (_, i) => minYear + i
-  );
-
-  // Filter months based on the selected year
-  const filteredMonths = MONTHS.filter((m) => {
-    if (!selectedYear || !selectedLease?.startDate) return true;
-    if (Number(selectedYear) === minYear) {
-      return Number(m.value) >= minMonthNum;
-    }
-    return true;
-  });
 
   useEffect(() => {
     leaseApi.getMyLeases(0, 50, 'ACTIVE')
@@ -97,17 +53,13 @@ export default function UploadPaymentPage() {
       }
   };
 
-  function buildPaymentMonth() {
-    if (selectedMonthNum && selectedYear) {
-      return `${selectedYear}-${selectedMonthNum}`;
-    }
-    return '';
-  }
-
   function validate() {
     const errs = {};
     if (!leaseId)        errs.leaseId = t('validation.selectLeaseRequired');
-    if (!buildPaymentMonth()) errs.month = t('validation.monthAndYearRequired');
+    if (!paymentMonth)   errs.month = t('validation.monthAndYearRequired');
+    else if (selectedLease && paymentMonth < selectedLease.startDate.substring(0, 7)) {
+       errs.month = t('payments.invalidMonthBeforeLease', 'Payment month cannot be before lease start date');
+    }
     if (!amount || Number(amount) <= 0) errs.amount = t('validation.validAmountRequired');
     if (!file)           errs.file    = t('validation.fileRequired');
     return errs;
@@ -122,7 +74,6 @@ export default function UploadPaymentPage() {
 
     try {
       setLoading(true);
-      const paymentMonth = buildPaymentMonth(); // build fresh at submit time
       const formData = new FormData();
       formData.append('file',          file);
       formData.append('paymentMonth',  paymentMonth);
@@ -133,7 +84,7 @@ export default function UploadPaymentPage() {
       setSuccess(t('payments.uploadSuccessDesc'));
       toast.success(t('payments.uploadSuccessToast'));
       setAmount(''); setFile(null); setErrors({});
-      setSelectedMonthNum(''); setSelectedYear('');
+      setPaymentMonth('');
     } catch (err) {
       setApiError(err.response?.data?.message || t('payments.failedUploadPayment'));
     } finally {
@@ -148,22 +99,6 @@ export default function UploadPaymentPage() {
     };
   }
 
-  function handleMonthNumChange(e) {
-    setSelectedMonthNum(e.target.value);
-    if (errors.month) setErrors((p) => ({ ...p, month: '' }));
-  }
-
-  function handleYearChange(e) {
-    const newYear = e.target.value;
-    setSelectedYear(newYear);
-    if (errors.month) setErrors((p) => ({ ...p, month: '' }));
-
-    // Reset month if it becomes invalid for the newly selected year
-    if (newYear && selectedMonthNum && Number(newYear) === minYear && Number(selectedMonthNum) < minMonthNum) {
-      setSelectedMonthNum('');
-    }
-  }
-
   function handleLeaseChange(e) {
     const newLeaseId = e.target.value;
     setLeaseId(newLeaseId);
@@ -171,24 +106,8 @@ export default function UploadPaymentPage() {
     if (errors.leaseId) setErrors((p) => ({ ...p, leaseId: '' }));
 
     const newLease = leases.find((l) => String(l.id) === String(newLeaseId));
-    if (newLease?.startDate) {
-      const parts = newLease.startDate.split('-');
-      if (parts.length >= 2) {
-        const newMinYear = parseInt(parts[0], 10);
-        const newMinMonth = parseInt(parts[1], 10);
-
-        if (selectedYear && Number(selectedYear) < newMinYear) {
-          setSelectedYear('');
-          setSelectedMonthNum('');
-        } else if (
-          selectedYear &&
-          selectedMonthNum &&
-          Number(selectedYear) === newMinYear &&
-          Number(selectedMonthNum) < newMinMonth
-        ) {
-          setSelectedMonthNum('');
-        }
-      }
+    if (newLease?.startDate && paymentMonth && paymentMonth < newLease.startDate.substring(0, 7)) {
+      setPaymentMonth('');
     }
   }
 
@@ -245,44 +164,23 @@ export default function UploadPaymentPage() {
               {leases.length === 0 && <p className="mt-1 text-xs text-yellow-600">{t('payments.noActiveLeasesFound')}</p>}
             </div>
 
-            {/* Payment month — two explicit dropdowns */}
+            {/* Payment month */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
-                <span className="text-red-500 mr-1" aria-hidden="true">*</span>{t('payments.paymentMonthLabel')}
-              </label>
-              <div className="flex gap-3">
-                <select
-                  id="payment-month-select"
-                  value={selectedMonthNum}
-                  onChange={handleMonthNumChange}
-                  disabled={loading}
-                  className={selectClass}
-                >
-                  <option className="bg-[#111827] text-slate-100" value="">{t('payments.monthSelectPlaceholder')}</option>
-                  {filteredMonths.map((m) => (
-                    <option className="bg-[#111827] text-slate-100" key={m.value} value={m.value}>{m.label}</option>
-                  ))}
-                </select>
-                <select
-                  id="payment-year-select"
-                  value={selectedYear}
-                  onChange={handleYearChange}
-                  disabled={loading}
-                  className={selectClass}
-                >
-                  <option className="bg-[#111827] text-slate-100" value="">{t('payments.yearSelectPlaceholder')}</option>
-                  {YEARS.map((y) => (
-                    <option className="bg-[#111827] text-slate-100" key={y} value={y}>{y}</option>
-                  ))}
-                </select>
-              </div>
-              {/* Preview what will be submitted */}
-              {selectedMonthNum && selectedYear && (
-                <p className="mt-1 text-xs text-green-600 font-medium">
-                  ✓ {t('payments.willSubmitPreview', { month: MONTHS.find(m => m.value === selectedMonthNum)?.label, year: selectedYear })}
-                </p>
-              )}
-              {errors.month && <p className="mt-1 text-xs text-red-400">{errors.month}</p>}
+              <EthiopianMonthPicker
+                label={
+                  <>
+                    <span className="text-red-500 mr-1" aria-hidden="true">*</span>
+                    {t('payments.paymentMonthLabel')}
+                  </>
+                }
+                value={paymentMonth}
+                onChange={(e) => {
+                  setPaymentMonth(e.target.value);
+                  if (errors.month) setErrors(p => ({ ...p, month: '' }));
+                }}
+                error={errors.month}
+                disabled={loading}
+              />
             </div>
 
             {/* Amount */}

@@ -12,6 +12,8 @@ import PropertySelector from '../../components/property/PropertySelector';
 import StatCard from '../../components/common/StatCard';
 import Input from '../../components/common/Input';
 import PaymentInfoModal from '../../components/payment/PaymentInfoModal';
+import EthiopianMonthPicker from '../../components/common/EthiopianMonthPicker';
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
 
@@ -19,6 +21,7 @@ export default function PaymentsPage() {
   const { t } = useTranslation();
   const toast = useToast();
   const detailsRef = useRef(null);
+  const { formatDate } = useCalendarDate();
 
   const [selectedProperty, setSelectedProperty] = useState(null);
 
@@ -153,7 +156,7 @@ export default function PaymentsPage() {
     { key: 'paymentMonth',  header: t('payments.month') },
     { key: 'amount',        header: t('payments.amountETB'), render: (r) => Number(r.amount).toLocaleString() },
     { key: 'status',        header: t('leases.status'),      render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-    { key: 'uploadedAt',    header: t('payments.uploaded'),    render: (r) => r.uploadedAt ? new Date(r.uploadedAt).toLocaleDateString() : '—' },
+    { key: 'uploadedAt',    header: t('payments.uploaded'),    render: (r) => r.uploadedAt ? formatDate(r.uploadedAt) : '—' },
     {
       key: 'actions', header: t('common.actions'),
       render: (row) => (
@@ -225,8 +228,7 @@ export default function PaymentsPage() {
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-xl font-bold text-slate-100">{t('payments.summary')}</h2>
         <div className="w-48">
-          <Input 
-            type="month" 
+          <EthiopianMonthPicker
             value={monthFilter}
             onChange={(e) => { setMonthFilter(e.target.value); setPage(0); }}
             placeholder={t('payments.filterByMonth')}

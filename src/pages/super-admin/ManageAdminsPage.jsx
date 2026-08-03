@@ -9,6 +9,7 @@ import AdminForm from '../../components/admin/AdminForm';
 import { adminApi } from '../../api/adminApi';
 import { useToast } from '../../context/ToastContext';
 import { TableSkeleton } from '../../components/common';
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 
 const PAGE_SIZE = 10;
@@ -17,6 +18,7 @@ export default function ManageAdminsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const toast = useToast();
+  const { formatDate } = useCalendarDate();
 
   const [admins, setAdmins]           = useState([]);
   const [totalPages, setTotalPages]   = useState(0);
@@ -119,7 +121,7 @@ export default function ManageAdminsPage() {
     { key: 'email',     header: t('admin.email') },
     { key: 'phoneNumber', header: t('payments.phoneNumber'), render: (r) => r.phoneNumber || '—' },
     { key: 'status',    header: t('admin.status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-    { key: 'createdAt', header: t('admin.joined'), render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+    { key: 'createdAt', header: t('admin.joined'), render: (r) => r.createdAt ? formatDate(r.createdAt) : '—' },
     {
       key: 'actions',
       header: t('common.actions'),

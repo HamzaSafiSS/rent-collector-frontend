@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PageHeader, Badge, Spinner, Alert } from '../../components/common';
 import { leaseApi } from '../../api/leaseApi';
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 export default function MyLeasePage() {
   const { t } = useTranslation();
+  const { formatDate } = useCalendarDate();
   const [leases, setLeases]   = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState('');
@@ -49,7 +51,7 @@ export default function MyLeasePage() {
               </div>
               <div>
                 <p className="text-slate-400 text-xs mb-1">{t('leases.startDateCol')}</p>
-                <p className="font-semibold">{lease.startDate}</p>
+                <p className="font-semibold">{lease.startDate ? formatDate(lease.startDate) : '—'}</p>
               </div>
               <div>
                 <p className="text-slate-400 text-xs mb-1">{t('leases.leaseID')}</p>
