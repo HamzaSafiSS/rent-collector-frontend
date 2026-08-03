@@ -89,6 +89,12 @@
     "landlord": "Landlord",
     "tenant": "Tenant"
   },
+  "roles": {
+    "SUPER_ADMIN": "Super Admin",
+    "ADMIN": "Admin",
+    "LANDLORD": "Landlord",
+    "TENANT": "Tenant"
+  },
 
   "nav": {
     "dashboard": "Dashboard",
@@ -709,7 +715,33 @@
     "type_UNIT": "Unit",
     "type_LEASE": "Lease",
     "type_PAYMENT": "Payment",
-    "type_TENANT": "Tenant"
+    "type_TENANT": "Tenant",
+    "desc_user_logged_out": "User logged out.",
+    "desc_user_logged_in": "User logged in: {{email}}",
+    "desc_landlord_registered": "Landlord registered and logged in: {{email}}",
+    "desc_password_changed": "Password changed for userId={{id}}",
+    "desc_property_created": "Property created: {{name}}",
+    "desc_property_updated": "Property updated: {{name}}",
+    "desc_property_deleted": "Property soft-deleted: {{name}}",
+    "desc_unit_renamed": "Unit renamed to: {{name}}",
+    "desc_unit_deleted": "Unit soft-deleted: {{name}}",
+    "desc_unit_maintenance": "Unit {{name}} set to MAINTENANCE.",
+    "desc_unit_available": "Unit {{name}} set to AVAILABLE.",
+    "desc_bulk_units_created": "Units bulk created.",
+    "desc_payment_uploaded": "Payment proof uploaded.",
+    "desc_payment_approved": "Payment approved.",
+    "desc_payment_rejected": "Payment rejected.",
+    "desc_admin_created": "Admin account created: {{email}}",
+    "desc_admin_updated": "Admin account updated: {{email}}",
+    "desc_admin_suspended": "Admin account suspended: {{email}}",
+    "desc_admin_activated": "Admin account activated: {{email}}",
+    "desc_admin_deleted": "Admin account deleted: {{email}}",
+    "desc_temp_password_issued": "Temporary password issued to: {{email}}",
+    "desc_tenant_created": "New tenant account created: {{email}}",
+    "desc_tenant_updated": "Tenant contact info updated for userId={{id}}",
+    "desc_tenant_deleted": "Tenant soft-deleted: userId={{id}}",
+    "desc_lease_created": "Lease created (User: {{userId}}, Unit: {{unit}}, Rent: {{rent}})",
+    "desc_lease_terminated": "Lease terminated for unit {{unit}}. Reason: {{reason}}"
   },
 
   "months": {

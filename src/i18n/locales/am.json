@@ -89,6 +89,12 @@
     "landlord": "አከራይ",
     "tenant": "ተከራይ"
   },
+  "roles": {
+    "SUPER_ADMIN": "ዋና አስተዳዳሪ",
+    "ADMIN": "አስተዳዳሪ",
+    "LANDLORD": "አከራይ",
+    "TENANT": "ተከራይ"
+  },
   "nav": {
     "dashboard": "ዳሽቦርድ",
     "properties": "ንብረቶች",
@@ -683,7 +689,33 @@
     "type_UNIT": "ክፍል",
     "type_LEASE": "ውል",
     "type_PAYMENT": "ክፍያ",
-    "type_TENANT": "ተከራይ"
+    "type_TENANT": "ተከራይ",
+    "desc_user_logged_out": "ተጠቃሚ ወጥቷል።",
+    "desc_user_logged_in": "ተጠቃሚ ገብቷል: {{email}}",
+    "desc_landlord_registered": "አከራይ ተመዝግቦ ገብቷል: {{email}}",
+    "desc_password_changed": "የይለፍ ቃል ተቀይሯል ለመታወቂያ={{id}}",
+    "desc_property_created": "ንብረት ተፈጥሯል: {{name}}",
+    "desc_property_updated": "ንብረት ተዘምኗል: {{name}}",
+    "desc_property_deleted": "ንብረት ተሰርዟል: {{name}}",
+    "desc_unit_renamed": "የክፍል ስም ተቀይሯል ወደ: {{name}}",
+    "desc_unit_deleted": "ክፍል ተሰርዟል: {{name}}",
+    "desc_unit_maintenance": "ክፍል {{name}} ወደ ጥገና ተቀይሯል።",
+    "desc_unit_available": "ክፍል {{name}} ክፍት ሆኗል።",
+    "desc_bulk_units_created": "ክፍሎች በጅምላ ተፈጥረዋል።",
+    "desc_payment_uploaded": "የክፍያ ማረጋገጫ ተሰቅሏል።",
+    "desc_payment_approved": "ክፍያ ጸድቋል።",
+    "desc_payment_rejected": "ክፍያ ውድቅ ተደርጓል።",
+    "desc_admin_created": "የአስተዳዳሪ መለያ ተፈጥሯል: {{email}}",
+    "desc_admin_updated": "የአስተዳዳሪ መለያ ተዘምኗል: {{email}}",
+    "desc_admin_suspended": "የአስተዳዳሪ መለያ ታግዷል: {{email}}",
+    "desc_admin_activated": "የአስተዳዳሪ መለያ ነቅቷል: {{email}}",
+    "desc_admin_deleted": "የአስተዳዳሪ መለያ ተሰርዟል: {{email}}",
+    "desc_temp_password_issued": "ጊዜያዊ የይለፍ ቃል ተሰጥቷል: {{email}}",
+    "desc_tenant_created": "አዲስ የተከራይ መለያ ተፈጥሯል: {{email}}",
+    "desc_tenant_updated": "የተከራይ መረጃ ተዘምኗል ለመታወቂያ={{id}}",
+    "desc_tenant_deleted": "ተከራይ ተሰርዟል ለመታወቂያ={{id}}",
+    "desc_lease_created": "ውል ተፈጥሯል (ተጠቃሚ: {{userId}}, ክፍል: {{unit}}, ኪራይ: {{rent}})",
+    "desc_lease_terminated": "ውል ተቋርጧል ለክፍል {{unit}}. ምክንያት: {{reason}}"
   },
   "months": {
     "january": "ጃንዋሪ",
