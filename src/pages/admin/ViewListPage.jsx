@@ -13,12 +13,12 @@ import { paymentApi } from '../../api/paymentApi';
 import { reportApi } from '../../api/reportApi';
 import { unitApi } from '../../api/unitApi';
 import { TableSkeleton } from '../../components/common';
-
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
 
 /* ─── Category config ──────────────────────────────────────────────────────── */
-const getCategories = (t) => ({
+const getCategories = (t, formatDate) => ({
   landlords: {
     title: t('admin.manageLandlordsTitle'),
     icon: '🏢',
@@ -28,7 +28,7 @@ const getCategories = (t) => ({
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
       { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? formatDate(r.createdAt) : '—' },
     ],
     detailFields: [
       { label: t('admin.name'),    key: 'fullName' },
@@ -50,7 +50,7 @@ const getCategories = (t) => ({
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
       { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? formatDate(r.createdAt) : '—' },
     ],
     detailFields: [
       { label: t('admin.name'),    key: 'fullName' },
@@ -71,7 +71,7 @@ const getCategories = (t) => ({
       { key: 'phoneNumber', header: t('tenants.phone'),      render: (r) => r.phoneNumber || '—' },
       { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       { key: 'unitNumber',  header: t('admin.currentUnit'),render: (r) => r.unitNumber || '—' },
-      { key: 'moveInDate',  header: t('tenants.moveInDate', 'Move-in'),    render: (r) => r.moveInDate || '—' },
+      { key: 'moveInDate',  header: t('tenants.moveInDate', 'Move-in'),    render: (r) => r.moveInDate ? formatDate(r.moveInDate) : '—' },
     ],
     detailFields: [
       { label: t('tenants.name'),      key: 'fullName' },
@@ -91,7 +91,7 @@ const getCategories = (t) => ({
     columns: [
       { key: 'name',        header: t('properties.propertyNameLabel', 'Property Name') },
       { key: 'address',     header: t('properties.addressLabel', 'Address') },
-      { key: 'createdAt',   header: t('properties.createdAt', 'Created At'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+      { key: 'createdAt',   header: t('properties.createdAt', 'Created At'),  render: (r) => r.createdAt ? formatDate(r.createdAt) : '—' },
       { key: 'landlordName',header: t('nav.landlords'),    render: (r) => r.landlordName || r.landlordFullName || '—' },
     ],
     detailFields: [
@@ -158,7 +158,7 @@ const getCategories = (t) => ({
       { key: 'unitNumber',     header: t('units.unitNumber', 'Unit') },
       { key: 'monthlyRent',    header: t('leases.monthlyRentETB', 'Rent'),   render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
       { key: 'status',         header: t('leases.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-      { key: 'startDate',      header: t('leases.startDateCol', 'Start Date'), render: (r) => r.startDate ? new Date(r.startDate).toLocaleDateString() : '—' },
+      { key: 'startDate',      header: t('leases.startDateCol', 'Start Date'), render: (r) => r.startDate ? formatDate(r.startDate) : '—' },
     ],
     detailFields: [
       { label: t('nav.tenants'),        key: 'tenantFullName', fallbackKey: 'tenantEmail' },
@@ -172,11 +172,11 @@ const getCategories = (t) => ({
 });
 
 /* ─── Detail Value Renderer ────────────────────────────────────────────────── */
-function DetailValue({ field, item }) {
+function DetailValue({ field, item, formatDate, t }) {
   const value = item[field.key] ?? (field.fallbackKey ? item[field.fallbackKey] : null);
   if (value === null || value === undefined || value === '') return <span className="text-slate-400">—</span>;
   if (field.badge) return <Badge statusKey={value} label={value ? t(`common.status${value.charAt(0) + value.slice(1).toLowerCase()}`, { defaultValue: value }) : ''} />;
-  if (field.date) return <span>{new Date(value).toLocaleDateString()}</span>;
+  if (field.date) return <span>{formatDate ? formatDate(value) : new Date(value).toLocaleDateString()}</span>;
   if (field.currency) return <span>ETB {Number(value).toLocaleString()}</span>;
   return <span>{value}</span>;
 }
@@ -186,8 +186,9 @@ export default function AdminViewListPage() {
   const { category } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { formatDate } = useCalendarDate();
 
-  const config = React.useMemo(() => getCategories(t)[category], [t, category]);
+  const config = React.useMemo(() => getCategories(t, formatDate)[category], [t, category, formatDate]);
 
   const [items, setItems]               = useState([]);
   const [page, setPage]                 = useState(0);
@@ -456,7 +457,7 @@ export default function AdminViewListPage() {
               >
                 <span className="text-sm font-semibold text-slate-500">{field.label}</span>
                 <span className="text-sm font-medium text-slate-100 text-right max-w-[60%] break-words">
-                  <DetailValue field={field} item={selectedItem} />
+                  <DetailValue field={field} item={selectedItem} formatDate={formatDate} t={t} />
                 </span>
               </div>
             ))}

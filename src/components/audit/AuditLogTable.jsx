@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Table, Badge } from '../common';
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 const ACTION_COLORS = {
   USER_LOGIN: 'info',
@@ -24,6 +25,7 @@ const ACTION_COLORS = {
 
 export default function AuditLogTable({ data, loading, emptyMessage }) {
   const { t } = useTranslation();
+  const { formatDateTime } = useCalendarDate();
 
   const columns = [
     { key: 'id', header: t('audit.id') },
@@ -38,7 +40,7 @@ export default function AuditLogTable({ data, loading, emptyMessage }) {
         </span>
       )
     },
-    { key: 'createdAt', header: t('audit.time'), render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleString() : '—' },
+    { key: 'createdAt', header: t('audit.time'), render: (r) => r.createdAt ? formatDateTime(r.createdAt) : '—' },
   ];
 
   return (

@@ -67,7 +67,20 @@
     "month10": "October",
     "month11": "November",
     "month12": "December",
-    "status": "Status"
+    "status": "Status",
+    "ethMonth01": "Meskerem",
+    "ethMonth02": "Tikimt",
+    "ethMonth03": "Hidar",
+    "ethMonth04": "Tahsas",
+    "ethMonth05": "Tir",
+    "ethMonth06": "Yekatit",
+    "ethMonth07": "Megabit",
+    "ethMonth08": "Miyazya",
+    "ethMonth09": "Ginbot",
+    "ethMonth10": "Sene",
+    "ethMonth11": "Hamle",
+    "ethMonth12": "Nehase",
+    "ethMonth13": "Pagume"
   },
 
   "portal": {
@@ -712,5 +725,16 @@
     "october": "October",
     "november": "November",
     "december": "December"
+  },
+
+  "calendar": {
+    "day": "Day",
+    "month": "Month",
+    "year": "Year",
+    "selectDay": "Select day",
+    "selectMonth": "Select month",
+    "selectYear": "Select year",
+    "ethiopianCalendar": "Ethiopian Calendar",
+    "gregorianCalendar": "Gregorian Calendar"
   }
 }

@@ -4,6 +4,13 @@ import { PageHeader, Spinner, Alert, Input, Button, StatCard } from '../../compo
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import PropertySelector from '../../components/property/PropertySelector';
+import EthiopianMonthPicker from '../../components/common/EthiopianMonthPicker';
+import useCalendarDate from '../../hooks/useCalendarDate';
+import {
+  getCurrentEthiopianYear,
+  gregorianYearToEthiopian,
+  ethiopianYearToGregorian,
+} from '../../utils/ethiopianDateUtils';
 
 export default function ReportsPage() {
   const { t } = useTranslation();
@@ -111,8 +118,8 @@ function PaymentReport({ properties, lockedPropertyId }) {
       {/* Filters */}
       <div className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-5">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
-          <Input label={t('reports.fromMonth')} type="month" value={filters.from}       onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))} />
-          <Input label={t('reports.toMonth')}   type="month" value={filters.to}         onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))} />
+          <EthiopianMonthPicker label={t('reports.fromMonth')} value={filters.from} onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))} />
+          <EthiopianMonthPicker label={t('reports.toMonth')}   value={filters.to}   onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))} />
           {!lockedPropertyId && (
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">{t('reports.property')}</label>
@@ -219,11 +226,21 @@ function OccupancyReport({ properties, lockedPropertyId }) {
 // ── Revenue Report ─────────────────────────────────────────────────────────────
 function RevenueReport({ properties, lockedPropertyId }) {
   const { t } = useTranslation();
+  const { isEthiopian } = useCalendarDate();
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
-  const [year, setYear]       = useState(String(new Date().getFullYear()));
+
+  // Year state: store Gregorian internally, display Ethiopian when in Amharic mode
+  const currentGregYear = new Date().getFullYear();
+  const [gregYear, setGregYear] = useState(currentGregYear);
   const [propertyId, setPropertyId] = useState(lockedPropertyId ? String(lockedPropertyId) : '');
+
+  // Generate year options
+  const yearOptions = [2024, 2025, 2026, 2027].map((gy) => ({
+    gregYear: gy,
+    label: isEthiopian ? String(gregorianYearToEthiopian(gy)) : String(gy),
+  }));
 
   const load = useCallback(async (y, pid) => {
     try {
@@ -237,7 +254,7 @@ function RevenueReport({ properties, lockedPropertyId }) {
     } finally { setLoading(false); }
   }, [t]);
 
-  useEffect(() => { load(year, propertyId); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { load(gregYear, propertyId); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -245,12 +262,12 @@ function RevenueReport({ properties, lockedPropertyId }) {
         <div>
           <label className="block text-sm font-medium text-slate-300 mb-1">{t('reports.year')}</label>
           <select
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
+            value={gregYear}
+            onChange={(e) => setGregYear(Number(e.target.value))}
             className="px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
           >
-            {[2024, 2025, 2026, 2027].map((y) => (
-              <option key={y} value={y}>{y}</option>
+            {yearOptions.map((opt) => (
+              <option key={opt.gregYear} value={opt.gregYear}>{opt.label}</option>
             ))}
           </select>
         </div>
@@ -267,7 +284,7 @@ function RevenueReport({ properties, lockedPropertyId }) {
             </select>
           </div>
         )}
-        <Button onClick={() => load(year, propertyId)} loading={loading}>{t('reports.refresh')}</Button>
+        <Button onClick={() => load(gregYear, propertyId)} loading={loading}>{t('reports.refresh')}</Button>
       </div>
 
       {error   && <Alert type="error" message={error} className="mb-4" />}
