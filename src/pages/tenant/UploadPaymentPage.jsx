@@ -26,18 +26,18 @@ export default function UploadPaymentPage() {
   const [selectedYear,     setSelectedYear]     = useState('');
 
   const MONTHS = [
-    { value: '01', label: t('months.january') },
-    { value: '02', label: t('months.february') },
-    { value: '03', label: t('months.march') },
-    { value: '04', label: t('months.april') },
-    { value: '05', label: t('months.may') },
-    { value: '06', label: t('months.june') },
-    { value: '07', label: t('months.july') },
-    { value: '08', label: t('months.august') },
-    { value: '09', label: t('months.september') },
-    { value: '10', label: t('months.october') },
-    { value: '11', label: t('months.november') },
-    { value: '12', label: t('months.december') },
+    { value: '01', label: t('common.month01') },
+    { value: '02', label: t('common.month02') },
+    { value: '03', label: t('common.month03') },
+    { value: '04', label: t('common.month04') },
+    { value: '05', label: t('common.month05') },
+    { value: '06', label: t('common.month06') },
+    { value: '07', label: t('common.month07') },
+    { value: '08', label: t('common.month08') },
+    { value: '09', label: t('common.month09') },
+    { value: '10', label: t('common.month10') },
+    { value: '11', label: t('common.month11') },
+    { value: '12', label: t('common.month12') },
   ];
 
   const currentYear = new Date().getFullYear();

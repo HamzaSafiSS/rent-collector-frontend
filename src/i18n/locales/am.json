@@ -52,6 +52,9 @@
     "statusCancelled": "ተሰርዟል",
     "statusSuspended": "ታግዷል",
     "statusPending": "በመጠባበቅ ላይ",
+    "statusApproved": "ተቀባይነት አግኝቷል",
+    "statusRejected": "ተቀባይነት አላገኘም",
+    "statusUnpaid": "ያልተከፈለ",
     "month01": "ጥር (January)",
     "month02": "የካቲት (February)",
     "month03": "መጋቢት (March)",
@@ -81,7 +84,7 @@
     "reports": "ሪፖርቶች",
     "myLease": "ውሌ",
     "howToPay": "እንዴት መክፈል",
-    "uploadPayment": "ክፍያ ስቀል",
+    "uploadPayment": "ክፍያ አስገባ",
     "paymentHistory": "የክፍያ ታሪክ",
     "landlords": "አከራዮች",
     "auditLogs": "የኦዲት ምዝግብ",
@@ -151,7 +154,7 @@
     "selectLease": "እባክዎ ውል ይምረጡ።",
     "selectMonthAndYear": "እባክዎ ወርና ዓመት ይምረጡ።",
     "enterValidAmount": "ትክክለኛ መጠን ያስገቡ።",
-    "selectFile": "እባክዎ ለመስቀል ፋይል ይምረጡ።",
+    "selectFile": "እባክዎ ለማስገባት ፋይል ይምረጡ።",
     "commentRequired": "ክፍያ ሲቀልቅሉ አስተያየት ያስፈልጋል።",
     "invalidFileType": "ልክ ያልሆነ የፋይል ዓይነት። የሚፈቀደው: JPEG, PNG, PDF.",
     "fileTooLarge": "ፋይሉ በጣም ትልቅ ነው። ከፍተኛው መጠን {{size}}ሜባ ነው።",
@@ -235,7 +238,7 @@
     "descriptionLabel": "መግለጫ (አማራጭ)",
     "descriptionPlaceholder": "ስለ ንብረቱ አጭር መግለጫ...",
     "createPropertyBtn": "ንብረት ፍጠር",
-    "clickToUpload": "ለመስቀል ጠቅ ያድርጉ ወይም ይጎትቱ",
+    "clickToUpload": "ለማስገባት ጠቅ ያድርጉ ወይም ይጎትቱ",
     "imageFormats": "JPEG, PNG ወይም WebP (ከፍተኛ 10ሜባ)",
     "propertyPreview": "የንብረት ቅድመ-ዕይታ",
     "createdAt": "የተፈጠረበት ቀን"
@@ -357,7 +360,7 @@
     "monthDetail": "ወር",
     "amountETB": "መጠን (ብር)",
     "statusDetail": "ሁኔታ",
-    "uploaded": "የተሰቀለ",
+    "uploaded": "የተላከ",
     "reviewed": "የተገመገመ",
     "paymentMethodsTitle": "እንዴት እንደሚከፍሉ",
     "addPaymentMethodTitle": "የክፍያ ዘዴ ጨምር",
@@ -375,7 +378,7 @@
     "phoneNumber": "ስልክ ቁጥር",
     "phoneNumberPlaceholder": "ለምሳሌ 0911234567",
     "savePaymentMethod": "የክፍያ ዘዴ አስቀምጥ",
-    "uploadPaymentTitle": "ክፍያ ስቀል",
+    "uploadPaymentTitle": "ክፍያ አስገባ",
     "uploadPaymentSubtitle": "የክፍያ ማረጋገጫዎን ለግምገማ ያስገቡ",
     "paymentInstructions": "የክፍያ መመሪያዎች",
     "instructionsTitle": "የክፍያ መመሪያዎች",
@@ -589,7 +592,7 @@
     "refreshPage": "ገፁን አድስ"
   },
   "fileUpload": {
-    "clickToUpload": "ለመስቀል ጠቅ ያድርጉ",
+    "clickToUpload": "ለማስገባት ጠቅ ያድርጉ",
     "orDragDrop": "ወይም ይጎትቱና ይጣሉ",
     "fileFormats": "JPEG, PNG, PDF — ከፍተኛ {{size}}ሜባ"
   },
@@ -610,7 +613,7 @@
     "manageAdmins": "አስተዳዳሪዎችን አስተዳድር",
     "myLease": "የእኔ ውል",
     "howToPay": "እንዴት እንደሚከፍሉ",
-    "uploadPayment": "ክፍያ ስቀል",
+    "uploadPayment": "ክፍያ አስገባ",
     "paymentHistory": "የክፍያ ታሪክ"
   },
   "audit": {

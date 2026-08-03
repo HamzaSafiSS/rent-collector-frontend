@@ -25,7 +25,7 @@ function UkFlag({ className = "w-5 h-3.5 rounded-sm overflow-hidden shadow-sm in
 }
 
 export default function LanguageToggle() {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation(); // access translation function.
   const currentLang = i18n.language?.startsWith('am') ? 'am' : 'en';
 
   function toggle() {

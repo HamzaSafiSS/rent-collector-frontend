@@ -24,12 +24,12 @@ const ENTITY_TYPES = ['', 'USER', 'PROPERTY', 'UNIT', 'LEASE', 'PAYMENT', 'TENAN
 export default function AuditLogPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [logs, setLogs]           = useState([]);
-  const [page, setPage]           = useState(0);
-  const [totalPages, setTotalPages]   = useState(0);
+  const [logs, setLogs] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
-  const [loading, setLoading]     = useState(true);
-  const [error, setError]         = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const [filters, setFilters] = useState({
     action: '',
@@ -46,9 +46,9 @@ export default function AuditLogPage() {
       const params = { page, size: PAGE_SIZE, ...appliedFilters };
       // Remove empty strings from params
       Object.keys(params).forEach((k) => { if (!params[k]) delete params[k]; });
-      const res  = await auditApi.getAuditLogs(params);
+      const res = await auditApi.getAuditLogs(params);
       const data = res.data?.data;
-      setLogs(data?.content        || []);
+      setLogs(data?.content || []);
       setTotalPages(data?.totalPages || 0);
       setTotalElements(data?.totalElements || 0);
     } catch {
