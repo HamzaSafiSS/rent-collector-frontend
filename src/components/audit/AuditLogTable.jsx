@@ -20,6 +20,8 @@ const ACTION_COLORS = {
   LANDLORD_SUSPENDED: 'danger',
   LANDLORD_ACTIVATED: 'success',
   ADMIN_CREATED: 'success',
+  ADMIN_ACTIVATED: 'success',
+  ADMIN_SUSPENDED: 'danger',
   ADMIN_DELETED: 'danger',
   TENANT_CREATED: 'success',
   TENANT_DELETED: 'danger',

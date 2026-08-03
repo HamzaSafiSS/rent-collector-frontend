@@ -680,6 +680,8 @@
     "action_LANDLORD_ACTIVATED": "አከራይ ነቅቷል",
     "action_ADMIN_CREATED": "አስተዳዳሪ ተፈጥሯል",
     "action_ADMIN_UPDATED": "አስተዳዳሪ ተዘምኗል",
+    "action_ADMIN_SUSPENDED": "አስተዳዳሪ ታግዷል",
+    "action_ADMIN_ACTIVATED": "አስተዳዳሪ ነቅቷል",
     "action_ADMIN_DELETED": "አስተዳዳሪ ተሰርዟል",
     "action_TENANT_CREATED": "ተከራይ ተፈጥሯል",
     "action_TENANT_UPDATED": "ተከራይ ተዘምኗል",

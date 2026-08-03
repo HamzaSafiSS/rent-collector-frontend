@@ -706,6 +706,8 @@
     "action_LANDLORD_ACTIVATED": "Landlord Activated",
     "action_ADMIN_CREATED": "Admin Created",
     "action_ADMIN_UPDATED": "Admin Updated",
+    "action_ADMIN_SUSPENDED": "Admin Suspended",
+    "action_ADMIN_ACTIVATED": "Admin Activated",
     "action_ADMIN_DELETED": "Admin Deleted",
     "action_TENANT_CREATED": "Tenant Created",
     "action_TENANT_UPDATED": "Tenant Updated",
