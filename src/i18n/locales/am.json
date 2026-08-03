@@ -249,8 +249,8 @@
     "propertyNamePlaceholder": "ለምሳሌ ቦሌ ሳንሻይን አፓርትመንቶች",
     "addressLabel": "አድራሻ",
     "addressPlaceholder": "ሙሉ አድራሻ",
-    "descriptionLabel": "መግለጫ (አማራጭ)",
-    "descriptionPlaceholder": "ስለ ንብረቱ አጭር መግለጫ...",
+    "descriptionLabel": "ማብራርያ (አማራጭ)",
+    "descriptionPlaceholder": "ስለ ንብረቱ አጭር ማብራርያ...",
     "createPropertyBtn": "ንብረት ፍጠር",
     "clickToUpload": "ለማስገባት ጠቅ ያድርጉ ወይም ይጎትቱ",
     "imageFormats": "JPEG, PNG ወይም WebP (ከፍተኛ 10ሜባ)",
@@ -649,7 +649,7 @@
     "entityType": "ዓይነት",
     "allTypes": "ሁሉም ዓይነቶች",
     "entityId": "መታወቂያ",
-    "description": "መግለጫ",
+    "description": "ማብራርያ",
     "fromDate": "ከ ቀን",
     "toDate": "እስከ ቀን",
     "clearFilters": "አጽዳ",
@@ -699,7 +699,6 @@
     "november": "ኖቬምበር",
     "december": "ዲሴምበር"
   },
-
   "calendar": {
     "day": "ቀን",
     "month": "ወር",

@@ -204,7 +204,7 @@ export default function EthiopianDatePicker({
           value={ethYear}
           onChange={handleYearChange}
           disabled={disabled}
-          className={`${selectClass} flex-[2] min-w-0 ${className}`}
+          className={`${selectClass} flex-[3] min-w-0 ${className}`}
           aria-label={t('calendar.year', 'Year')}
         >
           <option value="">{t('calendar.year', 'ዓ.ም.')}</option>
