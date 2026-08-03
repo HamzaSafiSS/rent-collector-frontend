@@ -359,7 +359,7 @@ export default function AdminViewListPage() {
           <select 
             value={statusFilter} 
             onChange={e => setStatusFilter(e.target.value)}
-            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">All Statuses</option>
             {category === 'units' ? (
@@ -387,7 +387,7 @@ export default function AdminViewListPage() {
           <select
             value={monthFilter}
             onChange={e => setMonthFilter(e.target.value)}
-            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">All Months</option>
             <option value="01">January</option>
@@ -408,7 +408,7 @@ export default function AdminViewListPage() {
             placeholder="Year"
             value={yearFilter}
             onChange={e => setYearFilter(e.target.value)}
-            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
+            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
           />
         </>
         {(statusFilter || dateFilter || monthFilter || yearFilter) && (

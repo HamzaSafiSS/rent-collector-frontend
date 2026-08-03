@@ -99,7 +99,7 @@ export default function AuditLogPage() {
               name="action"
               value={filters.action}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ACTIONS.map((a) => (
                 <option key={a} value={a}>{a || t('audit.allActions')}</option>
@@ -113,7 +113,7 @@ export default function AuditLogPage() {
               name="entityType"
               value={filters.entityType}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ENTITY_TYPES.map((type) => (
                 <option key={type} value={type}>{type || t('audit.allTypes')}</option>
@@ -128,7 +128,7 @@ export default function AuditLogPage() {
               type="date"
               value={filters.from}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
@@ -139,7 +139,7 @@ export default function AuditLogPage() {
               type="date"
               value={filters.to}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 

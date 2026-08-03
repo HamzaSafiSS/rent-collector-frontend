@@ -82,7 +82,7 @@ export default function AdminAuditLog() {
               name="action"
               value={filters.action}
               onChange={(e) => setFilters((p) => ({ ...p, action: e.target.value }))}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ACTIONS.map((a) => (
                 <option key={a} value={a}>{a || t('audit.allActions')}</option>
@@ -96,7 +96,7 @@ export default function AdminAuditLog() {
               name="entityType"
               value={filters.entityType}
               onChange={(e) => setFilters((p) => ({ ...p, entityType: e.target.value }))}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ENTITY_TYPES.map((type) => (
                 <option key={type} value={type}>{type || t('audit.allTypes')}</option>
@@ -111,7 +111,7 @@ export default function AdminAuditLog() {
               type="date"
               value={filters.from}
               onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
@@ -122,7 +122,7 @@ export default function AdminAuditLog() {
               type="date"
               value={filters.to}
               onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
