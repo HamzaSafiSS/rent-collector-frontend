@@ -57,16 +57,13 @@ function gregorianToJDN(year, month, day) {
  * Julian Day Number → Ethiopian date
  */
 function jdnToEthiopian(jdn) {
-  // Ethiopian epoch in JDN: August 29, 8 AD (Julian) = JDN 1724221
   const ethiopianEpoch = 1724221;
-  const r = (jdn - ethiopianEpoch) % 1461;
-  const n = (r % 365) + 365 * Math.floor(r / 1460);
-
-  const year = 4 * Math.floor((jdn - ethiopianEpoch) / 1461) +
-    Math.floor(r / 365) -
-    Math.floor(r / 1460);
-  const month = Math.floor(n / 30) + 1;
-  const day = (n % 30) + 1;
+  const days = jdn - ethiopianEpoch;
+  const year = Math.floor((4 * days + 1463) / 1461);
+  const daysPassed = 365 * (year - 1) + Math.floor(year / 4);
+  const daysInThisYear = days - daysPassed;
+  const month = Math.floor(daysInThisYear / 30) + 1;
+  const day = (daysInThisYear % 30) + 1;
 
   return { year, month, day };
 }
