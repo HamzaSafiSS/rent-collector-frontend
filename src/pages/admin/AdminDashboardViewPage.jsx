@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PageHeader, Badge, Spinner, Alert } from '../../components/common';
@@ -7,6 +8,8 @@ import { useAuth } from '../../context/AuthContext';
 
 
 export default function AdminDashboardViewPage() {
+  const { t } = useTranslation();
+
   const { adminId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -56,7 +59,7 @@ export default function AdminDashboardViewPage() {
             title={`${adminData.fullName}'s Dashboard`}
             subtitle={`Admin ID: ${adminId}`}
           >
-            <Badge label={adminData.status} />
+            <Badge statusKey={adminData.status} label={adminData.status ? t(`common.status${adminData.status.charAt(0) + adminData.status.slice(1).toLowerCase()}`, { defaultValue: adminData.status }) : ''} />
           </PageHeader>
 
           {/* Admin Info Card */}
@@ -78,7 +81,7 @@ export default function AdminDashboardViewPage() {
                 </div>
                 <div>
                   <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Account Status</span>
-                  <Badge label={adminData.status} />
+                  <Badge statusKey={adminData.status} label={adminData.status ? t(`common.status${adminData.status.charAt(0) + adminData.status.slice(1).toLowerCase()}`, { defaultValue: adminData.status }) : ''} />
                 </div>
                 <div>
                   <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Join Date</span>

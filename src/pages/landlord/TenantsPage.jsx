@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   PageHeader, Modal, ConfirmDialog,
   Alert, Pagination, Input, Button,
@@ -12,6 +13,7 @@ import { TableSkeleton } from '../../components/common';
 const PAGE_SIZE = 10;
 
 export default function TenantsPage() {
+  const { t } = useTranslation();
   const toast = useToast();
 
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -44,11 +46,11 @@ export default function TenantsPage() {
       setTotalPages(data?.totalPages    || 0);
       setTotalElements(data?.totalElements || 0);
     } catch {
-      setFetchError('Failed to load tenants.');
+      setFetchError(t('tenants.failedLoadTenants'));
     } finally {
       setLoading(false);
     }
-  }, [page, selectedProperty]);
+  }, [page, selectedProperty, t]);
 
   useEffect(() => { loadTenants(); }, [loadTenants, selectedProperty]);
 
@@ -62,18 +64,18 @@ export default function TenantsPage() {
   async function handleEdit(e) {
     e.preventDefault();
     if (!editForm.fullName.trim()) {
-      setEditError('Full name is required.');
+      setEditError(t('validation.fullNameRequired'));
       return;
     }
     try {
       setEditLoading(true);
       setEditError('');
       await tenantApi.updateTenant(editTarget.id, editForm);
-      toast.success('Tenant updated.');
+      toast.success(t('tenants.tenantUpdated'));
       setEditTarget(null);
       loadTenants();
     } catch (err) {
-      setEditError(err.response?.data?.message || 'Failed to update tenant.');
+      setEditError(err.response?.data?.message || t('tenants.failedUpdateTenant'));
     } finally {
       setEditLoading(false);
     }
@@ -84,11 +86,11 @@ export default function TenantsPage() {
     try {
       setDeleteLoading(true);
       await tenantApi.deleteTenant(deleteTarget.id);
-      toast.success('Tenant deleted.');
+      toast.success(t('tenants.tenantDeleted'));
       setDeleteTarget(null);
       loadTenants();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Cannot delete tenant.');
+      toast.error(err.response?.data?.message || t('tenants.cannotDeleteTenant'));
       setDeleteTarget(null);
     } finally {
       setDeleteLoading(false);
@@ -100,8 +102,8 @@ export default function TenantsPage() {
       {!selectedProperty ? (
         <>
           <PageHeader
-            title="Select Property"
-            subtitle="Choose a property to view its tenants"
+            title={t('common.selectProperty')}
+            subtitle={t('tenants.selectPropertyTenants')}
           />
           <PropertySelector onSelect={(p) => { setSelectedProperty(p); setPage(0); }} />
         </>
@@ -111,11 +113,11 @@ export default function TenantsPage() {
             onClick={() => setSelectedProperty(null)} 
             className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
-            ← Back to Properties
+            {t('common.backToProperties')}
           </button>
           <PageHeader
-            title={`Tenants - ${selectedProperty.name}`}
-            subtitle={`${totalElements} tenant${totalElements !== 1 ? 's' : ''}`}
+            title={t('tenants.tenantsTitle', { name: selectedProperty.name })}
+            subtitle={totalElements !== 1 ? t('tenants.tenantCount', { count: totalElements }) : t('tenants.tenantCountSingular', { count: totalElements })}
           />
 
           {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
@@ -141,26 +143,26 @@ export default function TenantsPage() {
       <Modal
         isOpen={!!editTarget}
         onClose={() => setEditTarget(null)}
-        title="Edit Tenant Contact Info"
+        title={t('tenants.editTenantTitle')}
         footer={null}
       >
         <form onSubmit={handleEdit} className="space-y-4" noValidate>
           {editError && <Alert type="error" message={editError} />}
           <Input
-            label="Full name"
+            label={t('auth.fullNameLabel')}
             value={editForm.fullName}
             onChange={(e) => setEditForm((p) => ({ ...p, fullName: e.target.value }))}
             disabled={editLoading}
             required
           />
           <Input
-            label="Phone number"
+            label={t('auth.phoneNumberLabel')}
             value={editForm.phoneNumber}
             onChange={(e) => setEditForm((p) => ({ ...p, phoneNumber: e.target.value }))}
             disabled={editLoading}
           />
           <div className="flex justify-end pt-2">
-            <Button type="submit" loading={editLoading}>Save changes</Button>
+            <Button type="submit" loading={editLoading}>{t('common.saveChanges')}</Button>
           </div>
         </form>
       </Modal>
@@ -171,9 +173,9 @@ export default function TenantsPage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDelete}
         loading={deleteLoading}
-        title="Delete Tenant"
-        message={`Delete "${deleteTarget?.fullName}"? They must have no active leases. This cannot be undone.`}
-        confirmText="Delete"
+        title={t('tenants.deleteTenantTitle')}
+        message={t('tenants.deleteTenantMessage', { name: deleteTarget?.fullName })}
+        confirmText={t('common.delete')}
         variant="danger"
       />
         </>

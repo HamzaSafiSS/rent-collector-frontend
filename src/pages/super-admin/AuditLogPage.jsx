@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader, Button, Input, Pagination, Alert, Spinner } from '../../components/common';
 import AuditLogTable from '../../components/audit/AuditLogTable';
 import { auditApi } from '../../api/auditApi';
@@ -20,12 +22,14 @@ const ACTIONS = [
 const ENTITY_TYPES = ['', 'USER', 'PROPERTY', 'UNIT', 'LEASE', 'PAYMENT', 'TENANT'];
 
 export default function AuditLogPage() {
-  const [logs, setLogs]           = useState([]);
-  const [page, setPage]           = useState(0);
-  const [totalPages, setTotalPages]   = useState(0);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [logs, setLogs] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
-  const [loading, setLoading]     = useState(true);
-  const [error, setError]         = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const [filters, setFilters] = useState({
     action: '',
@@ -42,17 +46,17 @@ export default function AuditLogPage() {
       const params = { page, size: PAGE_SIZE, ...appliedFilters };
       // Remove empty strings from params
       Object.keys(params).forEach((k) => { if (!params[k]) delete params[k]; });
-      const res  = await auditApi.getAuditLogs(params);
+      const res = await auditApi.getAuditLogs(params);
       const data = res.data?.data;
-      setLogs(data?.content        || []);
+      setLogs(data?.content || []);
       setTotalPages(data?.totalPages || 0);
       setTotalElements(data?.totalElements || 0);
     } catch {
-      setError('Failed to load audit logs.');
+      setError(t('audit.failedLoadLogs'));
     } finally {
       setLoading(false);
     }
-  }, [page, appliedFilters]);
+  }, [page, appliedFilters, t]);
 
   useEffect(() => { loadLogs(); }, [loadLogs]);
 
@@ -76,70 +80,77 @@ export default function AuditLogPage() {
 
   return (
     <>
-      <PageHeader title="Audit Logs" subtitle={`${totalElements} total entries`} />
+      <button
+        onClick={() => navigate('/super-admin/dashboard')}
+        className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
+      >
+        {t('common.backToDashboard')}
+      </button>
+
+      <PageHeader title={t('audit.auditLogsTitle')} subtitle={t('audit.totalEntriesCount', { count: totalElements })} />
 
       {/* Filters */}
       <form onSubmit={handleApplyFilters} className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-4">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Action</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.action')}</label>
             <select
               name="action"
               value={filters.action}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ACTIONS.map((a) => (
-                <option key={a} value={a}>{a || 'All actions'}</option>
+                <option key={a} value={a}>{a ? t(`audit.action_${a}`) : t('audit.allActions')}</option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">Entity Type</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.entityType')}</label>
             <select
               name="entityType"
               value={filters.entityType}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
-              {ENTITY_TYPES.map((t) => (
-                <option key={t} value={t}>{t || 'All types'}</option>
+              {ENTITY_TYPES.map((type) => (
+                <option key={type} value={type}>{type ? t(`audit.type_${type}`) : t('audit.allTypes')}</option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">From Date</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.fromDate')}</label>
             <input
               name="from"
               type="date"
               value={filters.from}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">To Date</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.toDate')}</label>
             <input
               name="to"
               type="date"
               value={filters.to}
               onChange={handleFilterChange}
-              className="w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
           <div>
             <Button type="button" variant="secondary" size="sm" className="w-full" onClick={handleClearFilters}>
-              Clear Filters
+              {t('audit.clearFilters')}
             </Button>
           </div>
           <div>
             <Button type="submit" size="sm" className="w-full">
-              Apply Filters
+              {t('audit.applyFilters')}
             </Button>
           </div>
         </div>

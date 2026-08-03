@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CardGridSkeleton } from '../common';
 import { propertyApi } from '../../api/propertyApi';
 import PropertyImage from './PropertyImage';
 
 export default function PropertySelector({ onSelect }) {
+  const { t } = useTranslation();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -21,12 +23,12 @@ export default function PropertySelector({ onSelect }) {
         onSelect(fetchedProperties[0]);
       }
     } catch {
-      setError('Failed to load properties.');
+      setError(t('properties.failedLoadProperties'));
     } finally {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [t]);
 
   useEffect(() => { loadProperties(); }, [loadProperties]);
 
@@ -52,9 +54,9 @@ export default function PropertySelector({ onSelect }) {
         <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-5">
           <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1v1H9V7zm5 0h1v1h-1V7zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1z" /></svg>
         </div>
-        <p className="text-xl text-slate-200 font-bold">No properties available</p>
+        <p className="text-xl text-slate-200 font-bold">{t('properties.noPropertiesYet')}</p>
         <p className="text-slate-500 text-sm mt-2 mb-6 max-w-sm mx-auto">
-          You need to add a property before you can view these details.
+          {t('properties.noPropertiesDescription')}
         </p>
       </div>
     );
@@ -62,7 +64,7 @@ export default function PropertySelector({ onSelect }) {
 
   return (
     <div>
-      <p className="text-sm text-slate-400 mb-4">Select a property to continue:</p>
+      <p className="text-sm text-slate-400 mb-4">{t('common.selectProperty')}:</p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {properties.map((p) => {
           return (
@@ -105,9 +107,9 @@ export default function PropertySelector({ onSelect }) {
 
               {/* Footer */}
               <div className="px-4 py-3 flex items-center justify-between border-t border-slate-700/50">
-                <span className="text-xs text-slate-500">{p.unitsCount || 0} units</span>
+                <span className="text-xs text-slate-500">{p.unitsCount || 0} {t('units.allUnits').toLowerCase()}</span>
                 <span className="text-sm font-semibold text-emerald-400 group-hover:text-emerald-300 transition-colors flex items-center gap-0.5">
-                  Select <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                  {t('common.view')} <span className="group-hover:translate-x-0.5 transition-transform">→</span>
                 </span>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import i18n from '../i18n/i18n';
 
 // ── Base instance ─────────────────────────────────────────────────────────────
 const api = axios.create({
@@ -21,6 +22,8 @@ api.interceptors.request.use(
     if (token && !config.url?.includes('/auth/refresh')) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
+    // Send current language to backend for localized responses
+    config.headers['Accept-Language'] = i18n.language || 'en';
     return config;
   },
   (error) => Promise.reject(error)

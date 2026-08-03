@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
@@ -12,6 +13,8 @@ import { useAuth } from '../../context/AuthContext';
 const PAGE_SIZE = 10;
 
 export default function PropertyDashboardViewPage() {
+  const { t } = useTranslation();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -83,13 +86,13 @@ export default function PropertyDashboardViewPage() {
         { key: 'tenantFullName', header: 'Tenant', render: (r) => r.tenantFullName || r.tenantEmail || '—' },
         { key: 'unitNumber', header: 'Unit' },
         { key: 'monthlyRent', header: 'Rent', render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
-        { key: 'status', header: 'Status', render: (r) => <Badge label={r.status} /> },
+        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       ];
     }
     if (activeTab === 'units') {
       return [
         { key: 'unitNumber', header: 'Unit No.' },
-        { key: 'status', header: 'Status', render: (r) => <Badge label={r.status} /> },
+        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
         { key: 'baseRent', header: 'Base Rent', render: (r) => r.baseRent ? `ETB ${Number(r.baseRent).toLocaleString()}` : '—' },
       ];
     }
@@ -98,7 +101,7 @@ export default function PropertyDashboardViewPage() {
         { key: 'fullName', header: 'Name', render: (r) => r.fullName || '—' },
         { key: 'email', header: 'Email' },
         { key: 'phoneNumber', header: 'Phone', render: (r) => r.phoneNumber || '—' },
-        { key: 'status', header: 'Status', render: (r) => <Badge label={r.status} /> },
+        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       ];
     }
     return [];

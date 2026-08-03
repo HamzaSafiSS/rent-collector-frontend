@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   PageHeader, Table, Badge, Pagination, Alert, Modal, Button, Spinner, ConfirmDialog,
 } from '../../components/common';
@@ -17,93 +18,93 @@ import { TableSkeleton } from '../../components/common';
 const PAGE_SIZE = 10;
 
 /* ─── Category config ──────────────────────────────────────────────────────── */
-const CATEGORIES = {
+const getCategories = (t) => ({
   landlords: {
-    title: 'All Landlords',
+    title: t('admin.manageLandlordsTitle'),
     icon: '🏢',
     fetchList: (page) => adminApi.listLandlords(page, PAGE_SIZE),
     columns: [
-      { key: 'fullName',    header: 'Name' },
-      { key: 'email',       header: 'Email' },
-      { key: 'phoneNumber', header: 'Phone',   render: (r) => r.phoneNumber || '—' },
-      { key: 'status',      header: 'Status',  render: (r) => <Badge label={r.status} /> },
-      { key: 'createdAt',   header: 'Joined',  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+      { key: 'fullName',    header: t('admin.name') },
+      { key: 'email',       header: t('admin.email') },
+      { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
+      { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     ],
     detailFields: [
-      { label: 'Full Name',    key: 'fullName' },
-      { label: 'Email',        key: 'email' },
-      { label: 'Phone',        key: 'phoneNumber' },
-      { label: 'Status',       key: 'status', badge: true },
-      { label: 'Created',      key: 'createdAt', date: true },
+      { label: t('admin.name'),    key: 'fullName' },
+      { label: t('admin.email'),        key: 'email' },
+      { label: t('payments.phone'),        key: 'phoneNumber' },
+      { label: t('admin.status'),       key: 'status', badge: true },
+      { label: t('admin.joined'),      key: 'createdAt', date: true },
     ],
   },
 
   'suspended-landlords': {
-    title: 'Suspended Landlords',
+    title: t('dashboard.suspendedLandlords'),
     icon: '🚫',
     fetchList: (page) => adminApi.listLandlords(page, PAGE_SIZE),
     // We'll filter to only show suspended ones client-side 
     filterFn: (items) => items.filter((l) => l.status === 'Suspended'),
     columns: [
-      { key: 'fullName',    header: 'Name' },
-      { key: 'email',       header: 'Email' },
-      { key: 'phoneNumber', header: 'Phone',   render: (r) => r.phoneNumber || '—' },
-      { key: 'status',      header: 'Status',  render: (r) => <Badge label={r.status} /> },
-      { key: 'createdAt',   header: 'Joined',  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+      { key: 'fullName',    header: t('admin.name') },
+      { key: 'email',       header: t('admin.email') },
+      { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
+      { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+      { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     ],
     detailFields: [
-      { label: 'Full Name',    key: 'fullName' },
-      { label: 'Email',        key: 'email' },
-      { label: 'Phone',        key: 'phoneNumber' },
-      { label: 'Status',       key: 'status', badge: true },
-      { label: 'Created',      key: 'createdAt', date: true },
+      { label: t('admin.name'),    key: 'fullName' },
+      { label: t('admin.email'),        key: 'email' },
+      { label: t('payments.phone'),        key: 'phoneNumber' },
+      { label: t('admin.status'),       key: 'status', badge: true },
+      { label: t('admin.joined'),      key: 'createdAt', date: true },
     ],
   },
 
   tenants: {
-    title: 'All Tenants',
+    title: t('admin.manageTenantsTitle'),
     icon: '👨‍👩‍👧',
     fetchList: (page) => tenantApi.listAllTenants(page, PAGE_SIZE),
     columns: [
-      { key: 'fullName',    header: 'Name' },
-      { key: 'email',       header: 'Email' },
-      { key: 'phoneNumber', header: 'Phone',      render: (r) => r.phoneNumber || '—' },
-      { key: 'status',      header: 'Status',     render: (r) => <Badge label={r.status} /> },
-      { key: 'unitNumber',  header: 'Current Unit',render: (r) => r.unitNumber || '—' },
-      { key: 'moveInDate',  header: 'Move-in',    render: (r) => r.moveInDate || '—' },
+      { key: 'fullName',    header: t('tenants.name') },
+      { key: 'email',       header: t('tenants.email') },
+      { key: 'phoneNumber', header: t('tenants.phone'),      render: (r) => r.phoneNumber || '—' },
+      { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+      { key: 'unitNumber',  header: t('admin.currentUnit'),render: (r) => r.unitNumber || '—' },
+      { key: 'moveInDate',  header: t('tenants.moveInDate', 'Move-in'),    render: (r) => r.moveInDate || '—' },
     ],
     detailFields: [
-      { label: 'Full Name',      key: 'fullName' },
-      { label: 'Email',          key: 'email' },
-      { label: 'Phone',          key: 'phoneNumber' },
-      { label: 'Status',         key: 'status', badge: true },
-      { label: 'Current Unit',   key: 'unitNumber' },
-      { label: 'Move-in Date',   key: 'moveInDate' },
-      { label: 'Active Leases',  key: 'activeLeaseCount' },
+      { label: t('tenants.name'),      key: 'fullName' },
+      { label: t('tenants.email'),          key: 'email' },
+      { label: t('tenants.phone'),          key: 'phoneNumber' },
+      { label: t('tenants.status'),         key: 'status', badge: true },
+      { label: t('admin.currentUnit'),   key: 'unitNumber' },
+      { label: t('tenants.moveInDate', 'Move-in Date'),   key: 'moveInDate' },
+      { label: t('admin.activeLeases'),  key: 'activeLeaseCount' },
     ],
   },
 
   properties: {
-    title: 'All Properties',
+    title: t('dashboard.totalProperties'),
     icon: '🏢',
     fetchList: (page) => propertyApi.listAllProperties(page, PAGE_SIZE),
     columns: [
-      { key: 'name',        header: 'Name' },
-      { key: 'address',     header: 'Address' },
-      { key: 'createdAt',   header: 'Created At',  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
-      { key: 'landlordName',header: 'Landlord',    render: (r) => r.landlordName || r.landlordFullName || '—' },
+      { key: 'name',        header: t('properties.propertyNameLabel', 'Property Name') },
+      { key: 'address',     header: t('properties.addressLabel', 'Address') },
+      { key: 'createdAt',   header: t('properties.createdAt', 'Created At'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+      { key: 'landlordName',header: t('nav.landlords'),    render: (r) => r.landlordName || r.landlordFullName || '—' },
     ],
     detailFields: [
-      { label: 'Property Name',  key: 'name' },
-      { label: 'Address',        key: 'address' },
-      { label: 'Description',    key: 'description' },
-      { label: 'Landlord',       key: 'landlordName', fallbackKey: 'landlordFullName' },
-      { label: 'Created',        key: 'createdAt', date: true },
+      { label: t('properties.propertyNameLabel', 'Property Name'),  key: 'name' },
+      { label: t('properties.addressLabel', 'Address'),        key: 'address' },
+      { label: t('properties.descriptionLabel', 'Description'),    key: 'description' },
+      { label: t('nav.landlords'),       key: 'landlordName', fallbackKey: 'landlordFullName' },
+      { label: t('properties.createdAt', 'Created At'),        key: 'createdAt', date: true },
     ],
   },
 
   units: {
-    title: 'All Units',
+    title: t('dashboard.totalUnits'),
     icon: '🚪',
     fetchList: async (page) => {
       // Units require loading all properties first, then their units
@@ -133,48 +134,48 @@ const CATEGORIES = {
       };
     },
     columns: [
-      { key: 'unitNumber',   header: 'Unit No.' },
-      { key: 'propertyName', header: 'Property' },
-      { key: 'status',       header: 'Status',   render: (r) => <Badge label={r.status} /> },
-      { key: 'baseRent',     header: 'Base Rent', render: (r) => r.baseRent ? `ETB ${Number(r.baseRent).toLocaleString()}` : '—' },
-      { key: 'landlordName', header: 'Landlord' },
+      { key: 'unitNumber',   header: t('units.unitNumber', 'Unit No.') },
+      { key: 'propertyName', header: t('nav.properties') },
+      { key: 'status',       header: t('units.status', 'Status'),   render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+      { key: 'baseRent',     header: t('units.baseRentETB', 'Base Rent'), render: (r) => r.baseRent ? `ETB ${Number(r.baseRent).toLocaleString()}` : '—' },
+      { key: 'landlordName', header: t('nav.landlords') },
     ],
     detailFields: [
-      { label: 'Unit Number',    key: 'unitNumber' },
-      { label: 'Property',       key: 'propertyName' },
-      { label: 'Status',         key: 'status', badge: true },
-      { label: 'Base Rent',      key: 'baseRent', currency: true },
-      { label: 'Landlord',       key: 'landlordName' },
+      { label: t('units.unitNumber', 'Unit No.'),    key: 'unitNumber' },
+      { label: t('nav.properties'),       key: 'propertyName' },
+      { label: t('units.status', 'Status'),         key: 'status', badge: true },
+      { label: t('units.baseRentETB', 'Base Rent'),      key: 'baseRent', currency: true },
+      { label: t('nav.landlords'),       key: 'landlordName' },
     ],
   },
   leases: {
-    title: 'All Leases',
+    title: t('dashboard.totalLeases'),
     icon: '📄',
     fetchList: (page) => adminApi.listAllLeases(page, PAGE_SIZE),
     columns: [
-      { key: 'tenantFullName', header: 'Tenant', render: (r) => r.tenantFullName || r.tenantEmail || '—' },
-      { key: 'propertyName',   header: 'Property' },
-      { key: 'unitNumber',     header: 'Unit' },
-      { key: 'monthlyRent',    header: 'Rent',   render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
-      { key: 'status',         header: 'Status', render: (r) => <Badge label={r.status} /> },
+      { key: 'tenantFullName', header: t('nav.tenants'), render: (r) => r.tenantFullName || r.tenantEmail || '—' },
+      { key: 'propertyName',   header: t('nav.properties') },
+      { key: 'unitNumber',     header: t('units.unitNumber', 'Unit') },
+      { key: 'monthlyRent',    header: t('leases.monthlyRentETB', 'Rent'),   render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
+      { key: 'status',         header: t('leases.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+      { key: 'startDate',      header: t('leases.startDateCol', 'Start Date'), render: (r) => r.startDate ? new Date(r.startDate).toLocaleDateString() : '—' },
     ],
     detailFields: [
-      { label: 'Tenant Name',  key: 'tenantFullName' },
-      { label: 'Tenant Email', key: 'tenantEmail' },
-      { label: 'Property',     key: 'propertyName' },
-      { label: 'Unit',         key: 'unitNumber' },
-      { label: 'Rent',         key: 'monthlyRent', currency: true },
-      { label: 'Status',       key: 'status', badge: true },
-      { label: 'Start Date',   key: 'startDate', date: true },
+      { label: t('nav.tenants'),        key: 'tenantFullName', fallbackKey: 'tenantEmail' },
+      { label: t('nav.properties'),     key: 'propertyName' },
+      { label: t('units.unitNumber', 'Unit'),         key: 'unitNumber' },
+      { label: t('leases.monthlyRentETB', 'Rent'),         key: 'monthlyRent', currency: true },
+      { label: t('leases.status', 'Status'),       key: 'status', badge: true },
+      { label: t('leases.startDate', 'Start Date'),   key: 'startDate', date: true },
     ],
   },
-};
+});
 
 /* ─── Detail Value Renderer ────────────────────────────────────────────────── */
 function DetailValue({ field, item }) {
   const value = item[field.key] ?? (field.fallbackKey ? item[field.fallbackKey] : null);
   if (value === null || value === undefined || value === '') return <span className="text-slate-400">—</span>;
-  if (field.badge) return <Badge label={value} />;
+  if (field.badge) return <Badge statusKey={value} label={value ? t(`common.status${value.charAt(0) + value.slice(1).toLowerCase()}`, { defaultValue: value }) : ''} />;
   if (field.date) return <span>{new Date(value).toLocaleDateString()}</span>;
   if (field.currency) return <span>ETB {Number(value).toLocaleString()}</span>;
   return <span>{value}</span>;
@@ -184,8 +185,9 @@ function DetailValue({ field, item }) {
 export default function AdminViewListPage() {
   const { category } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  const config = CATEGORIES[category];
+  const config = React.useMemo(() => getCategories(t)[category], [t, category]);
 
   const [items, setItems]               = useState([]);
   const [page, setPage]                 = useState(0);
@@ -343,40 +345,40 @@ export default function AdminViewListPage() {
         onClick={() => navigate('/admin/dashboard')}
         className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
       >
-        ← Back to Dashboard
+        {t('common.backToDashboard')}
       </button>
 
       <PageHeader
         title={config.title}
-        subtitle={`${totalElements} record${totalElements !== 1 ? 's' : ''}`}
+        subtitle={totalElements !== 1 ? t('common.records', { count: totalElements }) : t('common.recordsSingular', { count: totalElements })}
       />
 
       <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
-        <div className="text-sm font-medium text-slate-400">Filters:</div>
+        <div className="text-sm font-medium text-slate-400">{t('common.filters')}</div>
         {category !== 'properties' && (
           <select 
             value={statusFilter} 
             onChange={e => setStatusFilter(e.target.value)}
-            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
-            <option value="">All Statuses</option>
+            <option value="">{t('common.allStatuses')}</option>
             {category === 'units' ? (
               <>
-                <option value="AVAILABLE">Available</option>
-                <option value="OCCUPIED">Occupied</option>
-                <option value="MAINTENANCE">Maintenance</option>
+                <option value="AVAILABLE">{t('common.statusAvailable')}</option>
+                <option value="OCCUPIED">{t('common.statusOccupied')}</option>
+                <option value="MAINTENANCE">{t('common.statusMaintenance')}</option>
               </>
             ) : category === 'leases' ? (
               <>
-                <option value="ACTIVE">Active</option>
-                <option value="TERMINATED">Terminated</option>
-                <option value="CANCELLED">Cancelled</option>
+                <option value="ACTIVE">{t('common.statusActive')}</option>
+                <option value="TERMINATED">{t('common.statusTerminated')}</option>
+                <option value="CANCELLED">{t('common.statusCancelled')}</option>
               </>
             ) : (
               <>
-                <option value="Active">Active</option>
-                <option value="Suspended">Suspended</option>
-                <option value="Pending">Pending</option>
+                <option value="Active">{t('common.statusActive')}</option>
+                <option value="Suspended">{t('common.statusSuspended')}</option>
+                <option value="Pending">{t('common.statusPending')}</option>
               </>
             )}
           </select>
@@ -385,28 +387,28 @@ export default function AdminViewListPage() {
           <select
             value={monthFilter}
             onChange={e => setMonthFilter(e.target.value)}
-            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
-            <option value="">All Months</option>
-            <option value="01">January</option>
-            <option value="02">February</option>
-            <option value="03">March</option>
-            <option value="04">April</option>
-            <option value="05">May</option>
-            <option value="06">June</option>
-            <option value="07">July</option>
-            <option value="08">August</option>
-            <option value="09">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
+            <option value="">{t('common.allMonths')}</option>
+            <option value="01">{t('common.month01')}</option>
+            <option value="02">{t('common.month02')}</option>
+            <option value="03">{t('common.month03')}</option>
+            <option value="04">{t('common.month04')}</option>
+            <option value="05">{t('common.month05')}</option>
+            <option value="06">{t('common.month06')}</option>
+            <option value="07">{t('common.month07')}</option>
+            <option value="08">{t('common.month08')}</option>
+            <option value="09">{t('common.month09')}</option>
+            <option value="10">{t('common.month10')}</option>
+            <option value="11">{t('common.month11')}</option>
+            <option value="12">{t('common.month12')}</option>
           </select>
           <input
             type="number"
-            placeholder="Year"
+            placeholder={t('common.yearPlaceholder')}
             value={yearFilter}
             onChange={e => setYearFilter(e.target.value)}
-            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
+            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
           />
         </>
         {(statusFilter || dateFilter || monthFilter || yearFilter) && (
@@ -414,7 +416,7 @@ export default function AdminViewListPage() {
             onClick={() => { setStatusFilter(''); setDateFilter(''); setMonthFilter(''); setYearFilter(''); }}
             className="text-sm text-emerald-400 hover:underline"
           >
-            Clear
+            {t('common.clear')}
           </button>
         )}
       </div>

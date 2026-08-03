@@ -11,6 +11,7 @@ export { default as PageHeader }    from './PageHeader';
 export { default as Spinner }       from './Spinner';
 export { default as StatCard }      from './StatCard';
 export { default as Table }         from './Table';
+export { default as LanguageToggle } from './LanguageToggle';
 export {
   TableSkeleton,
   CardGridSkeleton,

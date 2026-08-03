@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
+import LanguageToggle from '../../components/common/LanguageToggle';
 
 export default function LandlordSignupPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { signup } = useAuth();
 
@@ -25,22 +28,22 @@ export default function LandlordSignupPage() {
     const errs = {};
 
     if (!form.fullName.trim())
-      errs.fullName = 'Full name is required.';
+      errs.fullName = t('validation.fullNameRequired');
 
     if (!form.email.trim())
-      errs.email = 'Email is required.';
+      errs.email = t('validation.emailRequired');
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      errs.email = 'Must be a valid email address.';
+      errs.email = t('validation.validEmail');
 
     if (!form.password)
-      errs.password = 'Password is required.';
+      errs.password = t('validation.passwordRequired');
     else if (form.password.length < 8)
-      errs.password = 'Password must be at least 8 characters.';
+      errs.password = t('validation.passwordMinLength');
 
     if (!form.confirmPassword)
-      errs.confirmPassword = 'Please confirm your password.';
+      errs.confirmPassword = t('validation.confirmPasswordRequired');
     else if (form.password !== form.confirmPassword)
-      errs.confirmPassword = 'Passwords do not match.';
+      errs.confirmPassword = t('validation.passwordsDoNotMatch');
 
     return errs;
   }
@@ -65,7 +68,7 @@ export default function LandlordSignupPage() {
       );
       navigate('/landlord/dashboard', { replace: true });
     } catch (err) {
-      const message = err.response?.data?.message || 'Signup failed. Please try again.';
+      const message = err.response?.data?.message || t('auth.signupFailed');
       setApiError(message);
     } finally {
       setLoading(false);
@@ -94,6 +97,11 @@ export default function LandlordSignupPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-slate-950 flex items-center justify-center p-4">
+      {/* Top right language toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <LanguageToggle />
+      </div>
+
       {/* Animated Background Gradients */}
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-600/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-800/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
@@ -108,8 +116,8 @@ export default function LandlordSignupPage() {
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Create Account</h1>
-          <p className="text-slate-400 text-sm mt-2 font-medium">Register as a landlord</p>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">{t('auth.createAccountTitle')}</h1>
+          <p className="text-slate-400 text-sm mt-2 font-medium">{t('auth.registerAsLandlord')}</p>
         </div>
 
         {/* Card */}
@@ -120,11 +128,11 @@ export default function LandlordSignupPage() {
 
           <form onSubmit={handleSubmit} className="space-y-3" noValidate>
             <Input
-              label="Full name"
+              label={t('auth.fullNameLabel')}
               name="fullName"
               type="text"
               autoComplete="name"
-              placeholder="Hamza Safi"
+              placeholder={t('auth.fullNamePlaceholder')}
               value={form.fullName}
               onChange={handleChange}
               error={errors.fullName}
@@ -133,11 +141,11 @@ export default function LandlordSignupPage() {
             />
 
             <Input
-              label="Email address"
+              label={t('auth.emailLabel')}
               name="email"
               type="email"
               autoComplete="email"
-              placeholder="example@gmail.com"
+              placeholder={t('auth.emailPlaceholder')}
               value={form.email}
               onChange={handleChange}
               error={errors.email}
@@ -146,11 +154,11 @@ export default function LandlordSignupPage() {
             />
 
             <Input
-              label="Phone number"
+              label={t('auth.phoneLabel')}
               name="phoneNumber"
               type="tel"
               autoComplete="tel"
-              placeholder="0991234577 (optional)"
+              placeholder={t('auth.phonePlaceholder')}
               value={form.phoneNumber}
               onChange={handleChange}
               error={errors.phoneNumber}
@@ -160,11 +168,11 @@ export default function LandlordSignupPage() {
             />
 
             <Input
-              label="Password"
+              label={t('auth.passwordLabel')}
               name="password"
               type="password"
               autoComplete="new-password"
-              placeholder="Enter Password Minimum 8 characters"
+              placeholder={t('auth.passwordPlaceholderSignup')}
               value={form.password}
               onChange={handleChange}
               error={errors.password}
@@ -173,11 +181,11 @@ export default function LandlordSignupPage() {
             />
 
             <Input
-              label="Confirm password"
+              label={t('auth.confirmPasswordLabel')}
               name="confirmPassword"
               type="password"
               autoComplete="new-password"
-              placeholder="Repeat your password"
+              placeholder={t('auth.confirmPasswordPlaceholder')}
               value={form.confirmPassword}
               onChange={handleChange}
               error={errors.confirmPassword}
@@ -190,17 +198,17 @@ export default function LandlordSignupPage() {
               fullWidth
               loading={loading}
             >
-              Create account
+              {t('auth.createAccountBtn')}
             </Button>
           </form>
 
           <p className="text-center text-sm text-slate-400 mt-4">
-            Already have an account?{' '}
+            {t('auth.alreadyHaveAccount')}{' '}
             <Link
               to="/login"
               className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
             >
-              Sign in
+              {t('auth.signIn')}
             </Link>
           </p>
         </div>

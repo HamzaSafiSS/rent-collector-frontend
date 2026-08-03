@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Modal from './Modal';
 import Input from './Input';
 import Button from './Button';
@@ -9,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../context/ToastContext';
 
 export default function ProfileModal({ isOpen, onClose }) {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
@@ -32,11 +34,11 @@ export default function ProfileModal({ isOpen, onClose }) {
 
   function validate() {
     const errs = {};
-    if (!form.currentPassword) errs.currentPassword = 'Current password is required.';
-    if (!form.newPassword) errs.newPassword = 'New password is required.';
-    else if (form.newPassword.length < 8) errs.newPassword = 'Minimum 8 characters.';
-    else if (form.newPassword === form.currentPassword) errs.newPassword = 'Must be different from current.';
-    if (form.newPassword !== form.confirmPassword) errs.confirmPassword = 'Passwords do not match.';
+    if (!form.currentPassword) errs.currentPassword = t('validation.currentPasswordRequired');
+    if (!form.newPassword) errs.newPassword = t('validation.newPasswordRequired');
+    else if (form.newPassword.length < 8) errs.newPassword = t('validation.minimum8Chars');
+    else if (form.newPassword === form.currentPassword) errs.newPassword = t('validation.mustBeDifferentFromCurrent');
+    if (form.newPassword !== form.confirmPassword) errs.confirmPassword = t('validation.passwordsDoNotMatch');
     return errs;
   }
 
@@ -49,15 +51,15 @@ export default function ProfileModal({ isOpen, onClose }) {
     try {
       setLoading(true);
       await authApi.changePassword(form.currentPassword, form.newPassword);
-      setSuccess('Password changed successfully. Please log in again.');
-      toast.success('Password changed.');
+      setSuccess(t('auth.passwordChangedSuccess'));
+      toast.success(t('profile.passwordChanged'));
       setTimeout(async () => {
         await logout();
         onClose();
         navigate('/login', { replace: true });
       }, 2000);
     } catch (err) {
-      setApiError(err.response?.data?.message || 'Failed to change password.');
+      setApiError(err.response?.data?.message || t('auth.failedChangePassword'));
     } finally {
       setLoading(false);
     }
@@ -70,16 +72,16 @@ export default function ProfileModal({ isOpen, onClose }) {
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="My Profile">
+    <Modal isOpen={isOpen} onClose={onClose} title={t('profile.title')}>
       <div className="space-y-6 text-sm">
         
         {/* Profile Details */}
         {!showPasswordForm && (
           <div className="space-y-3">
-            <div className="flex gap-4"><p className="text-slate-500 w-24">Full name</p><p className="font-medium text-slate-200">{user?.fullName}</p></div>
-            <div className="flex gap-4"><p className="text-slate-500 w-24">Email</p>    <p className="font-medium text-slate-200">{user?.email}</p></div>
-            <div className="flex gap-4"><p className="text-slate-500 w-24">Role</p>     <p className="font-medium text-slate-200 capitalize">{user?.role?.replace('_', ' ').toLowerCase()}</p></div>
-            <div className="flex gap-4"><p className="text-slate-500 w-24">Status</p>   <p className="font-medium text-slate-200">{user?.status}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.fullName')}</p><p className="font-medium text-slate-200">{user?.fullName}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.email')}</p>    <p className="font-medium text-slate-200">{user?.email}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.role')}</p>     <p className="font-medium text-slate-200 capitalize">{user?.role?.replace('_', ' ').toLowerCase()}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.status')}</p>   <p className="font-medium text-slate-200">{user?.status}</p></div>
           </div>
         )}
 
@@ -87,22 +89,22 @@ export default function ProfileModal({ isOpen, onClose }) {
         <div className={!showPasswordForm ? "pt-4 border-t border-slate-700/50" : ""}>
           {!showPasswordForm ? (
             <Button variant="outline" onClick={() => setShowPasswordForm(true)} className="w-full">
-              Change Password
+              {t('profile.changePassword')}
             </Button>
           ) : (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-slate-200">Change Password</h3>
+                <h3 className="font-semibold text-slate-200">{t('profile.changePassword')}</h3>
               </div>
 
               {apiError && <Alert type="error" message={apiError} />}
               {success && <Alert type="success" message={success} />}
 
               <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-                <Input label="Current password" name="currentPassword" type="password" value={form.currentPassword} onChange={handleChange} error={errors.currentPassword} disabled={loading || !!success} required />
-                <Input label="New password" name="newPassword" type="password" value={form.newPassword} onChange={handleChange} error={errors.newPassword} disabled={loading || !!success} required />
-                <Input label="Confirm password" name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} error={errors.confirmPassword} disabled={loading || !!success} required />
-                <Button type="submit" loading={loading} disabled={!!success} className="w-full">Update Password</Button>
+                <Input label={t('auth.currentPasswordLabel')} name="currentPassword" type="password" value={form.currentPassword} onChange={handleChange} error={errors.currentPassword} disabled={loading || !!success} required />
+                <Input label={t('auth.newPasswordLabel')} name="newPassword" type="password" value={form.newPassword} onChange={handleChange} error={errors.newPassword} disabled={loading || !!success} required />
+                <Input label={t('auth.confirmPasswordLabel')} name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} error={errors.confirmPassword} disabled={loading || !!success} required />
+                <Button type="submit" loading={loading} disabled={!!success} className="w-full">{t('profile.updatePassword')}</Button>
               </form>
             </div>
           )}

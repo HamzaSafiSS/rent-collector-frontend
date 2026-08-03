@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { authApi } from '../../api/authApi';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
+import LanguageToggle from '../../components/common/LanguageToggle';
 
 export default function ChangePasswordPage() {
+  const { t }                  = useTranslation();
   const navigate               = useNavigate();
   const { user, logout, isAuthenticated, loading } = useAuth();
 
@@ -20,10 +23,6 @@ export default function ChangePasswordPage() {
   const [success, setSuccess]   = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Redirect completely unauthenticated visitors to /login.
-  // Wait until AuthContext has finished its silent refresh check (loading = false)
-  // before deciding — otherwise we might redirect a user whose session is
-  // still being restored from the HttpOnly cookie.
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       navigate('/login', { replace: true });
@@ -33,17 +32,17 @@ export default function ChangePasswordPage() {
   function validate() {
     const errs = {};
     if (!form.currentPassword)
-      errs.currentPassword = 'Current password is required.';
+      errs.currentPassword = t('validation.currentPasswordRequired');
     if (!form.newPassword)
-      errs.newPassword = 'New password is required.';
+      errs.newPassword = t('validation.newPasswordRequired');
     else if (form.newPassword.length < 8)
-      errs.newPassword = 'New password must be at least 8 characters.';
+      errs.newPassword = t('validation.newPasswordMinLength');
     else if (form.newPassword === form.currentPassword)
-      errs.newPassword = 'New password must be different from your current password.';
+      errs.newPassword = t('validation.newPasswordMustDiffer');
     if (!form.confirmPassword)
-      errs.confirmPassword = 'Please confirm your new password.';
+      errs.confirmPassword = t('validation.confirmNewPasswordRequired');
     else if (form.newPassword !== form.confirmPassword)
-      errs.confirmPassword = 'Passwords do not match.';
+      errs.confirmPassword = t('validation.passwordsDoNotMatch');
     return errs;
   }
 
@@ -61,7 +60,7 @@ export default function ChangePasswordPage() {
     try {
       setSubmitting(true);
       await authApi.changePassword(form.currentPassword, form.newPassword);
-      setSuccess('Password changed successfully. Please log in again.');
+      setSuccess(t('auth.passwordChangedSuccess'));
 
       setTimeout(async () => {
         await logout();
@@ -69,7 +68,7 @@ export default function ChangePasswordPage() {
       }, 2000);
 
     } catch (err) {
-      setApiError(err.response?.data?.message || 'Failed to change password.');
+      setApiError(err.response?.data?.message || t('auth.failedChangePassword'));
     } finally {
       setSubmitting(false);
     }
@@ -81,7 +80,6 @@ export default function ChangePasswordPage() {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
   }
 
-  // Show spinner while AuthContext is still checking the session
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
@@ -92,6 +90,11 @@ export default function ChangePasswordPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-slate-950 flex items-center justify-center p-4">
+      {/* Top right language toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <LanguageToggle />
+      </div>
+
       {/* Animated Background Gradients */}
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-600/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-800/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
@@ -106,17 +109,17 @@ export default function ChangePasswordPage() {
                     d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
             </svg>
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Change Password</h1>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">{t('auth.changePasswordTitle')}</h1>
 
           {user?.status === 'PendingPasswordChange' ? (
             <div className="mt-3 mx-auto max-w-sm">
               <Alert
                 type="warning"
-                message="You must set a new password before you can access the platform."
+                message={t('auth.mustChangePassword')}
               />
             </div>
           ) : (
-            <p className="text-slate-400 text-sm mt-2 font-medium">Update your account password</p>
+            <p className="text-slate-400 text-sm mt-2 font-medium">{t('auth.updateAccountPassword')}</p>
           )}
         </div>
 
@@ -127,11 +130,11 @@ export default function ChangePasswordPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <Input
-              label="Current password"
+              label={t('auth.currentPasswordLabel')}
               name="currentPassword"
               type="password"
               autoComplete="current-password"
-              placeholder="Your current password"
+              placeholder={t('auth.currentPasswordPlaceholder')}
               value={form.currentPassword}
               onChange={handleChange}
               error={errors.currentPassword}
@@ -139,11 +142,11 @@ export default function ChangePasswordPage() {
               required
             />
             <Input
-              label="New password"
+              label={t('auth.newPasswordLabel')}
               name="newPassword"
               type="password"
               autoComplete="new-password"
-              placeholder="Minimum 8 characters"
+              placeholder={t('auth.newPasswordPlaceholder')}
               value={form.newPassword}
               onChange={handleChange}
               error={errors.newPassword}
@@ -151,11 +154,11 @@ export default function ChangePasswordPage() {
               required
             />
             <Input
-              label="Confirm new password"
+              label={t('auth.confirmNewPasswordLabel')}
               name="confirmPassword"
               type="password"
               autoComplete="new-password"
-              placeholder="Repeat new password"
+              placeholder={t('auth.confirmNewPasswordPlaceholder')}
               value={form.confirmPassword}
               onChange={handleChange}
               error={errors.confirmPassword}
@@ -170,7 +173,7 @@ export default function ChangePasswordPage() {
               size="lg"
               className="mt-2"
             >
-              Change password
+              {t('auth.changePasswordBtn')}
             </Button>
           </form>
 
@@ -184,7 +187,7 @@ export default function ChangePasswordPage() {
               }}
               className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
             >
-              Sign out and return to login
+              {t('auth.signOutAndReturn')}
             </button>
           </div>
         </div>

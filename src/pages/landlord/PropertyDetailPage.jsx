@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   PageHeader, Table, Badge, Button, Modal,
   ConfirmDialog, Alert, Spinner, Input,
@@ -9,6 +10,7 @@ import { unitApi } from '../../api/unitApi';
 import { useToast } from '../../context/ToastContext';
 
 export default function PropertyDetailPage() {
+  const { t }       = useTranslation();
   const { id }    = useParams();
   const navigate  = useNavigate();
   const toast     = useToast();
@@ -45,11 +47,11 @@ export default function PropertyDetailPage() {
       const res = await propertyApi.getPropertyDetail(id);
       setProperty(res.data?.data);
     } catch {
-      setError('Property not found.');
+      setError(t('properties.propertyNotFound'));
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, t]);
 
   const loadUnits = useCallback(async () => {
     try {
@@ -66,9 +68,9 @@ export default function PropertyDetailPage() {
   // ── Add Units ──────────────────────────────────────────────────────────────
   function validateAddForm() {
     const errs = {};
-    if (!addForm.prefix.trim())                 errs.prefix         = 'Prefix is required.';
-    if (!addForm.numberOfUnits)                 errs.numberOfUnits  = 'Number of units is required.';
-    else if (Number(addForm.numberOfUnits) < 1) errs.numberOfUnits  = 'Must be at least 1.';
+    if (!addForm.prefix.trim())                 errs.prefix         = t('validation.prefixRequired');
+    if (!addForm.numberOfUnits)                 errs.numberOfUnits  = t('validation.numberOfUnitsRequired');
+    else if (Number(addForm.numberOfUnits) < 1) errs.numberOfUnits  = t('validation.mustBeAtLeastOne');
     return errs;
   }
 
@@ -83,12 +85,15 @@ export default function PropertyDetailPage() {
         numberOfUnits: Number(addForm.numberOfUnits),
       });
       const result = res.data?.data;
-      toast.success(`Created ${result?.totalCreated} unit(s).${result?.totalSkipped > 0 ? ` Skipped ${result.totalSkipped} duplicates.` : ''}`);
+      toast.success(
+        t('units.createdUnits', { created: result?.totalCreated }) +
+        (result?.totalSkipped > 0 ? t('units.skippedDuplicates', { skipped: result.totalSkipped }) : '')
+      );
       setAddUnitsOpen(false);
       setAddForm({ prefix: '', numberOfUnits: '' });
       loadUnits();
     } catch (err) {
-      setAddError(err.response?.data?.message || 'Failed to create units.');
+      setAddError(err.response?.data?.message || t('units.failedCreateUnits'));
     } finally { setAddLoading(false); }
   }
 
@@ -98,17 +103,17 @@ export default function PropertyDetailPage() {
       setUnitActionLoading(true);
       if (unit.status === 'AVAILABLE') {
         await unitApi.setMaintenance(id, unit.id);
-        toast.success(`${unit.unitNumber} set to MAINTENANCE.`);
+        toast.success(t('units.setToMaintenance', { name: unit.unitNumber }));
       } else if (unit.status === 'MAINTENANCE') {
         await unitApi.setAvailable(id, unit.id);
-        toast.success(`${unit.unitNumber} set to AVAILABLE.`);
+        toast.success(t('units.setToAvailable', { name: unit.unitNumber }));
       } else {
-        toast.warning('Cannot change status of an OCCUPIED unit.');
+        toast.warning(t('units.cannotChangeOccupied'));
         return;
       }
       loadUnits();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to change status.');
+      toast.error(err.response?.data?.message || t('units.failedChangeStatus'));
     } finally { setUnitActionLoading(false); }
   }
 
@@ -117,11 +122,11 @@ export default function PropertyDetailPage() {
     try {
       setUnitActionLoading(true);
       await unitApi.deleteUnit(id, deleteUnitTarget.id);
-      toast.success(`Unit ${deleteUnitTarget.unitNumber} deleted.`);
+      toast.success(t('units.unitDeleted', { name: deleteUnitTarget.unitNumber }));
       setDeleteUnitTarget(null);
       loadUnits();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Cannot delete unit.');
+      toast.error(err.response?.data?.message || t('units.cannotDeleteUnit'));
       setDeleteUnitTarget(null);
     } finally { setUnitActionLoading(false); }
   }
@@ -129,36 +134,36 @@ export default function PropertyDetailPage() {
   // ── Rename unit ────────────────────────────────────────────────────────────
   async function handleRename(e) {
     e.preventDefault();
-    if (!renameValue.trim()) { setRenameError('Unit number is required.'); return; }
+    if (!renameValue.trim()) { setRenameError(t('validation.unitNumberRequired')); return; }
     try {
       setRenameLoading(true); setRenameError('');
       await unitApi.updateUnit(id, renameTarget.id, { unitNumber: renameValue.trim() });
-      toast.success('Unit renamed.');
+      toast.success(t('units.unitRenamed'));
       setRenameTarget(null);
       loadUnits();
     } catch (err) {
-      setRenameError(err.response?.data?.message || 'Failed to rename unit.');
+      setRenameError(err.response?.data?.message || t('units.failedRenameUnit'));
     } finally { setRenameLoading(false); }
   }
 
   // ── Table columns ──────────────────────────────────────────────────────────
   const unitColumns = [
-    { key: 'unitNumber', header: 'Unit No.' },
-    { key: 'status',     header: 'Status',  render: (r) => <Badge label={r.status} /> },
+    { key: 'unitNumber', header: t('units.unitNo') },
+    { key: 'status',     header: t('units.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     {
-      key: 'actions', header: 'Actions',
+      key: 'actions', header: t('common.actions'),
       render: (row) => (
         <div className="flex items-center gap-2">
           <Button size="sm" variant="ghost" onClick={() => { setRenameTarget(row); setRenameValue(row.unitNumber); setRenameError(''); }}>
-            Rename
+            {t('units.rename')}
           </Button>
           {row.status !== 'OCCUPIED' && (
             <Button size="sm" variant="secondary" onClick={() => handleStatusToggle(row)} disabled={unitActionLoading}>
-              {row.status === 'AVAILABLE' ? 'Set Maintenance' : 'Set Available'}
+              {row.status === 'AVAILABLE' ? t('units.setMaintenance') : t('units.setAvailable')}
             </Button>
           )}
           {row.status === 'AVAILABLE' && (
-            <Button size="sm" variant="danger" onClick={() => setDeleteUnitTarget(row)}>Delete</Button>
+            <Button size="sm" variant="danger" onClick={() => setDeleteUnitTarget(row)}>{t('common.delete')}</Button>
           )}
         </div>
       ),
@@ -174,7 +179,7 @@ export default function PropertyDetailPage() {
   if (error) return (
     <>
       <Alert type="error" message={error} />
-      <Button className="mt-4" variant="secondary" onClick={() => navigate('/landlord/properties')}>← Back</Button>
+      <Button className="mt-4" variant="secondary" onClick={() => navigate('/landlord/properties')}>{t('common.back')}</Button>
     </>
   );
 
@@ -182,7 +187,7 @@ export default function PropertyDetailPage() {
     <>
       {/* Breadcrumb */}
       <button onClick={() => navigate('/landlord/properties')} className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1">
-        ← Back to Properties
+        {t('common.backToProperties')}
       </button>
 
       <PageHeader
@@ -190,7 +195,7 @@ export default function PropertyDetailPage() {
         subtitle={property?.address}
         actions={
           <Button onClick={() => { setAddUnitsOpen(true); setAddForm({ prefix: '', numberOfUnits: '' }); setAddErrors({}); setAddError(''); }}>
-            + Add Units
+            {t('units.addUnitsBtn')}
           </Button>
         }
       />
@@ -207,6 +212,7 @@ export default function PropertyDetailPage() {
         {['ALL', 'AVAILABLE', 'OCCUPIED', 'MAINTENANCE'].map((s) => {
           const count = s === 'ALL' ? units.length : units.filter((u) => u.status === s).length;
           const isSelected = filterStatus === s;
+          const labelText = s === 'ALL' ? t('common.all') : t(`dashboard.${s.toLowerCase()}Units`, { defaultValue: s });
           return (
             <div 
               key={s} 
@@ -231,7 +237,7 @@ export default function PropertyDetailPage() {
                 s === 'MAINTENANCE' ? 'text-amber-400' :
                                     'text-slate-200'
               }`}>{count}</p>
-              <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{s}</p>
+              <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{labelText}</p>
             </div>
           );
         })}
@@ -240,33 +246,33 @@ export default function PropertyDetailPage() {
       {/* Units table */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-100">{filterStatus === 'ALL' ? 'All' : filterStatus} Units <span className="text-slate-500 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
+          <h2 className="text-xl font-bold text-slate-100">{filterStatus === 'ALL' ? t('units.allUnits') : t(`common.status${filterStatus.charAt(0) + filterStatus.slice(1).toLowerCase()}`, { defaultValue: filterStatus })} <span className="text-slate-500 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
         </div>
         <Table
           columns={unitColumns}
           data={units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus)}
           loading={unitsLoading}
-          emptyMessage="No units match the current filter."
+          emptyMessage={t('common.noResultsFilter')}
         />
       </div>
 
       {/* Add Units Modal */}
-      <Modal isOpen={addUnitsOpen} onClose={() => setAddUnitsOpen(false)} title="Add Units" footer={null}>
+      <Modal isOpen={addUnitsOpen} onClose={() => setAddUnitsOpen(false)} title={t('units.addUnitsTitle')} footer={null}>
         <form onSubmit={handleAddUnits} className="space-y-4" noValidate>
           {addError && <Alert type="error" message={addError} />}
           <Input
-            label="Unit prefix"
+            label={t('units.unitPrefixLabel')}
             name="prefix"
             value={addForm.prefix}
             onChange={(e) => setAddForm((p) => ({ ...p, prefix: e.target.value }))}
             error={addErrors.prefix}
-            placeholder="e.g. A, Block-B, Studio"
+            placeholder={t('units.unitPrefixPlaceholder')}
             disabled={addLoading}
-            hint="Units will be named: prefix-1, prefix-2 ..."
+            hint={t('units.unitPrefixHint')}
             required
           />
           <Input
-            label="Number of units"
+            label={t('units.numberOfUnitsLabel')}
             name="numberOfUnits"
             type="number"
             min="1"
@@ -274,21 +280,21 @@ export default function PropertyDetailPage() {
             value={addForm.numberOfUnits}
             onChange={(e) => setAddForm((p) => ({ ...p, numberOfUnits: e.target.value }))}
             error={addErrors.numberOfUnits}
-            placeholder="e.g. 20"
+            placeholder={t('units.numberOfUnitsPlaceholder')}
             disabled={addLoading}
             required
           />
           <div className="flex justify-end pt-2">
-            <Button type="submit" loading={addLoading}>Create units</Button>
+            <Button type="submit" loading={addLoading}>{t('units.createUnitsBtn')}</Button>
           </div>
         </form>
       </Modal>
 
       {/* Rename Modal */}
-      <Modal isOpen={!!renameTarget} onClose={() => setRenameTarget(null)} title="Rename Unit" footer={null}>
+      <Modal isOpen={!!renameTarget} onClose={() => setRenameTarget(null)} title={t('units.renameUnitTitle')} footer={null}>
         <form onSubmit={handleRename} className="space-y-4" noValidate>
           <Input
-            label="New unit number"
+            label={t('units.newUnitNumberLabel')}
             value={renameValue}
             onChange={(e) => { setRenameValue(e.target.value); setRenameError(''); }}
             error={renameError}
@@ -296,7 +302,7 @@ export default function PropertyDetailPage() {
             required
           />
           <div className="flex justify-end">
-            <Button type="submit" loading={renameLoading}>Save</Button>
+            <Button type="submit" loading={renameLoading}>{t('common.save')}</Button>
           </div>
         </form>
       </Modal>
@@ -307,9 +313,9 @@ export default function PropertyDetailPage() {
         onClose={() => setDeleteUnitTarget(null)}
         onConfirm={handleDeleteUnit}
         loading={unitActionLoading}
-        title="Delete Unit"
-        message={`Delete unit "${deleteUnitTarget?.unitNumber}"? This cannot be undone.`}
-        confirmText="Delete"
+        title={t('units.deleteUnitTitle')}
+        message={t('units.deleteUnitMessage', { name: deleteUnitTarget?.unitNumber })}
+        confirmText={t('common.delete')}
         variant="danger"
       />
     </>

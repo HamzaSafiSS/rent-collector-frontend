@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import {
   PageHeader, Table, Badge, Button, Modal,
   ConfirmDialog, Pagination, Spinner, Alert,
@@ -12,6 +14,8 @@ import { TableSkeleton } from '../../components/common';
 const PAGE_SIZE = 10;
 
 export default function ManageAdminsPage() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const toast = useToast();
 
   const [admins, setAdmins]           = useState([]);
@@ -38,11 +42,11 @@ export default function ManageAdminsPage() {
       setTotalPages(data?.totalPages || 0);
       setTotalElements(data?.totalElements || 0);
     } catch {
-      setFetchError('Failed to load admin accounts.');
+      setFetchError(t('admin.failedLoadAdmins'));
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, t]);
 
   useEffect(() => { loadAdmins(); }, [loadAdmins]);
 
@@ -52,11 +56,11 @@ export default function ManageAdminsPage() {
       setFormLoading(true);
       setFormError('');
       await adminApi.createAdmin(form);
-      toast.success('Admin account created.');
+      toast.success(t('admin.adminCreated'));
       setCreateOpen(false);
       loadAdmins();
     } catch (err) {
-      setFormError(err.response?.data?.message || 'Failed to create admin.');
+      setFormError(err.response?.data?.message || t('admin.failedCreateAdmin'));
     } finally {
       setFormLoading(false);
     }
@@ -68,11 +72,11 @@ export default function ManageAdminsPage() {
       setFormLoading(true);
       setFormError('');
       await adminApi.updateAdmin(editTarget.id, form);
-      toast.success('Admin updated.');
+      toast.success(t('admin.adminUpdated'));
       setEditTarget(null);
       loadAdmins();
     } catch (err) {
-      setFormError(err.response?.data?.message || 'Failed to update admin.');
+      setFormError(err.response?.data?.message || t('admin.failedUpdateAdmin'));
     } finally {
       setFormLoading(false);
     }
@@ -83,14 +87,14 @@ export default function ManageAdminsPage() {
     try {
       if (admin.status === 'Suspended') {
         await adminApi.activateAdmin(admin.id);
-        toast.success(`${admin.fullName} activated.`);
+        toast.success(t('admin.adminActivated', { name: admin.fullName }));
       } else {
         await adminApi.suspendAdmin(admin.id);
-        toast.success(`${admin.fullName} suspended.`);
+        toast.success(t('admin.adminSuspended', { name: admin.fullName }));
       }
       loadAdmins();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Action failed.');
+      toast.error(err.response?.data?.message || t('admin.actionFailed'));
     }
   }
 
@@ -99,11 +103,11 @@ export default function ManageAdminsPage() {
     try {
       setFormLoading(true);
       await adminApi.deleteAdmin(deleteTarget.id);
-      toast.success('Admin deleted.');
+      toast.success(t('admin.adminDeleted'));
       setDeleteTarget(null);
       loadAdmins();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to delete admin.');
+      toast.error(err.response?.data?.message || t('admin.failedDeleteAdmin'));
     } finally {
       setFormLoading(false);
     }
@@ -111,28 +115,28 @@ export default function ManageAdminsPage() {
 
   // ── Table columns ──────────────────────────────────────────────────────────
   const columns = [
-    { key: 'fullName',  header: 'Name' },
-    { key: 'email',     header: 'Email' },
-    { key: 'phoneNumber', header: 'Phone', render: (r) => r.phoneNumber || '—' },
-    { key: 'status',    header: 'Status', render: (r) => <Badge label={r.status} /> },
-    { key: 'createdAt', header: 'Created', render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+    { key: 'fullName',  header: t('admin.name') },
+    { key: 'email',     header: t('admin.email') },
+    { key: 'phoneNumber', header: t('payments.phoneNumber'), render: (r) => r.phoneNumber || '—' },
+    { key: 'status',    header: t('admin.status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+    { key: 'createdAt', header: t('admin.joined'), render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     {
       key: 'actions',
-      header: 'Actions',
+      header: t('common.actions'),
       render: (row) => (
         <div className="flex items-center gap-2">
           <Button size="sm" variant="ghost" onClick={() => { setEditTarget(row); setFormError(''); }}>
-            Edit
+            {t('common.edit')}
           </Button>
           <Button
             size="sm"
             variant={row.status === 'Suspended' ? 'success' : 'secondary'}
             onClick={() => handleToggleStatus(row)}
           >
-            {row.status === 'Suspended' ? 'Activate' : 'Suspend'}
+            {row.status === 'Suspended' ? t('admin.activate') : t('admin.suspend')}
           </Button>
           <Button size="sm" variant="danger" onClick={() => setDeleteTarget(row)}>
-            Delete
+            {t('common.delete')}
           </Button>
         </div>
       ),
@@ -141,12 +145,19 @@ export default function ManageAdminsPage() {
 
   return (
     <>
+      <button
+        onClick={() => navigate('/super-admin/dashboard')}
+        className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
+      >
+        {t('common.backToDashboard')}
+      </button>
+
       <PageHeader
-        title="Manage Admins"
-        subtitle={`${totalElements} admin account${totalElements !== 1 ? 's' : ''}`}
+        title={t('admin.manageAdminsTitle')}
+        subtitle={totalElements !== 1 ? t('admin.adminsCount', { count: totalElements }) : t('admin.adminsCountSingular', { count: totalElements })}
         actions={
           <Button onClick={() => { setCreateOpen(true); setFormError(''); }}>
-            + New Admin
+            {t('admin.newAdminBtn')}
           </Button>
         }
       />
@@ -157,7 +168,7 @@ export default function ManageAdminsPage() {
         {loading ? (
           <TableSkeleton rows={8} cols={columns.length} />
         ) : (
-          <Table columns={columns} data={admins} emptyMessage="No admins found." />
+          <Table columns={columns} data={admins} emptyMessage={t('admin.noAdminsFound')} />
         )}
         <div className="px-4 border-t border-slate-100">
           <Pagination
@@ -171,7 +182,7 @@ export default function ManageAdminsPage() {
       </div>
 
       {/* Create Modal */}
-      <Modal isOpen={createOpen} onClose={() => setCreateOpen(false)} title="Create Admin Account" footer={null}>
+      <Modal isOpen={createOpen} onClose={() => setCreateOpen(false)} title={t('admin.createAdminTitle')} footer={null}>
         <AdminForm
           onSubmit={handleCreate}
           loading={formLoading}
@@ -181,7 +192,7 @@ export default function ManageAdminsPage() {
       </Modal>
 
       {/* Edit Modal */}
-      <Modal isOpen={!!editTarget} onClose={() => setEditTarget(null)} title="Edit Admin" footer={null}>
+      <Modal isOpen={!!editTarget} onClose={() => setEditTarget(null)} title={t('admin.editAdminTitle')} footer={null}>
         <AdminForm
           initial={editTarget}
           onSubmit={handleUpdate}
@@ -197,9 +208,9 @@ export default function ManageAdminsPage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDelete}
         loading={formLoading}
-        title="Delete Admin"
-        message={`Are you sure you want to delete "${deleteTarget?.fullName}"? This action cannot be undone.`}
-        confirmText="Delete"
+        title={t('admin.deleteAdminTitle')}
+        message={t('admin.deleteAdminMessage', { name: deleteTarget?.fullName })}
+        confirmText={t('common.delete')}
         variant="danger"
       />
     </>

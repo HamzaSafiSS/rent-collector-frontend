@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
@@ -10,6 +11,8 @@ import { useAuth } from '../../context/AuthContext';
 const PAGE_SIZE = 10;
 
 export default function LandlordDashboardViewPage() {
+  const { t } = useTranslation();
+
   const { landlordId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -80,7 +83,7 @@ export default function LandlordDashboardViewPage() {
       return [
         { key: 'fullName', header: 'Name' },
         { key: 'email', header: 'Email' },
-        { key: 'status', header: 'Status', render: (r) => <Badge label={r.status} /> },
+        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
         { key: 'unitNumber', header: 'Unit', render: (r) => r.unitNumber || '—' },
       ];
     }
@@ -90,7 +93,7 @@ export default function LandlordDashboardViewPage() {
         { key: 'propertyName', header: 'Property' },
         { key: 'unitNumber', header: 'Unit' },
         { key: 'monthlyRent', header: 'Rent', render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
-        { key: 'status', header: 'Status', render: (r) => <Badge label={r.status} /> },
+        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       ];
     }
     return [];
