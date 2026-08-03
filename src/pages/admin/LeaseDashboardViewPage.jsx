@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
@@ -10,6 +11,8 @@ import { useAuth } from '../../context/AuthContext';
 const PAGE_SIZE = 10;
 
 export default function LeaseDashboardViewPage() {
+  const { t } = useTranslation();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -60,7 +63,7 @@ export default function LeaseDashboardViewPage() {
       return [
         { key: 'paymentMonth', header: 'Month' },
         { key: 'amount', header: 'Amount', render: (r) => `ETB ${Number(r.amount).toLocaleString()}` },
-        { key: 'status', header: 'Status', render: (r) => <Badge label={r.status} /> },
+        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
         { key: 'uploadedAt', header: 'Date', render: (r) => new Date(r.uploadedAt).toLocaleDateString() },
       ];
     }

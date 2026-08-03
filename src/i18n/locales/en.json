@@ -323,6 +323,7 @@
     "email": "Email",
     "property": "Property",
     "rentETB": "Rent (ETB)",
+    "monthlyRent": "Monthly Rent",
     "startDateCol": "Start Date",
     "status": "Status",
     "myLeaseTitle": "My Lease",

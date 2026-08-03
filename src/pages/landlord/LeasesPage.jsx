@@ -115,7 +115,7 @@ export default function LeasesPage() {
     { key: 'propertyName',  header: t('leases.property') },
     { key: 'monthlyRent',   header: t('leases.rentETB'), render: (r) => Number(r.monthlyRent).toLocaleString() },
     { key: 'startDate',     header: t('leases.startDateCol') },
-    { key: 'status',        header: t('leases.status'),     render: (r) => <Badge label={r.status} /> },
+    { key: 'status',        header: t('leases.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     {
       key: 'actions', header: t('common.actions'),
       render: (row) => row.status === 'ACTIVE' ? (

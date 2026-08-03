@@ -118,7 +118,7 @@ export default function ManageAdminsPage() {
     { key: 'fullName',  header: t('admin.name') },
     { key: 'email',     header: t('admin.email') },
     { key: 'phoneNumber', header: t('payments.phoneNumber'), render: (r) => r.phoneNumber || '—' },
-    { key: 'status',    header: t('admin.status'), render: (r) => <Badge label={r.status} /> },
+    { key: 'status',    header: t('admin.status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     { key: 'createdAt', header: t('admin.joined'), render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     {
       key: 'actions',

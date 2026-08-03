@@ -117,7 +117,7 @@ export default function PaymentHistoryPage() {
                       {t('common.view')}
                     </button>
                   )}
-                  <Badge label={p.status} />
+                  <Badge statusKey={p.status} label={p.status ? t(`common.status${p.status.charAt(0) + p.status.slice(1).toLowerCase()}`, { defaultValue: p.status }) : ''} />
                 </div>
               </div>
 

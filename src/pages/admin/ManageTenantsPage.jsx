@@ -20,7 +20,7 @@ export default function ManageTenantsPage() {
     { key: 'fullName',    header: t('tenants.name') },
     { key: 'email',       header: t('tenants.email') },
     { key: 'phoneNumber', header: t('tenants.phone'),      render: (r) => r.phoneNumber || '—' },
-    { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge label={r.status} /> },
+    { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     { key: 'unitNumber',  header: t('admin.currentUnit'),render: (r) => r.unitNumber || '—' },
     { key: 'moveInDate',  header: t('leases.startDateCol'),    render: (r) => r.moveInDate || '—' },
     { 

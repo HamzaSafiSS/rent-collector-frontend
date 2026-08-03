@@ -48,7 +48,7 @@ export default function GlobalUnitsPage() {
   const columns = [
     { key: 'propertyName', header: t('units.property'), render: (r) => <span className="font-medium text-slate-300">{r.propertyName}</span> },
     { key: 'unitNumber',   header: t('units.unit'),     render: (r) => <span className="font-bold text-slate-100">{r.unitNumber}</span> },
-    { key: 'status',       header: t('units.status'),   render: (r) => <Badge label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+    { key: 'status',       header: t('units.status'),   render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     { key: 'baseRent',     header: t('units.baseRent'),render: (r) => `ETB ${Number(r.baseRent).toLocaleString()}` },
     { key: 'actions',      header: t('common.actions'),  render: (r) => (
       <Button size="sm" variant="secondary" onClick={() => navigate(`/landlord/properties/${r.propertyId}`)}>{t('common.viewProperty')}</Button>

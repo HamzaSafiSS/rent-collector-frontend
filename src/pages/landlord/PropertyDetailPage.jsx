@@ -149,7 +149,7 @@ export default function PropertyDetailPage() {
   // ── Table columns ──────────────────────────────────────────────────────────
   const unitColumns = [
     { key: 'unitNumber', header: t('units.unitNo') },
-    { key: 'status',     header: t('units.status'),  render: (r) => <Badge label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+    { key: 'status',     header: t('units.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     {
       key: 'actions', header: t('common.actions'),
       render: (row) => (

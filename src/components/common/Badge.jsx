@@ -19,8 +19,8 @@ const STATUS_MAP = {
   TERMINATED:           'neutral',
 };
 
-export default function Badge({ label, variant, className = '' }) {
-  const resolvedVariant = variant || STATUS_MAP[label] || 'neutral';
+export default function Badge({ label, statusKey, variant, className = '' }) {
+  const resolvedVariant = variant || STATUS_MAP[statusKey] || STATUS_MAP[label] || 'neutral';
 
   return (
     <span

@@ -152,7 +152,7 @@ export default function PaymentsPage() {
     { key: 'propertyName',  header: t('leases.property') },
     { key: 'paymentMonth',  header: t('payments.month') },
     { key: 'amount',        header: t('payments.amountETB'), render: (r) => Number(r.amount).toLocaleString() },
-    { key: 'status',        header: t('leases.status'),      render: (r) => <Badge label={r.status} /> },
+    { key: 'status',        header: t('leases.status'),      render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     { key: 'uploadedAt',    header: t('payments.uploaded'),    render: (r) => r.uploadedAt ? new Date(r.uploadedAt).toLocaleDateString() : '—' },
     {
       key: 'actions', header: t('common.actions'),

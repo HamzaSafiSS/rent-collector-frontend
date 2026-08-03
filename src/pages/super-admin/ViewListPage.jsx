@@ -26,7 +26,7 @@ const getCategories = (t) => ({
       { key: 'fullName',    header: t('admin.name') },
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
-      { key: 'status',      header: t('admin.status'),  render: (r) => <Badge label={r.status} /> },
+      { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     ],
     detailFields: [
@@ -46,7 +46,7 @@ const getCategories = (t) => ({
       { key: 'fullName',    header: t('admin.name') },
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
-      { key: 'status',      header: t('admin.status'),  render: (r) => <Badge label={r.status} /> },
+      { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     ],
     detailFields: [
@@ -69,7 +69,7 @@ const getCategories = (t) => ({
       { key: 'fullName',    header: t('admin.name') },
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
-      { key: 'status',      header: t('admin.status'),  render: (r) => <Badge label={r.status} /> },
+      { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     ],
     detailFields: [
@@ -89,7 +89,7 @@ const getCategories = (t) => ({
       { key: 'fullName',    header: t('tenants.name') },
       { key: 'email',       header: t('tenants.email') },
       { key: 'phoneNumber', header: t('tenants.phone'),      render: (r) => r.phoneNumber || '—' },
-      { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge label={r.status} /> },
+      { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       { key: 'unitNumber',  header: t('admin.currentUnit'),render: (r) => r.unitNumber || '—' },
       { key: 'moveInDate',  header: t('tenants.moveInDate', 'Move-in'),    render: (r) => r.moveInDate || '—' },
     ],
@@ -156,7 +156,7 @@ const getCategories = (t) => ({
     columns: [
       { key: 'unitNumber',   header: t('units.unitNumber', 'Unit No.') },
       { key: 'propertyName', header: t('nav.properties') },
-      { key: 'status',       header: t('units.status', 'Status'),   render: (r) => <Badge label={r.status} /> },
+      { key: 'status',       header: t('units.status', 'Status'),   render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       { key: 'baseRent',     header: t('units.baseRentETB', 'Base Rent'), render: (r) => r.baseRent ? `ETB ${Number(r.baseRent).toLocaleString()}` : '—' },
       { key: 'landlordName', header: t('nav.landlords') },
     ],
@@ -181,7 +181,7 @@ const getCategories = (t) => ({
       { key: 'propertyName',    header: t('nav.properties') },
       { key: 'monthlyRent',     header: t('leases.monthlyRentETB', 'Rent'), render: (r) => Number(r.monthlyRent).toLocaleString() },
       { key: 'startDate',       header: t('leases.startDate', 'Start Date') },
-      { key: 'status',          header: t('leases.status', 'Status'),   render: (r) => <Badge label={r.status} /> },
+      { key: 'status',          header: t('leases.status', 'Status'),   render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     ],
     detailFields: [
       { label: 'ID',       key: 'id' },
@@ -200,7 +200,7 @@ const getCategories = (t) => ({
 function DetailValue({ field, item }) {
   const value = item[field.key] ?? (field.fallbackKey ? item[field.fallbackKey] : null);
   if (value === null || value === undefined || value === '') return <span className="text-slate-400">—</span>;
-  if (field.badge) return <Badge label={value} />;
+  if (field.badge) return <Badge statusKey={value} label={value ? t(`common.status${value.charAt(0) + value.slice(1).toLowerCase()}`, { defaultValue: value }) : ''} />;
   if (field.date) return <span>{new Date(value).toLocaleDateString()}</span>;
   if (field.currency) return <span>ETB {Number(value).toLocaleString()}</span>;
   return <span>{value}</span>;

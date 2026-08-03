@@ -91,7 +91,7 @@ export default function ReviewModal({
         <DetailRow label={t('payments.propertyDetail')}     value={payment.propertyName} />
         <DetailRow label={t('payments.monthDetail')}        value={payment.paymentMonth} />
         <DetailRow label={t('payments.amountETB')}          value={Number(payment.amount).toLocaleString()} />
-        <DetailRow label={t('payments.statusDetail')}       value={<Badge label={payment.status} />} />
+        <DetailRow label={t('payments.statusDetail')}       value={<Badge statusKey={payment.status} label={payment.status ? t(`common.status${payment.status.charAt(0) + payment.status.slice(1).toLowerCase()}`, { defaultValue: payment.status }) : ''} />} />
         <DetailRow label={t('payments.uploaded')}           value={payment.uploadedAt ? new Date(payment.uploadedAt).toLocaleString() : '—'} />
         {payment.verifiedAt && (
           <DetailRow label={t('payments.reviewed')}         value={new Date(payment.verifiedAt).toLocaleString()} />

@@ -40,7 +40,7 @@ export default function MyLeasePage() {
                 <h3 className="font-semibold text-slate-100 text-lg">{lease.propertyName}</h3>
                 <p className="text-slate-500 text-sm mt-0.5">{t('units.unit')}: {lease.unitNumber}</p>
               </div>
-              <Badge label={lease.status} />
+              <Badge statusKey={lease.status} label={lease.status ? t(`common.status${lease.status.charAt(0) + lease.status.slice(1).toLowerCase()}`, { defaultValue: lease.status }) : ''} />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
               <div>
