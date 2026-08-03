@@ -354,31 +354,31 @@ export default function AdminViewListPage() {
       />
 
       <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
-        <div className="text-sm font-medium text-slate-400">Filters:</div>
+        <div className="text-sm font-medium text-slate-400">{t('common.filters')}</div>
         {category !== 'properties' && (
           <select 
             value={statusFilter} 
             onChange={e => setStatusFilter(e.target.value)}
             className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
-            <option value="">All Statuses</option>
+            <option value="">{t('common.allStatuses')}</option>
             {category === 'units' ? (
               <>
-                <option value="AVAILABLE">Available</option>
-                <option value="OCCUPIED">Occupied</option>
-                <option value="MAINTENANCE">Maintenance</option>
+                <option value="AVAILABLE">{t('common.statusAvailable')}</option>
+                <option value="OCCUPIED">{t('common.statusOccupied')}</option>
+                <option value="MAINTENANCE">{t('common.statusMaintenance')}</option>
               </>
             ) : category === 'leases' ? (
               <>
-                <option value="ACTIVE">Active</option>
-                <option value="TERMINATED">Terminated</option>
-                <option value="CANCELLED">Cancelled</option>
+                <option value="ACTIVE">{t('common.statusActive')}</option>
+                <option value="TERMINATED">{t('common.statusTerminated')}</option>
+                <option value="CANCELLED">{t('common.statusCancelled')}</option>
               </>
             ) : (
               <>
-                <option value="Active">Active</option>
-                <option value="Suspended">Suspended</option>
-                <option value="Pending">Pending</option>
+                <option value="Active">{t('common.statusActive')}</option>
+                <option value="Suspended">{t('common.statusSuspended')}</option>
+                <option value="Pending">{t('common.statusPending')}</option>
               </>
             )}
           </select>
@@ -389,23 +389,23 @@ export default function AdminViewListPage() {
             onChange={e => setMonthFilter(e.target.value)}
             className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
-            <option value="">All Months</option>
-            <option value="01">January</option>
-            <option value="02">February</option>
-            <option value="03">March</option>
-            <option value="04">April</option>
-            <option value="05">May</option>
-            <option value="06">June</option>
-            <option value="07">July</option>
-            <option value="08">August</option>
-            <option value="09">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
+            <option value="">{t('common.allMonths')}</option>
+            <option value="01">{t('common.month01')}</option>
+            <option value="02">{t('common.month02')}</option>
+            <option value="03">{t('common.month03')}</option>
+            <option value="04">{t('common.month04')}</option>
+            <option value="05">{t('common.month05')}</option>
+            <option value="06">{t('common.month06')}</option>
+            <option value="07">{t('common.month07')}</option>
+            <option value="08">{t('common.month08')}</option>
+            <option value="09">{t('common.month09')}</option>
+            <option value="10">{t('common.month10')}</option>
+            <option value="11">{t('common.month11')}</option>
+            <option value="12">{t('common.month12')}</option>
           </select>
           <input
             type="number"
-            placeholder="Year"
+            placeholder={t('common.yearPlaceholder')}
             value={yearFilter}
             onChange={e => setYearFilter(e.target.value)}
             className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
@@ -416,7 +416,7 @@ export default function AdminViewListPage() {
             onClick={() => { setStatusFilter(''); setDateFilter(''); setMonthFilter(''); setYearFilter(''); }}
             className="text-sm text-emerald-400 hover:underline"
           >
-            Clear
+            {t('common.clear')}
           </button>
         )}
       </div>
