@@ -23,6 +23,8 @@
     "and": "and",
     "of": "of",
     "results": "results",
+    "records": "{{count}} records",
+    "recordsSingular": "{{count}} record",
     "showing": "Showing",
     "previous": "← Previous",
     "next": "Next →",
@@ -35,7 +37,8 @@
     "selectProperty": "Select Property",
     "choosePropertySubtitle": "Choose a property to view its {{item}}",
     "noResultsFilter": "No results match the current filter.",
-    "viewProperty": "View Property"
+    "viewProperty": "View Property",
+    "backToDashboard": "← Back to Dashboard"
   },
 
   "portal": {
@@ -158,12 +161,26 @@
 
     "tenantTitle": "My Dashboard",
     "tenantSubtitle": "Your rental summary",
+    "myDashboard": "My Dashboard",
+    "rentalSummary": "Your rental summary",
     "activeLeases": "Active Leases",
     "pendingPayments": "Pending Payments",
     "rejectedPayments": "Rejected Payments",
     "unpaidLeases": "Unpaid Leases",
     "dueSoonTenant": "Due Soon (≤ 3 Days)",
-    "failedLoadDashboard": "Failed to load dashboard data."
+    "failedLoadDashboard": "Failed to load dashboard data.",
+    "failedLoadData": "Failed to load dashboard data.",
+    "couldNotLoadStats": "Could not load stats.",
+    
+    "adminTitle": "Admin Dashboard",
+    "superAdminTitle": "Super Admin Dashboard",
+    "platformOverview": "Platform Overview",
+    "totalLandlords": "Total Landlords",
+    "suspendedLandlords": "Suspended Landlords",
+    "totalTenants": "Total Tenants",
+    "totalProperties": "Total Properties",
+    "totalLeases": "Total Leases",
+    "totalAdmins": "Total Admins"
   },
 
   "properties": {
@@ -202,7 +219,8 @@
     "createPropertyBtn": "Create property",
     "clickToUpload": "Click to upload or drag & drop",
     "imageFormats": "JPEG, PNG or WebP (max 10MB)",
-    "propertyPreview": "Property preview"
+    "propertyPreview": "Property preview",
+    "createdAt": "Created At"
   },
 
   "units": {
@@ -247,6 +265,8 @@
     "leasesTitle": "Leases - {{name}}",
     "leaseCount": "{{count}} leases",
     "leaseCountSingular": "{{count}} lease",
+    "myLeasesTitle": "My Leases",
+    "myLeasesSubtitle": "View all your active lease agreements.",
     "newLease": "+ New Lease",
     "createNewLease": "Create New Lease",
     "terminateLeaseTitle": "Terminate Lease",
@@ -323,6 +343,7 @@
     "uploaded": "Uploaded",
     "reviewed": "Reviewed",
 
+    "paymentMethodsTitle": "How to Pay",
     "addPaymentMethodTitle": "Add Payment Method",
     "addPaymentMethodDesc": "Add a new payment method for tenants to see when they pay rent.",
     "wallet": "Wallet",
@@ -395,6 +416,11 @@
   },
 
   "tenants": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "status": "Status",
+    "moveInDate": "Move-in Date",
     "tenantsTitle": "Tenants - {{name}}",
     "tenantCount": "{{count}} tenants",
     "tenantCountSingular": "{{count}} tenant",
@@ -466,6 +492,31 @@
     "activeLeases": "Active Leases",
     "manageLandlordsTitle": "Manage Landlords",
     "manageTenantsTitle": "Manage Tenants",
+    "manageAdminsTitle": "Manage Admins",
+    "adminsCount": "{{count}} admins",
+    "adminsCountSingular": "{{count}} admin",
+    "failedLoadLandlords": "Failed to load landlords.",
+    "landlordSuspended": "Landlord {{name}} suspended.",
+    "landlordActivated": "Landlord {{name}} activated.",
+    "actionFailed": "Action failed.",
+    "activate": "Activate",
+    "suspend": "Suspend",
+    "viewDashboard": "View Dashboard",
+    "landlordsCount": "{{count}} landlords",
+    "landlordsCountSingular": "{{count}} landlord",
+    "noLandlordsFound": "No landlords found.",
+    "tenantsCount": "{{count}} tenants platform-wide",
+    "tenantsCountSingular": "{{count}} tenant platform-wide",
+    "noTenantsFound": "No tenants found.",
+    "suspendLandlordTitle": "Suspend Landlord",
+    "activateLandlordTitle": "Activate Landlord",
+    "suspendLandlordMsg": "Suspend landlord \"{{name}}\"? They will not be able to log in.",
+    "activateLandlordMsg": "Activate landlord \"{{name}}\"? They will be able to log in.",
+    "joined": "Joined",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
     "createAdmin": "Create admin",
     "adminCreated": "Admin created.",
     "adminUpdated": "Admin updated.",
@@ -481,7 +532,13 @@
     "resetPasswordTitle": "Reset Password",
     "resetPasswordMessage": "Reset password for \"{{name}}\"? They will receive a temporary password.",
     "passwordReset": "Password reset.",
-    "failedResetPassword": "Failed to reset password."
+    "failedResetPassword": "Failed to reset password.",
+    "newAdminBtn": "+ New Admin",
+    "noAdminsFound": "No admins found.",
+    "createAdminTitle": "Create Admin",
+    "editAdminTitle": "Edit Admin",
+    "failedLoadAdmins": "Failed to load admins.",
+    "currentUnit": "Current Unit"
   },
 
   "superAdmin": {
@@ -540,16 +597,46 @@
     "results": "results"
   },
 
+  "nav": {
+    "dashboard": "Dashboard",
+    "properties": "Properties",
+    "tenants": "Tenants",
+    "leases": "Leases",
+    "payments": "Payments",
+    "reports": "Reports",
+    "landlords": "Landlords",
+    "auditLogs": "Audit Logs",
+    "manageAdmins": "Manage Admins",
+    "myLease": "My Lease",
+    "howToPay": "How To Pay",
+    "uploadPayment": "Upload Payment",
+    "paymentHistory": "Payment History"
+  },
+
   "audit": {
     "auditLogTitle": "Audit Log",
+    "auditLogsTitle": "Audit Logs",
     "auditLogSubtitle": "Track all system activities",
+    "totalEntriesCount": "Total Entries: {{count}}",
+    "failedLoadLogs": "Failed to load audit logs.",
     "noAuditEntries": "No audit entries found.",
+    "id": "ID",
+    "time": "Time",
     "timestamp": "Timestamp",
     "actor": "Actor",
+    "role": "Role",
+    "actionCol": "Action",
     "action": "Action",
+    "allActions": "All Actions",
+    "entity": "Entity",
     "entityType": "Entity Type",
+    "allTypes": "All Types",
     "entityId": "Entity ID",
-    "description": "Description"
+    "description": "Description",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "clearFilters": "Clear",
+    "applyFilters": "Apply"
   },
 
   "months": {

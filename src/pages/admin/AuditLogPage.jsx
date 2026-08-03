@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader, Button, Input, Pagination, Alert } from '../../components/common';
 import AuditLogTable from '../../components/audit/AuditLogTable';
 import { auditApi } from '../../api/auditApi';
@@ -23,6 +24,7 @@ const PAGE_SIZE = 20;
 
 export default function AdminAuditLog() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [logs, setLogs]                 = useState([]);
   const [page, setPage]                 = useState(0);
@@ -60,6 +62,13 @@ export default function AdminAuditLog() {
 
   return (
     <>
+      <button
+        onClick={() => navigate('/admin/dashboard')}
+        className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
+      >
+        {t('common.backToDashboard')}
+      </button>
+
       <PageHeader title={t('audit.auditLogsTitle')} subtitle={t('audit.entriesCount', { count: totalElements })} />
 
       <form

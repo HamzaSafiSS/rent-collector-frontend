@@ -61,10 +61,10 @@ export default function ManageLandlordsPage() {
   }
 
   const columns = [
-    { key: 'fullName',    header: t('tenants.name') },
-    { key: 'email',       header: t('tenants.email') },
-    { key: 'phoneNumber', header: t('tenants.phone'),   render: (r) => r.phoneNumber || '—' },
-    { key: 'status',      header: t('tenants.status'),  render: (r) => <Badge label={r.status} /> },
+    { key: 'fullName',    header: t('admin.name') },
+    { key: 'email',       header: t('admin.email') },
+    { key: 'phoneNumber', header: t('payments.phoneNumber'),   render: (r) => r.phoneNumber || '—' },
+    { key: 'status',      header: t('admin.status'),  render: (r) => <Badge label={r.status} /> },
     { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     {
       key: 'actions', header: t('common.actions'),
@@ -130,7 +130,7 @@ export default function ManageLandlordsPage() {
             : t('admin.activateLandlordMsg', { name: confirmTarget?.landlord?.fullName })
         }
         confirmText={action === 'suspend' ? t('admin.suspend') : t('admin.activate')}
-        variant={action === 'suspend' ? 'danger' : 'success'}
+        variant={action === 'suspend' ? 'danger' : 'primary'}
       />
     </>
   );

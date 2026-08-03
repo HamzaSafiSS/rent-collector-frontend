@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader, Button, Input, Pagination, Alert, Spinner } from '../../components/common';
 import AuditLogTable from '../../components/audit/AuditLogTable';
 import { auditApi } from '../../api/auditApi';
@@ -22,6 +23,7 @@ const ENTITY_TYPES = ['', 'USER', 'PROPERTY', 'UNIT', 'LEASE', 'PAYMENT', 'TENAN
 
 export default function AuditLogPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [logs, setLogs]           = useState([]);
   const [page, setPage]           = useState(0);
   const [totalPages, setTotalPages]   = useState(0);
@@ -78,6 +80,13 @@ export default function AuditLogPage() {
 
   return (
     <>
+      <button
+        onClick={() => navigate('/super-admin/dashboard')}
+        className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
+      >
+        {t('common.backToDashboard')}
+      </button>
+
       <PageHeader title={t('audit.auditLogsTitle')} subtitle={t('audit.totalEntriesCount', { count: totalElements })} />
 
       {/* Filters */}

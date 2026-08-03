@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import {
   PageHeader, Table, Badge, Button, Modal,
   ConfirmDialog, Pagination, Spinner, Alert,
@@ -14,6 +15,7 @@ const PAGE_SIZE = 10;
 
 export default function ManageAdminsPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const toast = useToast();
 
   const [admins, setAdmins]           = useState([]);
@@ -113,11 +115,11 @@ export default function ManageAdminsPage() {
 
   // ── Table columns ──────────────────────────────────────────────────────────
   const columns = [
-    { key: 'fullName',  header: t('tenants.name') },
-    { key: 'email',     header: t('tenants.email') },
-    { key: 'phoneNumber', header: t('tenants.phone'), render: (r) => r.phoneNumber || '—' },
-    { key: 'status',    header: t('tenants.status'), render: (r) => <Badge label={r.status} /> },
-    { key: 'createdAt', header: t('admin.created'), render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+    { key: 'fullName',  header: t('admin.name') },
+    { key: 'email',     header: t('admin.email') },
+    { key: 'phoneNumber', header: t('payments.phoneNumber'), render: (r) => r.phoneNumber || '—' },
+    { key: 'status',    header: t('admin.status'), render: (r) => <Badge label={r.status} /> },
+    { key: 'createdAt', header: t('admin.joined'), render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
     {
       key: 'actions',
       header: t('common.actions'),
@@ -143,6 +145,13 @@ export default function ManageAdminsPage() {
 
   return (
     <>
+      <button
+        onClick={() => navigate('/super-admin/dashboard')}
+        className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
+      >
+        {t('common.backToDashboard')}
+      </button>
+
       <PageHeader
         title={t('admin.manageAdminsTitle')}
         subtitle={totalElements !== 1 ? t('admin.adminsCount', { count: totalElements }) : t('admin.adminsCountSingular', { count: totalElements })}

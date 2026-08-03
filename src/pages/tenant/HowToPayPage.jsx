@@ -83,7 +83,7 @@ export default function HowToPayPage() {
           )}
 
           {leases.length === 0 && !loading && (
-            <Alert type="info" message={t('payments.noActiveLeasesInfo')} />
+            <Alert type="info" message={t('payments.noActiveLeasesAlert')} />
           )}
 
           {leaseId && (
@@ -116,7 +116,7 @@ export default function HowToPayPage() {
                       </div>
                     </div>
                   ) : (
-                    <Alert type="warning" message={t('payments.contactLandlordNotice')} />
+                    <Alert type="warning" message={t('payments.contactLandlord')} />
                   )}
                 </>
               )}

@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { PageHeader, Table, Badge, Pagination, Alert, Button } from '../../components/common';
 import { tenantApi } from '../../api/tenantApi';
 
 const PAGE_SIZE = 10;
 
 export default function ManageTenantsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [tenants, setTenants]         = useState([]);
   const [page, setPage]               = useState(0);
@@ -15,18 +17,18 @@ export default function ManageTenantsPage() {
   const [error, setError]             = useState('');
 
   const COLUMNS = [
-    { key: 'fullName',    header: 'Name' },
-    { key: 'email',       header: 'Email' },
-    { key: 'phoneNumber', header: 'Phone',      render: (r) => r.phoneNumber || '—' },
-    { key: 'status',      header: 'Status',     render: (r) => <Badge label={r.status} /> },
-    { key: 'unitNumber',  header: 'Current Unit',render: (r) => r.unitNumber || '—' },
-    { key: 'moveInDate',  header: 'Move-in',    render: (r) => r.moveInDate || '—' },
+    { key: 'fullName',    header: t('tenants.name') },
+    { key: 'email',       header: t('tenants.email') },
+    { key: 'phoneNumber', header: t('tenants.phone'),      render: (r) => r.phoneNumber || '—' },
+    { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge label={r.status} /> },
+    { key: 'unitNumber',  header: t('admin.currentUnit'),render: (r) => r.unitNumber || '—' },
+    { key: 'moveInDate',  header: t('leases.startDateCol'),    render: (r) => r.moveInDate || '—' },
     { 
       key: 'actions', 
-      header: 'Actions',
+      header: t('common.actions'),
       render: (r) => (
         <Button size="sm" variant="primary" onClick={() => navigate(`/admin/view/tenant-dashboard/${r.id}`)}>
-          View Dashboard
+          {t('admin.viewDashboard')}
         </Button>
       )
     }
@@ -42,25 +44,25 @@ export default function ManageTenantsPage() {
       setTotalPages(data?.totalPages    || 0);
       setTotalElements(data?.totalElements || 0);
     } catch {
-      setError('Failed to load tenants.');
+      setError(t('tenants.failedLoadTenants'));
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, t]);
 
   useEffect(() => { loadTenants(); }, [loadTenants]);
 
   return (
     <>
       <PageHeader
-        title="All Tenants"
-        subtitle={`${totalElements} tenant${totalElements !== 1 ? 's' : ''} platform-wide`}
+        title={t('admin.manageTenantsTitle')}
+        subtitle={totalElements !== 1 ? t('admin.tenantsCount', { count: totalElements }) : t('admin.tenantsCountSingular', { count: totalElements })}
       />
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
       <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden">
-        <Table columns={COLUMNS} data={tenants} loading={loading} emptyMessage="No tenants found." />
+        <Table columns={COLUMNS} data={tenants} loading={loading} emptyMessage={t('admin.noTenantsFound')} />
         <div className="px-4 border-t border-slate-100">
           <Pagination
             page={page} totalPages={totalPages}

@@ -23,6 +23,8 @@
     "and": "እና",
     "of": "ከ",
     "results": "ውጤቶች",
+    "records": "{{count}} መዝገቦች",
+    "recordsSingular": "{{count}} መዝገብ",
     "showing": "በማሳየት ላይ",
     "previous": "← ቀዳሚ",
     "next": "ቀጣይ →",
@@ -35,7 +37,8 @@
     "selectProperty": "ንብረት ይምረጡ",
     "choosePropertySubtitle": "{{item}}ን ለማየት ንብረት ይምረጡ",
     "noResultsFilter": "ከአሁኑ ማጣሪያ ጋር የሚዛመድ ውጤት የለም።",
-    "viewProperty": "ንብረት ይመልከቱ"
+    "viewProperty": "ንብረት ይመልከቱ",
+    "backToDashboard": "← ወደ ዳሽቦርድ ተመለስ"
   },
 
   "portal": {
@@ -158,12 +161,26 @@
 
     "tenantTitle": "ዳሽቦርዴ",
     "tenantSubtitle": "የኪራይ ማጠቃለያዎ",
+    "myDashboard": "የእኔ ዳሽቦርድ",
+    "rentalSummary": "የእርስዎ ኪራይ ማጠቃለያ",
     "activeLeases": "ንቁ ውሎች",
     "pendingPayments": "በመጠባበቂያ ላይ ያሉ ክፍያዎች",
     "rejectedPayments": "ውድቅ የተደረጉ ክፍያዎች",
     "unpaidLeases": "ያልተከፈሉ ውሎች",
     "dueSoonTenant": "በቅርቡ የሚደርሱ (≤ 3 ቀናት)",
-    "failedLoadDashboard": "የዳሽቦርድ ውሂብ መጫን አልተሳካም።"
+    "failedLoadDashboard": "የዳሽቦርድ ውሂብ መጫን አልተሳካም።",
+    "failedLoadData": "የዳሽቦርድ ውሂብ መጫን አልተሳካም።",
+    "couldNotLoadStats": "ስታትስቲክስ መጫን አልተቻለም።",
+    
+    "adminTitle": "የአድሚን ዳሽቦርድ",
+    "superAdminTitle": "የሱፐር አድሚን ዳሽቦርድ",
+    "platformOverview": "የፕላትፎርም አጠቃላይ እይታ",
+    "totalLandlords": "ጠቅላላ አከራዮች",
+    "suspendedLandlords": "የታገዱ አከራዮች",
+    "totalTenants": "ጠቅላላ ተከራዮች",
+    "totalProperties": "ጠቅላላ ንብረቶች",
+    "totalLeases": "ጠቅላላ ውሎች",
+    "totalAdmins": "ጠቅላላ አስተዳዳሪዎች"
   },
 
   "properties": {
@@ -202,7 +219,8 @@
     "createPropertyBtn": "ንብረት ፍጠር",
     "clickToUpload": "ለመስቀል ጠቅ ያድርጉ ወይም ይጎትቱ",
     "imageFormats": "JPEG, PNG ወይም WebP (ከፍተኛ 10ሜባ)",
-    "propertyPreview": "የንብረት ቅድመ-ዕይታ"
+    "propertyPreview": "የንብረት ቅድመ-ዕይታ",
+    "createdAt": "የተፈጠረበት ቀን"
   },
 
   "units": {
@@ -247,6 +265,10 @@
     "leasesTitle": "ውሎች - {{name}}",
     "leaseCount": "{{count}} ውሎች",
     "leaseCountSingular": "{{count}} ውል",
+    "managementTitle": "የውል አስተዳደር",
+    "myLeasesTitle": "የእኔ ውሎች",
+    "myLeasesSubtitle": "ሁሉንም ንቁ የውል ስምምነቶችዎን ይመልከቱ።",
+    "allLeasesTitle": "ሁሉንም ውሎች",
     "newLease": "+ አዲስ ውል",
     "createNewLease": "አዲስ ውል ፍጠር",
     "terminateLeaseTitle": "ውል አቋርጥ",
@@ -322,7 +344,8 @@
     "statusDetail": "ሁኔታ",
     "uploaded": "የተሰቀለ",
     "reviewed": "የተገመገመ",
-
+    
+    "paymentMethodsTitle": "እንዴት እንደሚከፍሉ",
     "addPaymentMethodTitle": "የክፍያ ዘዴ ጨምር",
     "addPaymentMethodDesc": "ተከራዮች ኪራይ ሲከፍሉ የሚያዩት አዲስ የክፍያ ዘዴ ጨምር።",
     "wallet": "ዋሌት",
@@ -395,6 +418,11 @@
   },
 
   "tenants": {
+    "name": "ስም",
+    "email": "ኢሜይል",
+    "phone": "ስልክ",
+    "status": "ሁኔታ",
+    "moveInDate": "የገባበት ቀን",
     "tenantsTitle": "ተከራዮች - {{name}}",
     "tenantCount": "{{count}} ተከራዮች",
     "tenantCountSingular": "{{count}} ተከራይ",
@@ -466,6 +494,31 @@
     "activeLeases": "ንቁ ውሎች",
     "manageLandlordsTitle": "አከራዮችን አስተዳድር",
     "manageTenantsTitle": "ተከራዮችን አስተዳድር",
+    "manageAdminsTitle": "አስተዳዳሪዎችን አስተዳድር",
+    "adminsCount": "{{count}} አስተዳዳሪዎች",
+    "adminsCountSingular": "{{count}} አስተዳዳሪ",
+    "failedLoadLandlords": "አከራዮችን መጫን አልተሳካም።",
+    "landlordSuspended": "አከራይ {{name}} ታግዷል።",
+    "landlordActivated": "አከራይ {{name}} ነቅቷል።",
+    "actionFailed": "ድርጊቱ አልተሳካም።",
+    "activate": "አንቃ",
+    "suspend": "አግድ",
+    "viewDashboard": "ዳሽቦርድ ይመልከቱ",
+    "landlordsCount": "{{count}} አከራዮች",
+    "landlordsCountSingular": "{{count}} አከራይ",
+    "noLandlordsFound": "ምንም አከራይ አልተገኘም።",
+    "tenantsCount": "{{count}} ተከራዮች",
+    "tenantsCountSingular": "{{count}} ተከራይ",
+    "noTenantsFound": "ምንም ተከራይ አልተገኘም።",
+    "suspendLandlordTitle": "አከራይ አግድ",
+    "activateLandlordTitle": "አከራይ አንቃ",
+    "suspendLandlordMsg": "አከራይ \"{{name}}\" ይታገድ? ወደ ሲስተሙ መግባት አይችሉም።",
+    "activateLandlordMsg": "አከራይ \"{{name}}\" ይነቃ? ወደ ሲስተሙ መግባት ይችላሉ።",
+    "joined": "የተመዘገበበት",
+    "name": "ስም",
+    "email": "ኢሜይል",
+    "role": "ሚና",
+    "status": "ሁኔታ",
     "createAdmin": "አስተዳዳሪ ፍጠር",
     "adminCreated": "አስተዳዳሪ ተፈጠረ።",
     "adminUpdated": "አስተዳዳሪ ተዘምኗል።",
@@ -481,7 +534,13 @@
     "resetPasswordTitle": "የይለፍ ቃል ዳግም አስጀምር",
     "resetPasswordMessage": "ለ\"{{name}}\" የይለፍ ቃል ዳግም ይጀመር? ጊዜያዊ የይለፍ ቃል ይደርሳቸዋል።",
     "passwordReset": "የይለፍ ቃል ዳግም ተጀምሯል።",
-    "failedResetPassword": "የይለፍ ቃል ዳግም ማስጀመር አልተሳካም።"
+    "failedResetPassword": "የይለፍ ቃል ዳግም ማስጀመር አልተሳካም።",
+    "newAdminBtn": "+ አዲስ አስተዳዳሪ",
+    "noAdminsFound": "ምንም አስተዳዳሪ አልተገኘም።",
+    "createAdminTitle": "አስተዳዳሪ ፍጠር",
+    "editAdminTitle": "አስተዳዳሪ አርትዕ",
+    "failedLoadAdmins": "አስተዳዳሪዎችን መጫን አልተሳካም።",
+    "currentUnit": "የአሁኑ ክፍል"
   },
 
   "superAdmin": {
@@ -540,16 +599,46 @@
     "results": "ውጤቶች"
   },
 
+  "nav": {
+    "dashboard": "ዳሽቦርድ",
+    "properties": "ንብረቶች",
+    "tenants": "ተከራዮች",
+    "leases": "ውሎች",
+    "payments": "ክፍያዎች",
+    "reports": "ሪፖርቶች",
+    "landlords": "አከራዮች",
+    "auditLogs": "የእንቅስቃሴ መዝገቦች",
+    "manageAdmins": "አስተዳዳሪዎችን አስተዳድር",
+    "myLease": "የእኔ ውል",
+    "howToPay": "እንዴት እንደሚከፍሉ",
+    "uploadPayment": "ክፍያ ስቀል",
+    "paymentHistory": "የክፍያ ታሪክ"
+  },
+
   "audit": {
     "auditLogTitle": "የኦዲት ምዝግብ",
+    "auditLogsTitle": "የእንቅስቃሴ መዝገቦች",
     "auditLogSubtitle": "ሁሉንም የስርዓት እንቅስቃሴዎች ይከታተሉ",
+    "totalEntriesCount": "ጠቅላላ ግቤቶች: {{count}}",
+    "failedLoadLogs": "የኦዲት መዝገቦችን መጫን አልተሳካም።",
     "noAuditEntries": "የኦዲት ግቤቶች አልተገኙም።",
+    "id": "መታወቂያ",
+    "time": "ሰዓት",
     "timestamp": "ጊዜ",
-    "actor": "ተዋናይ",
+    "actor": "ተጠቃሚ",
+    "role": "ሚና",
+    "actionCol": "ድርጊት",
     "action": "ድርጊት",
+    "allActions": "ሁሉም ድርጊቶች",
+    "entity": "አካል",
     "entityType": "ዓይነት",
+    "allTypes": "ሁሉም ዓይነቶች",
     "entityId": "መታወቂያ",
-    "description": "መግለጫ"
+    "description": "መግለጫ",
+    "fromDate": "ከ ቀን",
+    "toDate": "እስከ ቀን",
+    "clearFilters": "አጽዳ",
+    "applyFilters": "ተግብር"
   },
 
   "months": {
