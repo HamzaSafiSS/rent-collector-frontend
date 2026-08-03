@@ -149,7 +149,7 @@ export default function PropertyDetailPage() {
   // ── Table columns ──────────────────────────────────────────────────────────
   const unitColumns = [
     { key: 'unitNumber', header: t('units.unitNo') },
-    { key: 'status',     header: t('units.status'),  render: (r) => <Badge label={r.status} /> },
+    { key: 'status',     header: t('units.status'),  render: (r) => <Badge label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     {
       key: 'actions', header: t('common.actions'),
       render: (row) => (
@@ -246,7 +246,7 @@ export default function PropertyDetailPage() {
       {/* Units table */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-100">{filterStatus === 'ALL' ? t('units.allUnits') : filterStatus} <span className="text-slate-500 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
+          <h2 className="text-xl font-bold text-slate-100">{filterStatus === 'ALL' ? t('units.allUnits') : t(`common.status${filterStatus.charAt(0) + filterStatus.slice(1).toLowerCase()}`, { defaultValue: filterStatus })} <span className="text-slate-500 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
         </div>
         <Table
           columns={unitColumns}

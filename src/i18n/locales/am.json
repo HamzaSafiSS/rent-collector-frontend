@@ -66,14 +66,12 @@
     "month12": "ታኅሣሥ (December)",
     "status": "ሁኔታ"
   },
-
   "portal": {
     "admin": "አስተዳዳሪ",
     "superAdmin": "ዋና አስተዳዳሪ",
     "landlord": "አከራይ",
     "tenant": "ተከራይ"
   },
-
   "nav": {
     "dashboard": "ዳሽቦርድ",
     "properties": "ንብረቶች",
@@ -89,7 +87,6 @@
     "auditLogs": "የኦዲት ምዝግብ",
     "manageAdmins": "አስተዳዳሪዎችን አስተዳድር"
   },
-
   "auth": {
     "welcomeBack": "እንኳን ደህና መጡ። እባክዎ ይግቡ።",
     "signIn": "ግባ",
@@ -127,7 +124,6 @@
     "passwordPlaceholderSignup": "የይለፍ ቃል ያስገቡ ቢያንስ 8 ቁምፊዎች",
     "phoneNumberOptional": "ስልክ ቁጥር (አማራጭ)"
   },
-
   "validation": {
     "emailRequired": "ኢሜይል ያስፈልጋል።",
     "passwordRequired": "የይለፍ ቃል ያስፈልጋል።",
@@ -164,7 +160,6 @@
     "minimum8Chars": "ቢያንስ 8 ቁምፊዎች።",
     "mustBeDifferentFromCurrent": "ከአሁኑ የተለየ መሆን አለበት።"
   },
-
   "dashboard": {
     "landlordTitle": "የአከራይ ዳሽቦርድ",
     "myProperties": "ንብረቶቼ",
@@ -172,7 +167,7 @@
     "occupiedUnits": "የተያዙ ክፍሎች",
     "availableUnits": "ያሉ ክፍሎች",
     "maintenanceUnits": "በጥገና ላይ ያሉ ክፍሎች",
-    "dueSoon": "በቅርቡ የሚደርሱ (≤ 3 ቀናት)",
+    "dueSoon": "በቅርቡ የሚደርሱ ክፍያዎች (≤ 3 ቀናት)",
     "occupancy": "{{rate}}% ተይዟል",
     "revenueTitle": "የኪራይ ስብስብ አዝማሚያ (ባለፉት 6 ወራት)",
     "revenueSubtitle": "ወርሃዊ የኪራይ ስብስብ ግምገማ",
@@ -184,7 +179,6 @@
     "minutesAgo": "ከ{{count}} ደቂቃ በፊት",
     "hoursAgo": "ከ{{count}} ሰዓት በፊት",
     "daysAgo": "ከ{{count}} ቀን በፊት",
-
     "tenantTitle": "ዳሽቦርዴ",
     "tenantSubtitle": "የኪራይ ማጠቃለያዎ",
     "myDashboard": "የእኔ ዳሽቦርድ",
@@ -193,11 +187,10 @@
     "pendingPayments": "በመጠባበቂያ ላይ ያሉ ክፍያዎች",
     "rejectedPayments": "ውድቅ የተደረጉ ክፍያዎች",
     "unpaidLeases": "ያልተከፈሉ ውሎች",
-    "dueSoonTenant": "በቅርቡ የሚደርሱ (≤ 3 ቀናት)",
+    "dueSoonTenant": "በቅርቡ የሚደርሱ ክፍያዎች (≤ 3 ቀናት)",
     "failedLoadDashboard": "የዳሽቦርድ ውሂብ መጫን አልተሳካም።",
     "failedLoadData": "የዳሽቦርድ ውሂብ መጫን አልተሳካም።",
     "couldNotLoadStats": "ስታትስቲክስ መጫን አልተቻለም።",
-    
     "adminTitle": "የአድሚን ዳሽቦርድ",
     "superAdminTitle": "የሱፐር አድሚን ዳሽቦርድ",
     "platformOverview": "የፕላትፎርም አጠቃላይ እይታ",
@@ -208,7 +201,6 @@
     "totalLeases": "ጠቅላላ ውሎች",
     "totalAdmins": "ጠቅላላ አስተዳዳሪዎች"
   },
-
   "properties": {
     "portfolioManagement": "የፖርትፎሊዮ አስተዳደር",
     "realEstateProperties": "{{count}} የሪል ስቴት ንብረቶች",
@@ -248,7 +240,6 @@
     "propertyPreview": "የንብረት ቅድመ-ዕይታ",
     "createdAt": "የተፈጠረበት ቀን"
   },
-
   "units": {
     "globalUnitsTitle": "ጠቅላላ ክፍሎች",
     "globalUnitsSubtitle": "በሁሉም ንብረቶችዎ ውስጥ ያሉ ክፍሎችን ያስተዳድሩ",
@@ -286,7 +277,6 @@
     "property": "ንብረት",
     "unit": "ክፍል"
   },
-
   "leases": {
     "leasesTitle": "ውሎች - {{name}}",
     "leaseCount": "{{count}} ውሎች",
@@ -330,7 +320,6 @@
     "myLeaseTitle": "ውሌ",
     "myLeaseSubtitle": "የአሁን ውል ዝርዝሮችዎ"
   },
-
   "payments": {
     "paymentsTitle": "ክፍያዎች — {{name}}",
     "paymentCount": "{{count}} ክፍያዎች",
@@ -353,7 +342,6 @@
     "failedLoadPayments": "ክፍያዎችን መጫን አልተሳካም።",
     "paymentInfoSaved": "የክፍያ መረጃ ተቀምጧል።",
     "failedSavePaymentInfo": "የክፍያ መረጃ ማስቀመጥ አልተሳካም።",
-
     "reviewPaymentTitle": "ክፍያ ገምግም",
     "approve": "አጽድቅ",
     "reject": "ውድቅ አድርግ",
@@ -370,7 +358,6 @@
     "statusDetail": "ሁኔታ",
     "uploaded": "የተሰቀለ",
     "reviewed": "የተገመገመ",
-    
     "paymentMethodsTitle": "እንዴት እንደሚከፍሉ",
     "addPaymentMethodTitle": "የክፍያ ዘዴ ጨምር",
     "addPaymentMethodDesc": "ተከራዮች ኪራይ ሲከፍሉ የሚያዩት አዲስ የክፍያ ዘዴ ጨምር።",
@@ -387,7 +374,6 @@
     "phoneNumber": "ስልክ ቁጥር",
     "phoneNumberPlaceholder": "ለምሳሌ 0911234567",
     "savePaymentMethod": "የክፍያ ዘዴ አስቀምጥ",
-
     "uploadPaymentTitle": "ክፍያ ስቀል",
     "uploadPaymentSubtitle": "የክፍያ ማረጋገጫዎን ለግምገማ ያስገቡ",
     "paymentInstructions": "የክፍያ መመሪያዎች",
@@ -421,16 +407,13 @@
     "paymentUploadedSuccess": "ክፍያ በተሳካ ሁኔታ ተሰቅሏል። አከራይዎ በቅርቡ ይገመግመዋል።",
     "paymentUploaded": "ክፍያ ተሰቅሏል።",
     "failedUploadPayment": "ክፍያ መስቀል አልተሳካም።",
-
     "paymentHistoryTitle": "የክፍያ ታሪክ",
     "paymentHistorySubtitle": "ያለፉ የክፍያ ማስገቢያዎችዎ",
     "noPaymentsYet": "ገና ክፍያዎች የሉም",
-
     "paymentMethods": "የክፍያ ዘዴዎች",
     "accountName": "የመለያ ስም:",
     "accountNumberLabel": "የመለያ ቁጥር:",
     "phoneNumberLabel": "ስልክ ቁጥር:",
-
     "id": "መታወቂያ",
     "month": "ወር",
     "amount": "መጠን",
@@ -442,7 +425,6 @@
     "contactLandlord": "እባክዎ የክፍያ መመሪያዎችን ለማግኘት አከራይዎን ያነጋግሩ።",
     "failedLoadLeases": "ውሎችን መጫን አልተሳካም።"
   },
-
   "tenants": {
     "name": "ስም",
     "email": "ኢሜይል",
@@ -462,7 +444,6 @@
     "failedLoadTenants": "ተከራዮችን መጫን አልተሳካም።",
     "selectPropertyTenants": "ተከራዮችን ለማየት ንብረት ይምረጡ"
   },
-
   "reports": {
     "reportsTitle": "ሪፖርቶች — {{name}}",
     "analysePerformance": "የፖርትፎሊዮዎን አፈፃፀም ይተንትኑ",
@@ -500,16 +481,14 @@
     "totalLeases": "ጠቅላላ ውሎች",
     "failedLoadTenantReport": "የተከራይ ሪፖርት መጫን አልተሳካም።"
   },
-
   "dueSoon": {
-    "title": "በቅርቡ የሚደርሱ ተከራዮች (≤ 3 ቀናት)",
+    "title": "በቅርቡ የሚደርሱ ክፍያዎች (≤ 3 ቀናት)",
     "subtitle": "{{count}} ተከራዮች ቀጣይ ክፍያዎች አላቸው",
     "subtitleSingular": "{{count}} ተከራይ ቀጣይ ክፍያ አለው",
-    "failedLoad": "በቅርቡ የሚደርሱ ተከራዮችን መጫን አልተሳካም።",
-    "noTenantsDue": "በአሁኑ ጊዜ በቅርቡ የሚደርሱ ተከራዮች የሉም።",
+    "failedLoad": "በቅርቡ የሚደርሱ ክፍያዎችን መጫን አልተሳካም።",
+    "noTenantsDue": "በአሁኑ ጊዜ በቅርቡ የሚደርሱ ክፍያዎች የሉም።",
     "amountDueETB": "ሊከፈል ያለው (ብር)"
   },
-
   "admin": {
     "dashboardTitle": "የአስተዳዳሪ ዳሽቦርድ",
     "totalLandlords": "ጠቅላላ አከራዮች",
@@ -568,13 +547,11 @@
     "failedLoadAdmins": "አስተዳዳሪዎችን መጫን አልተሳካም።",
     "currentUnit": "የአሁኑ ክፍል"
   },
-
   "superAdmin": {
     "dashboardTitle": "የዋና አስተዳዳሪ ዳሽቦርድ",
     "totalAdmins": "ጠቅላላ አስተዳዳሪዎች",
     "manageAdminsTitle": "አስተዳዳሪዎችን አስተዳድር"
   },
-
   "profile": {
     "title": "የእኔ መገለጫ",
     "fullName": "ሙሉ ስም",
@@ -585,7 +562,6 @@
     "updatePassword": "የይለፍ ቃል ያዘምኑ",
     "passwordChanged": "የይለፍ ቃል ተቀይሯል።"
   },
-
   "empty": {
     "propertiesTitle": "ገና ንብረቶች የሉም",
     "propertiesSubtitle": "ለመጀመር የመጀመሪያውን ንብረትዎን ይጨምሩ።",
@@ -606,25 +582,21 @@
     "genericTitle": "ገና ምንም የለም",
     "genericSubtitle": "ውሂብ ሲገኝ እዚህ ይታያል።"
   },
-
   "errors": {
     "somethingWentWrong": "ስህተት ተፈጥሯል",
     "unexpectedError": "ያልተጠበቀ ስህተት ተከስቷል። እባክዎ ገፁን ያድሱ ወይም ችግሩ ከቀጠለ ድጋፍን ያነጋግሩ።",
     "refreshPage": "ገፁን አድስ"
   },
-
   "fileUpload": {
     "clickToUpload": "ለመስቀል ጠቅ ያድርጉ",
     "orDragDrop": "ወይም ይጎትቱና ይጣሉ",
     "fileFormats": "JPEG, PNG, PDF — ከፍተኛ {{size}}ሜባ"
   },
-
   "pagination": {
     "showing": "በማሳየት ላይ",
     "of": "ከ",
     "results": "ውጤቶች"
   },
-
   "nav": {
     "dashboard": "ዳሽቦርድ",
     "properties": "ንብረቶች",
@@ -640,7 +612,6 @@
     "uploadPayment": "ክፍያ ስቀል",
     "paymentHistory": "የክፍያ ታሪክ"
   },
-
   "audit": {
     "auditLogTitle": "የኦዲት ምዝግብ",
     "auditLogsTitle": "የእንቅስቃሴ መዝገቦች",
@@ -696,7 +667,6 @@
     "type_PAYMENT": "ክፍያ",
     "type_TENANT": "ተከራይ"
   },
-
   "months": {
     "january": "ጃንዋሪ",
     "february": "ፌብሩዋሪ",
