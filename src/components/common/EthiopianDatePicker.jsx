@@ -170,13 +170,13 @@ export default function EthiopianDatePicker({
           {label}
         </label>
       )}
-      <div className="flex gap-2">
+      <div className="flex gap-3 w-full">
         {/* Day */}
         <select
           value={ethDay}
           onChange={handleDayChange}
           disabled={disabled}
-          className={`${selectClass} w-[72px] ${className}`}
+          className={`${selectClass} flex-[2] min-w-0 ${className}`}
           aria-label={t('calendar.day', 'Day')}
         >
           <option value="">{t('calendar.day', 'ቀን')}</option>
@@ -190,7 +190,7 @@ export default function EthiopianDatePicker({
           value={ethMonth}
           onChange={handleMonthChange}
           disabled={disabled}
-          className={`${selectClass} flex-1 ${className}`}
+          className={`${selectClass} flex-[3] min-w-0 ${className}`}
           aria-label={t('calendar.month', 'Month')}
         >
           <option value="">{t('calendar.month', 'ወር')}</option>
@@ -204,7 +204,7 @@ export default function EthiopianDatePicker({
           value={ethYear}
           onChange={handleYearChange}
           disabled={disabled}
-          className={`${selectClass} w-[90px] ${className}`}
+          className={`${selectClass} flex-[2] min-w-0 ${className}`}
           aria-label={t('calendar.year', 'Year')}
         >
           <option value="">{t('calendar.year', 'ዓ.ም.')}</option>
