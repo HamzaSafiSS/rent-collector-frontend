@@ -184,7 +184,11 @@
     "imageOnlyAllowed": "Only JPEG, PNG, or WebP images are allowed.",
     "imageMaxSize": "Image must be under 10MB.",
     "minimum8Chars": "Minimum 8 characters.",
-    "mustBeDifferentFromCurrent": "Must be different from current."
+    "mustBeDifferentFromCurrent": "Must be different from current.",
+    "selectLeaseRequired": "Please select a lease",
+    "monthAndYearRequired": "Please select a month and year",
+    "validAmountRequired": "Please enter a valid amount greater than 0",
+    "fileRequired": "Please select a payment proof file"
   },
 
   "dashboard": {
@@ -649,7 +653,8 @@
   "errors": {
     "somethingWentWrong": "Something went wrong",
     "unexpectedError": "An unexpected error occurred. Please refresh the page or contact support if the problem persists.",
-    "refreshPage": "Refresh page"
+    "refreshPage": "Refresh page",
+    "accountAlreadyExists": "An account with email '{{email}}' already exists."
   },
 
   "fileUpload": {
@@ -788,11 +793,5 @@
     "selectYear": "Select year",
     "ethiopianCalendar": "Ethiopian Calendar",
     "gregorianCalendar": "Gregorian Calendar"
-  },
-  "validation": {
-    "selectLeaseRequired": "Please select a lease",
-    "monthAndYearRequired": "Please select a month and year",
-    "validAmountRequired": "Please enter a valid amount greater than 0",
-    "fileRequired": "Please select a payment proof file"
   }
 }

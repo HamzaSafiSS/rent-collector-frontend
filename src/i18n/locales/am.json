@@ -181,7 +181,11 @@
     "imageOnlyAllowed": "JPEG, PNG ወይም WebP ምስሎች ብቻ ይፈቀዳሉ።",
     "imageMaxSize": "ምስሉ ከ10ሜባ በታች መሆን አለበት።",
     "minimum8Chars": "ቢያንስ 8 ቁምፊዎች።",
-    "mustBeDifferentFromCurrent": "ከአሁኑ የተለየ መሆን አለበት።"
+    "mustBeDifferentFromCurrent": "ከአሁኑ የተለየ መሆን አለበት።",
+    "selectLeaseRequired": "እባክዎ የኪራይ ውል ይምረጡ",
+    "monthAndYearRequired": "እባክዎ ወር እና ዓመት ይምረጡ",
+    "validAmountRequired": "እባክዎ ከ0 የሚበልጥ ትክክለኛ መጠን ያስገቡ",
+    "fileRequired": "እባክዎ የክፍያ ማረጋገጫ ፋይል ያስገቡ"
   },
   "dashboard": {
     "landlordTitle": "የአከራይ ዳሽቦርድ",
@@ -627,7 +631,8 @@
   "errors": {
     "somethingWentWrong": "ስህተት ተፈጥሯል",
     "unexpectedError": "ያልተጠበቀ ስህተት ተከስቷል። እባክዎ ገፁን ያድሱ ወይም ችግሩ ከቀጠለ ድጋፍን ያነጋግሩ።",
-    "refreshPage": "ገፁን አድስ"
+    "refreshPage": "ገፁን አድስ",
+    "accountAlreadyExists": "'{{email}}' የሚል ኢሜይል ያለው መለያ አስቀድሞ አለ።"
   },
   "fileUpload": {
     "clickToUpload": "ለማስገባት ጠቅ ያድርጉ",
@@ -760,11 +765,5 @@
     "selectYear": "ዓመት ይምረጡ",
     "ethiopianCalendar": "የኢትዮጵያ ቀን መቁጠሪያ",
     "gregorianCalendar": "የግሪጎሪያን ቀን መቁጠሪያ"
-  },
-  "validation": {
-    "selectLeaseRequired": "እባክዎ የኪራይ ውል ይምረጡ",
-    "monthAndYearRequired": "እባክዎ ወር እና ዓመት ይምረጡ",
-    "validAmountRequired": "እባክዎ ከ0 የሚበልጥ ትክክለኛ መጠን ያስገቡ",
-    "fileRequired": "እባክዎ የክፍያ ማረጋገጫ ፋይል ያስገቡ"
   }
 }

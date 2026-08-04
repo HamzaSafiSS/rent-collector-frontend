@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Input, Button, Alert } from '../common';
 
 export default function AdminForm({ initial, onSubmit, loading, error, isEdit }) {
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     fullName:    '',
     email:       '',
@@ -21,9 +23,9 @@ export default function AdminForm({ initial, onSubmit, loading, error, isEdit })
 
   function validate() {
     const errs = {};
-    if (!form.fullName.trim()) errs.fullName = 'Full name is required.';
+    if (!form.fullName.trim()) errs.fullName = t('validation.fullNameRequired');
     if (!isEdit) {
-      if (!form.email.trim())    errs.email    = 'Email is required.';
+      if (!form.email.trim())    errs.email    = t('validation.emailRequired');
     }
     return errs;
   }
@@ -45,15 +47,15 @@ export default function AdminForm({ initial, onSubmit, loading, error, isEdit })
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       {error && <Alert type="error" message={error} />}
 
-      <Input label="Full name"    name="fullName"    value={form.fullName}    onChange={handleChange} error={errors.fullName}    disabled={loading} required />
+      <Input label={t('profile.fullName')}    name="fullName"    value={form.fullName}    onChange={handleChange} error={errors.fullName}    disabled={loading} required />
       {!isEdit && (
-        <Input label="Email"      name="email"       type="email" value={form.email} onChange={handleChange} error={errors.email} disabled={loading} required />
+        <Input label={t('profile.email')}      name="email"       type="email" value={form.email} onChange={handleChange} error={errors.email} disabled={loading} required />
       )}
-      <Input label="Phone number (optional)" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} disabled={loading} />
+      <Input label={t('auth.phoneNumberOptional')} name="phoneNumber" value={form.phoneNumber} onChange={handleChange} disabled={loading} />
 
       <div className="flex justify-end pt-2">
         <Button type="submit" loading={loading}>
-          {isEdit ? 'Save changes' : 'Create admin'}
+          {isEdit ? t('common.saveChanges') : t('admin.createAdmin')}
         </Button>
       </div>
     </form>
