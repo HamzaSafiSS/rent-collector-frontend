@@ -59,6 +59,7 @@
     "statusCancelled": "Cancelled",
     "statusSuspended": "Suspended",
     "statusPending": "Pending",
+    "statusPendingpasswordchange": "Pending Password Change",
     "statusApproved": "Approved",
     "statusRejected": "Rejected",
     "statusUnpaid": "Unpaid",

@@ -157,7 +157,9 @@ export default function PropertyDashboardViewPage() {
           >
             <option value="">{t('common.allStatuses', 'All')}</option>
             {getStatusOptions().map(opt => (
-              <option key={opt} value={opt}>{opt}</option>
+              <option key={opt} value={opt}>
+                {t(`common.status${opt.charAt(0).toUpperCase() + opt.slice(1).toLowerCase()}`, { defaultValue: opt })}
+              </option>
             ))}
           </select>
         </div>

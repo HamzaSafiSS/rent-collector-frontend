@@ -59,6 +59,7 @@
     "statusCancelled": "ተሰርዟል",
     "statusSuspended": "ታግዷል",
     "statusPending": "በመጠባበቅ ላይ",
+    "statusPendingpasswordchange": "የይለፍ ቃል ለውጥ በመጠባበቅ ላይ",
     "statusApproved": "ተቀባይነት አግኝቷል",
     "statusRejected": "ተቀባይነት አላገኘም",
     "statusUnpaid": "ያልተከፈለ",
