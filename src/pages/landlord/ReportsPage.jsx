@@ -226,7 +226,7 @@ function OccupancyReport({ properties, lockedPropertyId }) {
 // ── Revenue Report ─────────────────────────────────────────────────────────────
 function RevenueReport({ properties, lockedPropertyId }) {
   const { t } = useTranslation();
-  const { isEthiopian } = useCalendarDate();
+  const { isEthiopian, formatMonth } = useCalendarDate();
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
@@ -313,7 +313,7 @@ function RevenueReport({ properties, lockedPropertyId }) {
                   <tbody className="divide-y divide-slate-100">
                     {data.byMonth.map((m) => (
                       <tr key={m.month} className="hover:bg-emerald-500/5/50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">{m.month}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{formatMonth(m.month)}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-right font-bold text-emerald-400">{Number(m.revenue).toLocaleString()}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-slate-500 font-medium">{m.paymentCount}</td>
                       </tr>
