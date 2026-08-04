@@ -242,6 +242,7 @@
     "totalAdmins": "ጠቅላላ አስተዳዳሪዎች"
   },
   "properties": {
+    "propertyId": "የንብረት መታወቂያ: {{id}}",
     "portfolioManagement": "የፖርትፎሊዮ አስተዳደር",
     "realEstateProperties": "{{count}} የሪል ስቴት ንብረቶች",
     "realEstateProperty": "{{count}} የሪል ስቴት ንብረት",
@@ -282,6 +283,7 @@
     "createdAt": "የተፈጠረበት ቀን"
   },
   "units": {
+    "unitId": "የክፍል መታወቂያ: {{id}}",
     "globalUnitsTitle": "ጠቅላላ ክፍሎች",
     "globalUnitsSubtitle": "በሁሉም ንብረቶችዎ ውስጥ ያሉ ክፍሎችን ያስተዳድሩ",
     "failedLoadGlobalUnits": "ጠቅላላ ክፍሎችን መጫን አልተሳካም።",
@@ -321,6 +323,7 @@
     "unit": "ክፍል"
   },
   "leases": {
+    "leaseId": "የውል መታወቂያ: {{id}}",
     "leasesTitle": "ውሎች - {{name}}",
     "leaseCount": "{{count}} ውሎች",
     "leaseCountSingular": "{{count}} ውል",
@@ -404,6 +407,10 @@
     "monthDetail": "ወር",
     "amountETB": "መጠን (ብር)",
     "statusDetail": "ሁኔታ",
+    "month": "ወር",
+    "amount": "መጠን",
+    "status": "ሁኔታ",
+    "date": "ቀን",
     "uploaded": "የተላከበት ቀን",
     "reviewed": "የተገመገመ",
     "paymentMethodsTitle": "እንዴት እንደሚከፍሉ",
@@ -474,6 +481,7 @@
     "failedLoadLeases": "ውሎችን መጫን አልተሳካም።"
   },
   "tenants": {
+    "tenantId": "የተከራይ መታወቂያ: {{id}}",
     "name": "ስም",
     "email": "ኢሜይል",
     "phone": "ስልክ",
@@ -787,5 +795,8 @@
     "selectYear": "ዓመት ይምረጡ",
     "ethiopianCalendar": "የኢትዮጵያ ቀን መቁጠሪያ",
     "gregorianCalendar": "የግሪጎሪያን ቀን መቁጠሪያ"
+  },
+  "landlords": {
+    "landlordId": "የአከራይ መታወቂያ: {{id}}"
   }
 }

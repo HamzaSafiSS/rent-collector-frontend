@@ -249,6 +249,7 @@
   },
 
   "properties": {
+    "propertyId": "Property ID: {{id}}",
     "portfolioManagement": "Portfolio Management",
     "realEstateProperties": "{{count}} Real Estate Properties",
     "realEstateProperty": "{{count}} Real Estate Property",
@@ -290,6 +291,7 @@
   },
 
   "units": {
+    "unitId": "Unit ID: {{id}}",
     "globalUnitsTitle": "Global Units",
     "globalUnitsSubtitle": "Manage all units across your properties",
     "failedLoadGlobalUnits": "Failed to load global units.",
@@ -330,6 +332,7 @@
   },
 
   "leases": {
+    "leaseId": "Lease ID: {{id}}",
     "leasesTitle": "Leases - {{name}}",
     "leaseCount": "{{count}} leases",
     "leaseCountSingular": "{{count}} lease",
@@ -413,6 +416,10 @@
     "monthDetail": "Month",
     "amountETB": "Amount (ETB)",
     "statusDetail": "Status",
+    "month": "Month",
+    "amount": "Amount",
+    "status": "Status",
+    "date": "Date",
     "uploaded": "Uploaded",
     "reviewed": "Reviewed",
 
@@ -489,6 +496,7 @@
   },
 
   "tenants": {
+    "tenantId": "Tenant ID: {{id}}",
     "name": "Name",
     "email": "Email",
     "phone": "Phone",
