@@ -5,7 +5,9 @@
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-/* Global app styles — Dark Mode Edition */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Global app styles — Dual Theme (Dark default + Light mode)
+   ═══════════════════════════════════════════════════════════════════════════ */
 * {
   box-sizing: border-box;
 }
@@ -21,14 +23,24 @@ input[type="button"] {
   cursor: pointer !important;
 }
 
+/* ── Body — Dark Mode (default when data-theme="dark") ──────────────────── */
 body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: #0b1120;
   color: #f1f5f9;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark glassmorphism */
+/* ── Body — Light Mode ──────────────────────────────────────────────────── */
+[data-theme="light"] body {
+  background-color: #F8FAFB;
+  color: #1e293b;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Glassmorphism — Dark
+   ═══════════════════════════════════════════════════════════════════════════ */
 .glass {
   background: rgba(15, 23, 42, 0.7);
   backdrop-filter: blur(20px);
@@ -37,19 +49,46 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Dark card surface utility */
+/* Glassmorphism — Light */
+[data-theme="light"] .glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Card surface — Dark
+   ═══════════════════════════════════════════════════════════════════════════ */
 .card-dark {
   background: linear-gradient(135deg, #111827 0%, #1e293b 100%);
   border: 1px solid rgba(16, 185, 129, 0.15);
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.03);
 }
 
-/* Emerald glow effect */
+/* Card surface — Light */
+[data-theme="light"] .card-dark {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Emerald glow — Dark
+   ═══════════════════════════════════════════════════════════════════════════ */
 .glow-emerald {
   box-shadow: 0 0 15px rgba(16, 185, 129, 0.15), 0 0 30px rgba(16, 185, 129, 0.05);
 }
 
-/* Custom scrollbar for dark mode */
+/* Emerald glow — Light (subtler) */
+[data-theme="light"] .glow-emerald {
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.08), 0 0 20px rgba(16, 185, 129, 0.03);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Scrollbar — Dark
+   ═══════════════════════════════════════════════════════════════════════════ */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -65,7 +104,17 @@ body {
   background: rgba(148, 163, 184, 0.35);
 }
 
-/* Add after the existing CSS */
+/* Scrollbar — Light */
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.55);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Animations
+   ═══════════════════════════════════════════════════════════════════════════ */
 @keyframes slide-in {
   from {
     transform: translateX(100%);
@@ -81,7 +130,7 @@ body {
   animation: slide-in 0.25s ease-out;
 }
 
-/* Subtle pulse for skeleton loading */
+/* Subtle pulse for skeleton loading — Dark */
 @keyframes dark-pulse {
   0%, 100% { opacity: 0.15; }
   50% { opacity: 0.3; }
@@ -89,4 +138,23 @@ body {
 
 .animate-dark-pulse {
   animation: dark-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Subtle pulse for skeleton loading — Light */
+@keyframes light-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+[data-theme="light"] .animate-dark-pulse {
+  animation: light-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Smooth theme transitions for major surfaces
+   ═══════════════════════════════════════════════════════════════════════════ */
+.glass,
+.card-dark,
+.glow-emerald {
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
