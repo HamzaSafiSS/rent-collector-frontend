@@ -526,11 +526,13 @@
     "activeTenants": "Active Tenants",
     "historicalTenants": "Historical Tenants",
     "totalUnique": "Total Unique",
+    "totalUniqueTenants": "Total Unique Tenants",
     "name": "Name",
     "email": "Email",
     "currentUnit": "Current Unit",
     "activeLeases": "Active Leases",
     "totalLeases": "Total Leases",
+    "totalLeasesCol": "Total Leases",
     "failedLoadTenantReport": "Failed to load tenant report."
   },
 

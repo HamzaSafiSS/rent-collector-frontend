@@ -510,11 +510,13 @@
     "activeTenants": "ንቁ ተከራዮች",
     "historicalTenants": "ያለፉ ተከራዮች",
     "totalUnique": "ጠቅላላ ልዩ",
+    "totalUniqueTenants": "ጠቅላላ ልዩ ተከራዮች",
     "name": "ስም",
     "email": "ኢሜይል",
     "currentUnit": "የአሁን ክፍል",
     "activeLeases": "ንቁ ውሎች",
-    "totalLeases": "ጠቅላላ ውሎች",
+    "totalLeases": "አጠቃላይ ውሎች",
+    "totalLeasesCol": "አጠቃላይ ውሎች",
     "failedLoadTenantReport": "የተከራይ ሪፖርት መጫን አልተሳካም።"
   },
   "dueSoon": {
