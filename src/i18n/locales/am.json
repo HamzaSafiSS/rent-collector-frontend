@@ -473,6 +473,7 @@
   },
   "reports": {
     "reportsTitle": "ሪፖርቶች — {{name}}",
+    "reportsSubtitle": "የፖርትፎሊዮዎን አፈፃፀም ይተንትኑ",
     "analysePerformance": "የፖርትፎሊዮዎን አፈፃፀም ይተንትኑ",
     "selectPropertyReports": "ሪፖርቶችን ለማየት ንብረት ይምረጡ",
     "refresh": "አድስ",

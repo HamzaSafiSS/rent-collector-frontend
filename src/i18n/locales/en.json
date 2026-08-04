@@ -489,6 +489,7 @@
 
   "reports": {
     "reportsTitle": "Reports — {{name}}",
+    "reportsSubtitle": "Analyse your portfolio performance",
     "analysePerformance": "Analyse your portfolio performance",
     "selectPropertyReports": "Choose a property to view its reports",
     "refresh": "Refresh",
