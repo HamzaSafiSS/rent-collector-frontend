@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 
@@ -15,11 +15,11 @@ export default function UnitDashboardViewPage() {
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+  const backUrl = location.state?.from || (isSuperAdmin ? '/super-admin/view/units' : '/admin/view/units');
 
-
-  const backUrl = isSuperAdmin ? '/super-admin/view/units' : '/admin/view/units';
 
   const [activeTab, setActiveTab] = useState('leases');
   const [loading, setLoading] = useState(false);

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   PageHeader, Table, Badge, Pagination, Alert, Modal, Button, Spinner,
@@ -211,6 +211,7 @@ function DetailValue({ field, item, formatDate }) {
 export default function ViewListPage() {
   const { category } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const { formatDate, isEthiopian } = useCalendarDate();
 
@@ -315,7 +316,7 @@ export default function ViewListPage() {
         
         if (path) {
           return (
-            <Button size="sm" variant="primary" onClick={() => navigate(path)}>
+            <Button size="sm" variant="primary" onClick={() => navigate(path, { state: { from: location.pathname + location.search } })}>
               {t('admin.viewDashboard')}
             </Button>
           );

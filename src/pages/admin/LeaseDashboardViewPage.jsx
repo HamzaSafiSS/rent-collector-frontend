@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 
@@ -15,11 +15,12 @@ export default function LeaseDashboardViewPage() {
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
 
 
-  const backUrl = isSuperAdmin ? '/super-admin/view/leases' : '/admin/view/leases';
+  const backUrl = location.state?.from || (isSuperAdmin ? '/super-admin/view/leases' : '/admin/view/leases');
 
   const [activeTab, setActiveTab] = useState('payments');
   const [loading, setLoading] = useState(false);

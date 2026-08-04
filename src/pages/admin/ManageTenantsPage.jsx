@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PageHeader, Table, Badge, Pagination, Alert, Button } from '../../components/common';
 import { tenantApi } from '../../api/tenantApi';
@@ -11,6 +11,7 @@ export default function ManageTenantsPage() {
   const { t } = useTranslation();
   const { formatDate } = useCalendarDate();
   const navigate = useNavigate();
+  const location = useLocation();
   const [tenants, setTenants]         = useState([]);
   const [page, setPage]               = useState(0);
   const [totalPages, setTotalPages]   = useState(0);
@@ -29,7 +30,7 @@ export default function ManageTenantsPage() {
       key: 'actions', 
       header: t('common.actions'),
       render: (r) => (
-        <Button size="sm" variant="primary" onClick={() => navigate(`/admin/view/tenant-dashboard/${r.id}`)}>
+        <Button size="sm" variant="primary" onClick={() => navigate(`/admin/view/tenant-dashboard/${r.id}`, { state: { from: location.pathname + location.search } })}>
           {t('admin.viewDashboard')}
         </Button>
       )
