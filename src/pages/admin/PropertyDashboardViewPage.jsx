@@ -153,7 +153,7 @@ export default function PropertyDashboardViewPage() {
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">{t('common.allStatuses', 'All')}</option>
             {getStatusOptions().map(opt => (

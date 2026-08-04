@@ -598,6 +598,8 @@
     "failedLoadLandlords": "Failed to load landlords.",
     "landlordSuspended": "Landlord {{name}} suspended.",
     "landlordActivated": "Landlord {{name}} activated.",
+    "adminSuspended": "Admin {{name}} suspended.",
+    "adminActivated": "Admin {{name}} activated.",
     "actionFailed": "Action failed.",
     "activate": "Activate",
     "suspend": "Suspend",

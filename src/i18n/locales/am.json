@@ -580,6 +580,8 @@
     "failedLoadLandlords": "አከራዮችን መጫን አልተሳካም።",
     "landlordSuspended": "አከራይ {{name}} ታግዷል።",
     "landlordActivated": "አከራይ {{name}} ነቅቷል።",
+    "adminSuspended": "አስተዳዳሪ {{name}} ታግዷል።",
+    "adminActivated": "አስተዳዳሪ {{name}} ነቅቷል።",
     "actionFailed": "ድርጊቱ አልተሳካም።",
     "activate": "አንቃ",
     "suspend": "አግድ",
