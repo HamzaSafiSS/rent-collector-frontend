@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PageHeader, Table, Badge, Button, Pagination, Alert, ConfirmDialog } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
@@ -13,6 +13,7 @@ export default function ManageLandlordsPage() {
   const { t } = useTranslation();
   const { formatDate } = useCalendarDate();
   const navigate = useNavigate();
+  const location = useLocation();
   const toast = useToast();
   const [landlords, setLandlords]     = useState([]);
   const [page, setPage]               = useState(0);
@@ -85,7 +86,7 @@ export default function ManageLandlordsPage() {
           <Button
             size="sm"
             variant="primary"
-            onClick={() => navigate(`/admin/view/landlord-dashboard/${row.id}`)}
+            onClick={() => navigate(`/admin/view/landlord-dashboard/${row.id}`, { state: { from: location.pathname + location.search } })}
           >
             {t('admin.viewDashboard')}
           </Button>

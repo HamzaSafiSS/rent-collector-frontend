@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
 import { propertyApi } from '../../api/propertyApi';
 import { adminApi } from '../../api/adminApi';
@@ -17,11 +17,12 @@ export default function PropertyDashboardViewPage() {
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const isSuperAdmin = user?.role === 'SUPER_ADMIN';
 
 
-  const backUrl = isSuperAdmin ? '/super-admin/view/properties' : '/admin/view/properties';
+  const backUrl = location.state?.from || (isSuperAdmin ? '/super-admin/view/properties' : '/admin/view/properties');
 
   const [property, setProperty] = useState(null);
   const [activeTab, setActiveTab] = useState('leases');
