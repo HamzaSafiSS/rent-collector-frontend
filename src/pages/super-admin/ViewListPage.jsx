@@ -316,14 +316,14 @@ export default function ViewListPage() {
         if (path) {
           return (
             <Button size="sm" variant="primary" onClick={() => navigate(path)}>
-              View Dashboard
+              {t('admin.viewDashboard')}
             </Button>
           );
         }
         
         return (
           <Button size="sm" variant="ghost" onClick={() => setSelectedItem(row)}>
-            View
+            {t('common.view')}
           </Button>
         );
       },
@@ -416,7 +416,7 @@ export default function ViewListPage() {
         {loading ? (
           <TableSkeleton rows={8} cols={columnsWithView.length} />
         ) : (
-          <Table columns={columnsWithView} data={items} emptyMessage="No records found." />
+          <Table columns={columnsWithView} data={items} emptyMessage={t('empty.searchTitle')} />
         )}
         <div className="px-4 border-t border-slate-100">
           <Pagination
@@ -433,7 +433,7 @@ export default function ViewListPage() {
       <Modal
         isOpen={!!selectedItem}
         onClose={() => setSelectedItem(null)}
-        title={`${config.icon} ${config.title.replace(/^All\s/, '')} Details`}
+        title={`${config.icon} ${config.title}`}
         size="lg"
       >
         {selectedItem && (
