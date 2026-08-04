@@ -7,6 +7,7 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import LanguageToggle from '../../components/common/LanguageToggle';
+import ThemeToggle from '../../components/common/ThemeToggle';
 
 export default function ChangePasswordPage() {
   const { t }                  = useTranslation();
@@ -82,22 +83,23 @@ export default function ChangePasswordPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-[#F8FAFB] dark:bg-slate-950">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-500" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-slate-950 flex items-center justify-center p-4">
-      {/* Top right language toggle */}
-      <div className="absolute top-4 right-4 z-20">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-emerald-50 to-[#F8FAFB] dark:from-slate-950 dark:to-slate-950 flex items-center justify-center p-4">
+      {/* Top right controls */}
+      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+        <ThemeToggle />
         <LanguageToggle />
       </div>
 
       {/* Animated Background Gradients */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-600/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-800/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-400/10 dark:bg-emerald-600/15 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-300/10 dark:bg-emerald-800/15 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none"></div>
 
       <div className="w-full max-w-md relative z-10 animate-slide-in">
 
@@ -109,7 +111,7 @@ export default function ChangePasswordPage() {
                     d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
             </svg>
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">{t('auth.changePasswordTitle')}</h1>
+          <h1 className="text-3xl font-extrabold text-[#1A2B3C] dark:text-white tracking-tight">{t('auth.changePasswordTitle')}</h1>
 
           {user?.status === 'PendingPasswordChange' ? (
             <div className="mt-3 mx-auto max-w-sm">
@@ -119,7 +121,7 @@ export default function ChangePasswordPage() {
               />
             </div>
           ) : (
-            <p className="text-slate-400 text-sm mt-2 font-medium">{t('auth.updateAccountPassword')}</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 font-medium">{t('auth.updateAccountPassword')}</p>
           )}
         </div>
 
@@ -185,7 +187,7 @@ export default function ChangePasswordPage() {
                 await logout();
                 navigate('/login', { replace: true });
               }}
-              className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+              className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors"
             >
               {t('auth.signOutAndReturn')}
             </button>
