@@ -212,10 +212,10 @@ export default function AdminViewListPage() {
       setActionLoading(true);
       if (action === 'suspend') {
         await adminApi.suspendLandlord(item.id);
-        toast.success(`${item.fullName} suspended.`);
+        toast.success(t('admin.landlordSuspended', { name: item.fullName }));
       } else {
         await adminApi.activateLandlord(item.id);
-        toast.success(`${item.fullName} activated.`);
+        toast.success(t('admin.landlordActivated', { name: item.fullName }));
       }
       setConfirmTarget(null);
       loadData();
@@ -329,11 +329,11 @@ export default function AdminViewListPage() {
                     action: row.status === 'Suspended' ? 'activate' : 'suspend',
                   })}
                 >
-                  {row.status === 'Suspended' ? 'Activate' : 'Suspend'}
+                  {row.status === 'Suspended' ? t('admin.activate') : t('admin.suspend')}
                 </Button>
               )}
               <Button size="sm" variant="primary" onClick={() => navigate(path)}>
-                View Dashboard
+                {t('admin.viewDashboard')}
               </Button>
             </div>
           );
@@ -341,7 +341,7 @@ export default function AdminViewListPage() {
         
         return (
           <Button size="sm" variant="ghost" onClick={() => setSelectedItem(row)}>
-            View
+            {t('common.view')}
           </Button>
         );
       },
@@ -434,7 +434,7 @@ export default function AdminViewListPage() {
         {loading ? (
           <TableSkeleton rows={8} cols={columnsWithView.length} />
         ) : (
-          <Table columns={columnsWithView} data={items} emptyMessage="No records found." />
+          <Table columns={columnsWithView} data={items} emptyMessage={t('empty.searchTitle')} />
         )}
         <div className="px-4 border-t border-slate-100">
           <Pagination
@@ -451,7 +451,7 @@ export default function AdminViewListPage() {
       <Modal
         isOpen={!!selectedItem}
         onClose={() => setSelectedItem(null)}
-        title={`${config.icon} ${config.title.replace(/^All\s/, '')} Details`}
+        title={`${config.icon} ${config.title}`}
         size="lg"
       >
         {selectedItem && (
@@ -476,13 +476,13 @@ export default function AdminViewListPage() {
         onClose={() => setConfirmTarget(null)}
         onConfirm={handleConfirmAction}
         loading={actionLoading}
-        title={confirmTarget?.action === 'suspend' ? 'Suspend Landlord' : 'Activate Landlord'}
+        title={confirmTarget?.action === 'suspend' ? t('admin.suspendLandlordTitle') : t('admin.activateLandlordTitle')}
         message={
           confirmTarget?.action === 'suspend'
-            ? `Suspend "${confirmTarget?.item?.fullName}"? They will be immediately locked out.`
-            : `Activate "${confirmTarget?.item?.fullName}"? They will regain full access.`
+            ? t('admin.suspendLandlordMsg', { name: confirmTarget?.item?.fullName })
+            : t('admin.activateLandlordMsg', { name: confirmTarget?.item?.fullName })
         }
-        confirmText={confirmTarget?.action === 'suspend' ? 'Suspend' : 'Activate'}
+        confirmText={confirmTarget?.action === 'suspend' ? t('admin.suspend') : t('admin.activate')}
         variant={confirmTarget?.action === 'suspend' ? 'danger' : 'success'}
       />
     </>

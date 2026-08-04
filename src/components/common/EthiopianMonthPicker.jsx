@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   gregorianMonthToEthiopian,
@@ -27,25 +27,39 @@ export default function EthiopianMonthPicker({
   const { i18n, t } = useTranslation();
   const isEthiopian = i18n.language?.startsWith('am');
 
-  // Parse Gregorian value into Ethiopian
-  const ethFromValue = useMemo(() => {
-    if (!value) return null;
-    return gregorianMonthToEthiopian(value);
-  }, [value]);
-
+  // Parse Gregorian value into Ethiopian using refs to preserve Pagume
+  const ethStateRef = useRef({ ethYear: '', ethMonth: '' });
+  
   const [ethYear, setEthYear] = useState('');
   const [ethMonth, setEthMonth] = useState('');
 
+  ethStateRef.current = { ethYear, ethMonth };
+
   // Sync when value changes
   useEffect(() => {
-    if (ethFromValue && ethFromValue.year) {
-      setEthYear(String(ethFromValue.year));
-      setEthMonth(String(ethFromValue.month));
+    if (!value) {
+      setEthYear('');
+      setEthMonth('');
+      return;
+    }
+
+    const { ethYear: prevYear, ethMonth: prevMonth } = ethStateRef.current;
+    if (prevYear && prevMonth) {
+      const currentGregStr = ethiopianMonthToGregorian(parseInt(prevYear, 10), parseInt(prevMonth, 10));
+      if (currentGregStr === value) {
+        return; // Skip overriding to preserve the user's explicit selection (e.g. Pagume)
+      }
+    }
+
+    const eth = gregorianMonthToEthiopian(value);
+    if (eth && eth.year) {
+      setEthYear(String(eth.year));
+      setEthMonth(String(eth.month));
     } else {
       setEthYear('');
       setEthMonth('');
     }
-  }, [ethFromValue]);
+  }, [value]);
 
   const ethMonths = useMemo(() => getEthiopianMonths(), []);
   const currentEth = useMemo(() => getCurrentEthiopianDate(), []);

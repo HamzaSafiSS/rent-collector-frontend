@@ -5,11 +5,13 @@ import { PageHeader, Table, Badge, Button, Pagination, Alert, ConfirmDialog } fr
 import { adminApi } from '../../api/adminApi';
 import { useToast } from '../../context/ToastContext';
 import { TableSkeleton } from '../../components/common';
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
 
 export default function ManageLandlordsPage() {
   const { t } = useTranslation();
+  const { formatDate } = useCalendarDate();
   const navigate = useNavigate();
   const toast = useToast();
   const [landlords, setLandlords]     = useState([]);
@@ -65,7 +67,7 @@ export default function ManageLandlordsPage() {
     { key: 'email',       header: t('admin.email') },
     { key: 'phoneNumber', header: t('payments.phoneNumber'),   render: (r) => r.phoneNumber || '—' },
     { key: 'status',      header: t('admin.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-    { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—' },
+    { key: 'createdAt',   header: t('admin.joined'),  render: (r) => r.createdAt ? formatDate(r.createdAt) : '—' },
     {
       key: 'actions', header: t('common.actions'),
       render: (row) => (

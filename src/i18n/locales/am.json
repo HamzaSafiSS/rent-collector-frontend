@@ -33,7 +33,14 @@
     "saveChanges": "ለውጦችን አስቀምጥ",
     "loggedOutSuccess": "በተሳካ ሁኔታ ወጥተዋል።",
     "couldNotLoadStats": "ስታቲስቲክስ መጫን አልተቻለም።",
-    "backToProperties": "← ወደ ንብረቶች ተመለስ",
+    "backToAdmins": "ወደ አስተዳዳሪዎች ተመለስ",
+    "backToLandlords": "ወደ አከራዮች ተመለስ",
+    "backToTenants": "ወደ ተከራዮች ተመለስ",
+    "backToProperties": "ወደ ንብረቶች ተመለስ",
+    "backToUnits": "ወደ ቤቶች ተመለስ",
+    "backToLeases": "ወደ ውሎች ተመለስ",
+    "readOnlyView": "ለማንበብ ብቻ",
+    "failedToLoadData": "መረጃን መጫን አልተሳካም::",
     "selectProperty": "ንብረት ይምረጡ",
     "choosePropertySubtitle": "{{item}}ን ለማየት ንብረት ይምረጡ",
     "noResultsFilter": "ከአሁኑ ማጣሪያ ጋር የሚዛመድ ውጤት የለም።",
@@ -52,6 +59,7 @@
     "statusCancelled": "ተሰርዟል",
     "statusSuspended": "ታግዷል",
     "statusPending": "በመጠባበቅ ላይ",
+    "statusPendingpasswordchange": "የይለፍ ቃል ለውጥ በመጠባበቅ ላይ",
     "statusApproved": "ተቀባይነት አግኝቷል",
     "statusRejected": "ተቀባይነት አላገኘም",
     "statusUnpaid": "ያልተከፈለ",
@@ -89,6 +97,12 @@
     "landlord": "አከራይ",
     "tenant": "ተከራይ"
   },
+  "roles": {
+    "SUPER_ADMIN": "ዋና አስተዳዳሪ",
+    "ADMIN": "አስተዳዳሪ",
+    "LANDLORD": "አከራይ",
+    "TENANT": "ተከራይ"
+  },
   "nav": {
     "dashboard": "ዳሽቦርድ",
     "properties": "ንብረቶች",
@@ -102,7 +116,8 @@
     "paymentHistory": "የክፍያ ታሪክ",
     "landlords": "አከራዮች",
     "auditLogs": "የኦዲት ምዝግብ",
-    "manageAdmins": "አስተዳዳሪዎችን አስተዳድር"
+    "manageAdmins": "አስተዳዳሪዎችን አስተዳድር",
+    "units": "ክፍሎች"
   },
   "auth": {
     "welcomeBack": "እንኳን ደህና መጡ። እባክዎ ይግቡ።",
@@ -175,10 +190,19 @@
     "imageOnlyAllowed": "JPEG, PNG ወይም WebP ምስሎች ብቻ ይፈቀዳሉ።",
     "imageMaxSize": "ምስሉ ከ10ሜባ በታች መሆን አለበት።",
     "minimum8Chars": "ቢያንስ 8 ቁምፊዎች።",
-    "mustBeDifferentFromCurrent": "ከአሁኑ የተለየ መሆን አለበት።"
+    "mustBeDifferentFromCurrent": "ከአሁኑ የተለየ መሆን አለበት።",
+    "selectLeaseRequired": "እባክዎ የኪራይ ውል ይምረጡ",
+    "monthAndYearRequired": "እባክዎ ወር እና ዓመት ይምረጡ",
+    "validAmountRequired": "እባክዎ ከ0 የሚበልጥ ትክክለኛ መጠን ያስገቡ",
+    "fileRequired": "እባክዎ የክፍያ ማረጋገጫ ፋይል ያስገቡ"
   },
   "dashboard": {
     "landlordTitle": "የአከራይ ዳሽቦርድ",
+    "userDashboard": "የ{{name}} ዳሽቦርድ",
+    "tenantDashboardTitle": "የተከራይ ዳሽቦርድ",
+    "propertyDashboardTitle": "የንብረት ዳሽቦርድ",
+    "unitDashboardTitle": "የቤት ዳሽቦርድ",
+    "leaseDashboardTitle": "የውል ዳሽቦርድ",
     "myProperties": "ንብረቶቼ",
     "totalUnits": "ጠቅላላ ክፍሎች",
     "occupiedUnits": "የተያዙ ክፍሎች",
@@ -219,6 +243,7 @@
     "totalAdmins": "ጠቅላላ አስተዳዳሪዎች"
   },
   "properties": {
+    "propertyId": "የንብረት መታወቂያ: {{id}}",
     "portfolioManagement": "የፖርትፎሊዮ አስተዳደር",
     "realEstateProperties": "{{count}} የሪል ስቴት ንብረቶች",
     "realEstateProperty": "{{count}} የሪል ስቴት ንብረት",
@@ -228,6 +253,7 @@
     "noPropertiesYet": "ገና ንብረቶች የሉም",
     "noPropertiesDescription": "ወደ ፖርትፎሊዮዎ ምንም ንብረቶች አልጨመሩም። ለመጀመር የመጀመሪያውን ንብረትዎን ይፍጠሩ።",
     "totalUnitsLabel": "ጠቅላላ ክፍሎች",
+    "units": "ክፍሎች",
     "occupancyLabel": "ተይዟል",
     "availableLabel": "ያሉ",
     "occupiedSlashAvailable": "{{occupied}} ተይዟል / {{available}} ያሉ",
@@ -258,6 +284,7 @@
     "createdAt": "የተፈጠረበት ቀን"
   },
   "units": {
+    "unitId": "የክፍል መታወቂያ: {{id}}",
     "globalUnitsTitle": "ጠቅላላ ክፍሎች",
     "globalUnitsSubtitle": "በሁሉም ንብረቶችዎ ውስጥ ያሉ ክፍሎችን ያስተዳድሩ",
     "failedLoadGlobalUnits": "ጠቅላላ ክፍሎችን መጫን አልተሳካም።",
@@ -288,13 +315,16 @@
     "failedChangeStatus": "ሁኔታ መቀየር አልተሳካም።",
     "rename": "ዳግም ሰይም",
     "unitNo": "ክፍል ቁ.",
+    "unitNumber": "ክፍል",
     "status": "ሁኔታ",
     "baseRent": "መሰረታዊ ኪራይ",
+    "baseRentETB": "መሰረታዊ ኪራይ (ብር)",
     "allUnits": "ሁሉም ክፍሎች",
     "property": "ንብረት",
     "unit": "ክፍል"
   },
   "leases": {
+    "leaseId": "የውል መታወቂያ: {{id}}",
     "leasesTitle": "ውሎች - {{name}}",
     "leaseCount": "{{count}} ውሎች",
     "leaseCountSingular": "{{count}} ውል",
@@ -360,6 +390,10 @@
     "failedLoadPayments": "ክፍያዎችን መጫን አልተሳካም።",
     "paymentInfoSaved": "የክፍያ መረጃ ተቀምጧል።",
     "failedSavePaymentInfo": "የክፍያ መረጃ ማስቀመጥ አልተሳካም።",
+    "uploadSuccessDesc": "ክፍያዎ በተሳካ ሁኔታ ተልኳል እናም በመገምገም ላይ ይገኛል።",
+    "uploadSuccessToast": "ክፍያ በተሳካ ሁኔታ ተልኳል!",
+    "alreadyPaidError": "ለዚህ ወር እና አመት ክፍያ ቀደም ብሎ ተከፍሏል። እባክዎ ቀኑን ያረጋግጡ።",
+    "invalidMonthBeforeLease": "የክፍያ ወር ከውል መጀመሪያ ቀን በፊት መሆን አይችልም",
     "reviewPaymentTitle": "ክፍያ ገምግም",
     "approve": "አጽድቅ",
     "reject": "ውድቅ አድርግ",
@@ -374,7 +408,11 @@
     "monthDetail": "ወር",
     "amountETB": "መጠን (ብር)",
     "statusDetail": "ሁኔታ",
-    "uploaded": "የተላከ",
+    "month": "ወር",
+    "amount": "መጠን",
+    "status": "ሁኔታ",
+    "date": "ቀን",
+    "uploaded": "የተላከበት ቀን",
     "reviewed": "የተገመገመ",
     "paymentMethodsTitle": "እንዴት እንደሚከፍሉ",
     "addPaymentMethodTitle": "የክፍያ ዘዴ ጨምር",
@@ -415,8 +453,8 @@
     "amountETBLabel": "መጠን (ብር)",
     "amountPlaceholder": "ለምሳሌ 6500",
     "paymentProofLabel": "የክፍያ ማረጋገጫ (ስክሪንሾት / ደረሰኝ)",
-    "uploadPaymentBtn": "የክፍያ ማረጋገጫ ስቀል",
-    "uploadProofBtn": "የክፍያ ማረጋገጫ ስቀል",
+    "uploadPaymentBtn": "የክፍያ ማረጋገጫ ላክ",
+    "uploadProofBtn": "የክፍያ ማረጋገጫ ላክ",
     "noActiveLeasesFound": "ንቁ ውሎች አልተገኙም።",
     "mo": "ወር",
     "name": "ስም",
@@ -424,7 +462,7 @@
     "phone": "ስልክ",
     "paymentUploadedSuccess": "ክፍያ በተሳካ ሁኔታ ተሰቅሏል። አከራይዎ በቅርቡ ይገመግመዋል።",
     "paymentUploaded": "ክፍያ ተሰቅሏል።",
-    "failedUploadPayment": "ክፍያ መስቀል አልተሳካም።",
+    "failedUploadPayment": "ክፍያ መላክ አልተሳካም።",
     "paymentHistoryTitle": "የክፍያ ታሪክ",
     "paymentHistorySubtitle": "ያለፉ የክፍያ ማስገቢያዎችዎ",
     "noPaymentsYet": "ገና ክፍያዎች የሉም",
@@ -444,10 +482,14 @@
     "failedLoadLeases": "ውሎችን መጫን አልተሳካም።"
   },
   "tenants": {
+    "tenantId": "የተከራይ መታወቂያ: {{id}}",
     "name": "ስም",
     "email": "ኢሜይል",
     "phone": "ስልክ",
     "status": "ሁኔታ",
+    "currentUnit": "የአሁን ክፍል",
+    "moveIn": "የገባበት ቀን",
+    "activeLeases": "ንቁ ውሎች",
     "moveInDate": "የገባበት ቀን",
     "tenantsTitle": "ተከራዮች - {{name}}",
     "tenantCount": "{{count}} ተከራዮች",
@@ -464,10 +506,16 @@
   },
   "reports": {
     "reportsTitle": "ሪፖርቶች — {{name}}",
+    "reportsSubtitle": "የፖርትፎሊዮዎን አፈፃፀም ይተንትኑ",
     "analysePerformance": "የፖርትፎሊዮዎን አፈፃፀም ይተንትኑ",
     "selectPropertyReports": "ሪፖርቶችን ለማየት ንብረት ይምረጡ",
+    "refresh": "አድስ",
     "tabPayments": "ክፍያዎች",
     "tabOccupancy": "ተይዟል",
+    "totalUnits": "አጠቃላይ ክፍሎች",
+    "occupied": "የተያዙ",
+    "available": "ክፍት",
+    "maintenance": "በጥገና ላይ",
     "tabRevenue": "ገቢ",
     "tabTenants": "ተከራዮች",
     "fromMonth": "ከወር",
@@ -486,17 +534,22 @@
     "year": "ዓመት",
     "totalRevenueETB": "ጠቅላላ ገቢ (ብር)",
     "avgMonthlyETB": "አማካይ ወርሃዊ (ብር)",
-    "monthlyBreakdown": "ወርሃዊ ትንተና",
+    "monthlyBreakdown": "ወርሃዊ ዝርዝር",
+    "monthCol": "ወር",
+    "revenueETBCol": "ገቢ (ብር)",
+    "paymentsCol": "ክፍያዎች",
     "revenueETB": "ገቢ (ብር)",
     "failedLoadRevenueReport": "የገቢ ሪፖርት መጫን አልተሳካም።",
     "activeTenants": "ንቁ ተከራዮች",
     "historicalTenants": "ያለፉ ተከራዮች",
     "totalUnique": "ጠቅላላ ልዩ",
+    "totalUniqueTenants": "ጠቅላላ ልዩ ተከራዮች",
     "name": "ስም",
     "email": "ኢሜይል",
     "currentUnit": "የአሁን ክፍል",
     "activeLeases": "ንቁ ውሎች",
-    "totalLeases": "ጠቅላላ ውሎች",
+    "totalLeases": "አጠቃላይ ውሎች",
+    "totalLeasesCol": "አጠቃላይ ውሎች",
     "failedLoadTenantReport": "የተከራይ ሪፖርት መጫን አልተሳካም።"
   },
   "dueSoon": {
@@ -509,6 +562,10 @@
   },
   "admin": {
     "dashboardTitle": "የአስተዳዳሪ ዳሽቦርድ",
+    "failedToLoadProfile": "የአስተዳዳሪ መገለጫ መጫን አልተሳካም::",
+    "failedToLoadLandlord": "የአከራይ መገለጫ መጫን አልተሳካም::",
+    "profileInfo": "የመገለጫ መረጃ",
+    "adminId": "የአስተዳዳሪ መለያ፡ {{id}}",
     "totalLandlords": "ጠቅላላ አከራዮች",
     "totalTenants": "ጠቅላላ ተከራዮች",
     "totalProperties": "ጠቅላላ ንብረቶች",
@@ -523,6 +580,8 @@
     "failedLoadLandlords": "አከራዮችን መጫን አልተሳካም።",
     "landlordSuspended": "አከራይ {{name}} ታግዷል።",
     "landlordActivated": "አከራይ {{name}} ነቅቷል።",
+    "adminSuspended": "አስተዳዳሪ {{name}} ታግዷል።",
+    "adminActivated": "አስተዳዳሪ {{name}} ነቅቷል።",
     "actionFailed": "ድርጊቱ አልተሳካም።",
     "activate": "አንቃ",
     "suspend": "አግድ",
@@ -598,12 +657,14 @@
     "searchTitle": "ውጤቶች አልተገኙም",
     "searchSubtitle": "ማጣሪያዎችን ወይም የፍለጋ ቃላትን ማስተካከል ይሞክሩ።",
     "genericTitle": "ገና ምንም የለም",
-    "genericSubtitle": "ውሂብ ሲገኝ እዚህ ይታያል።"
+    "genericSubtitle": "ውሂብ ሲገኝ እዚህ ይታያል።",
+    "noRecordsForTab": "ምንም {{tab}} አልተገኘም::"
   },
   "errors": {
     "somethingWentWrong": "ስህተት ተፈጥሯል",
     "unexpectedError": "ያልተጠበቀ ስህተት ተከስቷል። እባክዎ ገፁን ያድሱ ወይም ችግሩ ከቀጠለ ድጋፍን ያነጋግሩ።",
-    "refreshPage": "ገፁን አድስ"
+    "refreshPage": "ገፁን አድስ",
+    "accountAlreadyExists": "'{{email}}' የሚል ኢሜይል ያለው መለያ አስቀድሞ አለ።"
   },
   "fileUpload": {
     "clickToUpload": "ለማስገባት ጠቅ ያድርጉ",
@@ -628,7 +689,8 @@
     "myLease": "የእኔ ውል",
     "howToPay": "እንዴት እንደሚከፍሉ",
     "uploadPayment": "ክፍያ አስገባ",
-    "paymentHistory": "የክፍያ ታሪክ"
+    "paymentHistory": "የክፍያ ታሪክ",
+    "units": "ክፍሎች"
   },
   "audit": {
     "auditLogTitle": "የኦዲት ምዝግብ",
@@ -674,6 +736,8 @@
     "action_LANDLORD_ACTIVATED": "አከራይ ነቅቷል",
     "action_ADMIN_CREATED": "አስተዳዳሪ ተፈጥሯል",
     "action_ADMIN_UPDATED": "አስተዳዳሪ ተዘምኗል",
+    "action_ADMIN_SUSPENDED": "አስተዳዳሪ ታግዷል",
+    "action_ADMIN_ACTIVATED": "አስተዳዳሪ ነቅቷል",
     "action_ADMIN_DELETED": "አስተዳዳሪ ተሰርዟል",
     "action_TENANT_CREATED": "ተከራይ ተፈጥሯል",
     "action_TENANT_UPDATED": "ተከራይ ተዘምኗል",
@@ -683,7 +747,33 @@
     "type_UNIT": "ክፍል",
     "type_LEASE": "ውል",
     "type_PAYMENT": "ክፍያ",
-    "type_TENANT": "ተከራይ"
+    "type_TENANT": "ተከራይ",
+    "desc_user_logged_out": "ተጠቃሚ ወጥቷል።",
+    "desc_user_logged_in": "ተጠቃሚ ገብቷል: {{email}}",
+    "desc_landlord_registered": "አከራይ ተመዝግቦ ገብቷል: {{email}}",
+    "desc_password_changed": "የይለፍ ቃል ተቀይሯል ለመታወቂያ={{id}}",
+    "desc_property_created": "ንብረት ተፈጥሯል: {{name}}",
+    "desc_property_updated": "ንብረት ተዘምኗል: {{name}}",
+    "desc_property_deleted": "ንብረት ተሰርዟል: {{name}}",
+    "desc_unit_renamed": "የክፍል ስም ተቀይሯል ወደ: {{name}}",
+    "desc_unit_deleted": "ክፍል ተሰርዟል: {{name}}",
+    "desc_unit_maintenance": "ክፍል {{name}} ወደ ጥገና ተቀይሯል።",
+    "desc_unit_available": "ክፍል {{name}} ክፍት ሆኗል።",
+    "desc_bulk_units_created": "ክፍሎች በጅምላ ተፈጥረዋል።",
+    "desc_payment_uploaded": "የክፍያ ማረጋገጫ ተሰቅሏል።",
+    "desc_payment_approved": "ክፍያ ጸድቋል።",
+    "desc_payment_rejected": "ክፍያ ውድቅ ተደርጓል።",
+    "desc_admin_created": "የአስተዳዳሪ መለያ ተፈጥሯል: {{email}}",
+    "desc_admin_updated": "የአስተዳዳሪ መለያ ተዘምኗል: {{email}}",
+    "desc_admin_suspended": "የአስተዳዳሪ መለያ ታግዷል: {{email}}",
+    "desc_admin_activated": "የአስተዳዳሪ መለያ ነቅቷል: {{email}}",
+    "desc_admin_deleted": "የአስተዳዳሪ መለያ ተሰርዟል: {{email}}",
+    "desc_temp_password_issued": "ጊዜያዊ የይለፍ ቃል ተሰጥቷል: {{email}}",
+    "desc_tenant_created": "አዲስ የተከራይ መለያ ተፈጥሯል: {{email}}",
+    "desc_tenant_updated": "የተከራይ መረጃ ተዘምኗል ለመታወቂያ={{id}}",
+    "desc_tenant_deleted": "ተከራይ ተሰርዟል ለመታወቂያ={{id}}",
+    "desc_lease_created": "ውል ተፈጥሯል (ተጠቃሚ: {{userId}}, ክፍል: {{unit}}, ኪራይ: {{rent}})",
+    "desc_lease_terminated": "ውል ተቋርጧል ለክፍል {{unit}}. ምክንያት: {{reason}}"
   },
   "months": {
     "january": "ጃንዋሪ",
@@ -708,5 +798,8 @@
     "selectYear": "ዓመት ይምረጡ",
     "ethiopianCalendar": "የኢትዮጵያ ቀን መቁጠሪያ",
     "gregorianCalendar": "የግሪጎሪያን ቀን መቁጠሪያ"
+  },
+  "landlords": {
+    "landlordId": "የአከራይ መታወቂያ: {{id}}"
   }
 }

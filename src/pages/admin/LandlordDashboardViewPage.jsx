@@ -35,7 +35,7 @@ export default function LandlordDashboardViewPage() {
   useEffect(() => {
     adminApi.getLandlord(landlordId)
       .then(res => setLandlord(res.data?.data))
-      .catch(() => setError('Failed to load landlord profile.'))
+      .catch(() => setError(t('admin.failedToLoadLandlord', 'Failed to load landlord profile.')))
       .finally(() => setLoading(false));
   }, [landlordId]);
 
@@ -74,26 +74,26 @@ export default function LandlordDashboardViewPage() {
   const getColumns = () => {
     if (activeTab === 'properties') {
       return [
-        { key: 'name', header: 'Name' },
-        { key: 'address', header: 'Address' },
-        { key: 'unitsCount', header: 'Units', render: (r) => r.unitsCount || 0 },
+        { key: 'name', header: t('properties.propertyNameLabel', 'Property Name') },
+        { key: 'address', header: t('properties.addressLabel', 'Address') },
+        { key: 'unitsCount', header: t('properties.units', 'Units'), render: (r) => r.unitsCount || 0 },
       ];
     }
     if (activeTab === 'tenants') {
       return [
-        { key: 'fullName', header: 'Name' },
-        { key: 'email', header: 'Email' },
-        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-        { key: 'unitNumber', header: 'Unit', render: (r) => r.unitNumber || '—' },
+        { key: 'fullName', header: t('tenants.name', 'Name') },
+        { key: 'email', header: t('tenants.email', 'Email') },
+        { key: 'status', header: t('tenants.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+        { key: 'unitNumber', header: t('admin.currentUnit', 'Unit'), render: (r) => r.unitNumber || '—' },
       ];
     }
     if (activeTab === 'leases') {
       return [
-        { key: 'tenantFullName', header: 'Tenant', render: (r) => r.tenantFullName || r.tenantEmail || '—' },
-        { key: 'propertyName', header: 'Property' },
-        { key: 'unitNumber', header: 'Unit' },
-        { key: 'monthlyRent', header: 'Rent', render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
-        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+        { key: 'tenantFullName', header: t('nav.tenants', 'Tenant'), render: (r) => r.tenantFullName || r.tenantEmail || '—' },
+        { key: 'propertyName', header: t('nav.properties', 'Property') },
+        { key: 'unitNumber', header: t('units.unitNumber', 'Unit') },
+        { key: 'monthlyRent', header: t('leases.monthlyRentETB', 'Rent'), render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
+        { key: 'status', header: t('leases.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       ];
     }
     return [];
@@ -114,7 +114,7 @@ export default function LandlordDashboardViewPage() {
         onClick={() => navigate(backUrl)}
         className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
       >
-        ← Back to Landlords
+        ← {t('common.backToLandlords', 'Back to Landlords')}
       </button>
 
       {error && <Alert type="error" message={error} className="mb-4" />}
@@ -123,11 +123,11 @@ export default function LandlordDashboardViewPage() {
         <>
           <div className="flex items-center justify-between mb-6">
             <PageHeader 
-              title={`${landlord.fullName}'s Dashboard`} 
+              title={t('dashboard.userDashboard', { name: landlord.fullName, defaultValue: `${landlord.fullName}'s Dashboard` })} 
               subtitle={landlord.email}
             />
             <div className="bg-amber-500/15 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-200 shadow-sm">
-              Read-Only View
+              {t('common.readOnlyView', 'Read-Only View')}
             </div>
           </div>
 
@@ -142,14 +142,14 @@ export default function LandlordDashboardViewPage() {
                     : 'border-transparent text-slate-500 hover:text-slate-100'
                 }`}
               >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                {t(`nav.${tab}`)}
               </button>
             ))}
           </div>
 
           <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden shadow-sm">
             <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-800/50">
-              <h3 className="font-semibold text-slate-100 capitalize">{activeTab}</h3>
+              <h3 className="font-semibold text-slate-100 capitalize">{t(`nav.${activeTab}`)}</h3>
             </div>
             <div className="relative min-h-[200px]">
               {isTableLoading ? (
@@ -160,7 +160,7 @@ export default function LandlordDashboardViewPage() {
               <Table 
                 columns={getColumns()} 
                 data={items} 
-                emptyMessage={`No ${activeTab} found for this landlord.`} 
+                emptyMessage={t('empty.noRecordsForTab', { tab: t(`nav.${activeTab}`), defaultValue: `No ${activeTab} found.` })} 
               />
             </div>
 

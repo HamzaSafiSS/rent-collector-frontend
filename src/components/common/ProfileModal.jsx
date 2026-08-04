@@ -80,8 +80,8 @@ export default function ProfileModal({ isOpen, onClose }) {
           <div className="space-y-3">
             <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.fullName')}</p><p className="font-medium text-slate-200">{user?.fullName}</p></div>
             <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.email')}</p>    <p className="font-medium text-slate-200">{user?.email}</p></div>
-            <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.role')}</p>     <p className="font-medium text-slate-200 capitalize">{user?.role?.replace('_', ' ').toLowerCase()}</p></div>
-            <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.status')}</p>   <p className="font-medium text-slate-200">{user?.status}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.role')}</p>     <p className="font-medium text-slate-200 capitalize">{user?.role ? t(`roles.${user.role}`, { defaultValue: user.role.replace('_', ' ').toLowerCase() }) : ''}</p></div>
+            <div className="flex gap-4"><p className="text-slate-500 w-24">{t('profile.status')}</p>   <p className="font-medium text-slate-200">{user?.status ? t(`common.status${user.status.replace(/_/g, '').charAt(0).toUpperCase() + user.status.replace(/_/g, '').slice(1).toLowerCase()}`, { defaultValue: user.status }) : ''}</p></div>
           </div>
         )}
 

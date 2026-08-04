@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PageHeader, Table, Badge, Pagination, Alert, Button } from '../../components/common';
 import { tenantApi } from '../../api/tenantApi';
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
 
 export default function ManageTenantsPage() {
   const { t } = useTranslation();
+  const { formatDate } = useCalendarDate();
   const navigate = useNavigate();
   const [tenants, setTenants]         = useState([]);
   const [page, setPage]               = useState(0);
@@ -22,7 +24,7 @@ export default function ManageTenantsPage() {
     { key: 'phoneNumber', header: t('tenants.phone'),      render: (r) => r.phoneNumber || '—' },
     { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     { key: 'unitNumber',  header: t('admin.currentUnit'),render: (r) => r.unitNumber || '—' },
-    { key: 'moveInDate',  header: t('leases.startDateCol'),    render: (r) => r.moveInDate || '—' },
+    { key: 'moveInDate',  header: t('leases.startDateCol'),    render: (r) => r.moveInDate ? formatDate(r.moveInDate) : '—' },
     { 
       key: 'actions', 
       header: t('common.actions'),

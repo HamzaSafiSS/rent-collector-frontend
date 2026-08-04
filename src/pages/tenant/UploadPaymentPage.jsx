@@ -86,7 +86,12 @@ export default function UploadPaymentPage() {
       setAmount(''); setFile(null); setErrors({});
       setPaymentMonth('');
     } catch (err) {
-      setApiError(err.response?.data?.message || t('payments.failedUploadPayment'));
+      const msg = err.response?.data?.message || '';
+      if (msg.toLowerCase().includes('already paid')) {
+        setApiError(t('payments.alreadyPaidError', 'Payment for this month and year already paid. Please check the date.'));
+      } else {
+        setApiError(msg || t('payments.failedUploadPayment'));
+      }
     } finally {
       setLoading(false);
     }

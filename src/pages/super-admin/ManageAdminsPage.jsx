@@ -62,7 +62,13 @@ export default function ManageAdminsPage() {
       setCreateOpen(false);
       loadAdmins();
     } catch (err) {
-      setFormError(err.response?.data?.message || t('admin.failedCreateAdmin'));
+      let errMsg = err.response?.data?.message || t('admin.failedCreateAdmin');
+      if (errMsg.includes('already exists') && errMsg.includes('email')) {
+        const match = errMsg.match(/email '([^']+)'/);
+        const email = match ? match[1] : form.email;
+        errMsg = t('errors.accountAlreadyExists', { email });
+      }
+      setFormError(errMsg);
     } finally {
       setFormLoading(false);
     }

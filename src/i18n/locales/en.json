@@ -33,7 +33,14 @@
     "saveChanges": "Save changes",
     "loggedOutSuccess": "Logged out successfully.",
     "couldNotLoadStats": "Could not load statistics.",
-    "backToProperties": "← Back to Properties",
+    "backToAdmins": "Back to Admins",
+    "backToLandlords": "Back to Landlords",
+    "backToTenants": "Back to Tenants",
+    "backToProperties": "Back to Properties",
+    "backToUnits": "Back to Units",
+    "backToLeases": "Back to Leases",
+    "readOnlyView": "Read-Only View",
+    "failedToLoadData": "Failed to load data.",
     "selectProperty": "Select Property",
     "choosePropertySubtitle": "Choose a property to view its {{item}}",
     "noResultsFilter": "No results match the current filter.",
@@ -52,6 +59,7 @@
     "statusCancelled": "Cancelled",
     "statusSuspended": "Suspended",
     "statusPending": "Pending",
+    "statusPendingpasswordchange": "Pending Password Change",
     "statusApproved": "Approved",
     "statusRejected": "Rejected",
     "statusUnpaid": "Unpaid",
@@ -89,6 +97,12 @@
     "landlord": "Landlord",
     "tenant": "Tenant"
   },
+  "roles": {
+    "SUPER_ADMIN": "Super Admin",
+    "ADMIN": "Admin",
+    "LANDLORD": "Landlord",
+    "TENANT": "Tenant"
+  },
 
   "nav": {
     "dashboard": "Dashboard",
@@ -103,7 +117,8 @@
     "paymentHistory": "Payment History",
     "landlords": "Landlords",
     "auditLogs": "Audit Logs",
-    "manageAdmins": "Manage Admins"
+    "manageAdmins": "Manage Admins",
+    "units": "Units"
   },
 
   "auth": {
@@ -178,11 +193,20 @@
     "imageOnlyAllowed": "Only JPEG, PNG, or WebP images are allowed.",
     "imageMaxSize": "Image must be under 10MB.",
     "minimum8Chars": "Minimum 8 characters.",
-    "mustBeDifferentFromCurrent": "Must be different from current."
+    "mustBeDifferentFromCurrent": "Must be different from current.",
+    "selectLeaseRequired": "Please select a lease",
+    "monthAndYearRequired": "Please select a month and year",
+    "validAmountRequired": "Please enter a valid amount greater than 0",
+    "fileRequired": "Please select a payment proof file"
   },
 
   "dashboard": {
     "landlordTitle": "Landlord Dashboard",
+    "userDashboard": "{{name}}'s Dashboard",
+    "tenantDashboardTitle": "Tenant Dashboard",
+    "propertyDashboardTitle": "Property Dashboard",
+    "unitDashboardTitle": "Unit Dashboard",
+    "leaseDashboardTitle": "Lease Dashboard",
     "myProperties": "My Properties",
     "totalUnits": "Total Units",
     "occupiedUnits": "Occupied Units",
@@ -226,6 +250,7 @@
   },
 
   "properties": {
+    "propertyId": "Property ID: {{id}}",
     "portfolioManagement": "Portfolio Management",
     "realEstateProperties": "{{count}} Real Estate Properties",
     "realEstateProperty": "{{count}} Real Estate Property",
@@ -235,6 +260,7 @@
     "noPropertiesYet": "No properties yet",
     "noPropertiesDescription": "You haven't added any properties to your portfolio. Create your first property to get started.",
     "totalUnitsLabel": "Total Units",
+    "units": "Units",
     "occupancyLabel": "Occupancy",
     "availableLabel": "Available",
     "occupiedSlashAvailable": "{{occupied}} Occupied / {{available}} Available",
@@ -266,6 +292,7 @@
   },
 
   "units": {
+    "unitId": "Unit ID: {{id}}",
     "globalUnitsTitle": "Global Units",
     "globalUnitsSubtitle": "Manage all units across your properties",
     "failedLoadGlobalUnits": "Failed to load global units.",
@@ -296,14 +323,17 @@
     "failedChangeStatus": "Failed to change status.",
     "rename": "Rename",
     "unitNo": "Unit No.",
+    "unitNumber": "Unit",
     "status": "Status",
     "baseRent": "Base Rent",
+    "baseRentETB": "Base Rent (ETB)",
     "allUnits": "All Units",
     "property": "Property",
     "unit": "Unit"
   },
 
   "leases": {
+    "leaseId": "Lease ID: {{id}}",
     "leasesTitle": "Leases - {{name}}",
     "leaseCount": "{{count}} leases",
     "leaseCountSingular": "{{count}} lease",
@@ -368,6 +398,10 @@
     "failedLoadPayments": "Failed to load payments.",
     "paymentInfoSaved": "Payment information saved.",
     "failedSavePaymentInfo": "Failed to save payment info.",
+    "uploadSuccessDesc": "Your payment has been successfully uploaded and is pending review.",
+    "uploadSuccessToast": "Payment uploaded successfully!",
+    "alreadyPaidError": "Payment for this month and year already paid. Please check the date.",
+    "invalidMonthBeforeLease": "Payment month cannot be before lease start date",
 
     "reviewPaymentTitle": "Review Payment",
     "approve": "Approve",
@@ -383,6 +417,10 @@
     "monthDetail": "Month",
     "amountETB": "Amount (ETB)",
     "statusDetail": "Status",
+    "month": "Month",
+    "amount": "Amount",
+    "status": "Status",
+    "date": "Date",
     "uploaded": "Uploaded",
     "reviewed": "Reviewed",
 
@@ -459,10 +497,14 @@
   },
 
   "tenants": {
+    "tenantId": "Tenant ID: {{id}}",
     "name": "Name",
     "email": "Email",
     "phone": "Phone",
     "status": "Status",
+    "currentUnit": "Current Unit",
+    "moveIn": "Move-in Date",
+    "activeLeases": "Active Leases",
     "moveInDate": "Move-in Date",
     "tenantsTitle": "Tenants - {{name}}",
     "tenantCount": "{{count}} tenants",
@@ -480,10 +522,16 @@
 
   "reports": {
     "reportsTitle": "Reports — {{name}}",
+    "reportsSubtitle": "Analyse your portfolio performance",
     "analysePerformance": "Analyse your portfolio performance",
     "selectPropertyReports": "Choose a property to view its reports",
+    "refresh": "Refresh",
     "tabPayments": "Payments",
     "tabOccupancy": "Occupancy",
+    "totalUnits": "Total Units",
+    "occupied": "Occupied",
+    "available": "Available",
+    "maintenance": "Maintenance",
     "tabRevenue": "Revenue",
     "tabTenants": "Tenants",
     "fromMonth": "From month",
@@ -503,16 +551,21 @@
     "totalRevenueETB": "Total Revenue (ETB)",
     "avgMonthlyETB": "Avg Monthly (ETB)",
     "monthlyBreakdown": "Monthly Breakdown",
+    "monthCol": "Month",
+    "revenueETBCol": "Revenue (ETB)",
+    "paymentsCol": "Payments",
     "revenueETB": "Revenue (ETB)",
     "failedLoadRevenueReport": "Failed to load revenue report.",
     "activeTenants": "Active Tenants",
     "historicalTenants": "Historical Tenants",
     "totalUnique": "Total Unique",
+    "totalUniqueTenants": "Total Unique Tenants",
     "name": "Name",
     "email": "Email",
     "currentUnit": "Current Unit",
     "activeLeases": "Active Leases",
     "totalLeases": "Total Leases",
+    "totalLeasesCol": "Total Leases",
     "failedLoadTenantReport": "Failed to load tenant report."
   },
 
@@ -527,6 +580,10 @@
 
   "admin": {
     "dashboardTitle": "Admin Dashboard",
+    "failedToLoadProfile": "Failed to load admin profile.",
+    "failedToLoadLandlord": "Failed to load landlord profile.",
+    "profileInfo": "Profile Information",
+    "adminId": "Admin ID: {{id}}",
     "totalLandlords": "Total Landlords",
     "totalTenants": "Total Tenants",
     "totalProperties": "Total Properties",
@@ -541,6 +598,8 @@
     "failedLoadLandlords": "Failed to load landlords.",
     "landlordSuspended": "Landlord {{name}} suspended.",
     "landlordActivated": "Landlord {{name}} activated.",
+    "adminSuspended": "Admin {{name}} suspended.",
+    "adminActivated": "Admin {{name}} activated.",
     "actionFailed": "Action failed.",
     "activate": "Activate",
     "suspend": "Suspend",
@@ -619,13 +678,15 @@
     "searchTitle": "No results found",
     "searchSubtitle": "Try adjusting your filters or search terms.",
     "genericTitle": "Nothing here yet",
-    "genericSubtitle": "Data will appear here once available."
+    "genericSubtitle": "Data will appear here once available.",
+    "noRecordsForTab": "No {{tab}} found."
   },
 
   "errors": {
     "somethingWentWrong": "Something went wrong",
     "unexpectedError": "An unexpected error occurred. Please refresh the page or contact support if the problem persists.",
-    "refreshPage": "Refresh page"
+    "refreshPage": "Refresh page",
+    "accountAlreadyExists": "An account with email '{{email}}' already exists."
   },
 
   "fileUpload": {
@@ -653,7 +714,8 @@
     "myLease": "My Lease",
     "howToPay": "How To Pay",
     "uploadPayment": "Upload Payment",
-    "paymentHistory": "Payment History"
+    "paymentHistory": "Payment History",
+    "units": "Units"
   },
 
   "audit": {
@@ -700,6 +762,8 @@
     "action_LANDLORD_ACTIVATED": "Landlord Activated",
     "action_ADMIN_CREATED": "Admin Created",
     "action_ADMIN_UPDATED": "Admin Updated",
+    "action_ADMIN_SUSPENDED": "Admin Suspended",
+    "action_ADMIN_ACTIVATED": "Admin Activated",
     "action_ADMIN_DELETED": "Admin Deleted",
     "action_TENANT_CREATED": "Tenant Created",
     "action_TENANT_UPDATED": "Tenant Updated",
@@ -709,7 +773,33 @@
     "type_UNIT": "Unit",
     "type_LEASE": "Lease",
     "type_PAYMENT": "Payment",
-    "type_TENANT": "Tenant"
+    "type_TENANT": "Tenant",
+    "desc_user_logged_out": "User logged out.",
+    "desc_user_logged_in": "User logged in: {{email}}",
+    "desc_landlord_registered": "Landlord registered and logged in: {{email}}",
+    "desc_password_changed": "Password changed for userId={{id}}",
+    "desc_property_created": "Property created: {{name}}",
+    "desc_property_updated": "Property updated: {{name}}",
+    "desc_property_deleted": "Property soft-deleted: {{name}}",
+    "desc_unit_renamed": "Unit renamed to: {{name}}",
+    "desc_unit_deleted": "Unit soft-deleted: {{name}}",
+    "desc_unit_maintenance": "Unit {{name}} set to MAINTENANCE.",
+    "desc_unit_available": "Unit {{name}} set to AVAILABLE.",
+    "desc_bulk_units_created": "Units bulk created.",
+    "desc_payment_uploaded": "Payment proof uploaded.",
+    "desc_payment_approved": "Payment approved.",
+    "desc_payment_rejected": "Payment rejected.",
+    "desc_admin_created": "Admin account created: {{email}}",
+    "desc_admin_updated": "Admin account updated: {{email}}",
+    "desc_admin_suspended": "Admin account suspended: {{email}}",
+    "desc_admin_activated": "Admin account activated: {{email}}",
+    "desc_admin_deleted": "Admin account deleted: {{email}}",
+    "desc_temp_password_issued": "Temporary password issued to: {{email}}",
+    "desc_tenant_created": "New tenant account created: {{email}}",
+    "desc_tenant_updated": "Tenant contact info updated for userId={{id}}",
+    "desc_tenant_deleted": "Tenant soft-deleted: userId={{id}}",
+    "desc_lease_created": "Lease created (User: {{userId}}, Unit: {{unit}}, Rent: {{rent}})",
+    "desc_lease_terminated": "Lease terminated for unit {{unit}}. Reason: {{reason}}"
   },
 
   "months": {

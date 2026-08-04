@@ -21,7 +21,7 @@ export default function PaymentsPage() {
   const { t } = useTranslation();
   const toast = useToast();
   const detailsRef = useRef(null);
-  const { formatDate } = useCalendarDate();
+  const { formatDate, formatMonth } = useCalendarDate();
 
   const [selectedProperty, setSelectedProperty] = useState(null);
 
@@ -153,7 +153,7 @@ export default function PaymentsPage() {
     { key: 'tenantFullName',header: t('leases.tenant'),     render: (r) => r.tenantFullName || '—' },
     { key: 'unitNumber',    header: t('units.unit') },
     { key: 'propertyName',  header: t('leases.property') },
-    { key: 'paymentMonth',  header: t('payments.month') },
+    { key: 'paymentMonth',  header: t('payments.month'), render: (r) => r.paymentMonth ? formatMonth(r.paymentMonth) : '—' },
     { key: 'amount',        header: t('payments.amountETB'), render: (r) => Number(r.amount).toLocaleString() },
     { key: 'status',        header: t('leases.status'),      render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     { key: 'uploadedAt',    header: t('payments.uploaded'),    render: (r) => r.uploadedAt ? formatDate(r.uploadedAt) : '—' },
@@ -277,7 +277,7 @@ export default function PaymentsPage() {
           <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
             {t('payments.paymentDetails')}
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              {statusFilter}
+              {statusFilter ? t(`common.status${statusFilter.charAt(0) + statusFilter.slice(1).toLowerCase()}`, { defaultValue: statusFilter }) : ''}
             </span>
           </h2>
         </div>
