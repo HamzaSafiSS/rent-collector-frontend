@@ -374,6 +374,8 @@
     "failedLoadPayments": "Failed to load payments.",
     "paymentInfoSaved": "Payment information saved.",
     "failedSavePaymentInfo": "Failed to save payment info.",
+    "uploadSuccessDesc": "Your payment has been successfully uploaded and is pending review.",
+    "uploadSuccessToast": "Payment uploaded successfully!",
     "alreadyPaidError": "Payment for this month and year already paid. Please check the date.",
     "invalidMonthBeforeLease": "Payment month cannot be before lease start date",
 
