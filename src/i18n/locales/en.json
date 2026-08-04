@@ -257,6 +257,7 @@
     "noPropertiesYet": "No properties yet",
     "noPropertiesDescription": "You haven't added any properties to your portfolio. Create your first property to get started.",
     "totalUnitsLabel": "Total Units",
+    "units": "Units",
     "occupancyLabel": "Occupancy",
     "availableLabel": "Available",
     "occupiedSlashAvailable": "{{occupied}} Occupied / {{available}} Available",

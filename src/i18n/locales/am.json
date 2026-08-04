@@ -250,6 +250,7 @@
     "noPropertiesYet": "ገና ንብረቶች የሉም",
     "noPropertiesDescription": "ወደ ፖርትፎሊዮዎ ምንም ንብረቶች አልጨመሩም። ለመጀመር የመጀመሪያውን ንብረትዎን ይፍጠሩ።",
     "totalUnitsLabel": "ጠቅላላ ክፍሎች",
+    "units": "ክፍሎች",
     "occupancyLabel": "ተይዟል",
     "availableLabel": "ያሉ",
     "occupiedSlashAvailable": "{{occupied}} ተይዟል / {{available}} ያሉ",
