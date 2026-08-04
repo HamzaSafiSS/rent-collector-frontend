@@ -491,6 +491,7 @@
     "reportsTitle": "Reports — {{name}}",
     "analysePerformance": "Analyse your portfolio performance",
     "selectPropertyReports": "Choose a property to view its reports",
+    "refresh": "Refresh",
     "tabPayments": "Payments",
     "tabOccupancy": "Occupancy",
     "tabRevenue": "Revenue",
