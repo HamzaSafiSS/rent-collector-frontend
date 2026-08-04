@@ -116,7 +116,8 @@
     "paymentHistory": "Payment History",
     "landlords": "Landlords",
     "auditLogs": "Audit Logs",
-    "manageAdmins": "Manage Admins"
+    "manageAdmins": "Manage Admins",
+    "units": "Units"
   },
 
   "auth": {
@@ -319,8 +320,10 @@
     "failedChangeStatus": "Failed to change status.",
     "rename": "Rename",
     "unitNo": "Unit No.",
+    "unitNumber": "Unit",
     "status": "Status",
     "baseRent": "Base Rent",
+    "baseRentETB": "Base Rent (ETB)",
     "allUnits": "All Units",
     "property": "Property",
     "unit": "Unit"

@@ -115,7 +115,8 @@
     "paymentHistory": "የክፍያ ታሪክ",
     "landlords": "አከራዮች",
     "auditLogs": "የኦዲት ምዝግብ",
-    "manageAdmins": "አስተዳዳሪዎችን አስተዳድር"
+    "manageAdmins": "አስተዳዳሪዎችን አስተዳድር",
+    "units": "ክፍሎች"
   },
   "auth": {
     "welcomeBack": "እንኳን ደህና መጡ። እባክዎ ይግቡ።",
@@ -311,8 +312,10 @@
     "failedChangeStatus": "ሁኔታ መቀየር አልተሳካም።",
     "rename": "ዳግም ሰይም",
     "unitNo": "ክፍል ቁ.",
+    "unitNumber": "ክፍል",
     "status": "ሁኔታ",
     "baseRent": "መሰረታዊ ኪራይ",
+    "baseRentETB": "መሰረታዊ ኪራይ (ብር)",
     "allUnits": "ሁሉም ክፍሎች",
     "property": "ንብረት",
     "unit": "ክፍል"
