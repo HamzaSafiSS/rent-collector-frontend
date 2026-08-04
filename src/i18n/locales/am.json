@@ -33,7 +33,14 @@
     "saveChanges": "ለውጦችን አስቀምጥ",
     "loggedOutSuccess": "በተሳካ ሁኔታ ወጥተዋል።",
     "couldNotLoadStats": "ስታቲስቲክስ መጫን አልተቻለም።",
-    "backToProperties": "← ወደ ንብረቶች ተመለስ",
+    "backToAdmins": "ወደ አስተዳዳሪዎች ተመለስ",
+    "backToLandlords": "ወደ አከራዮች ተመለስ",
+    "backToTenants": "ወደ ተከራዮች ተመለስ",
+    "backToProperties": "ወደ ንብረቶች ተመለስ",
+    "backToUnits": "ወደ ቤቶች ተመለስ",
+    "backToLeases": "ወደ ውሎች ተመለስ",
+    "readOnlyView": "ለማንበብ ብቻ",
+    "failedToLoadData": "መረጃን መጫን አልተሳካም::",
     "selectProperty": "ንብረት ይምረጡ",
     "choosePropertySubtitle": "{{item}}ን ለማየት ንብረት ይምረጡ",
     "noResultsFilter": "ከአሁኑ ማጣሪያ ጋር የሚዛመድ ውጤት የለም።",
@@ -189,6 +196,11 @@
   },
   "dashboard": {
     "landlordTitle": "የአከራይ ዳሽቦርድ",
+    "userDashboard": "የ{{name}} ዳሽቦርድ",
+    "tenantDashboardTitle": "የተከራይ ዳሽቦርድ",
+    "propertyDashboardTitle": "የንብረት ዳሽቦርድ",
+    "unitDashboardTitle": "የቤት ዳሽቦርድ",
+    "leaseDashboardTitle": "የውል ዳሽቦርድ",
     "myProperties": "ንብረቶቼ",
     "totalUnits": "ጠቅላላ ክፍሎች",
     "occupiedUnits": "የተያዙ ክፍሎች",
@@ -537,6 +549,10 @@
   },
   "admin": {
     "dashboardTitle": "የአስተዳዳሪ ዳሽቦርድ",
+    "failedToLoadProfile": "የአስተዳዳሪ መገለጫ መጫን አልተሳካም::",
+    "failedToLoadLandlord": "የአከራይ መገለጫ መጫን አልተሳካም::",
+    "profileInfo": "የመገለጫ መረጃ",
+    "adminId": "የአስተዳዳሪ መለያ፡ {{id}}",
     "totalLandlords": "ጠቅላላ አከራዮች",
     "totalTenants": "ጠቅላላ ተከራዮች",
     "totalProperties": "ጠቅላላ ንብረቶች",
@@ -626,7 +642,8 @@
     "searchTitle": "ውጤቶች አልተገኙም",
     "searchSubtitle": "ማጣሪያዎችን ወይም የፍለጋ ቃላትን ማስተካከል ይሞክሩ።",
     "genericTitle": "ገና ምንም የለም",
-    "genericSubtitle": "ውሂብ ሲገኝ እዚህ ይታያል።"
+    "genericSubtitle": "ውሂብ ሲገኝ እዚህ ይታያል።",
+    "noRecordsForTab": "ምንም {{tab}} አልተገኘም::"
   },
   "errors": {
     "somethingWentWrong": "ስህተት ተፈጥሯል",

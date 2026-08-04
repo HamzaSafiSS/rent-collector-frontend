@@ -44,7 +44,7 @@ export default function LeaseDashboardViewPage() {
     } catch (err) {
       console.error(err);
       setItems([]);
-      setError('Failed to load data.');
+      setError(t('common.failedToLoadData', 'Failed to load data.'));
     } finally {
       setLoading(false);
     }
@@ -61,10 +61,10 @@ export default function LeaseDashboardViewPage() {
   const getColumns = () => {
     if (activeTab === 'payments') {
       return [
-        { key: 'paymentMonth', header: 'Month' },
-        { key: 'amount', header: 'Amount', render: (r) => `ETB ${Number(r.amount).toLocaleString()}` },
-        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-        { key: 'uploadedAt', header: 'Date', render: (r) => new Date(r.uploadedAt).toLocaleDateString() },
+        { key: 'paymentMonth', header: t('payments.month', 'Month') },
+        { key: 'amount', header: t('payments.amount', 'Amount'), render: (r) => `ETB ${Number(r.amount).toLocaleString()}` },
+        { key: 'status', header: t('payments.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+        { key: 'uploadedAt', header: t('payments.date', 'Date'), render: (r) => new Date(r.uploadedAt).toLocaleDateString() },
       ];
     }
     return [];
@@ -76,15 +76,15 @@ export default function LeaseDashboardViewPage() {
         onClick={() => navigate(backUrl)}
         className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
       >
-        ← Back to Leases
+        ← {t('common.backToLeases', 'Back to Leases')}
       </button>
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
       <div className="flex items-center justify-between mb-6">
-        <PageHeader title={`Lease Dashboard`} subtitle={`Lease ID: ${id}`} />
+        <PageHeader title={t('dashboard.leaseDashboardTitle', 'Lease Dashboard')} subtitle={t('leases.leaseId', { id, defaultValue: `Lease ID: ${id}` })} />
         <div className="bg-amber-500/15 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-200 shadow-sm">
-          Read-Only View
+          {t('common.readOnlyView', 'Read-Only View')}
         </div>
       </div>
 
@@ -99,14 +99,14 @@ export default function LeaseDashboardViewPage() {
                 : 'border-transparent text-slate-500 hover:text-slate-100'
             }`}
           >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            {t(`nav.${tab}`)}
           </button>
         ))}
       </div>
 
       <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden shadow-sm">
         <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-800/50">
-          <h3 className="font-semibold text-slate-100 capitalize">{activeTab}</h3>
+          <h3 className="font-semibold text-slate-100 capitalize">{t(`nav.${activeTab}`)}</h3>
         </div>
         <div className="relative min-h-[200px]">
           {loading ? (
@@ -117,7 +117,7 @@ export default function LeaseDashboardViewPage() {
           <Table 
             columns={getColumns()} 
             data={items} 
-            emptyMessage={`No ${activeTab} found.`} 
+            emptyMessage={t('empty.noRecordsForTab', { tab: t(`nav.${activeTab}`), defaultValue: `No ${activeTab} found.` })} 
           />
         </div>
 

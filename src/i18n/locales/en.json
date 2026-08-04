@@ -33,7 +33,14 @@
     "saveChanges": "Save changes",
     "loggedOutSuccess": "Logged out successfully.",
     "couldNotLoadStats": "Could not load statistics.",
-    "backToProperties": "← Back to Properties",
+    "backToAdmins": "Back to Admins",
+    "backToLandlords": "Back to Landlords",
+    "backToTenants": "Back to Tenants",
+    "backToProperties": "Back to Properties",
+    "backToUnits": "Back to Units",
+    "backToLeases": "Back to Leases",
+    "readOnlyView": "Read-Only View",
+    "failedToLoadData": "Failed to load data.",
     "selectProperty": "Select Property",
     "choosePropertySubtitle": "Choose a property to view its {{item}}",
     "noResultsFilter": "No results match the current filter.",
@@ -193,6 +200,11 @@
 
   "dashboard": {
     "landlordTitle": "Landlord Dashboard",
+    "userDashboard": "{{name}}'s Dashboard",
+    "tenantDashboardTitle": "Tenant Dashboard",
+    "propertyDashboardTitle": "Property Dashboard",
+    "unitDashboardTitle": "Unit Dashboard",
+    "leaseDashboardTitle": "Lease Dashboard",
     "myProperties": "My Properties",
     "totalUnits": "Total Units",
     "occupiedUnits": "Occupied Units",
@@ -555,6 +567,10 @@
 
   "admin": {
     "dashboardTitle": "Admin Dashboard",
+    "failedToLoadProfile": "Failed to load admin profile.",
+    "failedToLoadLandlord": "Failed to load landlord profile.",
+    "profileInfo": "Profile Information",
+    "adminId": "Admin ID: {{id}}",
     "totalLandlords": "Total Landlords",
     "totalTenants": "Total Tenants",
     "totalProperties": "Total Properties",
@@ -647,7 +663,8 @@
     "searchTitle": "No results found",
     "searchSubtitle": "Try adjusting your filters or search terms.",
     "genericTitle": "Nothing here yet",
-    "genericSubtitle": "Data will appear here once available."
+    "genericSubtitle": "Data will appear here once available.",
+    "noRecordsForTab": "No {{tab}} found."
   },
 
   "errors": {

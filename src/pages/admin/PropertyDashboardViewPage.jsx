@@ -66,7 +66,7 @@ export default function PropertyDashboardViewPage() {
     } catch (err) {
       console.error(err);
       setItems([]);
-      setError('Failed to load data.');
+      setError(t('common.failedToLoadData', 'Failed to load data.'));
     } finally {
       setLoading(false);
     }
@@ -83,25 +83,25 @@ export default function PropertyDashboardViewPage() {
   const getColumns = () => {
     if (activeTab === 'leases') {
       return [
-        { key: 'tenantFullName', header: 'Tenant', render: (r) => r.tenantFullName || r.tenantEmail || '—' },
-        { key: 'unitNumber', header: 'Unit' },
-        { key: 'monthlyRent', header: 'Rent', render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
-        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+        { key: 'tenantFullName', header: t('nav.tenants', 'Tenant'), render: (r) => r.tenantFullName || r.tenantEmail || '—' },
+        { key: 'unitNumber', header: t('units.unitNumber', 'Unit') },
+        { key: 'monthlyRent', header: t('leases.monthlyRentETB', 'Rent'), render: (r) => `ETB ${Number(r.monthlyRent).toLocaleString()}` },
+        { key: 'status', header: t('leases.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       ];
     }
     if (activeTab === 'units') {
       return [
-        { key: 'unitNumber', header: 'Unit No.' },
-        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-        { key: 'baseRent', header: 'Base Rent', render: (r) => r.baseRent ? `ETB ${Number(r.baseRent).toLocaleString()}` : '—' },
+        { key: 'unitNumber', header: t('units.unitNumber', 'Unit No.') },
+        { key: 'status', header: t('units.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+        { key: 'baseRent', header: t('units.baseRentETB', 'Base Rent'), render: (r) => r.baseRent ? `ETB ${Number(r.baseRent).toLocaleString()}` : '—' },
       ];
     }
     if (activeTab === 'tenants') {
       return [
-        { key: 'fullName', header: 'Name', render: (r) => r.fullName || '—' },
-        { key: 'email', header: 'Email' },
-        { key: 'phoneNumber', header: 'Phone', render: (r) => r.phoneNumber || '—' },
-        { key: 'status', header: 'Status', render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+        { key: 'fullName', header: t('tenants.name', 'Name'), render: (r) => r.fullName || '—' },
+        { key: 'email', header: t('tenants.email', 'Email') },
+        { key: 'phoneNumber', header: t('tenants.phone', 'Phone'), render: (r) => r.phoneNumber || '—' },
+        { key: 'status', header: t('tenants.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
       ];
     }
     return [];
@@ -120,15 +120,15 @@ export default function PropertyDashboardViewPage() {
         onClick={() => navigate(backUrl)}
         className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
       >
-        ← Back to Properties
+        ← {t('common.backToProperties', 'Back to Properties')}
       </button>
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
       <div className="flex items-center justify-between mb-6">
-        <PageHeader title={`Property Dashboard`} subtitle={`Property ID: ${id}`} />
+        <PageHeader title={t('dashboard.propertyDashboardTitle', 'Property Dashboard')} subtitle={t('properties.propertyId', { id, defaultValue: `Property ID: ${id}` })} />
         <div className="bg-amber-500/15 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-200 shadow-sm">
-          Read-Only View
+          {t('common.readOnlyView', 'Read-Only View')}
         </div>
       </div>
 
@@ -144,18 +144,18 @@ export default function PropertyDashboardViewPage() {
                   : 'border-transparent text-slate-500 hover:text-slate-100'
               }`}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {t(`nav.${tab}`)}
             </button>
           ))}
         </div>
         <div className="mb-2 flex items-center gap-2">
-          <span className="text-sm font-medium text-slate-400">Status:</span>
+          <span className="text-sm font-medium text-slate-400">{t('common.status', 'Status:')}</span>
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
             className="text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
-            <option value="">All</option>
+            <option value="">{t('common.allStatuses', 'All')}</option>
             {getStatusOptions().map(opt => (
               <option key={opt} value={opt}>{opt}</option>
             ))}
@@ -165,7 +165,7 @@ export default function PropertyDashboardViewPage() {
 
       <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden shadow-sm">
         <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-800/50">
-          <h3 className="font-semibold text-slate-100 capitalize">{activeTab}</h3>
+          <h3 className="font-semibold text-slate-100 capitalize">{t(`nav.${activeTab}`)}</h3>
         </div>
         <div className="relative min-h-[200px]">
           {loading ? (
@@ -176,7 +176,7 @@ export default function PropertyDashboardViewPage() {
           <Table 
             columns={getColumns()} 
             data={items} 
-            emptyMessage={`No ${activeTab} found.`} 
+            emptyMessage={t('empty.noRecordsForTab', { tab: t(`nav.${activeTab}`), defaultValue: `No ${activeTab} found.` })} 
           />
         </div>
 
