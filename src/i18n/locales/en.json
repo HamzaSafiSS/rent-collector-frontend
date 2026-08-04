@@ -374,6 +374,7 @@
     "failedLoadPayments": "Failed to load payments.",
     "paymentInfoSaved": "Payment information saved.",
     "failedSavePaymentInfo": "Failed to save payment info.",
+    "alreadyPaidError": "Payment for this month and year already paid. Please check the date.",
     "invalidMonthBeforeLease": "Payment month cannot be before lease start date",
 
     "reviewPaymentTitle": "Review Payment",
@@ -785,5 +786,11 @@
     "selectYear": "Select year",
     "ethiopianCalendar": "Ethiopian Calendar",
     "gregorianCalendar": "Gregorian Calendar"
+  },
+  "validation": {
+    "selectLeaseRequired": "Please select a lease",
+    "monthAndYearRequired": "Please select a month and year",
+    "validAmountRequired": "Please enter a valid amount greater than 0",
+    "fileRequired": "Please select a payment proof file"
   }
 }
