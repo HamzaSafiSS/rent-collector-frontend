@@ -366,6 +366,7 @@
     "failedLoadPayments": "ክፍያዎችን መጫን አልተሳካም።",
     "paymentInfoSaved": "የክፍያ መረጃ ተቀምጧል።",
     "failedSavePaymentInfo": "የክፍያ መረጃ ማስቀመጥ አልተሳካም።",
+    "invalidMonthBeforeLease": "የክፍያ ወር ከውል መጀመሪያ ቀን በፊት መሆን አይችልም",
     "reviewPaymentTitle": "ክፍያ ገምግም",
     "approve": "አጽድቅ",
     "reject": "ውድቅ አድርግ",

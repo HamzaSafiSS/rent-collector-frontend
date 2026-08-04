@@ -374,6 +374,7 @@
     "failedLoadPayments": "Failed to load payments.",
     "paymentInfoSaved": "Payment information saved.",
     "failedSavePaymentInfo": "Failed to save payment info.",
+    "invalidMonthBeforeLease": "Payment month cannot be before lease start date",
 
     "reviewPaymentTitle": "Review Payment",
     "approve": "Approve",
