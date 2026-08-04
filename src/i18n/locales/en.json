@@ -703,7 +703,8 @@
     "myLease": "My Lease",
     "howToPay": "How To Pay",
     "uploadPayment": "Upload Payment",
-    "paymentHistory": "Payment History"
+    "paymentHistory": "Payment History",
+    "units": "Units"
   },
 
   "audit": {

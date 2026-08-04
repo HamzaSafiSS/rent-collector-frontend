@@ -678,7 +678,8 @@
     "myLease": "የእኔ ውል",
     "howToPay": "እንዴት እንደሚከፍሉ",
     "uploadPayment": "ክፍያ አስገባ",
-    "paymentHistory": "የክፍያ ታሪክ"
+    "paymentHistory": "የክፍያ ታሪክ",
+    "units": "ክፍሎች"
   },
   "audit": {
     "auditLogTitle": "የኦዲት ምዝግብ",
