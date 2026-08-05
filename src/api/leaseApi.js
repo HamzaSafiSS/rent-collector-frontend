@@ -3,8 +3,19 @@ import api from './axios';
 export const leaseApi = {
 
   // ── Landlord endpoints ────────────────────────────────────────────────────
-  createLease: (data) =>
-    api.post('/leases', data),
+  createLease: (data, agreementDocument) => {
+    const formData = new FormData();
+    if (data.tenantEmail) formData.append('tenantEmail', data.tenantEmail);
+    if (data.tenantId) formData.append('tenantId', data.tenantId);
+    formData.append('unitId', data.unitId);
+    formData.append('startDate', data.startDate);
+    formData.append('monthlyRent', data.monthlyRent);
+    if (agreementDocument) formData.append('agreementDocument', agreementDocument);
+    
+    return api.post('/leases', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 
   listLeases: (page = 0, size = 20, status = null, propertyId = null) =>
     api.get('/leases', {

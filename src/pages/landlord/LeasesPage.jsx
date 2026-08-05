@@ -78,11 +78,11 @@ export default function LeasesPage() {
     }
   }
 
-  async function handleCreate(payload) {
+  async function handleCreate(payload, agreementDocument) {
     try {
       setFormLoading(true);
       setFormError('');
-      const res = await leaseApi.createLease(payload);
+      const res = await leaseApi.createLease(payload, agreementDocument);
       const msg = res.data?.message || t('leases.leaseCreated');
       toast.success(msg);
       setCreateOpen(false);
@@ -118,6 +118,14 @@ export default function LeasesPage() {
     { key: 'monthlyRent',   header: t('leases.rentETB'), render: (r) => Number(r.monthlyRent).toLocaleString() },
     { key: 'startDate',     header: t('leases.startDateCol'), render: (r) => r.startDate ? formatDate(r.startDate) : '—' },
     { key: 'status',        header: t('leases.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+    {
+      key: 'document', header: t('leases.document'),
+      render: (r) => r.agreementDocumentUrl ? (
+        <a href={`${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/leases/${r.id}/document`} target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline text-xs">
+          {t('leases.viewDocument')}
+        </a>
+      ) : '—'
+    },
     {
       key: 'actions', header: t('common.actions'),
       render: (row) => row.status === 'ACTIVE' ? (

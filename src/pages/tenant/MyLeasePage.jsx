@@ -57,6 +57,16 @@ export default function MyLeasePage() {
                 <p className="text-slate-600 dark:text-slate-400 text-xs mb-1">{t('leases.leaseID')}</p>
                 <p className="font-semibold">#{lease.id}</p>
               </div>
+              {lease.agreementDocumentUrl && (
+                <div>
+                  <p className="text-slate-600 dark:text-slate-400 text-xs mb-1">{t('leases.agreementDocument')}</p>
+                  <p>
+                    <a href={`${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/leases/${lease.id}/document`} target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline font-medium">
+                      {t('leases.viewDocument')}
+                    </a>
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         ))}
