@@ -501,6 +501,7 @@
     "tenantDeleted": "ተከራይ ተሰርዟል።",
     "failedUpdateTenant": "ተከራይ ማዘመን አልተሳካም።",
     "cannotDeleteTenant": "ተከራይ መሰረዝ አይቻልም።",
+    "cannotDeleteActiveLease": "ተከራዩን መሰረዝ አልተቻለም: አሁንም ገቢር ውል አላቸው። ተከራዩን ከመሰረዝዎ በፊት ውሉን ያቋርጡ።",
     "failedLoadTenants": "ተከራዮችን መጫን አልተሳካም።",
     "selectPropertyTenants": "ተከራዮችን ለማየት ንብረት ይምረጡ"
   },

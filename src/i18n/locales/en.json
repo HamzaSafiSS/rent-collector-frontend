@@ -516,6 +516,7 @@
     "tenantDeleted": "Tenant deleted.",
     "failedUpdateTenant": "Failed to update tenant.",
     "cannotDeleteTenant": "Cannot delete tenant.",
+    "cannotDeleteActiveLease": "Cannot delete tenant: they still have an active lease. Terminate the lease first before deleting the tenant.",
     "failedLoadTenants": "Failed to load tenants.",
     "selectPropertyTenants": "Choose a property to view its tenants"
   },
