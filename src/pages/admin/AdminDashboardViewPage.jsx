@@ -64,9 +64,9 @@ export default function AdminDashboardViewPage() {
           </PageHeader>
 
           {/* Admin Info Card */}
-          <div className="bg-[#111827] rounded-xl border border-slate-700/50 p-6 shadow-sm flex flex-col md:flex-row gap-8">
+          <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 p-6 shadow-sm flex flex-col md:flex-row gap-8">
             <div className="flex-1 space-y-4">
-              <h3 className="text-lg font-semibold text-slate-100 border-b pb-2">{t('admin.profileInfo', 'Profile Information')}</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-700/50 pb-2">{t('admin.profileInfo', 'Profile Information')}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{t('admin.name')}</span>

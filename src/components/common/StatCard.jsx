@@ -1,14 +1,14 @@
 export default function StatCard({ label, value, icon, color = 'emerald', subtitle, onClick, isSelected = false }) {
   const textColors = {
-    blue:    'text-white',
-    green:   'text-white',
-    emerald: 'text-white',
-    red:     'text-white',
-    yellow:  'text-white',
-    purple:  'text-white',
-    slate:   'text-white',
-    indigo:  'text-white',
-    orange:  'text-white',
+    blue:    'text-[#1A2B3C] dark:text-white',
+    green:   'text-[#1A2B3C] dark:text-white',
+    emerald: 'text-[#1A2B3C] dark:text-white',
+    red:     'text-[#1A2B3C] dark:text-white',
+    yellow:  'text-[#1A2B3C] dark:text-white',
+    purple:  'text-[#1A2B3C] dark:text-white',
+    slate:   'text-[#1A2B3C] dark:text-white',
+    indigo:  'text-[#1A2B3C] dark:text-white',
+    orange:  'text-[#1A2B3C] dark:text-white',
   };
 
   const selectedBorders = {
@@ -37,20 +37,20 @@ export default function StatCard({ label, value, icon, color = 'emerald', subtit
 
   const borderClass = isSelected
     ? (selectedBorders[color] || 'border-emerald-500 ring-2 ring-emerald-500/50 shadow-lg shadow-emerald-500/10')
-    : 'border-slate-700/50 hover:border-slate-500/50';
+    : 'border-slate-200 dark:border-slate-700/50 hover:border-slate-300 dark:hover:border-slate-500/50';
 
   return (
     <div 
       onClick={onClick}
-      className={`rounded-2xl border bg-gradient-to-br from-[#111827] to-[#1e293b] shadow-sm hover:shadow-md transition-all duration-300 p-6 overflow-hidden relative group ${borderClass} ${onClick ? 'cursor-pointer hover:-translate-y-0.5' : ''}`}
+      className={`rounded-2xl border bg-white dark:bg-gradient-to-br dark:from-[#111827] dark:to-[#1e293b] shadow-sm hover:shadow-md transition-all duration-300 p-6 overflow-hidden relative group ${borderClass} ${onClick ? 'cursor-pointer hover:-translate-y-0.5' : ''}`}
     >
       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-50 rounded-bl-full -z-10 transform group-hover:scale-110 transition-transform duration-500"></div>
       <div className="flex items-center justify-between z-10">
         <div>
-          <p className="text-sm font-semibold text-slate-300 tracking-wide">{label}</p>
+          <p className="text-sm font-semibold text-slate-600 dark:text-slate-300 tracking-wide">{label}</p>
           <p className={`text-2xl font-extrabold mt-2 tracking-tight ${textColors[color] || textColors.emerald}`}>{value ?? '—'}</p>
           {subtitle && (
-            <p className="text-sm mt-2 font-medium text-slate-400">{subtitle}</p>
+            <p className="text-sm mt-2 font-medium text-slate-500 dark:text-slate-400">{subtitle}</p>
           )}
         </div>
         {icon && (

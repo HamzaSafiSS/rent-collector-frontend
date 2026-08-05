@@ -163,7 +163,7 @@ export default function LeasesPage() {
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
               statusFilter === s
                 ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}
           >
             {s ? (s === 'ACTIVE' ? t('leases.active') : t('leases.terminated')) : t('common.all')}

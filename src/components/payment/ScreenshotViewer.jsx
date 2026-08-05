@@ -55,7 +55,7 @@ export default function ScreenshotViewer({ paymentId }) {
             src={url}
             alt="Payment proof"
             onLoad={() => setLoaded(true)}
-            className={`max-w-full rounded-lg border border-slate-700 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+            className={`max-w-full rounded-lg border border-slate-200 dark:border-slate-700 transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
             style={{ maxHeight: '400px', objectFit: 'contain' }}
           />
           <a

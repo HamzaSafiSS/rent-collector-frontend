@@ -89,7 +89,7 @@ export default function LeaseDashboardViewPage() {
         </div>
       </div>
 
-      <div className="mb-6 flex gap-2 border-b border-slate-700/50">
+      <div className="mb-6 flex gap-2 border-b border-slate-200 dark:border-slate-700/50">
         {['payments'].map(tab => (
           <button
             key={tab}
@@ -97,7 +97,7 @@ export default function LeaseDashboardViewPage() {
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === tab
                 ? 'border-emerald-600 text-emerald-400'
-                : 'border-transparent text-slate-500 hover:text-slate-100'
+                : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
             {t(`nav.${tab}`)}
@@ -105,13 +105,13 @@ export default function LeaseDashboardViewPage() {
         ))}
       </div>
 
-      <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-800/50">
-          <h3 className="font-semibold text-slate-100 capitalize">{t(`nav.${activeTab}`)}</h3>
+      <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden shadow-sm">
+        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+          <h3 className="font-semibold text-slate-900 dark:text-slate-100 capitalize">{t(`nav.${activeTab}`)}</h3>
         </div>
         <div className="relative min-h-[200px]">
           {loading ? (
-            <div className="absolute inset-0 bg-[#111827]/70 flex justify-center pt-10 z-10">
+            <div className="absolute inset-0 bg-white/70 dark:bg-[#111827]/70 flex justify-center pt-10 z-10">
               <Spinner size="md" />
             </div>
           ) : null}

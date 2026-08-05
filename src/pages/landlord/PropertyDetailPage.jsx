@@ -220,10 +220,10 @@ export default function PropertyDetailPage() {
               className={`rounded-2xl p-6 border text-center shadow-sm relative overflow-hidden cursor-pointer transition-transform hover:-translate-y-1 ${
               isSelected ? 'ring-2 ring-emerald-500 shadow-md' : ''
             } ${
-              s === 'AVAILABLE'   ? 'bg-[#111827] border-emerald-500/20'  :
-              s === 'OCCUPIED'    ? 'bg-[#111827] border-sky-500/20'   :
-              s === 'MAINTENANCE' ? 'bg-[#111827] border-amber-500/20'  :
-                                    'bg-[#111827] border-slate-700/50'
+              s === 'AVAILABLE'   ? 'bg-white dark:bg-[#111827] border-emerald-500/20'  :
+              s === 'OCCUPIED'    ? 'bg-white dark:bg-[#111827] border-sky-500/20'   :
+              s === 'MAINTENANCE' ? 'bg-white dark:bg-[#111827] border-amber-500/20'  :
+                                    'bg-white dark:bg-[#111827] border-slate-200 dark:border-slate-700/50'
             }`}>
               <div className={`absolute inset-0 opacity-10 ${
                 s === 'AVAILABLE' ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' :
@@ -235,7 +235,7 @@ export default function PropertyDetailPage() {
                 s === 'AVAILABLE' ? 'text-emerald-400' :
                 s === 'OCCUPIED'  ? 'text-sky-400' :
                 s === 'MAINTENANCE' ? 'text-amber-400' :
-                                    'text-slate-200'
+                                    'text-slate-800 dark:text-slate-200'
               }`}>{count}</p>
               <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{labelText}</p>
             </div>
@@ -246,7 +246,7 @@ export default function PropertyDetailPage() {
       {/* Units table */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-100">{filterStatus === 'ALL' ? t('units.allUnits') : t(`common.status${filterStatus.charAt(0) + filterStatus.slice(1).toLowerCase()}`, { defaultValue: filterStatus })} <span className="text-slate-500 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{filterStatus === 'ALL' ? t('units.allUnits') : t(`common.status${filterStatus.charAt(0) + filterStatus.slice(1).toLowerCase()}`, { defaultValue: filterStatus })} <span className="text-slate-500 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
         </div>
         <Table
           columns={unitColumns}

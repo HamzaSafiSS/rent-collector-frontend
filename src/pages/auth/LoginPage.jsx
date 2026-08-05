@@ -6,6 +6,7 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import LanguageToggle from '../../components/common/LanguageToggle';
+import ThemeToggle from '../../components/common/ThemeToggle';
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -82,15 +83,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-slate-950 flex items-center justify-center p-4">
-      {/* Top right language toggle */}
-      <div className="absolute top-4 right-4 z-20">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-emerald-50 to-[#F8FAFB] dark:from-slate-950 dark:to-slate-950 flex items-center justify-center p-4">
+      {/* Top right controls */}
+      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+        <ThemeToggle />
         <LanguageToggle />
       </div>
 
       {/* Animated Background Gradients */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-600/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-800/15 blur-[120px] mix-blend-screen pointer-events-none"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-400/10 dark:bg-emerald-600/15 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-300/10 dark:bg-emerald-800/15 blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none"></div>
 
       <div className="w-full max-w-sm relative z-10 animate-slide-in">
 
@@ -98,15 +100,15 @@ export default function LoginPage() {
         <div className="text-center mb-10">
           <svg className="w-16 h-16 mx-auto mb-4 transform transition-transform hover:scale-105 duration-300" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 21V7L10 3V21" fill="#10b981" />
-            <path d="M10 21V9L21 9V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M14 21V15H17V21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M10 21V9L21 9V21" stroke="currentColor" className="text-[#1A2B3C] dark:text-white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M14 21V15H17V21" stroke="currentColor" className="text-[#1A2B3C] dark:text-white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">{t('common.appName')}</h1>
-          <p className="text-slate-400 text-sm mt-2 font-medium">{t('auth.welcomeBack')}</p>
+          <h1 className="text-3xl font-extrabold text-[#1A2B3C] dark:text-white tracking-tight">{t('common.appName')}</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 font-medium">{t('auth.welcomeBack')}</p>
         </div>
 
         {/* Card */}
-        <div className="glass rounded-3xl p-6 text-slate-200">
+        <div className="glass rounded-3xl p-6 text-slate-700 dark:text-slate-200">
           {apiError && (
             <Alert type="error" message={apiError} className="mb-6" />
           )}
@@ -148,11 +150,11 @@ export default function LoginPage() {
           </form>
 
           {/* Signup link — only for new landlords */}
-          <p className="text-center text-sm text-slate-400 mt-8">
+          <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8">
             {t('auth.newLandlord')}{' '}
             <Link
               to="/signup"
-              className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+              className="font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors"
             >
               {t('auth.createAccount')}
             </Link>

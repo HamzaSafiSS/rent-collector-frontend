@@ -60,20 +60,20 @@ export default function PaymentHistoryPage() {
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="w-full sm:w-48">
-          <label className="block text-sm font-medium text-slate-300 mb-1">{t('leases.status')}</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('leases.status')}</label>
           <select
-            className="w-full px-3 py-2 bg-[#111827] text-slate-100 border border-slate-600/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-sm"
+            className="w-full px-3 py-2 bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-600/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-sm"
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
           >
-            <option className="bg-[#111827] text-slate-100" value="ALL">{t('payments.allStatuses')}</option>
-            <option className="bg-[#111827] text-slate-100" value="PENDING">{t('payments.statusPending')}</option>
-            <option className="bg-[#111827] text-slate-100" value="APPROVED">{t('payments.statusApproved')}</option>
-            <option className="bg-[#111827] text-slate-100" value="REJECTED">{t('payments.statusRejected')}</option>
+            <option className="bg-white dark:bg-[#111827] text-slate-900 dark:text-slate-100" value="ALL">{t('payments.allStatuses')}</option>
+            <option className="bg-white dark:bg-[#111827] text-slate-900 dark:text-slate-100" value="PENDING">{t('payments.statusPending')}</option>
+            <option className="bg-white dark:bg-[#111827] text-slate-900 dark:text-slate-100" value="APPROVED">{t('payments.statusApproved')}</option>
+            <option className="bg-white dark:bg-[#111827] text-slate-900 dark:text-slate-100" value="REJECTED">{t('payments.statusRejected')}</option>
           </select>
         </div>
         <div className="w-full sm:w-48">
-          <label className="block text-sm font-medium text-slate-300 mb-1">{t('payments.month')}</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('payments.month')}</label>
           <EthiopianMonthPicker
             value={monthFilter}
             onChange={(e) => { setMonthFilter(e.target.value); setPage(0); }}
@@ -86,7 +86,7 @@ export default function PaymentHistoryPage() {
       {loading && <div className="flex justify-center py-20"><Spinner size="lg" /></div>}
 
       {!loading && !error && payments.length === 0 && (
-        <div className="text-center py-20 bg-[#111827] border border-slate-700/50 rounded-xl">
+        <div className="text-center py-20 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700/50 rounded-xl">
           <p className="text-3xl mb-3">💳</p>
           <p className="text-slate-500">{t('payments.noPaymentsFoundSimple')}</p>
         </div>
@@ -95,12 +95,12 @@ export default function PaymentHistoryPage() {
       {!loading && !error && payments.length > 0 && (
         <div className="space-y-3">
           {payments.map((p) => (
-            <div key={p.id} className="bg-[#111827] border border-slate-700/50 rounded-xl p-4">
+            <div key={p.id} className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700/50 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 bg-emerald-500/15 rounded-lg flex items-center justify-center text-lg">💳</div>
                   <div>
-                    <p className="font-semibold text-slate-100">ETB {Number(p.amount).toLocaleString()}</p>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">ETB {Number(p.amount).toLocaleString()}</p>
                     <p className="text-xs text-slate-500 mt-0.5">
                       {p.paymentMonth} · {t('payments.uploaded')} {p.uploadedAt ? formatDate(p.uploadedAt) : '—'}
                     </p>

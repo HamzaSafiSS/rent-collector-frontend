@@ -75,10 +75,10 @@ export default function GlobalUnitsPage() {
               className={`rounded-2xl p-6 border text-center shadow-sm relative overflow-hidden cursor-pointer transition-transform hover:-translate-y-1 ${
               isSelected ? 'ring-2 ring-emerald-500/50 shadow-md' : ''
             } ${
-              s === 'AVAILABLE'   ? 'bg-[#111827] border-emerald-500/20'  :
-              s === 'OCCUPIED'    ? 'bg-[#111827] border-sky-500/20'   :
-              s === 'MAINTENANCE' ? 'bg-[#111827] border-amber-500/20'  :
-                                    'bg-[#111827] border-slate-700/50/60'
+              s === 'AVAILABLE'   ? 'bg-white dark:bg-[#111827] border-emerald-500/20'  :
+              s === 'OCCUPIED'    ? 'bg-white dark:bg-[#111827] border-sky-500/20'   :
+              s === 'MAINTENANCE' ? 'bg-white dark:bg-[#111827] border-amber-500/20'  :
+                                    'bg-white dark:bg-[#111827] border-slate-200 dark:border-slate-700/50/60'
             }`}>
               <div className={`absolute inset-0 opacity-10 ${
                 s === 'AVAILABLE' ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' :

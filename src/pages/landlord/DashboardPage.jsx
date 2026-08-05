@@ -39,8 +39,8 @@ export default function LandlordDashboard() {
     if (action?.includes('PAYMENT')) return <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-sm shrink-0 border border-emerald-500/20">💳</div>;
     if (action?.includes('LEASE')) return <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-sm shrink-0 border border-emerald-500/20">📄</div>;
     if (action?.includes('TENANT')) return <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-sm shrink-0 border border-emerald-500/20">👤</div>;
-    if (action?.includes('UNIT') || action?.includes('PROPERTY')) return <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 text-sm shrink-0 border border-slate-700">🏢</div>;
-    return <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 text-sm shrink-0 border border-slate-700">📝</div>;
+    if (action?.includes('UNIT') || action?.includes('PROPERTY')) return <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 text-sm shrink-0 border border-slate-200 dark:border-slate-700">🏢</div>;
+    return <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 text-sm shrink-0 border border-slate-200 dark:border-slate-700">📝</div>;
   };
 
   useEffect(() => {
@@ -256,15 +256,15 @@ export default function LandlordDashboard() {
       <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Revenue Trend Chart */}
-        <div className="lg:col-span-2 bg-gradient-to-br from-[#111827] to-[#1e293b] rounded-2xl border border-slate-700/50 p-6 shadow-sm">
+        <div className="lg:col-span-2 bg-white dark:bg-gradient-to-br dark:from-[#111827] dark:to-[#1e293b] rounded-2xl border border-slate-200 dark:border-slate-700/50 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-bold text-slate-100">{t('dashboard.revenueTitle')}</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.revenueTitle')}</h2>
               <p className="text-sm text-slate-500 mt-0.5">{t('dashboard.revenueSubtitle')}</p>
             </div>
             <button 
               onClick={() => navigate('/landlord/reports')}
-              className="px-4 py-1.5 rounded-lg border border-slate-700/50 text-xs font-medium text-slate-300 hover:bg-slate-800/50 transition-colors"
+              className="px-4 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700/50 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
             >
               {t('dashboard.viewDetailedReport')}
             </button>
@@ -277,16 +277,16 @@ export default function LandlordDashboard() {
           ) : (
             <ResponsiveContainer width="100%" height={280}>
               <ComposedChart data={revenueData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid-color)" vertical={false} />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }}
-                  axisLine={{ stroke: '#334155' }}
+                  tick={{ fill: 'var(--chart-text-color)', fontSize: 13, fontWeight: 500 }}
+                  axisLine={{ stroke: 'var(--chart-axis-color)' }}
                   tickLine={false}
                   dy={10}
                 />
                 <YAxis
-                  tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 500 }}
+                  tick={{ fill: 'var(--chart-text-color)', fontSize: 12, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
                   domain={[0, 100000]}
@@ -296,11 +296,11 @@ export default function LandlordDashboard() {
                   width={80}
                 />
                 <Tooltip
-                  cursor={{ fill: '#1e293b' }}
+                  cursor={{ fill: 'rgba(150, 150, 150, 0.1)' }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       return (
-                        <div className="bg-[#111827] border border-slate-700 rounded-lg p-2.5 shadow-xl text-sm font-semibold text-emerald-400">
+                        <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 shadow-xl text-sm font-semibold text-emerald-600 dark:text-emerald-400">
                           ETB {Number(payload[0].value).toLocaleString()}
                         </div>
                       );
@@ -321,8 +321,8 @@ export default function LandlordDashboard() {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-[#111827] rounded-2xl border border-slate-700/50 p-6 shadow-sm flex flex-col">
-          <h2 className="text-lg font-bold text-slate-100 mb-6">{t('dashboard.recentActivity')}</h2>
+        <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-700/50 p-6 shadow-sm flex flex-col">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-6">{t('dashboard.recentActivity')}</h2>
           
           <div className="flex-1 overflow-y-auto space-y-5">
             {activityLoading ? (
@@ -336,7 +336,7 @@ export default function LandlordDashboard() {
                 <div key={log.id} className="flex gap-3 items-start">
                   <ActivityIcon action={log.action} />
                   <div>
-                    <p className="text-sm text-slate-200 font-medium leading-tight">
+                    <p className="text-sm text-slate-800 dark:text-slate-200 font-medium leading-tight">
                       {log.description || `${log.action} on ${log.entityType}`}
                     </p>
                     <p className="text-xs text-slate-500 mt-1">
@@ -350,7 +350,7 @@ export default function LandlordDashboard() {
 
           <button 
             onClick={() => navigate('/landlord/reports')}
-            className="w-full mt-6 py-2.5 rounded-xl border border-slate-700/50 text-sm font-medium text-slate-300 hover:bg-slate-800/50 transition-colors"
+            className="w-full mt-6 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/50 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
           >
             {t('dashboard.viewAllActivity')}
           </button>

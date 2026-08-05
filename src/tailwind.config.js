@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: ['selector', '[data-theme="dark"]'],
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -24,6 +25,11 @@ export default {
           light:   '#0f172a',
           card:    '#111827',
           elevated:'#1e293b',
+        },
+        // Light mode Navy & Emerald palette
+        navy: {
+          DEFAULT: '#1A2B3C',
+          light:   '#2D4356',
         },
       }
     },
