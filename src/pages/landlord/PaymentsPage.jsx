@@ -241,7 +241,7 @@ export default function PaymentsPage() {
         <StatCard 
             label={t('payments.pendingPayments')}
             value={reportData?.pendingCount || 0}
-            icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+            icon={<svg className="w-5 h-5 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
             color="blue"
             isSelected={statusFilter === 'PENDING'}
             onClick={() => handleCardClick('PENDING')}
@@ -249,7 +249,7 @@ export default function PaymentsPage() {
         <StatCard 
             label={t('payments.approvedPayments')}
             value={reportData?.approvedCount || 0}
-            icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>}
+            icon={<svg className="w-5 h-5 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>}
             color="green"
             isSelected={statusFilter === 'APPROVED'}
             onClick={() => handleCardClick('APPROVED')}
@@ -257,7 +257,7 @@ export default function PaymentsPage() {
         <StatCard 
             label={t('payments.rejectedPayments')}
             value={reportData?.rejectedCount || 0}
-            icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>}
+            icon={<svg className="w-5 h-5 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>}
             color="red"
             isSelected={statusFilter === 'REJECTED'}
             onClick={() => handleCardClick('REJECTED')}
@@ -265,7 +265,7 @@ export default function PaymentsPage() {
         <StatCard 
             label={t('payments.unpaidTenants')}
             value={reportData?.unpaidCount || 0}
-            icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="black"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>}
+            icon={<svg className="w-5 h-5 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>}
             color="yellow"
             isSelected={statusFilter === 'UNPAID'}
             onClick={() => handleCardClick('UNPAID')}
