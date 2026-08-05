@@ -17,13 +17,13 @@ export default class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-[#0b1120] p-8">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFB] dark:bg-[#0b1120] p-8">
           <div className="max-w-md text-center">
             <p className="text-6xl mb-6">⚠️</p>
-            <h1 className="text-2xl font-bold text-white mb-3">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
               Something went wrong
             </h1>
-            <p className="text-slate-400 text-sm mb-6">
+            <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
               An unexpected error occurred. Please refresh the page or contact support if the problem persists.
             </p>
             <button

@@ -133,17 +133,17 @@ export default function EthiopianDatePicker({
   }
 
   const selectClass =
-    'px-2 py-2 text-sm bg-[#111827] text-slate-100 border border-slate-600/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:bg-slate-800/50 disabled:text-slate-500 transition-all duration-200';
+    'px-2 py-2 text-sm bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-600/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:bg-slate-100 dark:disabled:bg-slate-800/50 disabled:text-slate-400 dark:disabled:text-slate-500 transition-all duration-200';
 
   const inputBaseClass =
-    'w-full px-3 py-2 text-sm text-slate-100 bg-[#111827] border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-800/30 disabled:text-slate-500 transition-all duration-200';
+    'w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-100 dark:disabled:bg-slate-800/30 disabled:text-slate-400 dark:disabled:text-slate-500 transition-all duration-200';
 
   // Gregorian mode — standard native input
   if (!isEthiopian) {
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium leading-none text-slate-300 mb-2">
+          <label className="block text-sm font-medium leading-none text-slate-700 dark:text-slate-300 mb-2">
             {required && <span className="text-red-400 mr-1" aria-hidden="true">*</span>}
             {label}
           </label>

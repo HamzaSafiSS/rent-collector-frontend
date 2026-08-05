@@ -12,6 +12,7 @@ export { default as Spinner }       from './Spinner';
 export { default as StatCard }      from './StatCard';
 export { default as Table }         from './Table';
 export { default as LanguageToggle } from './LanguageToggle';
+export { default as ThemeToggle }    from './ThemeToggle';
 export {
   TableSkeleton,
   CardGridSkeleton,

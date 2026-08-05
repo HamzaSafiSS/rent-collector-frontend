@@ -17,9 +17,9 @@ export default function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium leading-none text-slate-300 mb-2"
+          className="block text-sm font-medium leading-none text-slate-700 dark:text-slate-300 mb-2"
         >
-          {required && <span className="text-red-400 mr-1" aria-hidden="true">*</span>}
+          {required && <span className="text-red-500 dark:text-red-400 mr-1" aria-hidden="true">*</span>}
           {label}
         </label>
       )}
@@ -37,7 +37,7 @@ export default function Input({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-300"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
             tabIndex="-1"
           >
             {showPassword ? (
@@ -54,7 +54,7 @@ export default function Input({
         )}
       </div>
       {error && (
-        <p id={errorId} role="alert" className="mt-1 text-xs text-red-400">{error}</p>
+        <p id={errorId} role="alert" className="mt-1 text-xs text-red-500 dark:text-red-400">{error}</p>
       )}
       {hint && !error && (
         <p id={hintId} className="mt-1 text-xs text-slate-500">{hint}</p>

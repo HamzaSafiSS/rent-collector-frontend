@@ -57,7 +57,7 @@ export default function Modal({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex ${currentPos} bg-black/60 backdrop-blur-sm animate-slide-in`}
+      className={`fixed inset-0 z-50 flex ${currentPos} bg-black/40 dark:bg-black/60 backdrop-blur-sm animate-slide-in`}
       role="presentation"
       onClick={onClose}
     >
@@ -67,15 +67,15 @@ export default function Modal({
         aria-modal="true"
         aria-labelledby="modal-title"
         tabIndex={-1}
-        className={`relative w-full ${widths[size] || widths.md} bg-[#111827] ${currentRadius} shadow-2xl flex flex-col max-h-[90vh] sm:max-h-[90vh] focus:outline-none border border-slate-700/50`}
+        className={`relative w-full ${widths[size] || widths.md} bg-white dark:bg-[#111827] ${currentRadius} shadow-2xl flex flex-col max-h-[90vh] sm:max-h-[90vh] focus:outline-none border border-slate-200 dark:border-slate-700/50`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-700/50">
-          <h2 id="modal-title" className="text-xl font-bold text-slate-100 tracking-tight">{title}</h2>
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-200 dark:border-slate-700/50">
+          <h2 id="modal-title" className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">{title}</h2>
           <button
             onClick={onClose}
             aria-label="Close dialog"
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -88,10 +88,10 @@ export default function Modal({
         </div>
 
         {footer !== undefined ? footer : (
-          <div className="px-6 py-4 border-t border-slate-700/50 bg-slate-800/30 rounded-b-2xl flex justify-end">
+          <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700/50 bg-slate-50 dark:bg-slate-800/30 rounded-b-2xl flex justify-end">
             <button
               onClick={onClose}
-              className="px-5 py-2.5 text-sm font-semibold text-slate-300 bg-slate-800 border border-slate-600/50 rounded-xl hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm transition-colors"
+              className="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600/50 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm transition-colors"
             >
               Close
             </button>

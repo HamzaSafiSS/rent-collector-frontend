@@ -36,7 +36,7 @@ export default function LanguageToggle() {
   return (
     <button
       onClick={toggle}
-      className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 bg-slate-800/80 border border-slate-700/60 hover:bg-slate-700/80 hover:border-emerald-500/40 text-slate-200 hover:text-emerald-400 shadow-sm"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 hover:bg-slate-200 dark:hover:bg-slate-700/80 hover:border-emerald-500/40 text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 shadow-sm"
       title={currentLang === 'en' ? 'ወደ አማርኛ ቀይር' : 'Switch to English'}
       aria-label={currentLang === 'en' ? 'Switch to Amharic' : 'Switch to English'}
     >

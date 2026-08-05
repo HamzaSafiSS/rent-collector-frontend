@@ -18,8 +18,8 @@ export default function Pagination({
     <div className="flex items-center justify-between py-3 px-1">
       {/* Info text */}
       <p className="text-sm text-slate-500">
-        {t('common.showing')} <span className="font-medium text-slate-300">{from}–{to}</span>{' '}
-        {t('common.of')} <span className="font-medium text-slate-300">{totalElements}</span> {t('common.results')}
+        {t('common.showing')} <span className="font-medium text-slate-800 dark:text-slate-300">{from}–{to}</span>{' '}
+        {t('common.of')} <span className="font-medium text-slate-800 dark:text-slate-300">{totalElements}</span> {t('common.results')}
       </p>
 
       {/* Page buttons */}
@@ -44,7 +44,7 @@ export default function Pagination({
                 w-8 h-8 rounded text-sm font-medium transition-colors
                 ${i === page
                   ? 'bg-emerald-600 text-white'
-                  : 'text-slate-400 hover:bg-slate-800'}
+                  : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}
               `}
             >
               {i + 1}

@@ -53,7 +53,7 @@ export default function FileUpload({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-slate-300 mb-1">
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
           {required && <span className="text-red-400 mr-1" aria-hidden="true">*</span>}
           {label}
         </label>
@@ -71,7 +71,7 @@ export default function FileUpload({
           cursor-pointer transition-colors duration-150
           ${dragging
             ? 'border-emerald-400 bg-emerald-500/5'
-            : 'border-slate-600 hover:border-emerald-400/50 hover:bg-slate-800/50'}
+            : 'border-slate-300 dark:border-slate-600 hover:border-emerald-400/50 hover:bg-slate-50 dark:hover:bg-slate-800/50'}
         `}
       >
         {/* Upload icon */}
@@ -82,15 +82,15 @@ export default function FileUpload({
 
         {selectedFile ? (
           <div className="text-center">
-            <p className="text-sm font-medium text-emerald-400">{selectedFile.name}</p>
+            <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">{selectedFile.name}</p>
             <p className="text-xs text-slate-500 mt-0.5">
               {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
             </p>
           </div>
         ) : (
           <div className="text-center">
-            <p className="text-sm text-slate-400">
-              <span className="font-medium text-emerald-400">{t('fileUpload.clickToUpload')}</span>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              <span className="font-medium text-emerald-600 dark:text-emerald-400">{t('fileUpload.clickToUpload')}</span>
               {' '}{t('fileUpload.orDragDrop')}
             </p>
             <p className="text-xs text-slate-500 mt-1">{t('fileUpload.fileFormats', { size: maxSizeMB })}</p>
