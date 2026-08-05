@@ -200,7 +200,7 @@ const getCategories = (t, formatDate) => ({
 /* ─── Detail Value Renderer ────────────────────────────────────────────────── */
 function DetailValue({ field, item, formatDate }) {
   const value = item[field.key] ?? (field.fallbackKey ? item[field.fallbackKey] : null);
-  if (value === null || value === undefined || value === '') return <span className="text-slate-400">—</span>;
+  if (value === null || value === undefined || value === '') return <span className="text-slate-500 dark:text-slate-400">—</span>;
   if (field.badge) return <Badge statusKey={value} label={value ? t(`common.status${value.charAt(0) + value.slice(1).toLowerCase()}`, { defaultValue: value }) : ''} />;
   if (field.date) return <span>{formatDate ? formatDate(value) : new Date(value).toLocaleDateString()}</span>;
   if (field.currency) return <span>ETB {Number(value).toLocaleString()}</span>;
@@ -345,13 +345,13 @@ export default function ViewListPage() {
         subtitle={totalElements !== 1 ? t('common.records', { count: totalElements }) : t('common.recordsSingular', { count: totalElements })}
       />
 
-      <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
-        <div className="text-sm font-medium text-slate-400">{t('common.filters')}</div>
+      <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-100 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-200 dark:border-slate-700/50">
+        <div className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('common.filters')}</div>
         {category !== 'properties' && category !== 'admins' && (
           <select 
             value={statusFilter} 
             onChange={e => setStatusFilter(e.target.value)}
-            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">{t('common.allStatuses')}</option>
             {category === 'units' ? (
@@ -379,7 +379,7 @@ export default function ViewListPage() {
           <select
             value={monthFilter}
             onChange={e => setMonthFilter(e.target.value)}
-            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">{t('common.allMonths')}</option>
             {isEthiopian 
@@ -397,7 +397,7 @@ export default function ViewListPage() {
             placeholder={t('common.yearPlaceholder')}
             value={yearFilter}
             onChange={e => setYearFilter(e.target.value)}
-            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
+            className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
           />
         </>
         {(statusFilter || monthFilter || yearFilter) && (
@@ -412,7 +412,7 @@ export default function ViewListPage() {
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
-      <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden">
+      <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
         {loading ? (
           <TableSkeleton rows={8} cols={columnsWithView.length} />
         ) : (
@@ -444,7 +444,7 @@ export default function ViewListPage() {
                 className="flex items-center justify-between py-3 px-1 border-b border-slate-100 last:border-0"
               >
                 <span className="text-sm font-semibold text-slate-500">{field.label}</span>
-                <span className="text-sm font-medium text-slate-100 text-right max-w-[60%] break-words">
+                <span className="text-sm font-medium text-slate-800 dark:text-slate-100 text-right max-w-[60%] break-words">
                   <DetailValue field={field} item={selectedItem} formatDate={formatDate} />
                 </span>
               </div>
