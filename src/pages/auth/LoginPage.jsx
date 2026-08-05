@@ -66,7 +66,11 @@ export default function LoginPage() {
         navigateByRole(result.role, navigate);
       }
     } catch (err) {
-      const message = err.response?.data?.message || t('auth.loginFailed');
+      let message = err.response?.data?.message || t('auth.loginFailed');
+      const lowerMsg = message.toLowerCase();
+      if (lowerMsg.includes('validation failed') || lowerMsg.includes('bad credential')) {
+        message = t('auth.invalidCredentials');
+      }
       setApiError(message);
     } finally {
       setLoading(false);

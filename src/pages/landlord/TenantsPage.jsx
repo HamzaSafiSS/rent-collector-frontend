@@ -156,7 +156,7 @@ export default function TenantsPage() {
             required
           />
           <Input
-            label={t('auth.phoneNumberLabel')}
+            label={t('auth.phoneLabel')}
             value={editForm.phoneNumber}
             onChange={(e) => setEditForm((p) => ({ ...p, phoneNumber: e.target.value }))}
             disabled={editLoading}
