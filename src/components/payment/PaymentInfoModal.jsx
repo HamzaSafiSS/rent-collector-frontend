@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, Button, Input } from '../common';
+import { propertyApi } from '../../api/propertyApi';
 
 export default function PaymentInfoModal({ isOpen, onClose, onSave, loading, initialData = null }) {
   const { t } = useTranslation();
@@ -13,6 +14,9 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading, ini
     phoneNumber: '',
   });
   const [errors, setErrors] = useState({});
+  const [properties, setProperties] = useState([]);
+  const [selectedPropertyIds, setSelectedPropertyIds] = useState([]);
+  const [propertiesLoading, setPropertiesLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -34,6 +38,22 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading, ini
         setActiveTab('WALLET');
       }
       setErrors({});
+      
+      setPropertiesLoading(true);
+      propertyApi.listMyProperties(0, 100)
+        .then((res) => {
+          const fetchedProps = res.data?.data?.content || [];
+          setProperties(fetchedProps);
+          if (initialData && initialData.propertyIds) {
+            setSelectedPropertyIds(initialData.propertyIds);
+          } else if (fetchedProps.length === 1) {
+            setSelectedPropertyIds([fetchedProps[0].id]);
+          } else {
+            setSelectedPropertyIds([]);
+          }
+        })
+        .catch(console.error)
+        .finally(() => setPropertiesLoading(false));
     }
   }, [isOpen, initialData]);
 
@@ -59,6 +79,10 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading, ini
       if (!formData.phoneNumber.trim()) newErrors.phoneNumber = t('validation.phoneNumberRequired');
     }
 
+    if (properties.length > 0 && selectedPropertyIds.length === 0) {
+      newErrors.propertyIds = t('validation.selectAtLeastOneProperty');
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -68,6 +92,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading, ini
       ...(initialData ? { id: initialData.id } : {}),
       paymentType: activeTab,
       ...formData,
+      propertyIds: selectedPropertyIds,
     });
   };
 
@@ -176,6 +201,40 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading, ini
                 required
               />
             </>
+          )}
+
+          {properties.length > 1 && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                {t('payments.assignToProperties')}
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+              <div className="space-y-2 max-h-40 overflow-y-auto border border-slate-200 dark:border-slate-700 rounded-md p-3 bg-white dark:bg-slate-800">
+                {propertiesLoading ? (
+                  <div className="text-sm text-slate-500">{t('common.loading')}</div>
+                ) : (
+                  properties.map((prop) => (
+                    <label key={prop.id} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedPropertyIds.includes(prop.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedPropertyIds(prev => [...prev, prop.id]);
+                          } else {
+                            setSelectedPropertyIds(prev => prev.filter(id => id !== prop.id));
+                          }
+                          setErrors(prev => ({ ...prev, propertyIds: '' }));
+                        }}
+                        className="rounded border-slate-300 text-emerald-500 focus:ring-emerald-500 dark:bg-slate-700 dark:border-slate-600"
+                      />
+                      {prop.name}
+                    </label>
+                  ))
+                )}
+              </div>
+              {errors.propertyIds && <p className="text-sm text-red-500 mt-1">{errors.propertyIds}</p>}
+            </div>
           )}
         </div>
 
