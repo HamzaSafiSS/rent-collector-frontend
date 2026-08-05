@@ -30,6 +30,7 @@ export default function Input({
           aria-invalid={!!error}
           aria-describedby={describedBy}
           aria-required={required}
+          required={required}
           className={`${inputBase} ${errorClass} ${className} ${type === 'password' ? 'pr-10' : ''}`}
           {...props}
         />

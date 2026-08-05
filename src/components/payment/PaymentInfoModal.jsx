@@ -12,6 +12,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
     accountNumber: '',
     phoneNumber: '',
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (isOpen) {
@@ -21,6 +22,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
         accountNumber: '',
         phoneNumber: '',
       });
+      setErrors({});
       setActiveTab('WALLET');
     }
   }, [isOpen]);
@@ -28,10 +30,30 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    const newErrors = {};
+    if (activeTab === 'BANK') {
+      if (!formData.institutionName.trim()) newErrors.institutionName = t('validation.bankNameRequired');
+      if (!formData.accountHolderName.trim()) newErrors.accountHolderName = t('validation.accountHolderRequired');
+      if (!formData.accountNumber.trim()) newErrors.accountNumber = t('validation.accountNumberRequired');
+    } else {
+      if (!formData.institutionName.trim()) newErrors.institutionName = t('validation.walletNameRequired');
+      if (!formData.accountHolderName.trim()) newErrors.accountHolderName = t('validation.accountHolderRequired');
+      if (!formData.phoneNumber.trim()) newErrors.phoneNumber = t('validation.phoneNumberRequired');
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     onSave({
       paymentType: activeTab,
       ...formData,
@@ -40,7 +62,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('payments.addPaymentMethodTitle')} size="md" footer={null}>
-      <form onSubmit={handleSubmit} className="p-6">
+      <form onSubmit={handleSubmit} className="p-6" noValidate>
         <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
           {t('payments.addPaymentMethodDesc')}
         </p>
@@ -80,6 +102,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 value={formData.institutionName}
                 onChange={handleChange}
                 placeholder={t('payments.bankNamePlaceholder')}
+                error={errors.institutionName}
                 required
               />
               <Input
@@ -88,6 +111,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 value={formData.accountHolderName}
                 onChange={handleChange}
                 placeholder={t('payments.accountHolderPlaceholder')}
+                error={errors.accountHolderName}
                 required
               />
               <Input
@@ -96,6 +120,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 value={formData.accountNumber}
                 onChange={handleChange}
                 placeholder={t('payments.accountNumberPlaceholder')}
+                error={errors.accountNumber}
                 required
               />
             </>
@@ -107,6 +132,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 value={formData.institutionName}
                 onChange={handleChange}
                 placeholder={t('payments.walletNamePlaceholder')}
+                error={errors.institutionName}
                 required
               />
               <Input
@@ -115,6 +141,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 value={formData.accountHolderName}
                 onChange={handleChange}
                 placeholder={t('payments.accountHolderPlaceholder')}
+                error={errors.accountHolderName}
                 required
               />
               <Input
@@ -123,6 +150,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 placeholder={t('payments.phoneNumberPlaceholder')}
+                error={errors.phoneNumber}
                 required
               />
             </>
