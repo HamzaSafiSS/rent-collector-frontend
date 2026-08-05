@@ -300,7 +300,7 @@ export default function LandlordDashboard() {
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       return (
-                        <div className="bg-[#111827] border border-slate-700 rounded-lg p-2.5 shadow-xl text-sm font-semibold text-emerald-400">
+                        <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 shadow-xl text-sm font-semibold text-emerald-600 dark:text-emerald-400">
                           ETB {Number(payload[0].value).toLocaleString()}
                         </div>
                       );
@@ -321,8 +321,8 @@ export default function LandlordDashboard() {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-[#111827] rounded-2xl border border-slate-700/50 p-6 shadow-sm flex flex-col">
-          <h2 className="text-lg font-bold text-slate-100 mb-6">{t('dashboard.recentActivity')}</h2>
+        <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-700/50 p-6 shadow-sm flex flex-col">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-6">{t('dashboard.recentActivity')}</h2>
           
           <div className="flex-1 overflow-y-auto space-y-5">
             {activityLoading ? (
