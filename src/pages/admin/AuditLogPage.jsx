@@ -74,16 +74,16 @@ export default function AdminAuditLog() {
 
       <form
         onSubmit={(e) => { e.preventDefault(); setPage(0); setApplied({ ...filters }); }}
-        className="bg-[#111827] border border-slate-700/50 rounded-xl p-4 mb-4"
+        className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 mb-4"
       >
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.action')}</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('audit.action')}</label>
             <select
               name="action"
               value={filters.action}
               onChange={(e) => setFilters((p) => ({ ...p, action: e.target.value }))}
-              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ACTIONS.map((a) => (
                 <option key={a} value={a}>{a ? t(`audit.action_${a}`) : t('audit.allActions')}</option>
@@ -92,12 +92,12 @@ export default function AdminAuditLog() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">{t('audit.entityType')}</label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('audit.entityType')}</label>
             <select
               name="entityType"
               value={filters.entityType}
               onChange={(e) => setFilters((p) => ({ ...p, entityType: e.target.value }))}
-              className="bg-[#111827] text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ENTITY_TYPES.map((type) => (
                 <option key={type} value={type}>{type ? t(`audit.type_${type}`) : t('audit.allTypes')}</option>
@@ -138,7 +138,7 @@ export default function AdminAuditLog() {
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
-      <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden">
+      <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
         <AuditLogTable data={logs} loading={loading} />
         <div className="px-4 border-t border-slate-100">
           <Pagination page={page} totalPages={totalPages} totalElements={totalElements} size={PAGE_SIZE} onPageChange={setPage} />

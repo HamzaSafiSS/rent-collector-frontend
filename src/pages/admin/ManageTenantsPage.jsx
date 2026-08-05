@@ -63,7 +63,7 @@ export default function ManageTenantsPage() {
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
-      <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden">
+      <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
         <Table columns={COLUMNS} data={tenants} loading={loading} emptyMessage={t('admin.noTenantsFound')} />
         <div className="px-4 border-t border-slate-100">
           <Pagination

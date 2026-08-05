@@ -132,7 +132,7 @@ export default function PropertyDashboardViewPage() {
         </div>
       </div>
 
-      <div className="mb-6 flex flex-wrap gap-4 justify-between items-center border-b border-slate-700/50">
+      <div className="mb-6 flex flex-wrap gap-4 justify-between items-center border-b border-slate-200 dark:border-slate-700/50">
         <div className="flex gap-2">
           {['leases', 'units', 'tenants'].map(tab => (
             <button
@@ -141,7 +141,7 @@ export default function PropertyDashboardViewPage() {
               className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === tab
                   ? 'border-emerald-600 text-emerald-400'
-                  : 'border-transparent text-slate-500 hover:text-slate-100'
+                  : 'border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
               {t(`nav.${tab}`)}
@@ -149,11 +149,11 @@ export default function PropertyDashboardViewPage() {
           ))}
         </div>
         <div className="mb-2 flex items-center gap-2">
-          <span className="text-sm font-medium text-slate-400">{t('common.status', 'Status:')}</span>
+          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('common.status', 'Status:')}</span>
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            className="bg-[#111827] text-slate-100 text-sm border border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">{t('common.allStatuses', 'All')}</option>
             {getStatusOptions().map(opt => (
@@ -165,13 +165,13 @@ export default function PropertyDashboardViewPage() {
         </div>
       </div>
 
-      <div className="bg-[#111827] rounded-xl border border-slate-700/50 overflow-hidden shadow-sm">
-        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-800/50">
-          <h3 className="font-semibold text-slate-100 capitalize">{t(`nav.${activeTab}`)}</h3>
+      <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden shadow-sm">
+        <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+          <h3 className="font-semibold text-slate-900 dark:text-slate-100 capitalize">{t(`nav.${activeTab}`)}</h3>
         </div>
         <div className="relative min-h-[200px]">
           {loading ? (
-            <div className="absolute inset-0 bg-[#111827]/70 flex justify-center pt-10 z-10">
+            <div className="absolute inset-0 bg-white/70 dark:bg-[#111827]/70 flex justify-center pt-10 z-10">
               <Spinner size="md" />
             </div>
           ) : null}
