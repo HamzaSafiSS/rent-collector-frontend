@@ -75,7 +75,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
           {activeTab === 'BANK' ? (
             <>
               <Input
-                label={t('payments.bankNameLabel')}
+                label={t('payments.bankName')}
                 name="institutionName"
                 value={formData.institutionName}
                 onChange={handleChange}
@@ -83,7 +83,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 required
               />
               <Input
-                label={t('payments.accountHolderLabel')}
+                label={t('payments.accountHolderName')}
                 name="accountHolderName"
                 value={formData.accountHolderName}
                 onChange={handleChange}
@@ -102,7 +102,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
           ) : (
             <>
               <Input
-                label={t('payments.walletNameLabel')}
+                label={t('payments.walletName')}
                 name="institutionName"
                 value={formData.institutionName}
                 onChange={handleChange}
@@ -110,7 +110,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 required
               />
               <Input
-                label={t('payments.accountHolderLabel')}
+                label={t('payments.accountHolderName')}
                 name="accountHolderName"
                 value={formData.accountHolderName}
                 onChange={handleChange}
@@ -134,7 +134,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
             {t('common.cancel')}
           </Button>
           <Button type="submit" disabled={loading}>
-            {loading ? t('common.saving') : t('payments.savePaymentMethodBtn')}
+            {loading ? t('common.saving') : t('payments.savePaymentMethod')}
           </Button>
         </div>
       </form>
