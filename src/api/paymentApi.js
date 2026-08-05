@@ -49,6 +49,10 @@ export const paymentApi = {
     api.get('/payment-info'),
   savePaymentInfo: (data) =>
     api.post('/payment-info', data),
+  updatePaymentInfo: (id, data) =>
+    api.put(`/payment-info/${id}`, data),
+  deletePaymentInfo: (id) =>
+    api.delete(`/payment-info/${id}`),
   getPaymentInfoForLease: (leaseId) =>
     api.get(`/payment-info/lease/${leaseId}`),
 };

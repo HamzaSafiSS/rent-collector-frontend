@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, Button, Input } from '../common';
 
-export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
+export default function PaymentInfoModal({ isOpen, onClose, onSave, loading, initialData = null }) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('WALLET'); // 'WALLET' or 'BANK'
 
@@ -16,16 +16,26 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
 
   useEffect(() => {
     if (isOpen) {
-      setFormData({
-        institutionName: '',
-        accountHolderName: '',
-        accountNumber: '',
-        phoneNumber: '',
-      });
+      if (initialData) {
+        setFormData({
+          institutionName: initialData.institutionName || '',
+          accountHolderName: initialData.accountHolderName || '',
+          accountNumber: initialData.accountNumber || '',
+          phoneNumber: initialData.phoneNumber || '',
+        });
+        setActiveTab(initialData.paymentType || 'WALLET');
+      } else {
+        setFormData({
+          institutionName: '',
+          accountHolderName: '',
+          accountNumber: '',
+          phoneNumber: '',
+        });
+        setActiveTab('WALLET');
+      }
       setErrors({});
-      setActiveTab('WALLET');
     }
-  }, [isOpen]);
+  }, [isOpen, initialData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,16 +65,22 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
     }
 
     onSave({
+      ...(initialData ? { id: initialData.id } : {}),
       paymentType: activeTab,
       ...formData,
     });
   };
 
+  const isEditMode = !!initialData;
+  const modalTitle = isEditMode ? t('payments.editPaymentMethodTitle') : t('payments.addPaymentMethodTitle');
+  const modalDesc = isEditMode ? t('payments.editPaymentMethodDesc') : t('payments.addPaymentMethodDesc');
+  const saveBtnLabel = isEditMode ? t('payments.updatePaymentMethod') : t('payments.savePaymentMethod');
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t('payments.addPaymentMethodTitle')} size="md" footer={null}>
+    <Modal isOpen={isOpen} onClose={onClose} title={modalTitle} size="md" footer={null}>
       <form onSubmit={handleSubmit} className="p-6" noValidate>
         <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-          {t('payments.addPaymentMethodDesc')}
+          {modalDesc}
         </p>
 
         {/* Tabs */}
@@ -168,7 +184,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
             {t('common.cancel')}
           </Button>
           <Button type="submit" disabled={loading}>
-            {loading ? t('common.saving') : t('payments.savePaymentMethod')}
+            {loading ? t('common.saving') : saveBtnLabel}
           </Button>
         </div>
       </form>

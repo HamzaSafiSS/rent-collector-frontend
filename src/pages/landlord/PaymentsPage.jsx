@@ -44,6 +44,7 @@ export default function PaymentsPage() {
   const [isPaymentInfoModalOpen, setIsPaymentInfoModalOpen] = useState(false);
   const [paymentInfoData, setPaymentInfoData] = useState(null);
   const [paymentInfoLoading, setPaymentInfoLoading] = useState(false);
+  const [editingPaymentInfo, setEditingPaymentInfo] = useState(null);
 
   const fetchPaymentInfo = async () => {
     try {
@@ -61,14 +62,31 @@ export default function PaymentsPage() {
   const handleSavePaymentInfo = async (data) => {
     try {
       setPaymentInfoLoading(true);
-      await paymentApi.savePaymentInfo(data);
-      toast.success(t('payments.paymentInfoSaved'));
+      if (data.id) {
+        await paymentApi.updatePaymentInfo(data.id, data);
+        toast.success(t('payments.paymentInfoUpdated'));
+      } else {
+        await paymentApi.savePaymentInfo(data);
+        toast.success(t('payments.paymentInfoSaved'));
+      }
       setIsPaymentInfoModalOpen(false);
-      fetchPaymentInfo(); // refresh data
+      setEditingPaymentInfo(null);
+      fetchPaymentInfo();
     } catch (err) {
       toast.error(err.response?.data?.message || t('payments.failedSavePaymentInfo'));
     } finally {
       setPaymentInfoLoading(false);
+    }
+  };
+
+  const handleDeletePaymentInfo = async (id) => {
+    if (!window.confirm(t('payments.confirmDeletePaymentInfo'))) return;
+    try {
+      await paymentApi.deletePaymentInfo(id);
+      toast.success(t('payments.paymentInfoDeleted'));
+      fetchPaymentInfo();
+    } catch (err) {
+      toast.error(err.response?.data?.message || t('payments.failedDeletePaymentInfo'));
     }
   };
 
@@ -176,15 +194,24 @@ export default function PaymentsPage() {
               title={t('common.selectProperty')}
               subtitle={t('payments.selectPropertyPayments')}
             />
-            <Button onClick={() => setIsPaymentInfoModalOpen(true)}>
+            <Button onClick={() => { setEditingPaymentInfo(null); setIsPaymentInfoModalOpen(true); }}>
               {t('payments.addPaymentMethod')}
             </Button>
           </div>
           {paymentInfoData && paymentInfoData.length > 0 && (
-            <div className="mb-6 flex flex-wrap gap-3">
+            <div className="mb-6 flex flex-wrap gap-4">
               {paymentInfoData.map((info) => (
-                <div key={info.id} className="text-sm px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-lg text-slate-800 dark:text-slate-300">
-                  <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName} ({info.accountHolderName})
+                <div key={info.id} className="group relative text-sm px-4 py-3 pr-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-300 shadow-sm flex flex-col gap-1">
+                  <div><span className="font-semibold text-emerald-500">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName}</div>
+                  <div className="text-slate-500 text-xs">{info.accountHolderName} • {info.accountNumber || info.phoneNumber}</div>
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => { setEditingPaymentInfo(info); setIsPaymentInfoModalOpen(true); }} className="p-1.5 text-slate-400 hover:text-emerald-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.edit')}>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    </button>
+                    <button onClick={() => handleDeletePaymentInfo(info.id)} className="p-1.5 text-slate-400 hover:text-red-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.delete')}>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -211,15 +238,24 @@ export default function PaymentsPage() {
               title={t('payments.paymentsTitle', { name: selectedProperty.name })}
               subtitle={totalElements !== 1 ? t('payments.paymentCount', { count: totalElements }) : t('payments.paymentCountSingular', { count: totalElements })}
             />
-            <Button onClick={() => setIsPaymentInfoModalOpen(true)}>
+            <Button onClick={() => { setEditingPaymentInfo(null); setIsPaymentInfoModalOpen(true); }}>
               {t('payments.addPaymentMethod')}
             </Button>
           </div>
           {paymentInfoData && paymentInfoData.length > 0 && (
-            <div className="mb-6 flex flex-wrap gap-3">
+            <div className="mb-6 flex flex-wrap gap-4">
               {paymentInfoData.map((info) => (
-                <div key={info.id} className="text-sm px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-lg text-slate-800 dark:text-slate-300">
-                  <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName} ({info.accountHolderName})
+                <div key={info.id} className="group relative text-sm px-4 py-3 pr-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-300 shadow-sm flex flex-col gap-1">
+                  <div><span className="font-semibold text-emerald-500">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName}</div>
+                  <div className="text-slate-500 text-xs">{info.accountHolderName} • {info.accountNumber || info.phoneNumber}</div>
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => { setEditingPaymentInfo(info); setIsPaymentInfoModalOpen(true); }} className="p-1.5 text-slate-400 hover:text-emerald-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.edit')}>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    </button>
+                    <button onClick={() => handleDeletePaymentInfo(info.id)} className="p-1.5 text-slate-400 hover:text-red-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.delete')}>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -313,9 +349,13 @@ export default function PaymentsPage() {
 
       <PaymentInfoModal
         isOpen={isPaymentInfoModalOpen}
-        onClose={() => setIsPaymentInfoModalOpen(false)}
+        onClose={() => {
+          setIsPaymentInfoModalOpen(false);
+          setEditingPaymentInfo(null);
+        }}
         onSave={handleSavePaymentInfo}
         loading={paymentInfoLoading}
+        initialData={editingPaymentInfo}
       />
     </>
   );
