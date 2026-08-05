@@ -20,7 +20,7 @@ export default function PaymentDetailModal({ payment, isOpen, onClose }) {
       title={t('payments.paymentDetails')}
       size="lg"
       footer={
-        <div className="px-6 py-4 border-t border-slate-700/50 flex justify-end">
+        <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700/50 flex justify-end">
           <Button variant="secondary" onClick={onClose}>{t('common.close')}</Button>
         </div>
       }
@@ -47,8 +47,8 @@ export default function PaymentDetailModal({ payment, isOpen, onClose }) {
       )}
 
       {/* Screenshot */}
-      <div className="border-t border-slate-700/50 pt-4">
-        <p className="text-sm font-medium text-slate-300 mb-2">{t('payments.paymentProof')}</p>
+      <div className="border-t border-slate-200 dark:border-slate-700/50 pt-4">
+        <p className="text-sm font-medium text-slate-600 dark:text-slate-300 mb-2">{t('payments.paymentProof')}</p>
         <ScreenshotViewer paymentId={payment.id} />
       </div>
     </Modal>
@@ -59,7 +59,7 @@ function DetailRow({ label, value }) {
   return (
     <div>
       <p className="text-xs text-slate-500 font-medium">{label}</p>
-      <p className="text-sm text-slate-200 mt-0.5">{value ?? '—'}</p>
+      <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5">{value ?? '—'}</p>
     </div>
   );
 }

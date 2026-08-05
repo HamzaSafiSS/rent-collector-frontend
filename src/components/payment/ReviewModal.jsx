@@ -47,7 +47,7 @@ export default function ReviewModal({
       size="lg"
       footer={
         payment.status === 'PENDING' ? (
-          <div className="px-6 py-4 border-t border-slate-700/50">
+          <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700/50">
             {!showRejectForm ? (
               <div className="flex gap-3 justify-end">
                 <Button variant="secondary" onClick={handleClose} disabled={loading}>{t('common.cancel')}</Button>
@@ -58,7 +58,7 @@ export default function ReviewModal({
               <div className="space-y-3">
                 {commentError && <Alert type="error" message={commentError} />}
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                     <span className="text-red-400 mr-1" aria-hidden="true">*</span>{t('payments.rejectionReasonLabel')}
                   </label>
                   <textarea
@@ -66,7 +66,7 @@ export default function ReviewModal({
                     onChange={(e) => { setRejectComment(e.target.value); setCommentError(''); }}
                     placeholder={t('payments.rejectionReasonPlaceholder')}
                     rows={3}
-                    className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 placeholder-slate-500"
+                    className="w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 placeholder-slate-400 dark:placeholder-slate-500"
                     required
                   />
                 </div>
@@ -78,7 +78,7 @@ export default function ReviewModal({
             )}
           </div>
         ) : (
-          <div className="px-6 py-4 border-t border-slate-700/50 flex justify-end">
+          <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700/50 flex justify-end">
             <Button variant="secondary" onClick={handleClose}>{t('common.close')}</Button>
           </div>
         )
@@ -109,8 +109,8 @@ export default function ReviewModal({
       )}
 
       {/* Screenshot */}
-      <div className="border-t border-slate-700/50 pt-4">
-        <p className="text-sm font-medium text-slate-300 mb-2">{t('payments.paymentProof')}</p>
+      <div className="border-t border-slate-200 dark:border-slate-700/50 pt-4">
+        <p className="text-sm font-medium text-slate-600 dark:text-slate-300 mb-2">{t('payments.paymentProof')}</p>
         <ScreenshotViewer paymentId={payment.id} />
       </div>
     </Modal>
@@ -121,7 +121,7 @@ function DetailRow({ label, value }) {
   return (
     <div>
       <p className="text-xs text-slate-500 font-medium">{label}</p>
-      <p className="text-sm text-slate-200 mt-0.5">{value ?? '—'}</p>
+      <p className="text-sm text-slate-800 dark:text-slate-200 mt-0.5">{value ?? '—'}</p>
     </div>
   );
 }

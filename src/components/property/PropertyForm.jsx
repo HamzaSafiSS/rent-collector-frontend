@@ -94,9 +94,9 @@ export default function PropertyForm({ initial, onSubmit, loading, error }) {
 
       {/* Image Upload */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">{t('properties.propertyImageLabel')}</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('properties.propertyImageLabel')}</label>
         {imagePreview ? (
-          <div className="relative rounded-xl overflow-hidden border border-slate-600/50 group">
+          <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-600/50 group">
             <img src={imagePreview} alt={t('properties.propertyPreview')} className="w-full h-48 object-cover" />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
               <button
@@ -122,14 +122,14 @@ export default function PropertyForm({ initial, onSubmit, loading, error }) {
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            className="border-2 border-dashed border-slate-600/50 rounded-xl p-8 text-center cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all duration-200"
+            className="border-2 border-dashed border-slate-300 dark:border-slate-600/50 rounded-xl p-8 text-center cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all duration-200"
           >
-            <div className="w-12 h-12 bg-slate-800/60 rounded-xl flex items-center justify-center mx-auto mb-3">
+            <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800/60 rounded-xl flex items-center justify-center mx-auto mb-3">
               <svg className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <p className="text-sm text-slate-400 font-medium">{t('properties.clickToUpload')}</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{t('properties.clickToUpload')}</p>
             <p className="text-xs text-slate-600 mt-1">{t('properties.imageFormats')}</p>
           </div>
         )}
@@ -146,14 +146,14 @@ export default function PropertyForm({ initial, onSubmit, loading, error }) {
       <Input label={t('properties.propertyNameLabel')} name="name" value={form.name} onChange={handleChange} error={errors.name} disabled={loading} placeholder={t('properties.propertyNamePlaceholder')} required />
       <Input label={t('properties.addressLabel')} name="address" value={form.address} onChange={handleChange} error={errors.address} disabled={loading} placeholder={t('properties.addressPlaceholder')} required />
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-1">{t('properties.descriptionLabel')}</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('properties.descriptionLabel')}</label>
         <textarea
           name="description"
           value={form.description}
           onChange={handleChange}
           disabled={loading}
           rows={3}
-          className="w-full px-3 py-2 text-sm text-slate-100 bg-slate-800/60 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-800/30 disabled:text-slate-500 placeholder-slate-500 transition-all duration-200"
+          className="w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-100 dark:disabled:bg-slate-800/30 disabled:text-slate-400 dark:disabled:text-slate-500 placeholder-slate-400 dark:placeholder-slate-500 transition-all duration-200"
           placeholder={t('properties.descriptionPlaceholder')}
         />
       </div>

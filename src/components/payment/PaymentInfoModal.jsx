@@ -41,18 +41,18 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('payments.addPaymentMethodTitle')} size="md" footer={null}>
       <form onSubmit={handleSubmit} className="p-6">
-        <p className="text-sm text-slate-400 mb-4">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
           {t('payments.addPaymentMethodDesc')}
         </p>
 
         {/* Tabs */}
-        <div className="flex border-b border-slate-700/50 mb-6">
+        <div className="flex border-b border-slate-200 dark:border-slate-700/50 mb-6">
           <button
             type="button"
             className={`flex-1 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === 'WALLET'
                 ? 'border-emerald-500 text-emerald-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
             onClick={() => setActiveTab('WALLET')}
           >
@@ -63,7 +63,7 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
             className={`flex-1 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === 'BANK'
                 ? 'border-emerald-500 text-emerald-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-600'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
             onClick={() => setActiveTab('BANK')}
           >
