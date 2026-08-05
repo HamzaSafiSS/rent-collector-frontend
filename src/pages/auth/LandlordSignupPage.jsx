@@ -29,22 +29,22 @@ export default function LandlordSignupPage() {
     const errs = {};
 
     if (!form.fullName.trim())
-      errs.fullName = t('validation.fullNameRequired');
+      errs.fullName = 'validation.fullNameRequired';
 
     if (!form.email.trim())
-      errs.email = t('validation.emailRequired');
+      errs.email = 'validation.emailRequired';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      errs.email = t('validation.validEmail');
+      errs.email = 'validation.validEmail';
 
     if (!form.password)
-      errs.password = t('validation.passwordRequired');
+      errs.password = 'validation.passwordRequired';
     else if (form.password.length < 8)
-      errs.password = t('validation.passwordMinLength');
+      errs.password = 'validation.passwordMinLength';
 
     if (!form.confirmPassword)
-      errs.confirmPassword = t('validation.confirmPasswordRequired');
+      errs.confirmPassword = 'validation.confirmPasswordRequired';
     else if (form.password !== form.confirmPassword)
-      errs.confirmPassword = t('validation.passwordsDoNotMatch');
+      errs.confirmPassword = 'validation.passwordsDoNotMatch';
 
     return errs;
   }
@@ -69,8 +69,8 @@ export default function LandlordSignupPage() {
       );
       navigate('/landlord/dashboard', { replace: true });
     } catch (err) {
-      const message = err.response?.data?.message || t('auth.signupFailed');
-      setApiError(message);
+      const messageKey = err.response?.data?.message || 'auth.signupFailed';
+      setApiError(messageKey);
     } finally {
       setLoading(false);
     }
@@ -125,7 +125,7 @@ export default function LandlordSignupPage() {
         {/* Card */}
         <div className="glass rounded-3xl p-6 text-slate-700 dark:text-slate-200">
           {apiError && (
-            <Alert type="error" message={apiError} className="mb-6" />
+            <Alert type="error" message={t(apiError)} className="mb-6" />
           )}
 
           <form onSubmit={handleSubmit} className="space-y-3" noValidate>
@@ -137,7 +137,7 @@ export default function LandlordSignupPage() {
               placeholder={t('auth.fullNamePlaceholder')}
               value={form.fullName}
               onChange={handleChange}
-              error={errors.fullName}
+              error={errors.fullName ? t(errors.fullName) : ''}
               disabled={loading}
               required
             />
@@ -150,7 +150,7 @@ export default function LandlordSignupPage() {
               placeholder={t('auth.emailPlaceholder')}
               value={form.email}
               onChange={handleChange}
-              error={errors.email}
+              error={errors.email ? t(errors.email) : ''}
               disabled={loading}
               required
             />
@@ -163,7 +163,7 @@ export default function LandlordSignupPage() {
               placeholder={t('auth.phonePlaceholder')}
               value={form.phoneNumber}
               onChange={handleChange}
-              error={errors.phoneNumber}
+              error={errors.phoneNumber ? t(errors.phoneNumber) : ''}
               disabled={loading}
               inputMode="numeric"
               maxLength={10}
@@ -177,7 +177,7 @@ export default function LandlordSignupPage() {
               placeholder={t('auth.passwordPlaceholderSignup')}
               value={form.password}
               onChange={handleChange}
-              error={errors.password}
+              error={errors.password ? t(errors.password) : ''}
               disabled={loading}
               required
             />
@@ -190,7 +190,7 @@ export default function LandlordSignupPage() {
               placeholder={t('auth.confirmPasswordPlaceholder')}
               value={form.confirmPassword}
               onChange={handleChange}
-              error={errors.confirmPassword}
+              error={errors.confirmPassword ? t(errors.confirmPassword) : ''}
               disabled={loading}
               required
             />

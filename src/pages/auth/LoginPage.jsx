@@ -34,8 +34,8 @@ export default function LoginPage() {
 
   function validate() {
     const errs = {};
-    if (!form.email.trim()) errs.email = t('validation.emailRequired');
-    if (!form.password.trim()) errs.password = t('validation.passwordRequired');
+    if (!form.email.trim()) errs.email = 'validation.emailRequired';
+    if (!form.password.trim()) errs.password = 'validation.passwordRequired';
     return errs;
   }
 
@@ -66,12 +66,12 @@ export default function LoginPage() {
         navigateByRole(result.role, navigate);
       }
     } catch (err) {
-      let message = err.response?.data?.message || t('auth.loginFailed');
-      const lowerMsg = message.toLowerCase();
+      let messageKey = err.response?.data?.message || 'auth.loginFailed';
+      const lowerMsg = messageKey.toLowerCase();
       if (lowerMsg.includes('validation failed') || lowerMsg.includes('bad credential')) {
-        message = t('auth.invalidCredentials');
+        messageKey = 'auth.invalidCredentials';
       }
-      setApiError(message);
+      setApiError(messageKey);
     } finally {
       setLoading(false);
     }
@@ -114,7 +114,7 @@ export default function LoginPage() {
         {/* Card */}
         <div className="glass rounded-3xl p-6 text-slate-700 dark:text-slate-200">
           {apiError && (
-            <Alert type="error" message={apiError} className="mb-6" />
+            <Alert type="error" message={t(apiError)} className="mb-6" />
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -126,7 +126,7 @@ export default function LoginPage() {
               placeholder={t('auth.emailPlaceholder')}
               value={form.email}
               onChange={handleChange}
-              error={errors.email}
+              error={errors.email ? t(errors.email) : ''}
               disabled={loading}
               required
             />
@@ -139,7 +139,7 @@ export default function LoginPage() {
               placeholder={t('auth.passwordPlaceholder')}
               value={form.password}
               onChange={handleChange}
-              error={errors.password}
+              error={errors.password ? t(errors.password) : ''}
               disabled={loading}
               required
             />
