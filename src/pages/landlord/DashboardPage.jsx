@@ -11,10 +11,12 @@ import {
 } from 'recharts';
 import useCalendarDate from '../../hooks/useCalendarDate';
 import { gregorianMonthToEthiopian, getEthiopianMonthShort } from '../../utils/ethiopianDateUtils';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function LandlordDashboard() {
   const { t }                 = useTranslation();
   const { isEthiopian }       = useCalendarDate();
+  const { isDark } = useTheme();
   const [stats, setStats]     = useState(null);
   const [loading, setLoading] = useState(true);
   const [revenueData, setRevenueData] = useState([]);
@@ -277,16 +279,16 @@ export default function LandlordDashboard() {
           ) : (
             <ResponsiveContainer width="100%" height={280}>
               <ComposedChart data={revenueData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1e293b' : '#e2e8f0'} vertical={false} />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }}
-                  axisLine={{ stroke: '#334155' }}
+                  tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 13, fontWeight: 500 }}
+                  axisLine={{ stroke: isDark ? '#334155' : '#cbd5e1' }}
                   tickLine={false}
                   dy={10}
                 />
                 <YAxis
-                  tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 500 }}
+                  tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
                   domain={[0, 100000]}
@@ -296,7 +298,7 @@ export default function LandlordDashboard() {
                   width={80}
                 />
                 <Tooltip
-                  cursor={{ fill: '#1e293b' }}
+                  cursor={{ fill: isDark ? '#1e293b' : '#f1f5f9' }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       return (
