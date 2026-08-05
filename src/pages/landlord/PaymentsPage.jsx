@@ -258,16 +258,6 @@ export default function PaymentsPage() {
         </>
       )}
 
-      <PaymentInfoModal
-        isOpen={isPaymentInfoModalOpen}
-        onClose={() => {
-          setIsPaymentInfoModalOpen(false);
-          setEditingPaymentInfo(null);
-        }}
-        onSave={handleSavePaymentInfo}
-        loading={paymentInfoLoading}
-        initialData={editingPaymentInfo}
-      />
     </>
   );
 }
