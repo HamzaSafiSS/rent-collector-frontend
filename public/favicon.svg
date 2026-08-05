@@ -1,5 +1,11 @@
 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .outline { stroke: #1A2B3C; }
+    @media (prefers-color-scheme: dark) {
+      .outline { stroke: #ffffff; }
+    }
+  </style>
   <path d="M3 21V7L10 3V21" fill="#10b981" />
-  <path d="M10 21V9L21 9V21" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M14 21V15H17V21" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M10 21V9L21 9V21" class="outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M14 21V15H17V21" class="outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
