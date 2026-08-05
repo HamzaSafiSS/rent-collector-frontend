@@ -12,6 +12,18 @@
   box-sizing: border-box;
 }
 
+:root {
+  --chart-grid-color: #e2e8f0;
+  --chart-axis-color: #cbd5e1;
+  --chart-text-color: #64748b;
+}
+
+:root[data-theme="dark"] {
+  --chart-grid-color: #334155;
+  --chart-axis-color: #475569;
+  --chart-text-color: #94a3b8;
+}
+
 /* Ensure all interactive elements show a pointer cursor globally */
 button, 
 a, 

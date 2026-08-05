@@ -277,16 +277,16 @@ export default function LandlordDashboard() {
           ) : (
             <ResponsiveContainer width="100%" height={280}>
               <ComposedChart data={revenueData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-700/70" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid-color)" vertical={false} />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: '#64748b', fontSize: 13, fontWeight: 500 }}
-                  axisLine={{ stroke: '#94a3b8', strokeOpacity: 0.3 }}
+                  tick={{ fill: 'var(--chart-text-color)', fontSize: 13, fontWeight: 500 }}
+                  axisLine={{ stroke: 'var(--chart-axis-color)' }}
                   tickLine={false}
                   dy={10}
                 />
                 <YAxis
-                  tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }}
+                  tick={{ fill: 'var(--chart-text-color)', fontSize: 12, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
                   domain={[0, 100000]}
