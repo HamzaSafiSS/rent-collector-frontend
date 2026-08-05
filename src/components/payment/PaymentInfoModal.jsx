@@ -76,7 +76,10 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 ? 'border-emerald-500 text-emerald-400'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
-            onClick={() => setActiveTab('WALLET')}
+            onClick={() => {
+              setActiveTab('WALLET');
+              setErrors({});
+            }}
           >
             {t('payments.wallet')}
           </button>
@@ -87,7 +90,10 @@ export default function PaymentInfoModal({ isOpen, onClose, onSave, loading }) {
                 ? 'border-emerald-500 text-emerald-400'
                 : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
-            onClick={() => setActiveTab('BANK')}
+            onClick={() => {
+              setActiveTab('BANK');
+              setErrors({});
+            }}
           >
             {t('payments.bank')}
           </button>
