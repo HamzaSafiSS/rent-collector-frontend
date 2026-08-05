@@ -33,17 +33,17 @@ export default function ChangePasswordPage() {
   function validate() {
     const errs = {};
     if (!form.currentPassword)
-      errs.currentPassword = t('validation.currentPasswordRequired');
+      errs.currentPassword = 'validation.currentPasswordRequired';
     if (!form.newPassword)
-      errs.newPassword = t('validation.newPasswordRequired');
+      errs.newPassword = 'validation.newPasswordRequired';
     else if (form.newPassword.length < 8)
-      errs.newPassword = t('validation.newPasswordMinLength');
+      errs.newPassword = 'validation.newPasswordMinLength';
     else if (form.newPassword === form.currentPassword)
-      errs.newPassword = t('validation.newPasswordMustDiffer');
+      errs.newPassword = 'validation.newPasswordMustDiffer';
     if (!form.confirmPassword)
-      errs.confirmPassword = t('validation.confirmNewPasswordRequired');
+      errs.confirmPassword = 'validation.confirmNewPasswordRequired';
     else if (form.newPassword !== form.confirmPassword)
-      errs.confirmPassword = t('validation.passwordsDoNotMatch');
+      errs.confirmPassword = 'validation.passwordsDoNotMatch';
     return errs;
   }
 
@@ -61,7 +61,7 @@ export default function ChangePasswordPage() {
     try {
       setSubmitting(true);
       await authApi.changePassword(form.currentPassword, form.newPassword);
-      setSuccess(t('auth.passwordChangedSuccess'));
+      setSuccess('auth.passwordChangedSuccess');
 
       setTimeout(async () => {
         await logout();
@@ -69,7 +69,7 @@ export default function ChangePasswordPage() {
       }, 2000);
 
     } catch (err) {
-      setApiError(err.response?.data?.message || t('auth.failedChangePassword'));
+      setApiError(err.response?.data?.message || 'auth.failedChangePassword');
     } finally {
       setSubmitting(false);
     }
@@ -127,8 +127,8 @@ export default function ChangePasswordPage() {
 
         {/* Card */}
         <div className="glass rounded-3xl p-8">
-          {apiError && <Alert type="error"   message={apiError} className="mb-5" />}
-          {success   && <Alert type="success" message={success}  className="mb-5" />}
+          {apiError && <Alert type="error"   message={t(apiError)} className="mb-5" />}
+          {success   && <Alert type="success" message={t(success)}  className="mb-5" />}
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <Input
@@ -139,7 +139,7 @@ export default function ChangePasswordPage() {
               placeholder={t('auth.currentPasswordPlaceholder')}
               value={form.currentPassword}
               onChange={handleChange}
-              error={errors.currentPassword}
+              error={errors.currentPassword ? t(errors.currentPassword) : ''}
               disabled={submitting || !!success}
               required
             />
@@ -151,7 +151,7 @@ export default function ChangePasswordPage() {
               placeholder={t('auth.newPasswordPlaceholder')}
               value={form.newPassword}
               onChange={handleChange}
-              error={errors.newPassword}
+              error={errors.newPassword ? t(errors.newPassword) : ''}
               disabled={submitting || !!success}
               required
             />
@@ -163,7 +163,7 @@ export default function ChangePasswordPage() {
               placeholder={t('auth.confirmNewPasswordPlaceholder')}
               value={form.confirmPassword}
               onChange={handleChange}
-              error={errors.confirmPassword}
+              error={errors.confirmPassword ? t(errors.confirmPassword) : ''}
               disabled={submitting || !!success}
               required
             />
