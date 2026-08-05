@@ -152,6 +152,7 @@
     "signOutAndReturn": "ውጣ እና ወደ መግቢያ ተመለስ",
     "passwordChangedSuccess": "የይለፍ ቃል በተሳካ ሁኔታ ተቀይሯል። እባክዎ እንደገና ይግቡ።",
     "loginFailed": "መግባት አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+    "invalidCredentials": "የተሳሳተ ኢሜይል ወይም የይለፍ ቃል::",
     "signupFailed": "ምዝገባ አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
     "failedChangePassword": "የይለፍ ቃል መቀየር አልተሳካም።",
     "passwordPlaceholderSignup": "የይለፍ ቃል ያስገቡ ቢያንስ 8 ቁምፊዎች",

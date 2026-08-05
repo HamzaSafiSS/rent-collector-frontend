@@ -154,6 +154,7 @@
     "signOutAndReturn": "Sign out and return to login",
     "passwordChangedSuccess": "Password changed successfully. Please log in again.",
     "loginFailed": "Login failed. Please try again.",
+    "invalidCredentials": "Invalid email or password.",
     "signupFailed": "Signup failed. Please try again.",
     "failedChangePassword": "Failed to change password.",
     "passwordPlaceholderSignup": "Enter Password Minimum 8 characters",
