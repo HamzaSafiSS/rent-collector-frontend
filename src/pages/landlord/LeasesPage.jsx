@@ -6,6 +6,7 @@ import {
 } from '../../components/common';
 import LeaseForm from '../../components/lease/LeaseForm';
 import PropertySelector from '../../components/property/PropertySelector';
+import DocumentViewer from '../../components/lease/DocumentViewer';
 import { leaseApi } from '../../api/leaseApi';
 import { unitApi } from '../../api/unitApi';
 import { useToast } from '../../context/ToastContext';
@@ -121,9 +122,7 @@ export default function LeasesPage() {
     {
       key: 'document', header: t('leases.document'),
       render: (r) => r.agreementDocumentUrl ? (
-        <a href={`${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/leases/${r.id}/document`} target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline text-xs">
-          {t('leases.viewDocument')}
-        </a>
+        <DocumentViewer leaseId={r.id} />
       ) : '—'
     },
     {

@@ -377,7 +377,8 @@
     "myLeaseTitle": "ውሌ",
     "myLeaseSubtitle": "የአሁን ውል ዝርዝሮችዎ",
     "agreementDocument": "የውል ሰነድ",
-    "viewDocument": "ሰነድ ይመልከቱ"
+    "viewDocument": "ሰነድ ይመልከቱ",
+    "leaseID": "የውል መታወቂያ"
   },
   "payments": {
     "paymentsTitle": "ክፍያዎች — {{name}}",

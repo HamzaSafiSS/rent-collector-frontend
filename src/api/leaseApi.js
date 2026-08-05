@@ -25,6 +25,9 @@ export const leaseApi = {
   getLeaseDetail: (id) =>
     api.get(`/leases/${id}`),
 
+  getDocumentBlob: (id) =>
+    api.get(`/leases/${id}/document`, { responseType: 'blob' }),
+
   terminateLease: (id, reason = null) =>
     api.patch(`/leases/${id}/terminate`, reason ? { reason } : {}),
 
