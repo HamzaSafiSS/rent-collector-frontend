@@ -183,7 +183,7 @@ export default function PaymentsPage() {
           {paymentInfoData && paymentInfoData.length > 0 && (
             <div className="mb-6 flex flex-wrap gap-3">
               {paymentInfoData.map((info) => (
-                <div key={info.id} className="text-sm px-3 py-2 bg-slate-800 border border-slate-700/50 rounded-lg text-slate-300">
+                <div key={info.id} className="text-sm px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-lg text-slate-800 dark:text-slate-300">
                   <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName} ({info.accountHolderName})
                 </div>
               ))}
@@ -218,7 +218,7 @@ export default function PaymentsPage() {
           {paymentInfoData && paymentInfoData.length > 0 && (
             <div className="mb-6 flex flex-wrap gap-3">
               {paymentInfoData.map((info) => (
-                <div key={info.id} className="text-sm px-3 py-2 bg-slate-800 border border-slate-700/50 rounded-lg text-slate-300">
+                <div key={info.id} className="text-sm px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-lg text-slate-800 dark:text-slate-300">
                   <span className="font-semibold text-emerald-400">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName} ({info.accountHolderName})
                 </div>
               ))}
@@ -226,7 +226,7 @@ export default function PaymentsPage() {
           )}
 
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-xl font-bold text-slate-100">{t('payments.summary')}</h2>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('payments.summary')}</h2>
         <div className="w-48">
           <EthiopianMonthPicker
             value={monthFilter}
@@ -274,7 +274,7 @@ export default function PaymentsPage() {
 
       <div ref={detailsRef} className="mb-6 scroll-mt-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
             {t('payments.paymentDetails')}
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               {statusFilter ? t(`common.status${statusFilter.charAt(0) + statusFilter.slice(1).toLowerCase()}`, { defaultValue: statusFilter }) : ''}
