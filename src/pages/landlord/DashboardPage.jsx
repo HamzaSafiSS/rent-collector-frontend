@@ -277,7 +277,7 @@ export default function LandlordDashboard() {
           ) : (
             <ResponsiveContainer width="100%" height={280}>
               <ComposedChart data={revenueData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.1} vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-700/70" vertical={false} />
                 <XAxis
                   dataKey="month"
                   tick={{ fill: '#64748b', fontSize: 13, fontWeight: 500 }}
