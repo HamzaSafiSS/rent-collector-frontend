@@ -43,6 +43,7 @@ const GlobalUnitsPage     = lazy(() => import('../pages/landlord/GlobalUnitsPage
 const TenantsPage         = lazy(() => import('../pages/landlord/TenantsPage'));
 const LeasesPage          = lazy(() => import('../pages/landlord/LeasesPage'));
 const PaymentsPage        = lazy(() => import('../pages/landlord/PaymentsPage'));
+const PaymentMethodsPage  = lazy(() => import('../pages/landlord/PaymentMethodsPage'));
 const ReportsPage         = lazy(() => import('../pages/landlord/ReportsPage'));
 const DueSoonPage         = lazy(() => import('../pages/landlord/DueSoonPage'));
 
@@ -133,6 +134,7 @@ export default function AppRoutes() {
           <Route path="tenants" element={<TenantsPage />} />
           <Route path="leases" element={<LeasesPage />} />
           <Route path="payments" element={<PaymentsPage />} />
+          <Route path="payment-methods" element={<PaymentMethodsPage />} />
           <Route path="due-soon" element={<DueSoonPage />} />
           <Route path="reports" element={<ReportsPage />} />
         </Route>
