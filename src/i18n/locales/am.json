@@ -429,6 +429,7 @@
     "paymentInfoDeleted": "የክፍያ ዘዴው በተሳካ ሁኔታ ተሰርዟል።",
     "confirmDeletePaymentInfo": "ይህን የክፍያ ዘዴ መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት?",
     "failedDeletePaymentInfo": "የክፍያ ዘዴውን መሰረዝ አልተሳካም።",
+    "paymentMethodsHeading": "የክፍያ ዘዴዎች",
     "wallet": "ዋሌት",
     "bank": "ባንክ",
     "bankName": "የባንክ ስም",

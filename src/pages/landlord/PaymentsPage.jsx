@@ -187,35 +187,49 @@ export default function PaymentsPage() {
 
   return (
     <>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+              {t('payments.paymentMethodsHeading')}
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{t('payments.addPaymentMethodDesc')}</p>
+          </div>
+          <Button onClick={() => { setEditingPaymentInfo(null); setIsPaymentInfoModalOpen(true); }}>
+            {t('payments.addPaymentMethod')}
+          </Button>
+        </div>
+        {paymentInfoData && paymentInfoData.length > 0 && (
+          <div className="flex flex-wrap gap-4">
+            {paymentInfoData.map((info) => (
+              <div key={info.id} className="group relative text-sm px-4 py-3 pr-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-300 shadow-sm flex flex-col gap-1">
+                <div><span className="font-semibold text-emerald-500">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName}</div>
+                <div className="text-slate-500 text-xs">{info.accountHolderName} • {info.accountNumber || info.phoneNumber}</div>
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => { setEditingPaymentInfo(info); setIsPaymentInfoModalOpen(true); }} className="p-1.5 text-slate-400 hover:text-emerald-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.edit')}>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                  </button>
+                  <button onClick={() => handleDeletePaymentInfo(info.id)} className="p-1.5 text-slate-400 hover:text-red-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.delete')}>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <hr className="my-8 border-slate-200 dark:border-slate-700/50" />
+
       {!selectedProperty ? (
         <>
-          <div className="flex items-center justify-between">
+          <div className="mb-4">
             <PageHeader
               title={t('common.selectProperty')}
               subtitle={t('payments.selectPropertyPayments')}
             />
-            <Button onClick={() => { setEditingPaymentInfo(null); setIsPaymentInfoModalOpen(true); }}>
-              {t('payments.addPaymentMethod')}
-            </Button>
           </div>
-          {paymentInfoData && paymentInfoData.length > 0 && (
-            <div className="mb-6 flex flex-wrap gap-4">
-              {paymentInfoData.map((info) => (
-                <div key={info.id} className="group relative text-sm px-4 py-3 pr-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-300 shadow-sm flex flex-col gap-1">
-                  <div><span className="font-semibold text-emerald-500">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName}</div>
-                  <div className="text-slate-500 text-xs">{info.accountHolderName} • {info.accountNumber || info.phoneNumber}</div>
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => { setEditingPaymentInfo(info); setIsPaymentInfoModalOpen(true); }} className="p-1.5 text-slate-400 hover:text-emerald-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.edit')}>
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                    </button>
-                    <button onClick={() => handleDeletePaymentInfo(info.id)} className="p-1.5 text-slate-400 hover:text-red-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.delete')}>
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
           <PropertySelector
             onSelect={(p) => {
               setSelectedProperty(p);
@@ -233,33 +247,12 @@ export default function PaymentsPage() {
           >
             {t('common.backToProperties')}
           </button>
-          <div className="flex items-center justify-between">
+          <div className="mb-4">
             <PageHeader
               title={t('payments.paymentsTitle', { name: selectedProperty.name })}
               subtitle={totalElements !== 1 ? t('payments.paymentCount', { count: totalElements }) : t('payments.paymentCountSingular', { count: totalElements })}
             />
-            <Button onClick={() => { setEditingPaymentInfo(null); setIsPaymentInfoModalOpen(true); }}>
-              {t('payments.addPaymentMethod')}
-            </Button>
           </div>
-          {paymentInfoData && paymentInfoData.length > 0 && (
-            <div className="mb-6 flex flex-wrap gap-4">
-              {paymentInfoData.map((info) => (
-                <div key={info.id} className="group relative text-sm px-4 py-3 pr-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-300 shadow-sm flex flex-col gap-1">
-                  <div><span className="font-semibold text-emerald-500">{info.paymentType === 'BANK' ? t('payments.bank') : t('payments.wallet')}</span>: {info.institutionName}</div>
-                  <div className="text-slate-500 text-xs">{info.accountHolderName} • {info.accountNumber || info.phoneNumber}</div>
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => { setEditingPaymentInfo(info); setIsPaymentInfoModalOpen(true); }} className="p-1.5 text-slate-400 hover:text-emerald-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.edit')}>
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                    </button>
-                    <button onClick={() => handleDeletePaymentInfo(info.id)} className="p-1.5 text-slate-400 hover:text-red-500 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title={t('common.delete')}>
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
 
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('payments.summary')}</h2>
