@@ -10,6 +10,7 @@ export default function LeaseForm({ units = [], totalUnits = 0, onSubmit, loadin
   const [form, setForm]   = useState({
     tenantEmail: '',
     unitId: '', startDate: '', monthlyRent: '',
+    agreementDocument: null,
   });
   const [errors, setErrors] = useState({});
 
@@ -20,12 +21,13 @@ export default function LeaseForm({ units = [], totalUnits = 0, onSubmit, loadin
     if (!form.startDate)   errs.startDate   = t('validation.startDateRequired');
     if (!form.monthlyRent) errs.monthlyRent = t('validation.monthlyRentRequired');
     else if (Number(form.monthlyRent) <= 0) errs.monthlyRent = t('validation.mustBeGreaterThanZero');
+    if (!form.agreementDocument) errs.agreementDocument = t('validation.agreementDocumentRequired');
     return errs;
   }
 
   function handleChange(e) {
-    const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
+    const { name, value, files } = e.target;
+    setForm((p) => ({ ...p, [name]: files ? files[0] : value }));
     if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
   }
 
@@ -41,7 +43,7 @@ export default function LeaseForm({ units = [], totalUnits = 0, onSubmit, loadin
       tenantEmail: form.tenantEmail.trim(),
     };
 
-    onSubmit(payload);
+    onSubmit(payload, form.agreementDocument);
   }
 
   return (
@@ -108,6 +110,32 @@ export default function LeaseForm({ units = [], totalUnits = 0, onSubmit, loadin
         placeholder={t('leases.monthlyRentPlaceholder')}
         required
       />
+
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+          <span className="text-red-400 mr-1" aria-hidden="true">*</span>
+          {t('leases.agreementDocument')}
+        </label>
+        <input
+          type="file"
+          name="agreementDocument"
+          accept=".pdf,.png,.jpg,.jpeg"
+          onChange={handleChange}
+          disabled={loading}
+          className={`block w-full text-sm text-slate-500 dark:text-slate-400
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-xl file:border-0
+            file:text-sm file:font-semibold
+            file:bg-emerald-50 file:text-emerald-700
+            dark:file:bg-emerald-900/30 dark:file:text-emerald-400
+            hover:file:bg-emerald-100 dark:hover:file:bg-emerald-900/50
+            cursor-pointer
+            ${errors.agreementDocument ? 'border border-red-500 rounded-xl' : ''}`}
+        />
+        {errors.agreementDocument && (
+          <p className="mt-1 text-xs text-red-500">{errors.agreementDocument}</p>
+        )}
+      </div>
 
       <div className="flex justify-end pt-2">
         <Button type="submit" loading={loading}>{t('leases.createLeaseBtn')}</Button>

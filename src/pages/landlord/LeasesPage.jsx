@@ -6,6 +6,7 @@ import {
 } from '../../components/common';
 import LeaseForm from '../../components/lease/LeaseForm';
 import PropertySelector from '../../components/property/PropertySelector';
+import DocumentViewer from '../../components/lease/DocumentViewer';
 import { leaseApi } from '../../api/leaseApi';
 import { unitApi } from '../../api/unitApi';
 import { useToast } from '../../context/ToastContext';
@@ -78,11 +79,11 @@ export default function LeasesPage() {
     }
   }
 
-  async function handleCreate(payload) {
+  async function handleCreate(payload, agreementDocument) {
     try {
       setFormLoading(true);
       setFormError('');
-      const res = await leaseApi.createLease(payload);
+      const res = await leaseApi.createLease(payload, agreementDocument);
       const msg = res.data?.message || t('leases.leaseCreated');
       toast.success(msg);
       setCreateOpen(false);
@@ -118,6 +119,12 @@ export default function LeasesPage() {
     { key: 'monthlyRent',   header: t('leases.rentETB'), render: (r) => Number(r.monthlyRent).toLocaleString() },
     { key: 'startDate',     header: t('leases.startDateCol'), render: (r) => r.startDate ? formatDate(r.startDate) : '—' },
     { key: 'status',        header: t('leases.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+    {
+      key: 'document', header: t('leases.document'),
+      render: (r) => r.agreementDocumentUrl ? (
+        <DocumentViewer leaseId={r.id} />
+      ) : '—'
+    },
     {
       key: 'actions', header: t('common.actions'),
       render: (row) => row.status === 'ACTIVE' ? (

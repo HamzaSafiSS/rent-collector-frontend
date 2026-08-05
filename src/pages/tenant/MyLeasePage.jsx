@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { PageHeader, Badge, Spinner, Alert } from '../../components/common';
 import { leaseApi } from '../../api/leaseApi';
 import useCalendarDate from '../../hooks/useCalendarDate';
+import DocumentViewer from '../../components/lease/DocumentViewer';
 
 export default function MyLeasePage() {
   const { t } = useTranslation();
@@ -57,6 +58,12 @@ export default function MyLeasePage() {
                 <p className="text-slate-600 dark:text-slate-400 text-xs mb-1">{t('leases.leaseID')}</p>
                 <p className="font-semibold">#{lease.id}</p>
               </div>
+              {lease.agreementDocumentUrl && (
+                <div>
+                  <p className="text-slate-600 dark:text-slate-400 text-xs mb-1">{t('leases.agreementDocument')}</p>
+                  <DocumentViewer leaseId={lease.id} />
+                </div>
+              )}
             </div>
           </div>
         ))}

@@ -205,7 +205,8 @@
     "selectLeaseRequired": "Please select a lease",
     "monthAndYearRequired": "Please select a month and year",
     "validAmountRequired": "Please enter a valid amount greater than 0",
-    "fileRequired": "Please select a payment proof file"
+    "fileRequired": "Please select a payment proof file",
+    "agreementDocumentRequired": "Agreement document is required."
   },
 
   "dashboard": {
@@ -381,7 +382,10 @@
     "startDateCol": "Start Date",
     "status": "Status",
     "myLeaseTitle": "My Lease",
-    "myLeaseSubtitle": "Your current lease details"
+    "myLeaseSubtitle": "Your current lease details",
+    "agreementDocument": "Agreement Document",
+    "viewDocument": "View Document",
+    "leaseID": "Lease ID"
   },
 
   "payments": {

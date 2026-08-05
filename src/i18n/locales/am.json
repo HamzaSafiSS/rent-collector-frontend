@@ -202,7 +202,8 @@
     "selectLeaseRequired": "እባክዎ የኪራይ ውል ይምረጡ",
     "monthAndYearRequired": "እባክዎ ወር እና ዓመት ይምረጡ",
     "validAmountRequired": "እባክዎ ከ0 የሚበልጥ ትክክለኛ መጠን ያስገቡ",
-    "fileRequired": "እባክዎ የክፍያ ማረጋገጫ ፋይል ያስገቡ"
+    "fileRequired": "እባክዎ የክፍያ ማረጋገጫ ፋይል ያስገቡ",
+    "agreementDocumentRequired": "የውል ሰነድ ያስፈልጋል።"
   },
   "dashboard": {
     "landlordTitle": "የአከራይ ዳሽቦርድ",
@@ -374,7 +375,10 @@
     "startDateCol": "የመጀመሪያ ቀን",
     "status": "ሁኔታ",
     "myLeaseTitle": "ውሌ",
-    "myLeaseSubtitle": "የአሁን ውል ዝርዝሮችዎ"
+    "myLeaseSubtitle": "የአሁን ውል ዝርዝሮችዎ",
+    "agreementDocument": "የውል ሰነድ",
+    "viewDocument": "ሰነድ ይመልከቱ",
+    "leaseID": "የውል መታወቂያ"
   },
   "payments": {
     "paymentsTitle": "ክፍያዎች — {{name}}",
