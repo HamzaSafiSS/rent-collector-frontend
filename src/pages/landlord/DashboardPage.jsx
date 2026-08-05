@@ -11,12 +11,10 @@ import {
 } from 'recharts';
 import useCalendarDate from '../../hooks/useCalendarDate';
 import { gregorianMonthToEthiopian, getEthiopianMonthShort } from '../../utils/ethiopianDateUtils';
-import { useTheme } from '../../context/ThemeContext';
 
 export default function LandlordDashboard() {
   const { t }                 = useTranslation();
   const { isEthiopian }       = useCalendarDate();
-  const { isDark } = useTheme();
   const [stats, setStats]     = useState(null);
   const [loading, setLoading] = useState(true);
   const [revenueData, setRevenueData] = useState([]);
@@ -41,8 +39,8 @@ export default function LandlordDashboard() {
     if (action?.includes('PAYMENT')) return <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-sm shrink-0 border border-emerald-500/20">💳</div>;
     if (action?.includes('LEASE')) return <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-sm shrink-0 border border-emerald-500/20">📄</div>;
     if (action?.includes('TENANT')) return <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-sm shrink-0 border border-emerald-500/20">👤</div>;
-    if (action?.includes('UNIT') || action?.includes('PROPERTY')) return <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 text-sm shrink-0 border border-slate-700">🏢</div>;
-    return <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 text-sm shrink-0 border border-slate-700">📝</div>;
+    if (action?.includes('UNIT') || action?.includes('PROPERTY')) return <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 text-sm shrink-0 border border-slate-200 dark:border-slate-700">🏢</div>;
+    return <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 text-sm shrink-0 border border-slate-200 dark:border-slate-700">📝</div>;
   };
 
   useEffect(() => {
@@ -258,15 +256,15 @@ export default function LandlordDashboard() {
       <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Revenue Trend Chart */}
-        <div className="lg:col-span-2 bg-gradient-to-br from-[#111827] to-[#1e293b] rounded-2xl border border-slate-700/50 p-6 shadow-sm">
+        <div className="lg:col-span-2 bg-white dark:bg-gradient-to-br dark:from-[#111827] dark:to-[#1e293b] rounded-2xl border border-slate-200 dark:border-slate-700/50 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-bold text-slate-100">{t('dashboard.revenueTitle')}</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.revenueTitle')}</h2>
               <p className="text-sm text-slate-500 mt-0.5">{t('dashboard.revenueSubtitle')}</p>
             </div>
             <button 
               onClick={() => navigate('/landlord/reports')}
-              className="px-4 py-1.5 rounded-lg border border-slate-700/50 text-xs font-medium text-slate-300 hover:bg-slate-800/50 transition-colors"
+              className="px-4 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700/50 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
             >
               {t('dashboard.viewDetailedReport')}
             </button>
@@ -279,16 +277,16 @@ export default function LandlordDashboard() {
           ) : (
             <ResponsiveContainer width="100%" height={280}>
               <ComposedChart data={revenueData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1e293b' : '#e2e8f0'} vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.1} vertical={false} />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 13, fontWeight: 500 }}
-                  axisLine={{ stroke: isDark ? '#334155' : '#cbd5e1' }}
+                  tick={{ fill: '#64748b', fontSize: 13, fontWeight: 500 }}
+                  axisLine={{ stroke: '#94a3b8', strokeOpacity: 0.3 }}
                   tickLine={false}
                   dy={10}
                 />
                 <YAxis
-                  tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12, fontWeight: 500 }}
+                  tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
                   domain={[0, 100000]}
@@ -298,7 +296,7 @@ export default function LandlordDashboard() {
                   width={80}
                 />
                 <Tooltip
-                  cursor={{ fill: isDark ? '#1e293b' : '#f1f5f9' }}
+                  cursor={{ fill: 'rgba(150, 150, 150, 0.1)' }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       return (
@@ -338,7 +336,7 @@ export default function LandlordDashboard() {
                 <div key={log.id} className="flex gap-3 items-start">
                   <ActivityIcon action={log.action} />
                   <div>
-                    <p className="text-sm text-slate-200 font-medium leading-tight">
+                    <p className="text-sm text-slate-800 dark:text-slate-200 font-medium leading-tight">
                       {log.description || `${log.action} on ${log.entityType}`}
                     </p>
                     <p className="text-xs text-slate-500 mt-1">
@@ -352,7 +350,7 @@ export default function LandlordDashboard() {
 
           <button 
             onClick={() => navigate('/landlord/reports')}
-            className="w-full mt-6 py-2.5 rounded-xl border border-slate-700/50 text-sm font-medium text-slate-300 hover:bg-slate-800/50 transition-colors"
+            className="w-full mt-6 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/50 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
           >
             {t('dashboard.viewAllActivity')}
           </button>
