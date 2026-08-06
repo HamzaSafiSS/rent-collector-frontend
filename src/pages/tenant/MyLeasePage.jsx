@@ -55,15 +55,13 @@ export default function MyLeasePage() {
                 <p className="font-semibold">{lease.startDate ? formatDate(lease.startDate) : '—'}</p>
               </div>
               <div>
-                <p className="text-slate-600 dark:text-slate-400 text-xs mb-1">{t('leases.leaseID')}</p>
-                <p className="font-semibold">#{lease.id}</p>
-              </div>
-              {lease.agreementDocumentUrl && (
-                <div>
-                  <p className="text-slate-600 dark:text-slate-400 text-xs mb-1">{t('leases.agreementDocument')}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-xs mb-1">{t('leases.agreementDocument')}</p>
+                {lease.agreementDocumentUrl ? (
                   <DocumentViewer leaseId={lease.id} />
-                </div>
-              )}
+                ) : (
+                  <p className="font-semibold text-slate-500">—</p>
+                )}
+              </div>
             </div>
           </div>
         ))}
