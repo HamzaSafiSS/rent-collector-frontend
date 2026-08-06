@@ -90,7 +90,12 @@ export default function TenantsPage() {
       setDeleteTarget(null);
       loadTenants();
     } catch (err) {
-      toast.error(err.response?.data?.message || t('tenants.cannotDeleteTenant'));
+      const msg = err.response?.data?.message;
+      if (msg && msg.includes('active lease')) {
+        toast.error(t('tenants.cannotDeleteActiveLease'));
+      } else {
+        toast.error(msg || t('tenants.cannotDeleteTenant'));
+      }
       setDeleteTarget(null);
     } finally {
       setDeleteLoading(false);
