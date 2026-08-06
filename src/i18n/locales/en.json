@@ -384,6 +384,7 @@
     "myLeaseTitle": "My Lease",
     "myLeaseSubtitle": "Your current lease details",
     "agreementDocument": "Agreement Document",
+    "document": "Document",
     "viewDocument": "View Document",
     "leaseID": "Lease ID"
   },
