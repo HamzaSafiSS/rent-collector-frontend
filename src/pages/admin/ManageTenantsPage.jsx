@@ -51,7 +51,8 @@ export default function ManageTenantsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   useEffect(() => { loadTenants(); }, [loadTenants]);
 

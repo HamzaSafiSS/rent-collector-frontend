@@ -50,7 +50,8 @@ export default function TenantsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, selectedProperty, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, selectedProperty]);
 
   useEffect(() => { loadTenants(); }, [loadTenants, selectedProperty]);
 

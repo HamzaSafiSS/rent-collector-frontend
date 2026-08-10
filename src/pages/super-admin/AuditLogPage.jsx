@@ -57,7 +57,8 @@ export default function AuditLogPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, appliedFilters, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, appliedFilters]);
 
   useEffect(() => { loadLogs(); }, [loadLogs]);
 

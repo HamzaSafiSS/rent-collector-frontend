@@ -57,7 +57,8 @@ export default function LeasesPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, selectedProperty, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, statusFilter, selectedProperty]);
 
   useEffect(() => { loadLeases(); }, [loadLeases, selectedProperty]);
 

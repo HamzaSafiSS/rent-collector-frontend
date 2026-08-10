@@ -51,7 +51,8 @@ export default function PropertyDetailPage() {
     } finally {
       setLoading(false);
     }
-  }, [id, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const loadUnits = useCallback(async () => {
     try {
