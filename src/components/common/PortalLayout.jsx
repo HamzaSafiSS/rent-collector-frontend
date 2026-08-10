@@ -45,7 +45,7 @@ export default function PortalLayout({ navItems, portalLabel, children }) {
           </svg>
           <div>
             <p className="text-[#1A2B3C] dark:text-white font-bold text-base tracking-tight">{t('common.appName')}</p>
-            <p className="text-emerald-600 dark:text-emerald-400 font-medium text-xs tracking-wide uppercase mt-0.5">{portalLabel}</p>
+            <p className="text-emerald-600 dark:text-emerald-400 font-medium text-sm tracking-wide capitalize mt-0.5">{portalLabel}</p>
           </div>
         </div>
 
