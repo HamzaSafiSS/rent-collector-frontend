@@ -57,7 +57,8 @@ export default function AdminAuditLog() {
       setTotalElements(data?.totalElements || 0);
     } catch { setError(t('audit.failedLoadLogs')); }
     finally  { setLoading(false); }
-  }, [page, applied, user?.email, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, applied, user?.email]);
 
   useEffect(() => { loadLogs(); }, [loadLogs]);
 

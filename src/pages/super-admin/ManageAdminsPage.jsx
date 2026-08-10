@@ -48,7 +48,8 @@ export default function ManageAdminsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   useEffect(() => { loadAdmins(); }, [loadAdmins]);
 

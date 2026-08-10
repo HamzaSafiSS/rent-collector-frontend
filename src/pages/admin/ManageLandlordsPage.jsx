@@ -38,7 +38,8 @@ export default function ManageLandlordsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   useEffect(() => { loadLandlords(); }, [loadLandlords]);
 

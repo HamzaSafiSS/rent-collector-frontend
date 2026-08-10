@@ -84,7 +84,8 @@ export default function PaymentsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, monthFilter, selectedProperty, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, statusFilter, monthFilter, selectedProperty]);
 
   useEffect(() => { loadPayments(); }, [loadPayments]);
 

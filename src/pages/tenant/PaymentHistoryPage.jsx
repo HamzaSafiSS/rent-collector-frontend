@@ -40,7 +40,8 @@ export default function PaymentHistoryPage() {
       setTotalElements(data?.totalElements || 0);
     } catch { setError(t('payments.failedLoadPaymentHistory')); }
     finally  { setLoading(false); }
-  }, [page, statusFilter, monthFilter, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, statusFilter, monthFilter]);
 
   useEffect(() => { load(); }, [load]);
 

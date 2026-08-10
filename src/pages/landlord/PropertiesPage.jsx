@@ -66,7 +66,8 @@ export default function PropertiesPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   useEffect(() => { loadProperties(); }, [loadProperties]);
 
