@@ -396,7 +396,9 @@
     "nextStepBtn": "ቀጥል: ስምምነት ቅድመ እይታ →",
     "backToDetails": "← ወደ ዝርዝሮች ተመለስ",
     "previewInfo": "ከታች ያለውን ስምምነት ይመልከቱ። PDF ተፈጥሮ ከውሉ ጋር በራስ-ሰር ይያያዛል።",
-    "generateAndCreate": "PDF ፍጠር እና ውል ፍጠር"
+    "generateAndCreate": "PDF ፍጠር እና ውል ፍጠር",
+    "startDatePastError": "የመረጡት ቀን አልፏል። እባክዎ ዛሬ ወይም ወደፊት ያለ ቀን ይምረጡ።",
+    "datesSwappedWarning": "የመጀመሪያ ቀን ከማብቂያ ቀን በኋላ ስለነበር በራስ-ሰር ተቀይረዋል።"
   },
   "payments": {
     "paymentsTitle": "ክፍያዎች — {{name}}",
