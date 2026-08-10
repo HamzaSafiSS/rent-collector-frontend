@@ -299,6 +299,8 @@ export default function LeaseAgreementForm({
       startDate: form.startDate,
       monthlyRent: Number(form.monthlyRent),
       tenantEmail: form.tenantEmail.trim(),
+      tenantName: form.tenantName.trim(),
+      tenantPhone: form.tenantPhone.trim(),
     };
 
     onSubmit(payload, pdfFile);
