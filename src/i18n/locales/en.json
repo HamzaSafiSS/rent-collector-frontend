@@ -403,7 +403,9 @@
     "nextStepBtn": "Next: Preview Agreement →",
     "backToDetails": "← Back to Details",
     "previewInfo": "Review the agreement below. A PDF will be generated and attached to the lease automatically.",
-    "generateAndCreate": "Generate PDF & Create Lease"
+    "generateAndCreate": "Generate PDF & Create Lease",
+    "startDatePastError": "The selected date has already passed. Please select today or a future date.",
+    "datesSwappedWarning": "Start date was after end date, so they have been swapped automatically."
   },
 
   "payments": {

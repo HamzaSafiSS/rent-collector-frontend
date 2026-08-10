@@ -203,7 +203,7 @@ export default function LeasesPage() {
         isOpen={createOpen}
         onClose={() => setCreateOpen(false)}
         title={t('leases.createNewLease')}
-        size="2xl"
+        size="xl"
         footer={null}
       >
         <LeaseAgreementForm

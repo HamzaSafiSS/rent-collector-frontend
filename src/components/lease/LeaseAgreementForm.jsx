@@ -8,12 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 const selectClass =
   'w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-100 dark:disabled:bg-slate-800/30 disabled:text-slate-400 dark:disabled:text-slate-500 transition-all duration-200';
 
-const PAYMENT_METHODS = [
-  'Bank Transfer',
-  'Cash',
-  'Mobile Payment (TeleBirr)',
-  'Check',
-];
+
 
 // ── Helper: generate the PDF blob from filled form data ──────────────────────
 function generateAgreementPDF(data) {
@@ -101,7 +96,7 @@ function generateAgreementPDF(data) {
   y += 4;
 
   wrappedText(
-    `The Tenant agrees to pay ${data.monthlyRent ? `${Number(data.monthlyRent).toLocaleString()} ETB` : '____________________________ ETB'} per month. Rent is due on or before ${data.paymentDueDay || '____________________________'} of each month. The agreed payment method is ${data.paymentMethod || '____________________________'}.`,
+    `The Tenant agrees to pay ${data.monthlyRent ? `${Number(data.monthlyRent).toLocaleString()} ETB` : '____________________________ ETB'} per month.`,
   );
   y += 4;
 
@@ -122,17 +117,6 @@ function generateAgreementPDF(data) {
 
   addLine(0.5);
   y += 4;
-
-  // ── Signatures ──
-  checkPage(60);
-  labelValue('Landlord Name:', data.landlordName || '');
-  labelValue('Signature:', '');
-  labelValue('Date:', '');
-  y += 6;
-  labelValue('Tenant Name:', data.tenantName || '');
-  labelValue('Signature:', '');
-  labelValue('Date:', '');
-  y += 8;
 
   // ── Generated date ──
   checkPage(12);
@@ -172,7 +156,7 @@ function AgreementPreview({ data }) {
 
       <p>The rental period starts on ${blank(data.startDate)} and ends on ${blank(data.endDate)}.</p>
 
-      <p>The Tenant agrees to pay ${blank(data.monthlyRent ? `${Number(data.monthlyRent).toLocaleString()} ETB` : '', 120)} per month. Rent is due on or before ${blank(data.paymentDueDay, 120)} of each month. The agreed payment method is ${blank(data.paymentMethod, 150)}.</p>
+      <p>The Tenant agrees to pay ${blank(data.monthlyRent ? `${Number(data.monthlyRent).toLocaleString()} ETB` : '', 120)} per month.</p>
 
       <p>The Tenant agrees to keep the property clean and in good condition, pay rent and agreed utilities on time, report major damage or maintenance problems to the Landlord, not make major changes to the property without the Landlord's permission, and use the property for residential purposes only.</p>
 
@@ -180,20 +164,7 @@ function AgreementPreview({ data }) {
 
       <p>Both Parties confirm that they have read and agreed to the terms of this Rental Agreement.</p>
 
-      <hr style="border:none;border-top:2px solid #334155;margin:18px 0 14px;" />
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
-        <div>
-          <p><strong>Landlord Name:</strong> ${blank(data.landlordName)}</p>
-          <p><strong>Signature:</strong> ${blank('', 180)}</p>
-          <p><strong>Date:</strong> ${blank('', 150)}</p>
-        </div>
-        <div>
-          <p><strong>Tenant Name:</strong> ${blank(data.tenantName)}</p>
-          <p><strong>Signature:</strong> ${blank('', 180)}</p>
-          <p><strong>Date:</strong> ${blank('', 150)}</p>
-        </div>
-      </div>
 
       <p style="margin-top:20px;font-size:0.8rem;color:#64748b;font-style:italic;">Generated Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
     </div>
@@ -201,7 +172,7 @@ function AgreementPreview({ data }) {
 
   return (
     <div
-      className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-inner max-h-[60vh] overflow-y-auto"
+      className="flex-1 bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-inner overflow-y-auto min-h-0"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
@@ -223,12 +194,11 @@ export default function LeaseAgreementForm({
   const [form, setForm] = useState({
     tenantEmail: '',
     tenantName: '',
+    tenantPhone: '',
     unitId: '',
     startDate: '',
     endDate: '',
     monthlyRent: '',
-    paymentDueDay: '',
-    paymentMethod: '',
     propertyAddress: property?.address || '',
   });
   const [errors, setErrors] = useState({});
@@ -250,16 +220,16 @@ export default function LeaseAgreementForm({
       landlordName,
       landlordPhone,
       tenantName: form.tenantName,
-      tenantPhone: '', // intentionally blank per user request
+      tenantPhone: form.tenantPhone,
       propertyAddress: form.propertyAddress || property?.address || '',
       startDate: form.startDate,
       endDate: form.endDate,
       monthlyRent: form.monthlyRent,
-      paymentDueDay: form.paymentDueDay,
-      paymentMethod: form.paymentMethod,
     }),
     [agreementDate, landlordName, landlordPhone, form, property],
   );
+
+  const [dateWarning, setDateWarning] = useState('');
 
   function validate() {
     const errs = {};
@@ -271,6 +241,11 @@ export default function LeaseAgreementForm({
       errs.unitId = t('validation.selectUnit');
     if (!form.startDate)
       errs.startDate = t('validation.startDateRequired');
+    else {
+      const today = new Date().toISOString().split('T')[0];
+      if (form.startDate < today)
+        errs.startDate = t('leases.startDatePastError', { defaultValue: 'The selected date has already passed. Please select today or a future date.' });
+    }
     if (!form.monthlyRent)
       errs.monthlyRent = t('validation.monthlyRentRequired');
     else if (Number(form.monthlyRent) <= 0)
@@ -280,7 +255,26 @@ export default function LeaseAgreementForm({
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
+    setDateWarning('');
+
+    setForm((prev) => {
+      const next = { ...prev, [name]: value };
+
+      // Auto-swap if start date is after end date
+      if (next.startDate && next.endDate && next.startDate > next.endDate) {
+        const temp = next.startDate;
+        next.startDate = next.endDate;
+        next.endDate = temp;
+        setDateWarning(
+          t('leases.datesSwappedWarning', {
+            defaultValue: 'Start date was after end date, so they have been swapped automatically.',
+          }),
+        );
+      }
+
+      return next;
+    });
+
     if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
   }
 
@@ -322,6 +316,7 @@ export default function LeaseAgreementForm({
         noValidate
       >
         {error && <Alert type="error" message={error} />}
+        {dateWarning && <Alert type="warning" message={dateWarning} />}
 
         {/* Step indicator */}
         <div className="flex items-center gap-3 mb-2">
@@ -373,6 +368,19 @@ export default function LeaseAgreementForm({
             defaultValue: 'Full name as it will appear on the agreement.',
           })}
           required
+        />
+
+        <Input
+          label={t('leases.tenantPhoneLabel', { defaultValue: 'Tenant Phone Number' })}
+          name="tenantPhone"
+          type="tel"
+          value={form.tenantPhone}
+          onChange={handleChange}
+          disabled={loading}
+          maxLength={10}
+          placeholder={t('leases.tenantPhonePlaceholder', {
+            defaultValue: 'e.g. 09XXXXXXXX',
+          })}
         />
 
         {/* Unit selector */}
@@ -443,46 +451,7 @@ export default function LeaseAgreementForm({
           required
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input
-            label={t('leases.paymentDueDayLabel', {
-              defaultValue: 'Payment Due Day',
-            })}
-            name="paymentDueDay"
-            value={form.paymentDueDay}
-            onChange={handleChange}
-            disabled={loading}
-            placeholder={t('leases.paymentDueDayPlaceholder', {
-              defaultValue: 'e.g. the 5th',
-            })}
-          />
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-              {t('leases.paymentMethodLabel', {
-                defaultValue: 'Payment Method',
-              })}
-            </label>
-            <select
-              name="paymentMethod"
-              value={form.paymentMethod}
-              onChange={handleChange}
-              disabled={loading}
-              className={selectClass}
-            >
-              <option value="">
-                {t('leases.selectPaymentMethod', {
-                  defaultValue: 'Select method...',
-                })}
-              </option>
-              {PAYMENT_METHODS.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
 
         <Input
           label={t('leases.propertyAddressLabel', {
@@ -510,7 +479,7 @@ export default function LeaseAgreementForm({
 
   // ── Step 2: Preview & Generate ─────────────────────────────────────────────
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col h-[65vh] space-y-3">
       {error && <Alert type="error" message={error} />}
 
       {/* Step indicator */}
@@ -551,14 +520,14 @@ export default function LeaseAgreementForm({
       <AgreementPreview data={agreementData} />
 
       {/* Action buttons */}
-      <div className="flex items-center justify-between pt-2">
+      <div className="flex items-center justify-between pt-3 mt-auto">
         <button
           type="button"
           onClick={() => setStep(1)}
           disabled={loading}
           className="px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 transition-colors flex items-center gap-1"
         >
-          ← {t('leases.backToDetails', { defaultValue: 'Back to Details' })}
+          {t('leases.backToDetails', { defaultValue: 'Back to Details' })}
         </button>
         <Button onClick={handleGenerate} loading={loading}>
           <span className="flex items-center gap-2">
