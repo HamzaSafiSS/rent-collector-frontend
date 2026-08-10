@@ -36,7 +36,7 @@ export default function Modal({
 
   if (!isOpen) return null;
 
-  const widths = { sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-lg', xl: 'max-w-2xl' };
+  const widths = { sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-lg', xl: 'max-w-2xl', '2xl': 'max-w-4xl', full: 'max-w-6xl' };
 
   const positions = {
     center: 'items-center justify-center p-4 sm:p-6',

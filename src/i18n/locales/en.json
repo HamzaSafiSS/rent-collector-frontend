@@ -386,7 +386,24 @@
     "agreementDocument": "Agreement Document",
     "document": "Document",
     "viewDocument": "View Document",
-    "leaseID": "Lease ID"
+    "leaseID": "Lease ID",
+    "stepDetails": "Lease Details",
+    "stepPreview": "Preview & Generate",
+    "tenantNameLabel": "Tenant Full Name",
+    "tenantNamePlaceholder": "e.g. John Doe",
+    "tenantNameHint": "Full name as it will appear on the agreement.",
+    "tenantNameRequired": "Tenant name is required.",
+    "endDateLabel": "End Date",
+    "paymentDueDayLabel": "Payment Due Day",
+    "paymentDueDayPlaceholder": "e.g. the 5th",
+    "paymentMethodLabel": "Payment Method",
+    "selectPaymentMethod": "Select method...",
+    "propertyAddressLabel": "Property Address",
+    "propertyAddressPlaceholder": "e.g. Bole, Addis Ababa",
+    "nextStepBtn": "Next: Preview Agreement →",
+    "backToDetails": "← Back to Details",
+    "previewInfo": "Review the agreement below. A PDF will be generated and attached to the lease automatically.",
+    "generateAndCreate": "Generate PDF & Create Lease"
   },
 
   "payments": {

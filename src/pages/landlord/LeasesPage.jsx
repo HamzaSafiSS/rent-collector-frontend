@@ -4,7 +4,7 @@ import {
   PageHeader, Table, Badge, Button, Modal,
   ConfirmDialog, Alert, Pagination,
 } from '../../components/common';
-import LeaseForm from '../../components/lease/LeaseForm';
+import LeaseAgreementForm from '../../components/lease/LeaseAgreementForm';
 import PropertySelector from '../../components/property/PropertySelector';
 import DocumentViewer from '../../components/lease/DocumentViewer';
 import { leaseApi } from '../../api/leaseApi';
@@ -203,15 +203,16 @@ export default function LeasesPage() {
         isOpen={createOpen}
         onClose={() => setCreateOpen(false)}
         title={t('leases.createNewLease')}
-        size="lg"
+        size="2xl"
         footer={null}
       >
-        <LeaseForm
+        <LeaseAgreementForm
           units={availableUnits}
           totalUnits={totalUnits}
           onSubmit={handleCreate}
           loading={formLoading}
           error={formError}
+          property={selectedProperty}
         />
       </Modal>
 
