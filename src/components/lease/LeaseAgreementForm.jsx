@@ -172,7 +172,7 @@ function AgreementPreview({ data }) {
 
   return (
     <div
-      className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-inner max-h-[60vh] overflow-y-auto"
+      className="flex-1 bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-inner overflow-y-auto min-h-0"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
@@ -478,7 +478,7 @@ export default function LeaseAgreementForm({
 
   // ── Step 2: Preview & Generate ─────────────────────────────────────────────
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col h-[65vh] space-y-3">
       {error && <Alert type="error" message={error} />}
 
       {/* Step indicator */}
@@ -519,7 +519,7 @@ export default function LeaseAgreementForm({
       <AgreementPreview data={agreementData} />
 
       {/* Action buttons */}
-      <div className="flex items-center justify-between pt-2">
+      <div className="flex items-center justify-between pt-3 mt-auto">
         <button
           type="button"
           onClick={() => setStep(1)}
