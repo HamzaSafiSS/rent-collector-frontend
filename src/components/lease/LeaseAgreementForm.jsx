@@ -377,8 +377,9 @@ export default function LeaseAgreementForm({
           value={form.tenantPhone}
           onChange={handleChange}
           disabled={loading}
+          maxLength={10}
           placeholder={t('leases.tenantPhonePlaceholder', {
-            defaultValue: 'e.g. +251 9XX XXX XXX',
+            defaultValue: 'e.g. 09XXXXXXXX',
           })}
         />
 
