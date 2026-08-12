@@ -4,7 +4,7 @@ import { PageHeader, FileUpload, Input, Button, Alert } from '../../components/c
 import { paymentApi } from '../../api/paymentApi';
 import { leaseApi } from '../../api/leaseApi';
 import { useToast } from '../../context/ToastContext';
-import EthiopianMonthPicker from '../../components/common/EthiopianMonthPicker';
+
 
 export default function UploadPaymentPage() {
   const { t } = useTranslation();
@@ -171,21 +171,21 @@ export default function UploadPaymentPage() {
 
             {/* Payment month */}
             <div>
-              <EthiopianMonthPicker
-                label={
-                  <>
-                    <span className="text-red-500 mr-1" aria-hidden="true">*</span>
-                    {t('payments.paymentMonthLabel')}
-                  </>
-                }
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <span className="text-red-500 mr-1" aria-hidden="true">*</span>
+                {t('payments.paymentMonthLabel')}
+              </label>
+              <input
+                type="month"
                 value={paymentMonth}
                 onChange={(e) => {
                   setPaymentMonth(e.target.value);
                   if (errors.month) setErrors(p => ({ ...p, month: '' }));
                 }}
-                error={errors.month}
                 disabled={loading}
+                className="w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-100 dark:disabled:bg-slate-800/30 disabled:text-slate-400 dark:disabled:text-slate-500 transition-all duration-200"
               />
+              {errors.month && <p className="mt-1 text-xs text-red-400">{errors.month}</p>}
             </div>
 
             {/* Amount */}

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { PageHeader, Badge, Spinner, Alert, Pagination, Input } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
 import PaymentDetailModal from '../../components/payment/PaymentDetailModal';
-import EthiopianMonthPicker from '../../components/common/EthiopianMonthPicker';
+
 import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
@@ -75,10 +75,12 @@ export default function PaymentHistoryPage() {
         </div>
         <div className="w-full sm:w-48">
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('payments.month')}</label>
-          <EthiopianMonthPicker
+          <input
+            type="month"
             value={monthFilter}
             onChange={(e) => { setMonthFilter(e.target.value); setPage(0); }}
             placeholder={t('payments.filterByMonth')}
+            className="w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200"
           />
         </div>
       </div>

@@ -13,7 +13,6 @@ import { reportApi } from '../../api/reportApi';
 import { unitApi } from '../../api/unitApi';
 import { TableSkeleton } from '../../components/common';
 import useCalendarDate from '../../hooks/useCalendarDate';
-import { toEthiopian, getEthiopianMonths } from '../../utils/ethiopianDateUtils';
 
 const PAGE_SIZE = 10;
 
@@ -213,7 +212,7 @@ export default function ViewListPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const { formatDate, isEthiopian } = useCalendarDate();
+  const { formatDate } = useCalendarDate();
 
   const config = useMemo(() => getCategories(t, formatDate)[category], [t, category, formatDate]);
 
@@ -248,22 +247,15 @@ export default function ViewListPage() {
       if (statusFilter) {
         content = content.filter(l => l.status && l.status.toLowerCase().includes(statusFilter.toLowerCase()));
       }
-      if (monthFilter || yearFilter) {
+       if (monthFilter || yearFilter) {
         content = content.filter(l => {
           const d = l.createdAt || l.moveInDate || l.startDate;
           if (!d) return false;
           const dateObj = new Date(d);
           if (isNaN(dateObj.getTime())) return false;
           
-          let m, y;
-          if (isEthiopian) {
-            const eth = toEthiopian(dateObj.getFullYear(), dateObj.getMonth() + 1, dateObj.getDate());
-            m = String(eth.month).padStart(2, '0');
-            y = String(eth.year);
-          } else {
-            m = String(dateObj.getMonth() + 1).padStart(2, '0');
-            y = String(dateObj.getFullYear());
-          }
+          const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+          const y = String(dateObj.getFullYear());
           
           let match = true;
           if (monthFilter && m !== monthFilter) match = false;
@@ -383,15 +375,10 @@ export default function ViewListPage() {
             className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">{t('common.allMonths')}</option>
-            {isEthiopian 
-              ? getEthiopianMonths().map(m => (
-                  <option key={m.month} value={m.value}>{m.labelAm}</option>
-                ))
-              : [1,2,3,4,5,6,7,8,9,10,11,12].map(m => {
-                  const val = String(m).padStart(2, '0');
-                  return <option key={val} value={val}>{t(`common.month${val}`)}</option>;
-                })
-            }
+            {[1,2,3,4,5,6,7,8,9,10,11,12].map(m => {
+              const val = String(m).padStart(2, '0');
+              return <option key={val} value={val}>{t(`common.month${val}`)}</option>;
+            })}
           </select>
           <input
             type="number"

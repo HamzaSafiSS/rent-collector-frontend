@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { PageHeader, Button, Input, Pagination, Alert, Spinner } from '../../components/common';
 import AuditLogTable from '../../components/audit/AuditLogTable';
 import { auditApi } from '../../api/auditApi';
-import EthiopianDatePicker from '../../components/common/EthiopianDatePicker';
 
 
 const PAGE_SIZE = 20;
@@ -124,20 +123,24 @@ export default function AuditLogPage() {
           </div>
 
           <div>
-            <EthiopianDatePicker
-              label={t('audit.fromDate')}
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('audit.fromDate')}</label>
+            <input
+              type="date"
               name="from"
               value={filters.from}
               onChange={handleFilterChange}
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
           <div>
-            <EthiopianDatePicker
-              label={t('audit.toDate')}
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('audit.toDate')}</label>
+            <input
+              type="date"
               name="to"
               value={filters.to}
               onChange={handleFilterChange}
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 

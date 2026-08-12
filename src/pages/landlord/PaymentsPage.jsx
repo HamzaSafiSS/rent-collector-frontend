@@ -12,7 +12,7 @@ import PropertySelector from '../../components/property/PropertySelector';
 import StatCard from '../../components/common/StatCard';
 import Input from '../../components/common/Input';
 
-import EthiopianMonthPicker from '../../components/common/EthiopianMonthPicker';
+
 import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
@@ -176,10 +176,12 @@ export default function PaymentsPage() {
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('payments.summary')}</h2>
         <div className="w-48">
-          <EthiopianMonthPicker
+          <input
+            type="month"
             value={monthFilter}
             onChange={(e) => { setMonthFilter(e.target.value); setPage(0); }}
             placeholder={t('payments.filterByMonth')}
+            className="w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200"
           />
         </div>
       </div>

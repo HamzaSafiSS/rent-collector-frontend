@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { jsPDF } from 'jspdf';
 import { Input, Button, Alert } from '../common';
-import EthiopianDatePicker from '../common/EthiopianDatePicker';
+
 import { useAuth } from '../../context/AuthContext';
 
 const selectClass =
@@ -422,18 +422,20 @@ export default function LeaseAgreementForm({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <EthiopianDatePicker
+          <Input
             label={t('leases.startDate')}
             name="startDate"
+            type="date"
             value={form.startDate}
             onChange={handleChange}
             error={errors.startDate}
             disabled={loading}
             required
           />
-          <EthiopianDatePicker
+          <Input
             label={t('leases.endDateLabel', { defaultValue: 'End Date' })}
             name="endDate"
+            type="date"
             value={form.endDate}
             onChange={handleChange}
             disabled={loading}

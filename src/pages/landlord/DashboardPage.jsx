@@ -9,12 +9,9 @@ import { StatCardsSkeleton } from '../../components/common';
 import {
   ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
-import useCalendarDate from '../../hooks/useCalendarDate';
-import { gregorianMonthToEthiopian, getEthiopianMonthShort } from '../../utils/ethiopianDateUtils';
 
 export default function LandlordDashboard() {
   const { t }                 = useTranslation();
-  const { isEthiopian }       = useCalendarDate();
   const [stats, setStats]     = useState(null);
   const [loading, setLoading] = useState(true);
   const [revenueData, setRevenueData] = useState([]);
@@ -160,10 +157,6 @@ export default function LandlordDashboard() {
           const revenue = y === currentYear ? currentYearData[m] : (y === currentYear - 1 ? prevYearData[m] : 0);
           
           let monthLabel = months[m];
-          if (isEthiopian) {
-            const eth = gregorianMonthToEthiopian(`${y}-${String(m + 1).padStart(2, '0')}`);
-            monthLabel = getEthiopianMonthShort(eth.month, 'am');
-          }
           
           chartData.push({
             month: monthLabel,
@@ -181,10 +174,6 @@ export default function LandlordDashboard() {
           const m = d.getMonth();
           
           let monthLabel = months[m];
-          if (isEthiopian) {
-            const eth = gregorianMonthToEthiopian(`${y}-${String(m + 1).padStart(2, '0')}`);
-            monthLabel = getEthiopianMonthShort(eth.month, 'am');
-          }
           
           chartData.push({ month: monthLabel, revenue: 0 });
         }

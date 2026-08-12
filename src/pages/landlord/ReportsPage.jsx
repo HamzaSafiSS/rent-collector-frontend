@@ -4,13 +4,7 @@ import { PageHeader, Spinner, Alert, Input, Button, StatCard } from '../../compo
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import PropertySelector from '../../components/property/PropertySelector';
-import EthiopianMonthPicker from '../../components/common/EthiopianMonthPicker';
 import useCalendarDate from '../../hooks/useCalendarDate';
-import {
-  getCurrentEthiopianYear,
-  gregorianYearToEthiopian,
-  ethiopianYearToGregorian,
-} from '../../utils/ethiopianDateUtils';
 
 export default function ReportsPage() {
   const { t } = useTranslation();
@@ -118,8 +112,14 @@ function PaymentReport({ properties, lockedPropertyId }) {
       {/* Filters */}
       <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 mb-5">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
-          <EthiopianMonthPicker label={t('reports.fromMonth')} value={filters.from} onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))} />
-          <EthiopianMonthPicker label={t('reports.toMonth')}   value={filters.to}   onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))} />
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('reports.fromMonth')}</label>
+            <input type="month" value={filters.from} onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))} className="w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('reports.toMonth')}</label>
+            <input type="month" value={filters.to} onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))} className="w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200" />
+          </div>
           {!lockedPropertyId && (
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('reports.property')}</label>
@@ -226,20 +226,20 @@ function OccupancyReport({ properties, lockedPropertyId }) {
 // ── Revenue Report ─────────────────────────────────────────────────────────────
 function RevenueReport({ properties, lockedPropertyId }) {
   const { t } = useTranslation();
-  const { isEthiopian, formatMonth } = useCalendarDate();
+  const { formatMonth } = useCalendarDate();
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
 
-  // Year state: store Gregorian internally, display Ethiopian when in Amharic mode
+  // Year state: always Gregorian
   const currentGregYear = new Date().getFullYear();
   const [gregYear, setGregYear] = useState(currentGregYear);
   const [propertyId, setPropertyId] = useState(lockedPropertyId ? String(lockedPropertyId) : '');
 
-  // Generate year options
+  // Generate year options (Gregorian)
   const yearOptions = [2024, 2025, 2026, 2027].map((gy) => ({
     gregYear: gy,
-    label: isEthiopian ? String(gregorianYearToEthiopian(gy)) : String(gy),
+    label: String(gy),
   }));
 
   const load = useCallback(async (y, pid) => {
