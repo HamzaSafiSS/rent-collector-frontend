@@ -174,6 +174,7 @@ export default function PropertiesPage() {
                       <PropertyImage
                         propertyId={p.id}
                         hasImage={!!p.imageUrl}
+                        imageUrl={p.imageUrl}
                         alt={p.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />

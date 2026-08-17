@@ -3,22 +3,33 @@ import { paymentApi } from '../../api/paymentApi';
 import { Spinner } from '../common';
 
 // Fetches and displays the payment proof screenshot inline.
-// Uses a blob URL so the image is streamed through the API
-// (with authorization) rather than exposed as a direct URL.
+// If screenshotUrl is a Cloudinary URL, uses it directly.
+// Otherwise, falls back to blob fetch through the authenticated API.
 
-export default function ScreenshotViewer({ paymentId }) {
+export default function ScreenshotViewer({ paymentId, screenshotUrl }) {
   const [url, setUrl]       = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError]   = useState('');
   const [loaded, setLoaded] = useState(false);
 
+  // Check if the screenshotUrl is a direct Cloudinary URL
+  const isDirectUrl = screenshotUrl &&
+    (screenshotUrl.startsWith('http://') || screenshotUrl.startsWith('https://'));
+
   async function handleLoad() {
     if (url) return; // already loaded
+
+    // If we have a direct URL, use it immediately
+    if (isDirectUrl) {
+      setUrl(screenshotUrl);
+      return;
+    }
+
+    // Fallback: fetch via authenticated API (legacy local files)
     try {
       setLoading(true);
       setError('');
 
-      // Fetch the file as a blob using the Axios instance (automatically attaches Authorization header)
       const response = await paymentApi.getProofBlob(paymentId);
       
       const blobUrl = URL.createObjectURL(response.data);

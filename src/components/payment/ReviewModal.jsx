@@ -111,7 +111,7 @@ export default function ReviewModal({
       {/* Screenshot */}
       <div className="border-t border-slate-200 dark:border-slate-700/50 pt-4">
         <p className="text-sm font-medium text-slate-600 dark:text-slate-300 mb-2">{t('payments.paymentProof')}</p>
-        <ScreenshotViewer paymentId={payment.id} />
+        <ScreenshotViewer paymentId={payment.id} screenshotUrl={payment.screenshotUrl} />
       </div>
     </Modal>
   );
