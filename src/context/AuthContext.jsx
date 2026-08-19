@@ -16,6 +16,9 @@ import api from '../api/axios';
 // ── Create context ────────────────────────────────────────────────────────────
 const AuthContext = createContext(null);
 
+// ── Session storage key for cached user profile ──────────────────────────────
+const USER_CACHE_KEY = 'rc_user_profile';
+
 // ── Helper to extract role from JWT ──────────────────────────────────────────
 function getRoleFromToken(token) {
   if (!token) return null;
@@ -27,6 +30,24 @@ function getRoleFromToken(token) {
   } catch (e) {
     return null;
   }
+}
+
+// ── Helper to cache user profile ─────────────────────────────────────────────
+function cacheUser(profile) {
+  if (profile) {
+    try { sessionStorage.setItem(USER_CACHE_KEY, JSON.stringify(profile)); } catch {}
+  }
+}
+
+function getCachedUser() {
+  try {
+    const cached = sessionStorage.getItem(USER_CACHE_KEY);
+    return cached ? JSON.parse(cached) : null;
+  } catch { return null; }
+}
+
+function clearCachedUser() {
+  try { sessionStorage.removeItem(USER_CACHE_KEY); } catch {}
 }
 
 // ── Provider ──────────────────────────────────────────────────────────────────
@@ -56,6 +77,7 @@ export function AuthProvider({ children }) {
       tokenRef.current = null;
       setAccessToken(null);
       setUser(null);
+      clearCachedUser();
     });
   }, []);
 
@@ -76,6 +98,7 @@ useEffect(() => {
       );
 
       if (!response.ok) {
+        clearCachedUser();
         setLoading(false);
         return;
       }
@@ -84,6 +107,7 @@ useEffect(() => {
       const newToken = data?.data?.accessToken;
 
       if (!newToken) {
+        clearCachedUser();
         setLoading(false);
         return;
       }
@@ -91,30 +115,41 @@ useEffect(() => {
       tokenRef.current = newToken;
       setAccessToken(newToken);
 
-      try {
-        const profileRes = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/users/me`,
-          {
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${newToken}`,
-            },
-          }
-        );
+      // ── OPTIMIZED: Try cached user first, only fetch /users/me if no cache ──
+      const cached = getCachedUser();
+      if (cached) {
+        // Update role from the fresh token (in case it changed)
+        cached.role = getRoleFromToken(newToken);
+        setUser(cached);
+      } else {
+        // No cache — must fetch profile (only happens on first visit or after cache clear)
+        try {
+          const profileRes = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/users/me`,
+            {
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${newToken}`,
+              },
+            }
+          );
 
           if (profileRes.ok) {
             const profileData = await profileRes.json();
             const profile = profileData?.data;
             if (profile) {
               profile.role = getRoleFromToken(newToken);
+              cacheUser(profile);
             }
             setUser(profile);
           }
-      } catch {
+        } catch {
+        }
       }
 
     } catch {
+      clearCachedUser();
     } finally {
       setLoading(false);
     }
@@ -138,13 +173,17 @@ useEffect(() => {
       };
     }
 
-    // Load full user profile
-    const profileRes = await api.get('/users/me');
-    const profile    = profileRes.data?.data;
-
-    if (profile) {
-      profile.role = getRoleFromToken(data.accessToken);
-    }
+    // ── OPTIMIZED: Use login response data directly — NO /users/me call ──
+    // The backend now returns all needed profile fields in the login response.
+    const profile = {
+      id: data.userId,
+      fullName: data.fullName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      status: data.status,
+      role: data.role,
+    };
+    cacheUser(profile);
     setUser(profile);
 
     return {
@@ -163,6 +202,7 @@ useEffect(() => {
       tokenRef.current = null;
       setAccessToken(null);
       setUser(null);
+      clearCachedUser();
     }
   }, []);
 
@@ -179,11 +219,16 @@ useEffect(() => {
     tokenRef.current = data.accessToken;
     setAccessToken(data.accessToken);
 
-    const profileRes = await api.get('/users/me');
-    const profile = profileRes.data?.data;
-    if (profile) {
-      profile.role = getRoleFromToken(data.accessToken);
-    }
+    // ── OPTIMIZED: Use signup response data directly — NO /users/me call ──
+    const profile = {
+      id: data.userId,
+      fullName: data.fullName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      status: data.status,
+      role: data.role,
+    };
+    cacheUser(profile);
     setUser(profile);
 
     return data;
@@ -196,6 +241,7 @@ useEffect(() => {
       const profile = profileRes.data?.data;
       if (profile) {
         profile.role = getRoleFromToken(tokenRef.current);
+        cacheUser(profile);
       }
       setUser(profile);
     } catch {
