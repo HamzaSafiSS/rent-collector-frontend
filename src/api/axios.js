@@ -16,8 +16,58 @@ export function setTokenGetter(fn) {
   getAccessToken = fn;
 }
 
+// ── Token readiness mechanism ────────────────────────────────────────────────
+// When the UI renders instantly from cache but the access token hasn't been
+// obtained yet (background refresh in progress), API calls need to wait
+// for the token rather than firing without auth and getting 401s.
+let tokenReadyResolve = null;
+let tokenReadyPromise = null;
+let isTokenReady = false;
+
+export function markTokenReady() {
+  isTokenReady = true;
+  if (tokenReadyResolve) {
+    tokenReadyResolve();
+    tokenReadyResolve = null;
+    tokenReadyPromise = null;
+  }
+}
+
+export function markTokenPending() {
+  if (!isTokenReady) return; // already pending
+  isTokenReady = false;
+  tokenReadyPromise = null;
+  tokenReadyResolve = null;
+}
+
+function waitForToken(timeoutMs = 5000) {
+  if (isTokenReady) return Promise.resolve();
+  if (!tokenReadyPromise) {
+    tokenReadyPromise = new Promise((resolve) => {
+      tokenReadyResolve = resolve;
+      // Safety timeout — don't wait forever
+      setTimeout(() => {
+        resolve();
+        isTokenReady = true;
+      }, timeoutMs);
+    });
+  }
+  return tokenReadyPromise;
+}
+
+// ── Request interceptor ──────────────────────────────────────────────────────
 api.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    // For auth endpoints, don't wait for token
+    const isAuthEndpoint = config.url?.includes('/auth/refresh')
+                        || config.url?.includes('/auth/login')
+                        || config.url?.includes('/auth/signup');
+
+    if (!isAuthEndpoint && !isTokenReady) {
+      // Wait for the background refresh to complete before sending the request
+      await waitForToken();
+    }
+
     const token = getAccessToken();
     if (token && !config.url?.includes('/auth/refresh')) {
       config.headers['Authorization'] = `Bearer ${token}`;
@@ -94,6 +144,7 @@ api.interceptors.response.use(
         if (!newToken) throw new Error('No access token in refresh response');
 
         setAccessToken(newToken);
+        markTokenReady();
         originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
         processQueue(null, newToken);
 

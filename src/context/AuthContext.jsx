@@ -18,6 +18,8 @@ const AuthContext = createContext(null);
 
 // ── Session storage key for cached user profile ──────────────────────────────
 const USER_CACHE_KEY = 'rc_user_profile';
+// Marker that tells us the user was previously logged in (survives page refresh)
+const SESSION_MARKER_KEY = 'rc_has_session';
 
 // ── Helper to extract role from JWT ──────────────────────────────────────────
 function getRoleFromToken(token) {
@@ -35,7 +37,10 @@ function getRoleFromToken(token) {
 // ── Helper to cache user profile ─────────────────────────────────────────────
 function cacheUser(profile) {
   if (profile) {
-    try { sessionStorage.setItem(USER_CACHE_KEY, JSON.stringify(profile)); } catch {}
+    try {
+      sessionStorage.setItem(USER_CACHE_KEY, JSON.stringify(profile));
+      sessionStorage.setItem(SESSION_MARKER_KEY, '1');
+    } catch {}
   }
 }
 
@@ -46,19 +51,48 @@ function getCachedUser() {
   } catch { return null; }
 }
 
+function hadPreviousSession() {
+  try {
+    return sessionStorage.getItem(SESSION_MARKER_KEY) === '1';
+  } catch { return false; }
+}
+
 function clearCachedUser() {
-  try { sessionStorage.removeItem(USER_CACHE_KEY); } catch {}
+  try {
+    sessionStorage.removeItem(USER_CACHE_KEY);
+    sessionStorage.removeItem(SESSION_MARKER_KEY);
+  } catch {}
 }
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 export function AuthProvider({ children }) {
-  const [user, setUser]               = useState(null);
+  // ── OPTIMIZATION: Instantly restore cached user on mount ──────────────────
+  // This lets ProtectedRoute render the layout IMMEDIATELY for returning users
+  // instead of blocking the entire UI with a spinner while we refresh the token.
+  const cachedUser = getCachedUser();
+
+  const [user, setUser]               = useState(cachedUser);
   const [accessToken, setAccessToken] = useState(null);
-  const [loading, setLoading]         = useState(true);
+
+  // ── OPTIMIZATION: If we have cached user data, don't block the UI ─────────
+  // - Returning users (have cache): loading = false → UI renders immediately
+  // - New/logged-out users (no cache but had session): loading = true → brief spinner
+  // - First-time visitors (no cache, no session marker): loading = false → go to login
+  const [loading, setLoading] = useState(() => {
+    if (cachedUser) return false;          // Returning user → instant UI
+    if (hadPreviousSession()) return true; // Had session but cache cleared → wait briefly
+    return false;                          // Never logged in → go to login immediately
+  });
 
   // Use a ref so the Axios interceptor always has the latest token
   // without needing a re-render or a new reference
   const tokenRef = useRef(null);
+
+  // ── Guard against React.StrictMode double-mount ──────────────────────────
+  // In development, StrictMode runs useEffect twice. Without this guard,
+  // trySilentRefresh() would fire twice, causing the second call to try
+  // rotating an already-revoked refresh token (which fails with 401).
+  const refreshCalledRef = useRef(false);
 
   // ── Wire up Axios interceptors ──────────────────────────────────────────────
   // Called once on mount — connects the Axios instance to this context
@@ -85,78 +119,93 @@ export function AuthProvider({ children }) {
     tokenRef.current = accessToken;
   }, [accessToken]);
 
-useEffect(() => {
-  async function trySilentRefresh() {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/auth/refresh`,
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+  // ── Silent refresh on mount ─────────────────────────────────────────────────
+  // For returning users: the UI is already visible (loading=false, user=cached).
+  // This runs in the background to get a fresh access token.
+  // For new visitors: loading is already false, so they go straight to login.
+  useEffect(() => {
+    // Guard against StrictMode double-fire
+    if (refreshCalledRef.current) return;
+    refreshCalledRef.current = true;
 
-      if (!response.ok) {
-        clearCachedUser();
-        setLoading(false);
-        return;
-      }
-
-      const data     = await response.json();
-      const newToken = data?.data?.accessToken;
-
-      if (!newToken) {
-        clearCachedUser();
-        setLoading(false);
-        return;
-      }
-
-      tokenRef.current = newToken;
-      setAccessToken(newToken);
-
-      // ── OPTIMIZED: Try cached user first, only fetch /users/me if no cache ──
-      const cached = getCachedUser();
-      if (cached) {
-        // Update role from the fresh token (in case it changed)
-        cached.role = getRoleFromToken(newToken);
-        setUser(cached);
-      } else {
-        // No cache — must fetch profile (only happens on first visit or after cache clear)
-        try {
-          const profileRes = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/users/me`,
-            {
-              credentials: 'include',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${newToken}`,
-              },
-            }
-          );
-
-          if (profileRes.ok) {
-            const profileData = await profileRes.json();
-            const profile = profileData?.data;
-            if (profile) {
-              profile.role = getRoleFromToken(newToken);
-              cacheUser(profile);
-            }
-            setUser(profile);
+    async function trySilentRefresh() {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/auth/refresh`,
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
           }
-        } catch {
+        );
+
+        if (!response.ok) {
+          // No valid refresh token — user is not logged in
+          clearCachedUser();
+          setUser(null);
+          setAccessToken(null);
+          setLoading(false);
+          return;
         }
+
+        const data     = await response.json();
+        const newToken = data?.data?.accessToken;
+
+        if (!newToken) {
+          clearCachedUser();
+          setUser(null);
+          setAccessToken(null);
+          setLoading(false);
+          return;
+        }
+
+        tokenRef.current = newToken;
+        setAccessToken(newToken);
+
+        // If we already have a cached user, just update the role from the fresh token
+        const cached = getCachedUser();
+        if (cached) {
+          cached.role = getRoleFromToken(newToken);
+          cacheUser(cached);
+          setUser(cached);
+        } else {
+          // No cache — must fetch profile (first login in this tab)
+          try {
+            const profileRes = await fetch(
+              `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/users/me`,
+              {
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${newToken}`,
+                },
+              }
+            );
+
+            if (profileRes.ok) {
+              const profileData = await profileRes.json();
+              const profile = profileData?.data;
+              if (profile) {
+                profile.role = getRoleFromToken(newToken);
+                cacheUser(profile);
+              }
+              setUser(profile);
+            }
+          } catch {
+          }
+        }
+      } catch {
+        clearCachedUser();
+        setUser(null);
+        setAccessToken(null);
+      } finally {
+        setLoading(false);
       }
-
-    } catch {
-      clearCachedUser();
-    } finally {
-      setLoading(false);
     }
-  }
 
-  trySilentRefresh();
-}, []);
+    trySilentRefresh();
+  }, []);
+
   // ── Login ──────────────────────────────────────────────────────────────────
   const login = useCallback(async (email, password) => {
     const response = await api.post('/auth/login', { email, password });
@@ -173,8 +222,7 @@ useEffect(() => {
       };
     }
 
-    // ── OPTIMIZED: Use login response data directly — NO /users/me call ──
-    // The backend now returns all needed profile fields in the login response.
+    // ── Use login response data directly — NO /users/me call needed ──
     const profile = {
       id: data.userId,
       fullName: data.fullName,
@@ -219,7 +267,7 @@ useEffect(() => {
     tokenRef.current = data.accessToken;
     setAccessToken(data.accessToken);
 
-    // ── OPTIMIZED: Use signup response data directly — NO /users/me call ──
+    // ── Use signup response data directly — NO /users/me call needed ──
     const profile = {
       id: data.userId,
       fullName: data.fullName,
@@ -254,7 +302,7 @@ useEffect(() => {
     user,
     accessToken,
     loading,
-    isAuthenticated: !!accessToken,
+    isAuthenticated: !!user,  // ← Changed: user presence = authenticated (not just token)
     login,
     logout,
     signup,
