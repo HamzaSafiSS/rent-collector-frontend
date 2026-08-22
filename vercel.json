@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://rentcollector.duckdns.org:5000/api/v1"
+      "destination": "https://rentcollector.duckdns.org:5000/api/$1"
     },
     {
       "source": "/(.*)",
