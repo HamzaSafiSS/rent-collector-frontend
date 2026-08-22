@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://rentcollector.duckdns.org/api/v1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
