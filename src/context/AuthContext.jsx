@@ -10,6 +10,7 @@ import {
   setTokenGetter,
   setTokenSetter,
   setLogoutCallback,
+  markTokenReady,
 } from '../api/axios';
 import api from '../api/axios';
 
@@ -161,6 +162,7 @@ export function AuthProvider({ children }) {
 
         tokenRef.current = newToken;
         setAccessToken(newToken);
+        markTokenReady();
 
         // If we already have a cached user, just update the role from the fresh token
         const cached = getCachedUser();
@@ -213,12 +215,15 @@ export function AuthProvider({ children }) {
 
     tokenRef.current = data.accessToken;
     setAccessToken(data.accessToken);
+    markTokenReady();
+
+    const actualRole = getRoleFromToken(data.accessToken) || (data.role ? data.role.replace('ROLE_', '').toUpperCase() : '');
 
     if (data.mustChangePassword) {
-      setUser({ status: 'PendingPasswordChange', role: data.role });
+      setUser({ status: 'PendingPasswordChange', role: actualRole });
       return {
         mustChangePassword: data.mustChangePassword,
-        role: data.role,
+        role: actualRole,
       };
     }
 
@@ -229,14 +234,14 @@ export function AuthProvider({ children }) {
       email: data.email,
       phoneNumber: data.phoneNumber,
       status: data.status,
-      role: data.role,
+      role: actualRole,
     };
     cacheUser(profile);
     setUser(profile);
 
     return {
       mustChangePassword: data.mustChangePassword,
-      role: data.role,
+      role: actualRole,
     };
   }, []);
 
@@ -266,6 +271,9 @@ export function AuthProvider({ children }) {
 
     tokenRef.current = data.accessToken;
     setAccessToken(data.accessToken);
+    markTokenReady();
+
+    const actualRole = getRoleFromToken(data.accessToken) || (data.role ? data.role.replace('ROLE_', '').toUpperCase() : '');
 
     // ── Use signup response data directly — NO /users/me call needed ──
     const profile = {
@@ -274,7 +282,7 @@ export function AuthProvider({ children }) {
       email: data.email,
       phoneNumber: data.phoneNumber,
       status: data.status,
-      role: data.role,
+      role: actualRole,
     };
     cacheUser(profile);
     setUser(profile);
