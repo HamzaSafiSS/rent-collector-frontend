@@ -28,23 +28,37 @@ export default function LandlordSignupPage() {
   function validate() {
     const errs = {};
 
-    if (!form.fullName.trim())
+    if (!form.fullName.trim()) {
       errs.fullName = 'validation.fullNameRequired';
+    } else if (/\d/.test(form.fullName)) {
+      errs.fullName = 'validation.fullNameNoNumbers';
+    } else if (!form.fullName.trim().includes(' ')) {
+      errs.fullName = 'validation.fullNameSpaceRequired';
+    }
 
-    if (!form.email.trim())
+    if (!form.email.trim()) {
       errs.email = 'validation.emailRequired';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       errs.email = 'validation.validEmail';
+    }
 
-    if (!form.password)
+    if (!form.phoneNumber.trim()) {
+      errs.phoneNumber = 'validation.phoneNumberRequired';
+    } else if (form.phoneNumber.trim().length < 10) {
+      errs.phoneNumber = 'validation.phoneNumberInvalid';
+    }
+
+    if (!form.password) {
       errs.password = 'validation.passwordRequired';
-    else if (form.password.length < 8)
+    } else if (form.password.length < 8) {
       errs.password = 'validation.passwordMinLength';
+    }
 
-    if (!form.confirmPassword)
+    if (!form.confirmPassword) {
       errs.confirmPassword = 'validation.confirmPasswordRequired';
-    else if (form.password !== form.confirmPassword)
+    } else if (form.password !== form.confirmPassword) {
       errs.confirmPassword = 'validation.passwordsDoNotMatch';
+    }
 
     return errs;
   }
@@ -54,8 +68,8 @@ export default function LandlordSignupPage() {
     setApiError('');
 
     const errs = validate();
+    setErrors(errs);
     if (Object.keys(errs).length > 0) {
-      setErrors(errs);
       return;
     }
 
@@ -65,7 +79,7 @@ export default function LandlordSignupPage() {
         form.fullName.trim(),
         form.email.trim(),
         form.password,
-        form.phoneNumber.trim() || undefined,
+        form.phoneNumber.trim(),
       );
       navigate('/landlord/dashboard', { replace: true });
     } catch (err) {
@@ -78,22 +92,25 @@ export default function LandlordSignupPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let nextValue = value;
 
     if (name === "phoneNumber") {
-      const numbersOnly = value.replace(/\D/g, "").slice(0, 10);
-
-      setForm((prev) => ({
-        ...prev,
-        phoneNumber: numbersOnly,
-      }));
-
-      return;
+      nextValue = value.replace(/\D/g, "").slice(0, 10);
+    } else if (name === "fullName") {
+      nextValue = value.replace(/[0-9]/g, "");
     }
 
     setForm((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: nextValue,
     }));
+
+    setErrors((prev) => {
+      if (!prev[name]) return prev;
+      const updated = { ...prev };
+      delete updated[name];
+      return updated;
+    });
   };
 
   return (
@@ -167,6 +184,7 @@ export default function LandlordSignupPage() {
               disabled={loading}
               inputMode="numeric"
               maxLength={10}
+              required
             />
 
             <Input
