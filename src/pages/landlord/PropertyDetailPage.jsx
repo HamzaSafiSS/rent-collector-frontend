@@ -7,6 +7,7 @@ import {
 } from '../../components/common';
 import { propertyApi } from '../../api/propertyApi';
 import { unitApi } from '../../api/unitApi';
+import { leaseApi } from '../../api/leaseApi';
 import { useToast } from '../../context/ToastContext';
 
 export default function PropertyDetailPage() {
@@ -40,6 +41,11 @@ export default function PropertyDetailPage() {
   const [renameValue, setRenameValue]     = useState('');
   const [renameLoading, setRenameLoading] = useState(false);
   const [renameError, setRenameError]     = useState('');
+
+  // View Unit modal
+  const [viewUnitTarget, setViewUnitTarget]   = useState(null);
+  const [viewUnitTenant, setViewUnitTenant]   = useState(null);
+  const [viewUnitLoading, setViewUnitLoading] = useState(false);
 
   const loadProperty = useCallback(async () => {
     try {
@@ -147,9 +153,30 @@ export default function PropertyDetailPage() {
     } finally { setRenameLoading(false); }
   }
 
+  // ── View Unit ──────────────────────────────────────────────────────────────
+  async function handleViewUnit(unit) {
+    setViewUnitTarget(unit);
+    setViewUnitTenant(null);
+
+    if (unit.status === 'OCCUPIED') {
+      setViewUnitLoading(true);
+      try {
+        const res = await leaseApi.listLeases(0, 50, 'ACTIVE', id);
+        const leases = res.data?.data?.content || [];
+        const unitLease = leases.find(l => l.unitId === unit.id);
+        if (unitLease) {
+          setViewUnitTenant(unitLease.tenantFullName || unitLease.tenantEmail || null);
+        }
+      } catch {
+        // tenant info unavailable
+      } finally { setViewUnitLoading(false); }
+    }
+  }
+
   // ── Table columns ──────────────────────────────────────────────────────────
   const unitColumns = [
-    { key: 'unitNumber', header: t('units.unitNo') },
+    { key: 'propertyName', header: t('units.property'), render: () => <span className="font-medium text-slate-700 dark:text-slate-300">{property?.name}</span> },
+    { key: 'unitNumber', header: t('units.unit'), render: (r) => <span className="font-bold text-slate-900 dark:text-slate-100">{r.unitNumber}</span> },
     { key: 'status',     header: t('units.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     {
       key: 'actions', header: t('common.actions'),
@@ -166,6 +193,9 @@ export default function PropertyDetailPage() {
           {row.status === 'AVAILABLE' && (
             <Button size="sm" variant="danger" onClick={() => setDeleteUnitTarget(row)}>{t('common.delete')}</Button>
           )}
+          <Button size="sm" variant="secondary" onClick={() => handleViewUnit(row)}>
+            {t('common.viewUnit')}
+          </Button>
         </div>
       ),
     },
@@ -319,6 +349,39 @@ export default function PropertyDetailPage() {
         confirmText={t('common.delete')}
         variant="danger"
       />
+
+      {/* View Unit Modal */}
+      <Modal isOpen={!!viewUnitTarget} onClose={() => setViewUnitTarget(null)} title={t('units.unitDetails')} footer={null}>
+        {viewUnitTarget && (
+          <div className="space-y-5">
+            {/* Tenant row — only shown if unit is OCCUPIED */}
+            {viewUnitTarget.status === 'OCCUPIED' && (
+              <div className="flex items-center justify-between py-3 border-b border-slate-200 dark:border-slate-700/50">
+                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{t('units.tenant')}</span>
+                {viewUnitLoading ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    {viewUnitTenant || t('units.noTenant')}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Property row */}
+            <div className="flex items-center justify-between py-3 border-b border-slate-200 dark:border-slate-700/50">
+              <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{t('units.property')}</span>
+              <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{property?.name}</span>
+            </div>
+
+            {/* Status row */}
+            <div className="flex items-center justify-between py-3">
+              <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{t('units.status')}</span>
+              <Badge statusKey={viewUnitTarget.status} label={viewUnitTarget.status ? t(`common.status${viewUnitTarget.status.charAt(0) + viewUnitTarget.status.slice(1).toLowerCase()}`, { defaultValue: viewUnitTarget.status }) : ''} />
+            </div>
+          </div>
+        )}
+      </Modal>
     </>
   );
 }

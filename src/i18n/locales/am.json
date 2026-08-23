@@ -45,6 +45,7 @@
     "choosePropertySubtitle": "{{item}}ን ለማየት ንብረት ይምረጡ",
     "noResultsFilter": "ከአሁኑ ማጣሪያ ጋር የሚዛመድ ውጤት የለም።",
     "viewProperty": "ንብረት ይመልከቱ",
+    "viewUnit": "ክፍል ይመልከቱ",
     "backToDashboard": "← ወደ ዳሽቦርድ ተመለስ",
     "filters": "ማጣሪያዎች:",
     "allStatuses": "ሁሉም ሁኔታዎች",
@@ -333,7 +334,10 @@
     "baseRentETB": "መሰረታዊ ኪራይ (ብር)",
     "allUnits": "ሁሉም ክፍሎች",
     "property": "ንብረት",
-    "unit": "ክፍል"
+    "unit": "ክፍል",
+    "tenant": "ተከራይ",
+    "noTenant": "ተከራይ አልተመደበም",
+    "unitDetails": "የክፍል ዝርዝሮች"
   },
   "leases": {
     "leaseId": "የውል መታወቂያ: {{id}}",

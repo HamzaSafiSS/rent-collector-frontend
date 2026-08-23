@@ -45,6 +45,7 @@
     "choosePropertySubtitle": "Choose a property to view its {{item}}",
     "noResultsFilter": "No results match the current filter.",
     "viewProperty": "View Property",
+    "viewUnit": "View Unit",
     "backToDashboard": "← Back to Dashboard",
     "filters": "Filters:",
     "allStatuses": "All Statuses",
@@ -332,7 +333,10 @@
     "baseRentETB": "Base Rent (ETB)",
     "allUnits": "All Units",
     "property": "Property",
-    "unit": "Unit"
+    "unit": "Unit",
+    "tenant": "Tenant",
+    "noTenant": "No tenant assigned",
+    "unitDetails": "Unit Details"
   },
   "leases": {
     "leaseId": "Lease ID: {{id}}",
