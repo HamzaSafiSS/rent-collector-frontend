@@ -135,7 +135,7 @@
     "fullNameLabel": "ሙሉ ስም",
     "fullNamePlaceholder": "ሐምዛ ሳፊ",
     "phoneLabel": "ስልክ ቁጥር",
-    "phonePlaceholder": "0991234577 (አማራጭ)",
+    "phonePlaceholder": "0991234577",
     "confirmPasswordLabel": "የይለፍ ቃል ያረጋግጡ",
     "confirmPasswordPlaceholder": "የይለፍ ቃልዎን ይድገሙ",
     "createAccountBtn": "መለያ ፍጠር",
@@ -838,7 +838,6 @@
     "selectDay": "ቀን ይምረጡ",
     "selectMonth": "ወር ይምረጡ",
     "selectYear": "ዓመት ይምረጡ",
-
     "gregorianCalendar": "የግሪጎሪያን ቀን መቁጠሪያ"
   },
   "landlords": {

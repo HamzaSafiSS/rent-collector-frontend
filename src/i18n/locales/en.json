@@ -90,7 +90,6 @@
     "ethMonth12": "Nehase",
     "ethMonth13": "Pagume"
   },
-
   "portal": {
     "admin": "Admin",
     "superAdmin": "Super Admin",
@@ -103,7 +102,6 @@
     "LANDLORD": "Landlord",
     "TENANT": "Tenant"
   },
-
   "nav": {
     "dashboard": "Dashboard",
     "properties": "Properties",
@@ -121,7 +119,6 @@
     "manageAdmins": "Manage Admins",
     "units": "Units"
   },
-
   "auth": {
     "welcomeBack": "Welcome back. Please sign in.",
     "signIn": "Sign in",
@@ -137,7 +134,7 @@
     "fullNameLabel": "Full name",
     "fullNamePlaceholder": "Hamza Safi",
     "phoneLabel": "Phone number",
-    "phonePlaceholder": "0991234577 (optional)",
+    "phonePlaceholder": "0991234577",
     "confirmPasswordLabel": "Confirm password",
     "confirmPasswordPlaceholder": "Repeat your password",
     "createAccountBtn": "Create account",
@@ -160,7 +157,6 @@
     "passwordPlaceholderSignup": "Enter Password Minimum 8 characters",
     "phoneNumberOptional": "Phone number (optional)"
   },
-
   "validation": {
     "emailRequired": "Email is required.",
     "passwordRequired": "Password is required.",
@@ -208,7 +204,6 @@
     "fileRequired": "Please select a payment proof file",
     "agreementDocumentRequired": "Agreement document is required."
   },
-
   "dashboard": {
     "landlordTitle": "Landlord Dashboard",
     "userDashboard": "{{name}}'s Dashboard",
@@ -233,7 +228,6 @@
     "minutesAgo": "{{count}}m ago",
     "hoursAgo": "{{count}}h ago",
     "daysAgo": "{{count}}d ago",
-
     "tenantTitle": "My Dashboard",
     "tenantSubtitle": "Your rental summary",
     "myDashboard": "My Dashboard",
@@ -246,7 +240,6 @@
     "failedLoadDashboard": "Failed to load dashboard data.",
     "failedLoadData": "Failed to load dashboard data.",
     "couldNotLoadStats": "Could not load stats.",
-    
     "adminTitle": "Admin Dashboard",
     "superAdminTitle": "Super Admin Dashboard",
     "platformOverview": "Platform Overview",
@@ -257,7 +250,6 @@
     "totalLeases": "Total Leases",
     "totalAdmins": "Total Admins"
   },
-
   "properties": {
     "propertyId": "Property ID: {{id}}",
     "portfolioManagement": "Portfolio Management",
@@ -299,7 +291,6 @@
     "propertyPreview": "Property preview",
     "createdAt": "Created At"
   },
-
   "units": {
     "unitId": "Unit ID: {{id}}",
     "globalUnitsTitle": "Global Units",
@@ -340,7 +331,6 @@
     "property": "Property",
     "unit": "Unit"
   },
-
   "leases": {
     "leaseId": "Lease ID: {{id}}",
     "leasesTitle": "Leases - {{name}}",
@@ -407,7 +397,6 @@
     "startDatePastError": "The selected date has already passed. Please select today or a future date.",
     "datesSwappedWarning": "Start date was after end date, so they have been swapped automatically."
   },
-
   "payments": {
     "paymentsTitle": "Payments — {{name}}",
     "paymentCount": "{{count}} payments",
@@ -435,7 +424,6 @@
     "uploadSuccessToast": "Payment uploaded successfully!",
     "alreadyPaidError": "Payment for this month and year already paid. Please check the date.",
     "invalidMonthBeforeLease": "Payment month cannot be before lease start date",
-
     "reviewPaymentTitle": "Review Payment",
     "approve": "Approve",
     "reject": "Reject",
@@ -456,7 +444,6 @@
     "date": "Date",
     "uploaded": "Uploaded",
     "reviewed": "Reviewed",
-
     "paymentMethodsTitle": "How to Pay",
     "addPaymentMethodTitle": "Add Payment Method",
     "addPaymentMethodDesc": "Add a new payment method for tenants to see when they pay rent.",
@@ -481,7 +468,6 @@
     "phoneNumber": "Phone Number",
     "phoneNumberPlaceholder": "e.g. 0911234567",
     "savePaymentMethod": "Save Payment Method",
-
     "uploadPaymentTitle": "Upload Payment",
     "uploadPaymentSubtitle": "Submit your payment proof for review",
     "paymentInstructions": "Payment Instructions",
@@ -515,16 +501,13 @@
     "paymentUploadedSuccess": "Payment uploaded successfully. Your landlord will review it shortly.",
     "paymentUploaded": "Payment uploaded.",
     "failedUploadPayment": "Failed to upload payment.",
-
     "paymentHistoryTitle": "Payment History",
     "paymentHistorySubtitle": "Your past payment submissions",
     "noPaymentsYet": "No payments yet",
-
     "paymentMethods": "Payment Methods",
     "accountName": "Account Name:",
     "accountNumberLabel": "Account Number:",
     "phoneNumberLabel": "Phone Number:",
-
     "id": "ID",
     "month": "Month",
     "amount": "Amount",
@@ -536,7 +519,6 @@
     "contactLandlord": "Please contact your landlord to get payment instructions.",
     "failedLoadLeases": "Failed to load leases."
   },
-
   "tenants": {
     "tenantId": "Tenant ID: {{id}}",
     "name": "Name",
@@ -561,7 +543,6 @@
     "failedLoadTenants": "Failed to load tenants.",
     "selectPropertyTenants": "Choose a property to view its tenants"
   },
-
   "reports": {
     "reportsTitle": "Reports — {{name}}",
     "reportsSubtitle": "Analyse your portfolio performance",
@@ -610,7 +591,6 @@
     "totalLeasesCol": "Total Leases",
     "failedLoadTenantReport": "Failed to load tenant report."
   },
-
   "dueSoon": {
     "title": "Tenants Due Soon (≤ 3 days)",
     "subtitle": "{{count}} tenants have upcoming payments",
@@ -619,7 +599,6 @@
     "noTenantsDue": "No tenants currently due soon.",
     "amountDueETB": "Amount Due (ETB)"
   },
-
   "admin": {
     "dashboardTitle": "Admin Dashboard",
     "failedToLoadProfile": "Failed to load admin profile.",
@@ -684,13 +663,11 @@
     "failedLoadAdmins": "Failed to load admins.",
     "currentUnit": "Current Unit"
   },
-
   "superAdmin": {
     "dashboardTitle": "Super Admin Dashboard",
     "totalAdmins": "Total Admins",
     "manageAdminsTitle": "Manage Admins"
   },
-
   "profile": {
     "title": "My Profile",
     "fullName": "Full name",
@@ -701,7 +678,6 @@
     "updatePassword": "Update Password",
     "passwordChanged": "Password changed."
   },
-
   "empty": {
     "propertiesTitle": "No properties yet",
     "propertiesSubtitle": "Add your first property to get started.",
@@ -723,26 +699,22 @@
     "genericSubtitle": "Data will appear here once available.",
     "noRecordsForTab": "No {{tab}} found."
   },
-
   "errors": {
     "somethingWentWrong": "Something went wrong",
     "unexpectedError": "An unexpected error occurred. Please refresh the page or contact support if the problem persists.",
     "refreshPage": "Refresh page",
     "accountAlreadyExists": "An account with email '{{email}}' already exists."
   },
-
   "fileUpload": {
     "clickToUpload": "Click to upload",
     "orDragDrop": "or drag and drop",
     "fileFormats": "JPEG, PNG, PDF — max {{size}}MB"
   },
-
   "pagination": {
     "showing": "Showing",
     "of": "of",
     "results": "results"
   },
-
   "nav": {
     "dashboard": "Dashboard",
     "properties": "Properties",
@@ -759,7 +731,6 @@
     "paymentHistory": "Payment History",
     "units": "Units"
   },
-
   "audit": {
     "auditLogTitle": "Audit Log",
     "auditLogsTitle": "Audit Logs",
@@ -843,7 +814,6 @@
     "desc_lease_created": "Lease created (User: {{userId}}, Unit: {{unit}}, Rent: {{rent}})",
     "desc_lease_terminated": "Lease terminated for unit {{unit}}. Reason: {{reason}}"
   },
-
   "months": {
     "january": "January",
     "february": "February",
@@ -858,7 +828,6 @@
     "november": "November",
     "december": "December"
   },
-
   "calendar": {
     "day": "Day",
     "month": "Month",
@@ -866,7 +835,6 @@
     "selectDay": "Select day",
     "selectMonth": "Select month",
     "selectYear": "Select year",
-
     "gregorianCalendar": "Gregorian Calendar"
   }
 }
