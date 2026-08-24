@@ -233,32 +233,56 @@ export default function LeaseAgreementForm({
 
   function validate() {
     const errs = {};
-    if (!form.tenantEmail.trim())
-      errs.tenantEmail = t('validation.tenantEmailRequired');
-    if (!form.tenantName.trim())
-      errs.tenantName = t('leases.tenantNameRequired', { defaultValue: 'Tenant name is required.' });
+    if (!form.tenantEmail.trim()) {
+      errs.tenantEmail = 'validation.tenantEmailRequired';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.tenantEmail.trim())) {
+      errs.tenantEmail = 'validation.validEmail';
+    }
+
+    if (!form.tenantName.trim()) {
+      errs.tenantName = 'validation.fullNameRequired';
+    } else if (/\d/.test(form.tenantName)) {
+      errs.tenantName = 'validation.fullNameNoNumbers';
+    } else if (!form.tenantName.trim().includes(' ')) {
+      errs.tenantName = 'validation.fullNameSpaceRequired';
+    }
+
+    if (!form.tenantPhone.trim()) {
+      errs.tenantPhone = 'validation.phoneNumberRequired';
+    } else if (form.tenantPhone.trim().length < 10) {
+      errs.tenantPhone = 'validation.phoneNumberInvalid';
+    }
+
     if (!form.unitId)
-      errs.unitId = t('validation.selectUnit');
+      errs.unitId = 'validation.selectUnit';
     if (!form.startDate)
-      errs.startDate = t('validation.startDateRequired');
+      errs.startDate = 'validation.startDateRequired';
     else {
       const today = new Date().toISOString().split('T')[0];
       if (form.startDate < today)
-        errs.startDate = t('leases.startDatePastError', { defaultValue: 'The selected date has already passed. Please select today or a future date.' });
+        errs.startDate = 'leases.startDatePastError';
     }
     if (!form.monthlyRent)
-      errs.monthlyRent = t('validation.monthlyRentRequired');
+      errs.monthlyRent = 'validation.monthlyRentRequired';
     else if (Number(form.monthlyRent) <= 0)
-      errs.monthlyRent = t('validation.mustBeGreaterThanZero');
+      errs.monthlyRent = 'validation.mustBeGreaterThanZero';
     return errs;
   }
 
   function handleChange(e) {
     const { name, value } = e.target;
+    let nextValue = value;
+
+    if (name === 'tenantPhone') {
+      nextValue = value.replace(/\D/g, '').slice(0, 10);
+    } else if (name === 'tenantName') {
+      nextValue = value.replace(/[0-9]/g, '');
+    }
+
     setDateWarning('');
 
     setForm((prev) => {
-      const next = { ...prev, [name]: value };
+      const next = { ...prev, [name]: nextValue };
 
       // Auto-swap if start date is after end date
       if (next.startDate && next.endDate && next.startDate > next.endDate) {
@@ -275,7 +299,12 @@ export default function LeaseAgreementForm({
       return next;
     });
 
-    if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
+    setErrors((prev) => {
+      if (!prev[name]) return prev;
+      const updated = { ...prev };
+      delete updated[name];
+      return updated;
+    });
   }
 
   function handleNext() {
@@ -349,7 +378,7 @@ export default function LeaseAgreementForm({
           type="email"
           value={form.tenantEmail}
           onChange={handleChange}
-          error={errors.tenantEmail}
+          error={errors.tenantEmail ? t(errors.tenantEmail) : ''}
           disabled={loading}
           placeholder={t('leases.tenantEmailPlaceholder')}
           hint={t('leases.tenantEmailHint')}
@@ -359,9 +388,10 @@ export default function LeaseAgreementForm({
         <Input
           label={t('leases.tenantNameLabel', { defaultValue: 'Tenant Full Name' })}
           name="tenantName"
+          type="text"
           value={form.tenantName}
           onChange={handleChange}
-          error={errors.tenantName}
+          error={errors.tenantName ? t(errors.tenantName) : ''}
           disabled={loading}
           placeholder={t('leases.tenantNamePlaceholder', {
             defaultValue: 'e.g. John Doe',
@@ -376,13 +406,16 @@ export default function LeaseAgreementForm({
           label={t('leases.tenantPhoneLabel', { defaultValue: 'Tenant Phone Number' })}
           name="tenantPhone"
           type="tel"
+          inputMode="numeric"
+          maxLength={10}
           value={form.tenantPhone}
           onChange={handleChange}
+          error={errors.tenantPhone ? t(errors.tenantPhone) : ''}
           disabled={loading}
-          maxLength={10}
           placeholder={t('leases.tenantPhonePlaceholder', {
             defaultValue: 'e.g. 09XXXXXXXX',
           })}
+          required
         />
 
         {/* Unit selector */}
@@ -408,7 +441,7 @@ export default function LeaseAgreementForm({
             ))}
           </select>
           {errors.unitId && (
-            <p className="mt-1 text-xs text-red-400">{errors.unitId}</p>
+            <p className="mt-1 text-xs text-red-400">{t(errors.unitId)}</p>
           )}
           {totalUnits === 0 ? (
             <p className="mt-1 text-xs text-amber-400">
@@ -428,7 +461,7 @@ export default function LeaseAgreementForm({
             type="date"
             value={form.startDate}
             onChange={handleChange}
-            error={errors.startDate}
+            error={errors.startDate ? t(errors.startDate) : ''}
             disabled={loading}
             required
           />
@@ -449,7 +482,7 @@ export default function LeaseAgreementForm({
           min="1"
           value={form.monthlyRent}
           onChange={handleChange}
-          error={errors.monthlyRent}
+          error={errors.monthlyRent ? t(errors.monthlyRent) : ''}
           disabled={loading}
           placeholder={t('leases.monthlyRentPlaceholder')}
           required

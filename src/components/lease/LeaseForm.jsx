@@ -15,19 +15,29 @@ export default function LeaseForm({ units = [], totalUnits = 0, onSubmit, loadin
 
   function validate() {
     const errs = {};
-    if (!form.tenantEmail.trim()) errs.tenantEmail = t('validation.tenantEmailRequired');
-    if (!form.unitId)      errs.unitId      = t('validation.selectUnit');
-    if (!form.startDate)   errs.startDate   = t('validation.startDateRequired');
-    if (!form.monthlyRent) errs.monthlyRent = t('validation.monthlyRentRequired');
-    else if (Number(form.monthlyRent) <= 0) errs.monthlyRent = t('validation.mustBeGreaterThanZero');
-    if (!form.agreementDocument) errs.agreementDocument = t('validation.agreementDocumentRequired');
+    if (!form.tenantEmail.trim()) {
+      errs.tenantEmail = 'validation.tenantEmailRequired';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.tenantEmail.trim())) {
+      errs.tenantEmail = 'validation.validEmail';
+    }
+
+    if (!form.unitId)      errs.unitId      = 'validation.selectUnit';
+    if (!form.startDate)   errs.startDate   = 'validation.startDateRequired';
+    if (!form.monthlyRent) errs.monthlyRent = 'validation.monthlyRentRequired';
+    else if (Number(form.monthlyRent) <= 0) errs.monthlyRent = 'validation.mustBeGreaterThanZero';
+    if (!form.agreementDocument) errs.agreementDocument = 'validation.agreementDocumentRequired';
     return errs;
   }
 
   function handleChange(e) {
     const { name, value, files } = e.target;
     setForm((p) => ({ ...p, [name]: files ? files[0] : value }));
-    if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
+    setErrors((prev) => {
+      if (!prev[name]) return prev;
+      const updated = { ...prev };
+      delete updated[name];
+      return updated;
+    });
   }
 
   function handleSubmit(e) {
@@ -55,7 +65,7 @@ export default function LeaseForm({ units = [], totalUnits = 0, onSubmit, loadin
         type="email"
         value={form.tenantEmail}
         onChange={handleChange}
-        error={errors.tenantEmail}
+        error={errors.tenantEmail ? t(errors.tenantEmail) : ''}
         disabled={loading}
         placeholder={t('leases.tenantEmailPlaceholder')}
         hint={t('leases.tenantEmailHint')}
