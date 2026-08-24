@@ -6,12 +6,14 @@ export const leaseApi = {
   createLease: (data, agreementDocument) => {
     const formData = new FormData();
     if (data.tenantEmail) formData.append('tenantEmail', data.tenantEmail);
+    if (data.tenantName) formData.append('tenantName', data.tenantName);
+    if (data.tenantPhone) formData.append('tenantPhone', data.tenantPhone);
     if (data.tenantId) formData.append('tenantId', data.tenantId);
     formData.append('unitId', data.unitId);
     formData.append('startDate', data.startDate);
     formData.append('monthlyRent', data.monthlyRent);
     if (agreementDocument) formData.append('agreementDocument', agreementDocument);
-    
+
     return api.post('/leases', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
