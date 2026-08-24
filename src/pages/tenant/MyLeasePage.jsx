@@ -57,7 +57,7 @@ export default function MyLeasePage() {
               <div>
                 <p className="text-slate-600 dark:text-slate-400 text-xs mb-1">{t('leases.agreementDocument')}</p>
                 {lease.agreementDocumentUrl ? (
-                  <DocumentViewer leaseId={lease.id} />
+                  <DocumentViewer leaseId={lease.id} documentUrl={lease.agreementDocumentUrl} />
                 ) : (
                   <p className="font-semibold text-slate-500">—</p>
                 )}

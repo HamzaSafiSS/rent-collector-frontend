@@ -123,7 +123,7 @@ export default function LeasesPage() {
     {
       key: 'document', header: t('leases.document'),
       render: (r) => r.agreementDocumentUrl ? (
-        <DocumentViewer leaseId={r.id} />
+        <DocumentViewer leaseId={r.id} documentUrl={r.agreementDocumentUrl} />
       ) : '—'
     },
     {
