@@ -14,6 +14,9 @@ export const leaseApi = {
     formData.append('monthlyRent', data.monthlyRent);
     if (agreementDocument) formData.append('agreementDocument', agreementDocument);
 
+    console.log('[LEASE-DEBUG] monthlyRent sent to backend:', data.monthlyRent, typeof data.monthlyRent);
+    console.log('[LEASE-DEBUG] agreementDocument size:', agreementDocument?.size, 'bytes');
+
     return api.post('/leases', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
