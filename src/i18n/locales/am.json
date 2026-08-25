@@ -207,7 +207,9 @@
     "monthAndYearRequired": "እባክዎ ወር እና ዓመት ይምረጡ",
     "validAmountRequired": "እባክዎ ከ0 የሚበልጥ ትክክለኛ መጠን ያስገቡ",
     "fileRequired": "እባክዎ የክፍያ ማረጋገጫ ፋይል ያስገቡ",
-    "agreementDocumentRequired": "የውል ሰነድ ያስፈልጋል።"
+    "agreementDocumentRequired": "የውል ሰነድ ያስፈልጋል።",
+    "endDateRequired": "የመጨረሻ ቀን ያስፈልጋል።",
+    "minSixMonthsError": "የኪራይ ውል ቆይታ ቢያንስ 6 ወራት መሆን አለበት።"
   },
   "dashboard": {
     "landlordTitle": "የአከራይ ዳሽቦርድ",
@@ -405,7 +407,10 @@
     "previewInfo": "ከታች ያለውን ስምምነት ይመልከቱ። PDF ተፈጥሮ ከውሉ ጋር በራስ-ሰር ይያያዛል።",
     "generateAndCreate": "PDF ፍጠር እና ውል ፍጠር",
     "startDatePastError": "የመረጡት ቀን አልፏል። እባክዎ ዛሬ ወይም ወደፊት ያለ ቀን ይምረጡ።",
-    "datesSwappedWarning": "የመጀመሪያ ቀን ከማብቂያ ቀን በኋላ ስለነበር በራስ-ሰር ተቀይረዋል።"
+    "datesSwappedWarning": "የመጀመሪያ ቀን ከማብቂያ ቀን በኋላ ስለነበር በራስ-ሰር ተቀይረዋል።",
+    "endDateRequired": "የመጨረሻ ቀን ያስፈልጋል።",
+    "minSixMonthsError": "የኪራይ ውል ቆይታ ቢያንስ 6 ወራት መሆን አለበት።",
+    "endDateAfterStartDateError": "የመጨረሻው ቀን ከመጀመሪያው ቀን በኋላ መሆን አለበት።"
   },
   "payments": {
     "paymentsTitle": "ክፍያዎች — {{name}}",

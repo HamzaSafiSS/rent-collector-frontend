@@ -212,6 +212,7 @@ export default function LeasesPage() {
           onSubmit={handleCreate}
           loading={formLoading}
           error={formError}
+          onClearError={() => setFormError('')}
           property={selectedProperty}
         />
       </Modal>

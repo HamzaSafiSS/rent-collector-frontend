@@ -206,7 +206,9 @@
     "monthAndYearRequired": "Please select a month and year",
     "validAmountRequired": "Please enter a valid amount greater than 0",
     "fileRequired": "Please select a payment proof file",
-    "agreementDocumentRequired": "Agreement document is required."
+    "agreementDocumentRequired": "Agreement document is required.",
+    "endDateRequired": "End date is required.",
+    "minSixMonthsError": "Lease duration must be at least 6 months."
   },
   "dashboard": {
     "landlordTitle": "Landlord Dashboard",
@@ -402,7 +404,10 @@
     "previewInfo": "Review the agreement below. A PDF will be generated and attached to the lease automatically.",
     "generateAndCreate": "Generate PDF & Create Lease",
     "startDatePastError": "The selected date has already passed. Please select today or a future date.",
-    "datesSwappedWarning": "Start date was after end date, so they have been swapped automatically."
+    "datesSwappedWarning": "Start date was after end date, so they have been swapped automatically.",
+    "endDateRequired": "End date is required.",
+    "minSixMonthsError": "Lease duration must be at least 6 months.",
+    "endDateAfterStartDateError": "End date must be after start date."
   },
   "payments": {
     "paymentsTitle": "Payments — {{name}}",

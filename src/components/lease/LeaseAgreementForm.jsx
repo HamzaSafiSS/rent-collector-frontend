@@ -8,6 +8,25 @@ import { useAuth } from '../../context/AuthContext';
 const selectClass =
   'w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-100 dark:disabled:bg-slate-800/30 disabled:text-slate-400 dark:disabled:text-slate-500 transition-all duration-200';
 
+function isAtLeastSixMonths(startDateStr, endDateStr) {
+  if (!startDateStr || !endDateStr) return false;
+  const [sY, sM, sD] = startDateStr.split('-').map(Number);
+  const [eY, eM, eD] = endDateStr.split('-').map(Number);
+
+  const start = new Date(sY, sM - 1, sD);
+  const end = new Date(eY, eM - 1, eD);
+
+  if (end <= start) return false;
+
+  const minEnd = new Date(sY, sM - 1 + 6, sD);
+  const targetMonth = (sM - 1 + 6) % 12;
+  if (minEnd.getMonth() !== targetMonth) {
+    minEnd.setDate(0);
+  }
+
+  return end >= minEnd;
+}
+
 
 
 // ── Helper: generate the PDF blob from filled form data ──────────────────────
@@ -185,6 +204,7 @@ export default function LeaseAgreementForm({
   onSubmit,
   loading,
   error,
+  onClearError,
   property,
 }) {
   const { t } = useTranslation();
@@ -262,6 +282,17 @@ export default function LeaseAgreementForm({
       if (form.startDate < today)
         errs.startDate = 'leases.startDatePastError';
     }
+
+    if (!form.endDate) {
+      errs.endDate = 'leases.endDateRequired';
+    } else if (form.startDate) {
+      if (form.endDate <= form.startDate) {
+        errs.endDate = 'leases.endDateAfterStartDateError';
+      } else if (!isAtLeastSixMonths(form.startDate, form.endDate)) {
+        errs.endDate = 'leases.minSixMonthsError';
+      }
+    }
+
     if (!form.monthlyRent)
       errs.monthlyRent = 'validation.monthlyRentRequired';
     else if (Number(form.monthlyRent) <= 0)
@@ -300,9 +331,10 @@ export default function LeaseAgreementForm({
     });
 
     setErrors((prev) => {
-      if (!prev[name]) return prev;
       const updated = { ...prev };
       delete updated[name];
+      if (name === 'startDate') delete updated.endDate;
+      if (name === 'endDate') delete updated.startDate;
       return updated;
     });
   }
@@ -471,7 +503,9 @@ export default function LeaseAgreementForm({
             type="date"
             value={form.endDate}
             onChange={handleChange}
+            error={errors.endDate ? t(errors.endDate, { defaultValue: 'Lease duration must be at least 6 months.' }) : ''}
             disabled={loading}
+            required
           />
         </div>
 
@@ -560,7 +594,10 @@ export default function LeaseAgreementForm({
       <div className="flex items-center justify-between pt-3 mt-auto">
         <button
           type="button"
-          onClick={() => setStep(1)}
+          onClick={() => {
+            onClearError?.();
+            setStep(1);
+          }}
           disabled={loading}
           className="px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 transition-colors flex items-center gap-1"
         >
