@@ -71,7 +71,7 @@ export default function LandlordDashboard() {
     async function loadActivity() {
       try {
         setActivityLoading(true);
-        const res = await auditApi.getAuditLogs({ size: 5 });
+        const res = await auditApi.getAuditLogs({ size: 7 });
         setRecentActivity(res.data?.data?.content || []);
       } catch {
         setRecentActivity([]);
@@ -336,13 +336,6 @@ export default function LandlordDashboard() {
               ))
             )}
           </div>
-
-          <button 
-            onClick={() => navigate('/landlord/reports')}
-            className="w-full mt-6 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/50 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
-          >
-            {t('dashboard.viewAllActivity')}
-          </button>
         </div>
 
       </div>
