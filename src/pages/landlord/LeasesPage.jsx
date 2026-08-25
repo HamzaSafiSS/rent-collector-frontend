@@ -90,7 +90,13 @@ export default function LeasesPage() {
       setCreateOpen(false);
       loadLeases();
     } catch (err) {
-      setFormError(err.response?.data?.message || t('leases.failedCreateLease'));
+      let errMsg = err.response?.data?.message || t('leases.failedCreateLease');
+      if (errMsg.includes('already exists') && errMsg.includes('tenant account')) {
+        const match = errMsg.match(/email '([^']+)'/);
+        const email = match ? match[1] : payload.tenantEmail;
+        errMsg = t('errors.accountNotTenant', { email });
+      }
+      setFormError(errMsg);
     } finally {
       setFormLoading(false);
     }

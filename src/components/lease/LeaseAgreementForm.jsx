@@ -4,6 +4,7 @@ import { jsPDF } from 'jspdf';
 import { Input, Button, Alert } from '../common';
 
 import { useAuth } from '../../context/AuthContext';
+import { leaseApi } from '../../api/leaseApi';
 
 const selectClass =
   'w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 disabled:bg-slate-100 dark:disabled:bg-slate-800/30 disabled:text-slate-400 dark:disabled:text-slate-500 transition-all duration-200';
@@ -222,6 +223,7 @@ export default function LeaseAgreementForm({
     propertyAddress: property?.address || '',
   });
   const [errors, setErrors] = useState({});
+  const [validating, setValidating] = useState(false);
 
   // Auto-populate landlord info
   const landlordName = user?.fullName || '';
@@ -339,13 +341,63 @@ export default function LeaseAgreementForm({
     });
   }
 
-  function handleNext() {
+  function scrollToFirstError(errorsObj) {
+    setTimeout(() => {
+      const fieldOrder = [
+        'tenantEmail',
+        'tenantName',
+        'tenantPhone',
+        'unitId',
+        'startDate',
+        'endDate',
+        'monthlyRent',
+        'propertyAddress',
+      ];
+      for (const fieldName of fieldOrder) {
+        if (errorsObj && errorsObj[fieldName]) {
+          const el = document.querySelector(`[name="${fieldName}"]`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.focus?.();
+            return;
+          }
+        }
+      }
+
+      const anyErrorEl =
+        document.querySelector('[role="alert"]') ||
+        document.querySelector('[aria-invalid="true"]');
+      if (anyErrorEl) {
+        anyErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 50);
+  }
+
+  async function handleNext() {
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
+      scrollToFirstError(errs);
       return;
     }
-    setStep(2);
+
+    try {
+      setValidating(true);
+      await leaseApi.validateTenantEmail(form.tenantEmail.trim());
+      setStep(2);
+    } catch (err) {
+      let errMsg = err.response?.data?.message;
+      const newErrors = { ...errors };
+      if (errMsg && errMsg.includes('already exists') && errMsg.includes('tenant account')) {
+        newErrors.tenantEmail = t('errors.accountNotTenant', { email: form.tenantEmail.trim() });
+      } else {
+        newErrors.tenantEmail = errMsg || t('validation.validEmail');
+      }
+      setErrors(newErrors);
+      scrollToFirstError(newErrors);
+    } finally {
+      setValidating(false);
+    }
   }
 
   async function handleGenerate() {
@@ -410,8 +462,8 @@ export default function LeaseAgreementForm({
           type="email"
           value={form.tenantEmail}
           onChange={handleChange}
-          error={errors.tenantEmail ? t(errors.tenantEmail) : ''}
-          disabled={loading}
+          error={errors.tenantEmail ? (errors.tenantEmail.startsWith?.('validation.') || errors.tenantEmail.startsWith?.('leases.') || errors.tenantEmail.startsWith?.('errors.') ? t(errors.tenantEmail) : errors.tenantEmail) : ''}
+          disabled={loading || validating}
           placeholder={t('leases.tenantEmailPlaceholder')}
           hint={t('leases.tenantEmailHint')}
           required
@@ -538,7 +590,7 @@ export default function LeaseAgreementForm({
         />
 
         <div className="flex justify-end pt-2">
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading || validating} loading={validating}>
             {t('leases.nextStepBtn', {
               defaultValue: 'Next: Preview Agreement →',
             })}

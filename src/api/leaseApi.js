@@ -22,6 +22,9 @@ export const leaseApi = {
     });
   },
 
+  validateTenantEmail: (email) =>
+    api.get('/leases/validate-email', { params: { email } }),
+
   listLeases: (page = 0, size = 20, status = null, propertyId = null) =>
     api.get('/leases', {
       params: { page, size, ...(status && { status }), ...(propertyId && { propertyId }) },

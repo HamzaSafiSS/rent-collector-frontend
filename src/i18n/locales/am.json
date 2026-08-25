@@ -718,7 +718,8 @@
     "somethingWentWrong": "ስህተት ተፈጥሯል",
     "unexpectedError": "ያልተጠበቀ ስህተት ተከስቷል። እባክዎ ገፁን ያድሱ ወይም ችግሩ ከቀጠለ ድጋፍን ያነጋግሩ።",
     "refreshPage": "ገፁን አድስ",
-    "accountAlreadyExists": "'{{email}}' የሚል ኢሜይል ያለው መለያ አስቀድሞ አለ።"
+    "accountAlreadyExists": "'{{email}}' የሚል ኢሜይል ያለው መለያ አስቀድሞ አለ።",
+    "accountNotTenant": "'{{email}}' የሚል ኢሜይል ያለው መለያ አስቀድሞ አለ፤ የተከራይ መለያ ግን አይደለም።"
   },
   "fileUpload": {
     "clickToUpload": "ለማስገባት ጠቅ ያድርጉ",
