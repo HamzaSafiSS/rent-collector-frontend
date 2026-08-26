@@ -5,6 +5,7 @@ import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../comp
 import { adminApi } from '../../api/adminApi';
 
 import { useAuth } from '../../context/AuthContext';
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 
 
@@ -12,6 +13,7 @@ const PAGE_SIZE = 10;
 
 export default function LeaseDashboardViewPage() {
   const { t } = useTranslation();
+  const { formatDate } = useCalendarDate();
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -65,7 +67,7 @@ export default function LeaseDashboardViewPage() {
         { key: 'paymentMonth', header: t('payments.month', 'Month') },
         { key: 'amount', header: t('payments.amount', 'Amount'), render: (r) => `ETB ${Number(r.amount).toLocaleString()}` },
         { key: 'status', header: t('payments.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-        { key: 'uploadedAt', header: t('payments.date', 'Date'), render: (r) => new Date(r.uploadedAt).toLocaleDateString() },
+        { key: 'uploadedAt', header: t('payments.date', 'Date'), render: (r) => r.uploadedAt ? formatDate(r.uploadedAt) : '—' },
       ];
     }
     return [];

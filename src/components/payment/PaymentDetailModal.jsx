@@ -3,6 +3,7 @@ import Modal from '../common/Modal';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
 import ScreenshotViewer from './ScreenshotViewer';
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 /**
  * Read-only modal for tenants to view full payment details
@@ -10,6 +11,7 @@ import ScreenshotViewer from './ScreenshotViewer';
  */
 export default function PaymentDetailModal({ payment, isOpen, onClose }) {
   const { t } = useTranslation();
+  const { formatDateTime } = useCalendarDate();
 
   if (!payment) return null;
 
@@ -32,9 +34,9 @@ export default function PaymentDetailModal({ payment, isOpen, onClose }) {
         <DetailRow label={t('payments.unitDetail')}         value={payment.unitNumber} />
         <DetailRow label={t('payments.propertyDetail')}     value={payment.propertyName} />
         <DetailRow label={t('payments.statusDetail')}       value={<Badge statusKey={payment.status} label={payment.status ? t(`common.status${payment.status.charAt(0) + payment.status.slice(1).toLowerCase()}`, { defaultValue: payment.status }) : ''} />} />
-        <DetailRow label={t('payments.uploaded')}           value={payment.uploadedAt ? new Date(payment.uploadedAt).toLocaleString() : '—'} />
+        <DetailRow label={t('payments.uploaded')}           value={payment.uploadedAt ? formatDateTime(payment.uploadedAt) : '—'} />
         {payment.verifiedAt && (
-          <DetailRow label={t('payments.reviewed')} value={new Date(payment.verifiedAt).toLocaleString()} />
+          <DetailRow label={t('payments.reviewed')} value={formatDateTime(payment.verifiedAt)} />
         )}
       </div>
 

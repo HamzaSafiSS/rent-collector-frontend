@@ -4,11 +4,11 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { PageHeader, Badge, Spinner, Alert } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 import { useAuth } from '../../context/AuthContext';
-
-
+import useCalendarDate from '../../hooks/useCalendarDate';
 
 export default function AdminDashboardViewPage() {
   const { t } = useTranslation();
+  const { formatDate } = useCalendarDate();
 
   const { adminId } = useParams();
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ export default function AdminDashboardViewPage() {
                 </div>
                 <div>
                   <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{t('admin.joined')}</span>
-                  <span className="text-slate-100">{adminData.createdAt ? new Date(adminData.createdAt).toLocaleDateString() : '—'}</span>
+                  <span className="text-slate-100">{adminData.createdAt ? formatDate(adminData.createdAt) : '—'}</span>
                 </div>
               </div>
             </div>

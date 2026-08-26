@@ -5,6 +5,7 @@ import { StatCard, PageHeader, Spinner, Badge } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import { auditApi } from '../../api/auditApi';
+import { formatRelativeTime } from '../../utils/dateUtils';
 import { StatCardsSkeleton } from '../../components/common';
 import {
   ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -20,17 +21,7 @@ export default function LandlordDashboard() {
   const [activityLoading, setActivityLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Helper function for relative time
-  const timeAgo = (dateString) => {
-    if (!dateString) return '';
-    const diff = Date.now() - new Date(dateString).getTime();
-    const mins = Math.floor(diff / 60000);
-    if (mins < 1) return t('dashboard.justNow');
-    if (mins < 60) return t('dashboard.minutesAgo', { count: mins });
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return t('dashboard.hoursAgo', { count: hrs });
-    return t('dashboard.daysAgo', { count: Math.floor(hrs / 24) });
-  };
+  const timeAgo = (dateString) => formatRelativeTime(dateString, t);
 
   const ActivityIcon = ({ action }) => {
     if (action?.includes('PAYMENT')) return <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-sm shrink-0 border border-emerald-500/20">💳</div>;

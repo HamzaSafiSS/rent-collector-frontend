@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
+import { parseUtcDate, formatRelativeTime as formatRelTime } from '../utils/dateUtils';
 
 /**
  * Hook that provides locale-aware Gregorian date formatting functions.
@@ -7,11 +8,11 @@ import { useMemo } from 'react';
  * (Amharic or English), always using the Gregorian calendar.
  *
  * Usage:
- *   const { formatDate, formatDateTime, formatMonth } = useCalendarDate();
+ *   const { formatDate, formatDateTime, formatMonth, formatRelativeTime } = useCalendarDate();
  *   <span>{formatDate(someIsoString)}</span>
  */
 export default function useCalendarDate() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = i18n.language?.startsWith('am') ? 'am' : 'en';
   const locale = lang === 'am' ? 'am-ET' : 'en-US';
 
@@ -25,7 +26,18 @@ export default function useCalendarDate() {
      */
     formatDate: (isoDate) => {
       if (!isoDate) return '—';
-      return new Date(isoDate).toLocaleDateString(locale, {
+      if (typeof isoDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(isoDate)) {
+        const [y, m, d] = isoDate.split('-').map((v) => parseInt(v, 10));
+        const localDate = new Date(y, m - 1, d);
+        return localDate.toLocaleDateString(locale, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+      }
+      const parsed = parseUtcDate(isoDate);
+      if (!parsed) return '—';
+      return parsed.toLocaleDateString(locale, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -38,13 +50,22 @@ export default function useCalendarDate() {
      */
     formatDateTime: (isoDateTime) => {
       if (!isoDateTime) return '—';
-      return new Date(isoDateTime).toLocaleString(locale, {
+      const parsed = parseUtcDate(isoDateTime);
+      if (!parsed) return '—';
+      return parsed.toLocaleString(locale, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
       });
+    },
+
+    /**
+     * Format a date into relative time (e.g. "Just now", "5m ago", "2h ago", "3d ago").
+     */
+    formatRelativeTime: (dateInput) => {
+      return formatRelTime(dateInput, t);
     },
 
     /**
@@ -58,5 +79,6 @@ export default function useCalendarDate() {
       const dateObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, 1);
       return dateObj.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
     },
-  }), [lang, locale]);
+  }), [t, lang, locale]);
 }
+
