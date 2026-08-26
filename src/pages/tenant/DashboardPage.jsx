@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PageHeader, StatCard, StatCardsSkeleton, Alert } from '../../components/common';
 import { leaseApi } from '../../api/leaseApi';
 import { paymentApi } from '../../api/paymentApi';
+import { getLeasePaymentStatus } from '../../utils/leasePaymentStatus';
 
 export default function TenantDashboard() {
   const { t } = useTranslation();
@@ -38,42 +39,11 @@ export default function TenantDashboard() {
         let dueSoonLeases = 0;
 
         leases.forEach(lease => {
-            const leasePayments = payments.filter(p => p.leaseId === lease.id && ['APPROVED', 'PENDING'].includes(p.status));
-            leasePayments.sort((a, b) => b.paymentMonth.localeCompare(a.paymentMonth));
-            
-            const latestPayment = leasePayments[0];
-            
-            let targetYearMonthStr;
-            let sourceMonthStr = !latestPayment ? lease.startDate.substring(0, 7) : latestPayment.paymentMonth;
-            
-            const parts = sourceMonthStr.split('-');
-            let y = parseInt(parts[0], 10);
-            let m = parseInt(parts[1], 10);
-            m += 1;
-            if (m > 12) { m = 1; y += 1; }
-            targetYearMonthStr = `${y}-${String(m).padStart(2, '0')}`;
-
-            const targetParts = targetYearMonthStr.split('-');
-            const targetYear = parseInt(targetParts[0], 10);
-            const targetMonth = parseInt(targetParts[1], 10) - 1;
-            
-            const startDateObj = new Date(lease.startDate);
-            const startDay = startDateObj.getDate();
-            
-            const lastDayOfTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
-            const dueDay = Math.min(startDay, lastDayOfTargetMonth);
-            
-            const dueDateObj = new Date(targetYear, targetMonth, dueDay);
-            dueDateObj.setHours(23, 59, 59, 999);
-            
-            if (currentDate > dueDateObj) {
+            const status = getLeasePaymentStatus(lease, payments, currentDate);
+            if (status.isUnpaid) {
                 unpaidLeases++;
-            } else {
-                const diffTime = dueDateObj.getTime() - currentDate.getTime();
-                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                if (diffDays >= 0 && diffDays <= 3) {
-                    dueSoonLeases++;
-                }
+            } else if (status.isDueSoon) {
+                dueSoonLeases++;
             }
         });
 
@@ -133,7 +103,7 @@ export default function TenantDashboard() {
             value={stats.unpaidLeases} 
             icon={<svg className="w-6 h-6 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>} 
             color="orange" 
-            onClick={() => navigate('/tenant/payments')} 
+            onClick={() => navigate('/tenant/lease?status=UNPAID')} 
           />
           {stats.dueSoonLeases > 0 && (
             <StatCard 
@@ -141,7 +111,7 @@ export default function TenantDashboard() {
               value={stats.dueSoonLeases} 
               icon={<svg className="w-6 h-6 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} 
               color="indigo" 
-              onClick={() => navigate('/tenant/payments')} 
+              onClick={() => navigate('/tenant/lease?status=DUE_SOON')} 
             />
           )}
         </div>
