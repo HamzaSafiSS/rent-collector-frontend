@@ -60,7 +60,14 @@ export default function UploadPaymentPage() {
     else if (selectedLease && paymentMonth < selectedLease.startDate.substring(0, 7)) {
        errs.month = t('payments.invalidMonthBeforeLease', 'Payment month cannot be before lease start date');
     }
-    if (!amount || Number(amount) <= 0) errs.amount = t('validation.validAmountRequired');
+    if (!amount || Number(amount) <= 0) {
+      errs.amount = t('validation.validAmountRequired');
+    } else if (selectedLease && selectedLease.monthlyRent != null && Number(amount) !== Number(selectedLease.monthlyRent)) {
+      errs.amount = t('payments.amountMismatchLease', {
+        amount: Number(selectedLease.monthlyRent).toLocaleString(),
+        defaultValue: `Entered amount does not match your lease rent amount of ETB ${Number(selectedLease.monthlyRent).toLocaleString()}.`
+      });
+    }
     if (!file)           errs.file    = t('validation.fileRequired');
     return errs;
   }
@@ -89,6 +96,8 @@ export default function UploadPaymentPage() {
       const msg = err.response?.data?.message || '';
       if (msg.toLowerCase().includes('already paid')) {
         setApiError(t('payments.alreadyPaidError', 'Payment for this month and year already paid. Please check the date.'));
+      } else if (msg.toLowerCase().includes('match') && (msg.toLowerCase().includes('rent') || msg.toLowerCase().includes('lease') || msg.toLowerCase().includes('amount'))) {
+        setApiError(msg || t('payments.amountMismatchError', 'Entered amount does not match your lease rent amount.'));
       } else {
         setApiError(msg || t('payments.failedUploadPayment'));
       }
@@ -109,6 +118,7 @@ export default function UploadPaymentPage() {
     setLeaseId(newLeaseId);
     fetchPaymentInfo(newLeaseId);
     if (errors.leaseId) setErrors((p) => ({ ...p, leaseId: '' }));
+    if (errors.amount) setErrors((p) => ({ ...p, amount: '' }));
 
     const newLease = leases.find((l) => String(l.id) === String(newLeaseId));
     if (newLease?.startDate && paymentMonth && paymentMonth < newLease.startDate.substring(0, 7)) {
@@ -193,11 +203,13 @@ export default function UploadPaymentPage() {
               label={t('payments.amountETBLabel')}
               type="number"
               min="1"
+              step="any"
               value={amount}
               onChange={handleChange(setAmount, 'amount')}
               error={errors.amount}
               disabled={loading}
-              placeholder={t('payments.amountPlaceholder')}
+              placeholder={selectedLease ? `${Number(selectedLease.monthlyRent)}` : t('payments.amountPlaceholder')}
+              hint={selectedLease ? t('payments.expectedAmountHint', { amount: Number(selectedLease.monthlyRent).toLocaleString() }) : undefined}
               required
             />
 

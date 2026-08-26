@@ -211,7 +211,8 @@
     "fileRequired": "እባክዎ የክፍያ ማረጋገጫ ፋይል ያስገቡ",
     "agreementDocumentRequired": "የውል ሰነድ ያስፈልጋል።",
     "endDateRequired": "የመጨረሻ ቀን ያስፈልጋል።",
-    "minSixMonthsError": "የኪራይ ውል ቆይታ ቢያንስ 6 ወራት መሆን አለበት።"
+    "minSixMonthsError": "የኪራይ ውል ቆይታ ቢያንስ 6 ወራት መሆን አለበት።",
+    "amountMismatchLease": "የክፍያ መጠን ከውልዎ የኪራይ መጠን {{amount}} ብር ጋር እኩል መሆን አለበት።"
   },
   "dashboard": {
     "landlordTitle": "የአከራይ ዳሽቦርድ",
@@ -246,6 +247,7 @@
     "rejectedPayments": "ውድቅ የተደረጉ ክፍያዎች",
     "unpaidLeases": "ያልተከፈሉ ውሎች",
     "dueSoonTenant": "በቅርቡ የሚደርሱ ክፍያዎች (≤ 3 ቀናት)",
+    "dueSoonLabel": "በቅርቡ የሚደርሱ ክፍያዎች (≤ 3 ቀናት)",
     "failedLoadDashboard": "የዳሽቦርድ ውሂብ መጫን አልተሳካም።",
     "failedLoadData": "የዳሽቦርድ ውሂብ መጫን አልተሳካም።",
     "couldNotLoadStats": "ስታትስቲክስ መጫን አልተቻለም።",
@@ -430,6 +432,8 @@
     "paymentDetails": "የክፍያ ዝርዝሮች",
     "review": "ገምግም",
     "noPaymentsFound": "{{status}} ክፍያዎች አልተገኙም።",
+    "noPaymentsFoundSimple": "ምንም ክፍያዎች አልተገኙም።",
+    "failedLoadPaymentHistory": "የክፍያ ታሪክ መጫን አልተሳካም።",
     "paymentApproved": "ክፍያ ጸድቋል።",
     "paymentRejected": "ክፍያ ውድቅ ተደርጓል።",
     "failedApprovePayment": "ክፍያ ማፅደቅ አልተሳካም።",
@@ -441,6 +445,9 @@
     "uploadSuccessToast": "ክፍያ በተሳካ ሁኔታ ተልኳል!",
     "alreadyPaidError": "ለዚህ ወር እና አመት ክፍያ ቀደም ብሎ ተከፍሏል። እባክዎ ቀኑን ያረጋግጡ።",
     "invalidMonthBeforeLease": "የክፍያ ወር ከውል መጀመሪያ ቀን በፊት መሆን አይችልም",
+    "amountMismatchLease": "የተስገባው መጠን ከውልዎ የኪራይ መጠን {{amount}} ብር ጋር አይዛመድም።",
+    "amountMismatchError": "የተስገባው መጠን ከውልዎ የኪራይ መጠን ጋር አይዛመድም።",
+    "expectedAmountHint": "የውል ኪራይ መጠን፡ {{amount}} ብር",
     "reviewPaymentTitle": "ክፍያ ገምግም",
     "approve": "አጽድቅ",
     "reject": "ውድቅ አድርግ",

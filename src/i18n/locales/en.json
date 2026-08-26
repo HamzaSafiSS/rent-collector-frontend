@@ -210,7 +210,8 @@
     "fileRequired": "Please select a payment proof file",
     "agreementDocumentRequired": "Agreement document is required.",
     "endDateRequired": "End date is required.",
-    "minSixMonthsError": "Lease duration must be at least 6 months."
+    "minSixMonthsError": "Lease duration must be at least 6 months.",
+    "amountMismatchLease": "Payment amount must match the lease rent amount of {{amount}} ETB."
   },
   "dashboard": {
     "landlordTitle": "Landlord Dashboard",
@@ -244,7 +245,8 @@
     "pendingPayments": "Pending Payments",
     "rejectedPayments": "Rejected Payments",
     "unpaidLeases": "Unpaid Leases",
-    "dueSoonTenant": "Due Soon (≤ 3 Days)",
+    "dueSoonTenant": "Due Soon Payments (≤ 3 Days)",
+    "dueSoonLabel": "Due Soon Payments (≤ 3 Days)",
     "failedLoadDashboard": "Failed to load dashboard data.",
     "failedLoadData": "Failed to load dashboard data.",
     "couldNotLoadStats": "Could not load stats.",
@@ -427,6 +429,8 @@
     "paymentDetails": "Payment Details",
     "review": "Review",
     "noPaymentsFound": "No {{status}} payments found.",
+    "noPaymentsFoundSimple": "No payments found.",
+    "failedLoadPaymentHistory": "Failed to load payment history.",
     "paymentApproved": "Payment approved.",
     "paymentRejected": "Payment rejected.",
     "failedApprovePayment": "Failed to approve payment.",
@@ -438,6 +442,9 @@
     "uploadSuccessToast": "Payment uploaded successfully!",
     "alreadyPaidError": "Payment for this month and year already paid. Please check the date.",
     "invalidMonthBeforeLease": "Payment month cannot be before lease start date",
+    "amountMismatchLease": "Entered amount does not match your lease rent amount of ETB {{amount}}.",
+    "amountMismatchError": "Entered amount does not match your lease rent amount.",
+    "expectedAmountHint": "Expected lease rent: ETB {{amount}}",
     "reviewPaymentTitle": "Review Payment",
     "approve": "Approve",
     "reject": "Reject",
