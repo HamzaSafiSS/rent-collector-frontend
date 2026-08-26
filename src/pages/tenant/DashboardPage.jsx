@@ -119,14 +119,14 @@ export default function TenantDashboard() {
             value={stats.pendingPayments} 
             icon={<svg className="w-6 h-6 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} 
             color="yellow" 
-            onClick={() => navigate('/tenant/payments')} 
+            onClick={() => navigate('/tenant/payments?status=PENDING')} 
           />
           <StatCard 
             label={t('payments.rejectedPayments')} 
             value={stats.rejectedPayments} 
             icon={<svg className="w-6 h-6 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>} 
             color="red" 
-            onClick={() => navigate('/tenant/payments')} 
+            onClick={() => navigate('/tenant/payments?status=REJECTED')} 
           />
           <StatCard 
             label={t('dashboard.unpaidLeases')} 
