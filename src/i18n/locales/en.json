@@ -293,7 +293,7 @@
     "propertyNamePlaceholder": "e.g. Bole Sunshine Apartments",
     "addressLabel": "Address",
     "addressPlaceholder": "Full street address",
-    "descriptionLabel": "Description (optional)",
+    "descriptionLabel": "Description",
     "descriptionPlaceholder": "Brief description of the property...",
     "createPropertyBtn": "Create property",
     "clickToUpload": "Click to upload or drag & drop",
