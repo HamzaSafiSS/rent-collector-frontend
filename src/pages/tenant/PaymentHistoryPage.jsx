@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PageHeader, Badge, Spinner, Alert, Pagination, Input } from '../../components/common';
+import { PageHeader, Badge, Spinner, Alert, Pagination } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
 import PaymentDetailModal from '../../components/payment/PaymentDetailModal';
 
@@ -11,6 +12,9 @@ const PAGE_SIZE = 10;
 export default function PaymentHistoryPage() {
   const { t } = useTranslation();
   const { formatDate } = useCalendarDate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const statusParam = searchParams.get('status') || 'ALL';
+
   const [payments, setPayments]       = useState([]);
   const [page, setPage]               = useState(0);
   const [totalPages, setTotalPages]   = useState(0);
@@ -18,8 +22,13 @@ export default function PaymentHistoryPage() {
   const [loading, setLoading]         = useState(true);
   const [error, setError]             = useState('');
 
-  const [statusFilter, setStatusFilter] = useState('ALL');
+  const [statusFilter, setStatusFilter] = useState(statusParam);
   const [monthFilter, setMonthFilter]   = useState('');
+
+  useEffect(() => {
+    const urlStatus = searchParams.get('status') || 'ALL';
+    setStatusFilter(urlStatus);
+  }, [searchParams]);
 
   // Detail modal state
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -65,7 +74,16 @@ export default function PaymentHistoryPage() {
           <select
             className="w-full px-3 py-2 bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-600/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-sm"
             value={statusFilter}
-            onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
+            onChange={(e) => {
+              const val = e.target.value;
+              setStatusFilter(val);
+              setPage(0);
+              if (val && val !== 'ALL') {
+                setSearchParams({ status: val });
+              } else {
+                setSearchParams({});
+              }
+            }}
           >
             <option className="bg-white dark:bg-[#111827] text-slate-900 dark:text-slate-100" value="ALL">{t('payments.allStatuses')}</option>
             <option className="bg-white dark:bg-[#111827] text-slate-900 dark:text-slate-100" value="PENDING">{t('payments.statusPending')}</option>
