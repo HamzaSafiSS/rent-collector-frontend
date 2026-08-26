@@ -40,6 +40,18 @@ export default function LandlordDashboard() {
     return <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 text-sm shrink-0 border border-slate-200 dark:border-slate-700">📝</div>;
   };
 
+  const getActionLabel = (log) => {
+    if (log.action) {
+      return t(`audit.action_${log.action}`, {
+        defaultValue: log.action
+          .toLowerCase()
+          .replace(/_/g, ' ')
+          .replace(/^\w/, (c) => c.toUpperCase())
+      });
+    }
+    return log.description || t('audit.action');
+  };
+
   useEffect(() => {
     async function load() {
       try {
@@ -326,10 +338,10 @@ export default function LandlordDashboard() {
                   <ActivityIcon action={log.action} />
                   <div>
                     <p className="text-sm text-slate-800 dark:text-slate-200 font-medium leading-tight">
-                      {log.description || `${log.action} on ${log.entityType}`}
+                      {getActionLabel(log)}{log.actorEmail ? `: ${log.actorEmail}` : ''}
                     </p>
                     <p className="text-xs text-slate-500 mt-1">
-                      {timeAgo(log.createdAt)} · {log.actorEmail}
+                      {timeAgo(log.createdAt)}
                     </p>
                   </div>
                 </div>
