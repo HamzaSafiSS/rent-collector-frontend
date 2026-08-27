@@ -163,7 +163,7 @@ export default function MyLeasePage() {
                 <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
                   <button
                     type="button"
-                    onClick={() => navigate('/tenant/upload-payment')}
+                    onClick={() => navigate(`/tenant/upload-payment?leaseId=${lease.id}`)}
                     className="text-xs px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition-colors"
                   >
                     {t('nav.uploadPayment')} →
