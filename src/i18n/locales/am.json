@@ -870,5 +870,10 @@
   },
   "landlords": {
     "landlordId": "የአከራይ መታወቂያ: {{id}}"
+  },
+  "tenant": {
+    "landlordsSubtitle": "የአከራዮችዎ የአድራሻ እና የንብረት ዝርዝር መረጃ",
+    "noLandlordFound": "ምንም ንቁ አከራይ አልተገኘም",
+    "noActiveLeaseMsg": "ንቁ የሆነ የኪራይ ውል ሲኖርዎት የአከራይ መረጃ እዚህ ይታያል።"
   }
 }

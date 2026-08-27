@@ -50,6 +50,7 @@ const DueSoonPage         = lazy(() => import('../pages/landlord/DueSoonPage'));
 // Tenant pages
 const TenantDashboard     = lazy(() => import('../pages/tenant/DashboardPage'));
 const MyLeasePage         = lazy(() => import('../pages/tenant/MyLeasePage'));
+const TenantLandlordsPage = lazy(() => import('../pages/tenant/TenantLandlordsPage'));
 const UploadPaymentPage   = lazy(() => import('../pages/tenant/UploadPaymentPage'));
 const PaymentHistoryPage  = lazy(() => import('../pages/tenant/PaymentHistoryPage'));
 const HowToPayPage        = lazy(() => import('../pages/tenant/HowToPayPage'));
@@ -143,6 +144,7 @@ export default function AppRoutes() {
         <Route path="/tenant" element={<ProtectedRoute roles={['TENANT']}><TenantLayout /></ProtectedRoute>}>
           <Route path="dashboard" element={<TenantDashboard />} />
           <Route path="lease" element={<MyLeasePage />} />
+          <Route path="landlords" element={<TenantLandlordsPage />} />
           <Route path="upload-payment" element={<UploadPaymentPage />} />
           <Route path="how-to-pay" element={<HowToPayPage />} />
           <Route path="payments" element={<PaymentHistoryPage />} />

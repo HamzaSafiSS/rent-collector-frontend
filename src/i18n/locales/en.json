@@ -864,5 +864,10 @@
     "selectMonth": "Select month",
     "selectYear": "Select year",
     "gregorianCalendar": "Gregorian Calendar"
+  },
+  "tenant": {
+    "landlordsSubtitle": "Contact and property details for your landlords",
+    "noLandlordFound": "No active landlord found",
+    "noActiveLeaseMsg": "Landlord contact info will appear here once you have an active lease."
   }
 }
