@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PageHeader, FileUpload, Input, Button, Alert } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
@@ -9,6 +10,8 @@ import { useToast } from '../../context/ToastContext';
 export default function UploadPaymentPage() {
   const { t } = useTranslation();
   const toast = useToast();
+  const [searchParams] = useSearchParams();
+  const queryLeaseId = searchParams.get('leaseId');
   const topRef = useRef(null);
   const errorRef = useRef(null);
 
@@ -55,13 +58,16 @@ export default function UploadPaymentPage() {
       .then((r) => {
         const active = r.data?.data?.content || [];
         setLeases(active);
-        if (active.length === 1) {
-            setLeaseId(String(active[0].id));
-            fetchPaymentInfo(active[0].id);
+        if (queryLeaseId && active.some((l) => String(l.id) === String(queryLeaseId))) {
+          setLeaseId(String(queryLeaseId));
+          fetchPaymentInfo(queryLeaseId);
+        } else if (active.length === 1) {
+          setLeaseId(String(active[0].id));
+          fetchPaymentInfo(active[0].id);
         }
       })
       .catch(() => {});
-  }, []);
+  }, [queryLeaseId]);
 
   const fetchPaymentInfo = async (id) => {
       if (!id) {

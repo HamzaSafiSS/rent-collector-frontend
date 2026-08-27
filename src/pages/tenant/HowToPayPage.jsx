@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PageHeader, Alert } from '../../components/common';
+import { PageHeader, Alert, Button } from '../../components/common';
 import { leaseApi } from '../../api/leaseApi';
 import { paymentApi } from '../../api/paymentApi';
 
 export default function HowToPayPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [leases, setLeases] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -113,6 +115,20 @@ export default function HowToPayPage() {
                             {info.phoneNumber && <p><span className="text-slate-500 dark:text-slate-400">{t('payments.phoneNumber')}:</span> <span className="font-mono text-emerald-600 dark:text-emerald-300 font-semibold">{info.phoneNumber}</span></p>}
                           </div>
                         ))}
+                      </div>
+
+                      {/* Upload Payment Button */}
+                      <div className="mt-6 pt-4 border-t border-emerald-500/20">
+                        <Button
+                          variant="primary"
+                          onClick={() => navigate(leaseId ? `/tenant/upload-payment?leaseId=${leaseId}` : '/tenant/upload-payment')}
+                          className="w-full flex items-center justify-center gap-2 shadow-sm"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                          </svg>
+                          <span>{t('nav.uploadPayment', 'Upload Payment')}</span>
+                        </Button>
                       </div>
                     </div>
                   ) : (
