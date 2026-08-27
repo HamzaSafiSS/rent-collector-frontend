@@ -441,6 +441,7 @@
     "uploadSuccessDesc": "Your payment has been successfully uploaded and is pending review.",
     "uploadSuccessToast": "Payment uploaded successfully!",
     "alreadyPaidError": "Payment for this month and year already paid. Please check the date.",
+    "alreadyPendingError": "A payment for this month and year is already pending approval. Please check the date or contact Landlord",
     "invalidMonthBeforeLease": "Payment month cannot be before lease start date",
     "amountMismatchLease": "Entered amount does not match your lease rent amount of ETB {{amount}}.",
     "amountMismatchError": "Entered amount does not match your lease rent amount.",

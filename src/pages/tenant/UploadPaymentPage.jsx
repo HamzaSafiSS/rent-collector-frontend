@@ -96,6 +96,8 @@ export default function UploadPaymentPage() {
       const msg = err.response?.data?.message || '';
       if (msg.toLowerCase().includes('already paid')) {
         setApiError(t('payments.alreadyPaidError', 'Payment for this month and year already paid. Please check the date.'));
+      } else if (msg.toLowerCase().includes('pending approval') || msg.toLowerCase().includes('already pending')) {
+        setApiError(t('payments.alreadyPendingError', 'A payment for this month and year is already pending approval. Please check the date or contact Landlord'));
       } else if (msg.toLowerCase().includes('match') && (msg.toLowerCase().includes('rent') || msg.toLowerCase().includes('lease') || msg.toLowerCase().includes('amount'))) {
         setApiError(msg || t('payments.amountMismatchError', 'Entered amount does not match your lease rent amount.'));
       } else {

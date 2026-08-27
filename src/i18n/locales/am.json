@@ -444,6 +444,7 @@
     "uploadSuccessDesc": "ክፍያዎ በተሳካ ሁኔታ ተልኳል እናም በመገምገም ላይ ይገኛል።",
     "uploadSuccessToast": "ክፍያ በተሳካ ሁኔታ ተልኳል!",
     "alreadyPaidError": "ለዚህ ወር እና አመት ክፍያ ቀደም ብሎ ተከፍሏል። እባክዎ ቀኑን ያረጋግጡ።",
+    "alreadyPendingError": "ለዚህ ወር እና አመት ክፍያ ቀደም ብሎ በግምገማ ላይ (Pending) ይገኛል። እባክዎ ቀኑን ያረጋግጡ ወይም አከራዩን ያነጋግሩ።",
     "invalidMonthBeforeLease": "የክፍያ ወር ከውል መጀመሪያ ቀን በፊት መሆን አይችልም",
     "amountMismatchLease": "የተስገባው መጠን ከውልዎ የኪራይ መጠን {{amount}} ብር ጋር አይዛመድም።",
     "amountMismatchError": "የተስገባው መጠን ከውልዎ የኪራይ መጠን ጋር አይዛመድም።",
