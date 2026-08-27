@@ -24,17 +24,24 @@ export default function UploadPaymentPage() {
   const [loading, setLoading]   = useState(false);
   const [success, setSuccess]   = useState('');
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (topRef.current) {
-      topRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  const scrollToErrorOrTop = () => {
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const mainEl = document.querySelector('main');
+      if (mainEl) {
+        mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (errorRef.current) {
+        errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (topRef.current) {
+        topRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
   };
 
   useEffect(() => {
     if (apiError) {
-      scrollToTop();
-      errorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      scrollToErrorOrTop();
     }
   }, [apiError]);
 
@@ -95,7 +102,7 @@ export default function UploadPaymentPage() {
     const errs = validate();
     if (Object.keys(errs).length > 0) { 
       setErrors(errs); 
-      scrollToTop();
+      scrollToErrorOrTop();
       return; 
     }
 
@@ -123,7 +130,7 @@ export default function UploadPaymentPage() {
       } else {
         setApiError(msg || t('payments.failedUploadPayment'));
       }
-      scrollToTop();
+      scrollToErrorOrTop();
     } finally {
       setLoading(false);
     }
