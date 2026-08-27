@@ -149,6 +149,15 @@ export default function UploadPaymentPage() {
     };
   }
 
+  function handleAmountChange(e) {
+    const val = e.target.value;
+    // Allow digits with an optional single decimal point and up to 2 decimals
+    if (val === '' || /^\d*\.?\d{0,2}$/.test(val)) {
+      setAmount(val);
+      if (errors.amount) setErrors((p) => ({ ...p, amount: '' }));
+    }
+  }
+
   function handleLeaseChange(e) {
     const newLeaseId = e.target.value;
     setLeaseId(newLeaseId);
@@ -241,11 +250,11 @@ export default function UploadPaymentPage() {
             {/* Amount */}
             <Input
               label={t('payments.amountETBLabel')}
-              type="number"
-              min="1"
-              step="any"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
               value={amount}
-              onChange={handleChange(setAmount, 'amount')}
+              onChange={handleAmountChange}
               error={errors.amount}
               disabled={loading}
               placeholder={selectedLease ? `${Number(selectedLease.monthlyRent)}` : t('payments.amountPlaceholder')}
