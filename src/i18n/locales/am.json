@@ -93,7 +93,12 @@
     "ethMonth11": "ሐምሌ",
     "ethMonth12": "ነሐሴ",
     "ethMonth13": "ጳጉሜ",
-    "landlord": "አከራይ"
+    "landlord": "አከራይ",
+    "call": "ደውል",
+    "email": "ኢሜይል",
+    "copy": "ቅዳ",
+    "emailCopied": "የኢሜይል አድራሻ ተገልብጧል!",
+    "phoneCopied": "የስልክ ቁጥር ተገልብጧል!"
   },
   "portal": {
     "admin": "አስተዳዳሪ",
@@ -874,6 +879,9 @@
   "tenant": {
     "landlordsSubtitle": "የአከራዮችዎ የአድራሻ እና የንብረት ዝርዝር መረጃ",
     "noLandlordFound": "ምንም ንቁ አከራይ አልተገኘም",
-    "noActiveLeaseMsg": "ንቁ የሆነ የኪራይ ውል ሲኖርዎት የአከራይ መረጃ እዚህ ይታያል።"
+    "noActiveLeaseMsg": "ንቁ የሆነ የኪራይ ውል ሲኖርዎት የአከራይ መረጃ እዚህ ይታያል።",
+    "propertyAndUnit": "ንብረት እና ክፍል",
+    "landlordName": "የአከራይ ስም",
+    "searchLandlordsPlaceholder": "በስም፣ በስልክ፣ በኢሜይል፣ በንብረት ይፈልጉ..."
   }
 }

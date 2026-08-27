@@ -92,7 +92,12 @@
     "ethMonth11": "Hamle",
     "ethMonth12": "Nehase",
     "ethMonth13": "Pagume",
-    "landlord": "Landlord"
+    "landlord": "Landlord",
+    "call": "Call",
+    "email": "Email",
+    "copy": "Copy",
+    "emailCopied": "Email address copied to clipboard!",
+    "phoneCopied": "Phone number copied to clipboard!"
   },
   "portal": {
     "admin": "Admin",
@@ -868,6 +873,9 @@
   "tenant": {
     "landlordsSubtitle": "Contact and property details for your landlords",
     "noLandlordFound": "No active landlord found",
-    "noActiveLeaseMsg": "Landlord contact info will appear here once you have an active lease."
+    "noActiveLeaseMsg": "Landlord contact info will appear here once you have an active lease.",
+    "propertyAndUnit": "Property & Unit",
+    "landlordName": "Landlord Name",
+    "searchLandlordsPlaceholder": "Search by name, phone, email, property..."
   }
 }
