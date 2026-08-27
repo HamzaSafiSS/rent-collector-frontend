@@ -11,8 +11,9 @@ import ThemeToggle from './ThemeToggle';
 //   navItems — array of { label, to, icon }
 //   portalLabel — e.g. "Super Admin", "Landlord"
 //   children — page content
+//   sidebarExtra — optional extra content (e.g. Landlord info card for tenant)
 
-export default function PortalLayout({ navItems, portalLabel, children }) {
+export default function PortalLayout({ navItems, portalLabel, children, sidebarExtra }) {
   const { t }            = useTranslation();
   const { user, logout } = useAuth();
   const navigate         = useNavigate();
@@ -50,25 +51,33 @@ export default function PortalLayout({ navItems, portalLabel, children }) {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) => `
-                group flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200
-                ${isActive
-                  ? 'bg-[#E6F4EA] dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-l-2 border-emerald-600 dark:border-emerald-400'
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-emerald-500/5 hover:text-slate-800 dark:hover:text-slate-200 border-l-2 border-transparent'}
-              `}
-            >
-              <span className={`text-xl transition-transform duration-200 group-hover:scale-110 ${item.to === window.location.pathname ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-500 dark:group-hover:text-slate-400'}`}>
-                {item.icon}
-              </span>
-              {item.label}
-            </NavLink>
-          ))}
+        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto flex flex-col">
+          <div className="space-y-1.5">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                onClick={() => setSidebarOpen(false)}
+                className={({ isActive }) => `
+                  group flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200
+                  ${isActive
+                    ? 'bg-[#E6F4EA] dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-l-2 border-emerald-600 dark:border-emerald-400'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-emerald-500/5 hover:text-slate-800 dark:hover:text-slate-200 border-l-2 border-transparent'}
+                `}
+              >
+                <span className={`text-xl transition-transform duration-200 group-hover:scale-110 ${item.to === window.location.pathname ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-500 dark:group-hover:text-slate-400'}`}>
+                  {item.icon}
+                </span>
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
+
+          {sidebarExtra && (
+            <div className="mt-auto pt-6">
+              {sidebarExtra}
+            </div>
+          )}
         </nav>
 
         {/* User info + logout */}
