@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PageHeader, FileUpload, Input, Button, Alert } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
@@ -9,6 +9,8 @@ import { useToast } from '../../context/ToastContext';
 export default function UploadPaymentPage() {
   const { t } = useTranslation();
   const toast = useToast();
+  const topRef = useRef(null);
+  const errorRef = useRef(null);
 
   const [leases, setLeases]     = useState([]);
   const [leaseId, setLeaseId]   = useState('');
@@ -21,6 +23,20 @@ export default function UploadPaymentPage() {
   const [apiError, setApiError] = useState('');
   const [loading, setLoading]   = useState(false);
   const [success, setSuccess]   = useState('');
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  useEffect(() => {
+    if (apiError) {
+      scrollToTop();
+      errorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [apiError]);
 
   // ── Month/Year picker state ───────────────────────────────────────────────
   const [paymentMonth, setPaymentMonth] = useState('');
@@ -77,7 +93,11 @@ export default function UploadPaymentPage() {
     setApiError(''); setSuccess('');
 
     const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+    if (Object.keys(errs).length > 0) { 
+      setErrors(errs); 
+      scrollToTop();
+      return; 
+    }
 
     try {
       setLoading(true);
@@ -103,6 +123,7 @@ export default function UploadPaymentPage() {
       } else {
         setApiError(msg || t('payments.failedUploadPayment'));
       }
+      scrollToTop();
     } finally {
       setLoading(false);
     }
@@ -132,12 +153,16 @@ export default function UploadPaymentPage() {
     'w-full px-3 py-2 text-sm bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50 disabled:bg-slate-100 dark:disabled:bg-slate-800/50';
 
   return (
-    <>
+    <div ref={topRef}>
       <PageHeader title={t('payments.uploadPaymentTitle')} subtitle={t('payments.uploadPaymentSubtitle')} />
 
       <div className="max-w-lg">
         <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700/50 rounded-xl p-6">
-          {apiError && <Alert type="error"   message={apiError}  className="mb-5" />}
+          {apiError && (
+            <div ref={errorRef} className="mb-5">
+              <Alert type="error" message={apiError} />
+            </div>
+          )}
           {success  && <Alert type="success" message={success}   className="mb-5" />}
 
           {paymentInfo && paymentInfo.length > 0 && (
@@ -231,6 +256,6 @@ export default function UploadPaymentPage() {
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }
