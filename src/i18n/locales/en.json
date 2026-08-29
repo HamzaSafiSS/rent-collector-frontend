@@ -231,7 +231,7 @@
     "occupiedUnits": "Occupied Units",
     "availableUnits": "Available Units",
     "maintenanceUnits": "Maintenance Units",
-    "dueSoon": "Due Soon (≤ 3 days)",
+    "dueSoon": "Due Soon Payments (≤ 3 days)",
     "occupancy": "{{rate}}% occupancy",
     "revenueTitle": "Rent Collection Trends (Last 6 Months)",
     "revenueSubtitle": "Monthly rent collection overview",
