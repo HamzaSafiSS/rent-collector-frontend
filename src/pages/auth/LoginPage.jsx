@@ -12,22 +12,23 @@ export default function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isAuthenticated, user } = useAuth();
+  const { login, isAuthenticated, user, loading: authLoading } = useAuth();
 
+  // ── Redirect already-authenticated users (runs when auth state changes) ────
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!authLoading && isAuthenticated) {
       if (user?.status === 'PendingPasswordChange') {
         navigate('/change-password', { replace: true });
       } else if (user?.role) {
         navigateByRole(user.role, navigate);
       }
     }
-  }, [isAuthenticated, user, navigate]);
+  }, [authLoading, isAuthenticated, user, navigate]);
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   // Where to send the user after login — respect the page they tried to visit
   const from = location.state?.from?.pathname || null;
@@ -50,7 +51,7 @@ export default function LoginPage() {
     }
 
     try {
-      setLoading(true);
+      setSubmitting(true);
       const result = await login(form.email.trim(), form.password);
 
       // Tenant with PendingPasswordChange must change password first
@@ -73,7 +74,7 @@ export default function LoginPage() {
       }
       setApiError(messageKey);
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   }
 
@@ -84,6 +85,17 @@ export default function LoginPage() {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
+  }
+
+  // ── FLASH FIX: Don't render the login form while auth state is being resolved ─
+  // If we're still checking auth OR the user is already authenticated,
+  // show a spinner instead of the login form to prevent the flash.
+  if (authLoading || isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-[#F8FAFB] dark:from-slate-950 dark:to-slate-950">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-600" />
+      </div>
+    );
   }
 
   return (
@@ -127,7 +139,7 @@ export default function LoginPage() {
               value={form.email}
               onChange={handleChange}
               error={errors.email ? t(errors.email) : ''}
-              disabled={loading}
+              disabled={submitting}
               required
             />
 
@@ -140,14 +152,14 @@ export default function LoginPage() {
               value={form.password}
               onChange={handleChange}
               error={errors.password ? t(errors.password) : ''}
-              disabled={loading}
+              disabled={submitting}
               required
             />
 
             <Button
               type="submit"
               fullWidth
-              loading={loading}
+              loading={submitting}
             >
               {t('auth.signIn')}
             </Button>
