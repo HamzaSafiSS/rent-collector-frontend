@@ -52,7 +52,7 @@ export default function Table({
                 {columns.map((col) => (
                   <td key={col.key} className="px-6 py-4 whitespace-nowrap">
                     {col.render
-                      ? col.render(row)
+                      ? col.render(row, rowIndex)
                       : row[col.key] ?? '—'}
                   </td>
                 ))}

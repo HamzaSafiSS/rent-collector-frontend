@@ -17,7 +17,7 @@ import useCalendarDate from '../../hooks/useCalendarDate';
 const PAGE_SIZE = 10;
 
 /* ─── Category config ──────────────────────────────────────────────────────── */
-const getCategories = (t, formatDate) => ({
+const getCategories = (t, formatDate, page = 0) => ({
   admins: {
     title: t('superAdmin.manageAdminsTitle', 'All Admins'),
     icon: '👤',
@@ -34,7 +34,7 @@ const getCategories = (t, formatDate) => ({
       { label: t('admin.email'),        key: 'email' },
       { label: t('payments.phone'),        key: 'phoneNumber' },
       { label: t('admin.status'),       key: 'status', badge: true },
-      { label: t('admin.joined'),      key: 'createdAt', date: true },
+      { label: t('admin.joined'),       key: 'createdAt', date: true },
     ],
   },
 
@@ -54,17 +54,15 @@ const getCategories = (t, formatDate) => ({
       { label: t('admin.email'),        key: 'email' },
       { label: t('payments.phone'),        key: 'phoneNumber' },
       { label: t('admin.status'),       key: 'status', badge: true },
-      { label: t('admin.joined'),      key: 'createdAt', date: true },
+      { label: t('admin.joined'),       key: 'createdAt', date: true },
     ],
   },
 
   'suspended-landlords': {
-    title: t('dashboard.suspendedLandlords', 'Suspended Landlords'),
+    title: t('superAdmin.suspendedLandlordsTitle', 'Suspended Landlords'),
     icon: '🚫',
     fetchList: (page) => adminApi.listLandlords(page, PAGE_SIZE),
-    // We'll filter to only show suspended ones client-side 
-    // (or return all and filter, depending on the API)
-    filterFn: (items) => items.filter((l) => l.status === 'Suspended'),
+    filterFn: (l) => l.status === 'Suspended',
     columns: [
       { key: 'fullName',    header: t('admin.name') },
       { key: 'email',       header: t('admin.email') },
@@ -77,49 +75,49 @@ const getCategories = (t, formatDate) => ({
       { label: t('admin.email'),        key: 'email' },
       { label: t('payments.phone'),        key: 'phoneNumber' },
       { label: t('admin.status'),       key: 'status', badge: true },
-      { label: t('admin.joined'),      key: 'createdAt', date: true },
+      { label: t('admin.joined'),       key: 'createdAt', date: true },
     ],
   },
 
   tenants: {
     title: t('admin.manageTenantsTitle', 'All Tenants'),
-    icon: '👨‍👩‍👧',
+    icon: '👥',
     fetchList: (page) => tenantApi.listAllTenants(page, PAGE_SIZE),
     columns: [
       { key: 'fullName',    header: t('tenants.name') },
       { key: 'email',       header: t('tenants.email') },
-      { key: 'phoneNumber', header: t('tenants.phone'),      render: (r) => r.phoneNumber || '—' },
-      { key: 'status',      header: t('tenants.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-      { key: 'unitNumber',  header: t('admin.currentUnit'),render: (r) => r.unitNumber || '—' },
-      { key: 'moveInDate',  header: t('tenants.moveInDate', 'Move-in'),    render: (r) => r.moveInDate ? formatDate(r.moveInDate) : '—' },
+      { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
+      { key: 'status',      header: t('tenants.status'),  render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
+      { key: 'moveInDate',  header: t('leases.startDateCol'), render: (r) => r.moveInDate ? formatDate(r.moveInDate) : '—' },
     ],
     detailFields: [
-      { label: t('tenants.name'),      key: 'fullName' },
-      { label: t('tenants.email'),          key: 'email' },
-      { label: t('tenants.phone'),          key: 'phoneNumber' },
-      { label: t('tenants.status'),         key: 'status', badge: true },
-      { label: t('admin.currentUnit'),   key: 'unitNumber' },
-      { label: t('tenants.moveInDate', 'Move-in Date'),   key: 'moveInDate' },
-      { label: t('admin.activeLeases'),  key: 'activeLeaseCount' },
+      { label: t('tenants.name'),    key: 'fullName' },
+      { label: t('tenants.email'),        key: 'email' },
+      { label: t('payments.phone'),        key: 'phoneNumber' },
+      { label: t('tenants.status'),       key: 'status', badge: true },
+      { label: t('leases.startDateCol'),   key: 'moveInDate', date: true },
     ],
   },
 
   properties: {
     title: t('dashboard.totalProperties', 'All Properties'),
-    icon: '🏢',
+    icon: '🏠',
     fetchList: (page) => propertyApi.listAllProperties(page, PAGE_SIZE),
     columns: [
-      { key: 'name',        header: t('properties.propertyNameLabel', 'Property Name') },
-      { key: 'address',     header: t('properties.addressLabel', 'Address') },
-      { key: 'description', header: t('properties.descriptionLabel', 'Description'), render: (r) => r.description ? (r.description.length > 50 ? r.description.slice(0, 50) + '…' : r.description) : '—' },
-      { key: 'landlordName',header: t('nav.landlords'),    render: (r) => r.landlordName || r.landlordFullName || '—' },
+      { key: 'name',         header: t('nav.properties') },
+      { key: 'address',      header: t('properties.address') },
+      { key: 'city',         header: t('properties.city') },
+      { key: 'totalUnits',   header: t('properties.totalUnits') },
+      { key: 'occupiedUnits',header: t('properties.occupied') },
+      { key: 'landlordName', header: t('nav.landlords') },
     ],
     detailFields: [
-      { label: t('properties.propertyNameLabel', 'Property Name'),  key: 'name' },
-      { label: t('properties.addressLabel', 'Address'),        key: 'address' },
-      { label: t('properties.descriptionLabel', 'Description'),    key: 'description' },
-      { label: t('nav.landlords'),       key: 'landlordName', fallbackKey: 'landlordFullName' },
-      { label: t('properties.createdAt', 'Created'),        key: 'createdAt', date: true },
+      { label: t('nav.properties'),       key: 'name' },
+      { label: t('properties.address'),    key: 'address' },
+      { label: t('properties.city'),       key: 'city' },
+      { label: t('properties.totalUnits'), key: 'totalUnits' },
+      { label: t('properties.occupied'),   key: 'occupiedUnits' },
+      { label: t('nav.landlords'),       key: 'landlordName' },
     ],
   },
 
@@ -127,14 +125,18 @@ const getCategories = (t, formatDate) => ({
     title: t('dashboard.totalUnits', 'All Units'),
     icon: '🚪',
     fetchList: async (page) => {
-      // Units require loading all properties first, then their units
-      const propRes = await propertyApi.listAllProperties(0, 200);
-      const properties = propRes.data?.data?.content || [];
-      const unitPromises = properties.map(async (p) => {
+      // Units endpoint is per-property; fetch all properties then their units
+      const propRes = await propertyApi.listAllProperties(0, 1000);
+      const props = propRes.data?.data?.content || [];
+      const unitPromises = props.map(async (p) => {
         try {
-          const uRes = await unitApi.listUnits(p.id, 0, 200);
-          const propertyUnits = uRes.data?.data?.content || [];
-          return propertyUnits.map(u => ({ ...u, propertyName: p.name, landlordName: p.landlordName || p.landlordFullName || '—' }));
+          const res = await unitApi.listUnits(p.id);
+          const units = res.data?.data || [];
+          return units.map((u) => ({
+            ...u,
+            propertyName: p.name,
+            landlordName: p.landlordName,
+          }));
         } catch {
           return [];
         }
@@ -174,7 +176,7 @@ const getCategories = (t, formatDate) => ({
     icon: '📄',
     fetchList: (page) => adminApi.listAllLeases(page, PAGE_SIZE),
     columns: [
-      { key: 'id',              header: 'ID' },
+      { key: '_no',             header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
       { key: 'tenantFullName',  header: t('nav.tenants'),   render: (r) => r.tenantFullName || '—' },
       { key: 'tenantEmail',     header: t('tenants.email'),    render: (r) => <span className="text-xs">{r.tenantEmail || '—'}</span> },
       { key: 'unitNumber',      header: t('units.unitNumber', 'Unit') },
@@ -184,7 +186,6 @@ const getCategories = (t, formatDate) => ({
       { key: 'status',          header: t('leases.status', 'Status'),   render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     ],
     detailFields: [
-      { label: 'ID',       key: 'id' },
       { label: t('tenants.name'),         key: 'tenantFullName' },
       { label: t('tenants.email'),   key: 'tenantEmail' },
       { label: t('units.unitNumber', 'Unit'),           key: 'unitNumber' },
@@ -214,10 +215,10 @@ export default function ViewListPage() {
   const { t } = useTranslation();
   const { formatDate } = useCalendarDate();
 
-  const config = useMemo(() => getCategories(t, formatDate)[category], [t, category, formatDate]);
-
   const [items, setItems]               = useState([]);
   const [page, setPage]                 = useState(0);
+  const config = useMemo(() => getCategories(t, formatDate, page)[category], [t, category, formatDate, page]);
+
   const [totalPages, setTotalPages]     = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading]           = useState(true);

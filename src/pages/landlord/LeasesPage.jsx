@@ -118,6 +118,7 @@ export default function LeasesPage() {
   }
 
   const columns = [
+    { key: '_no',           header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
     { key: 'tenantFullName',header: t('leases.tenant'),     render: (r) => r.tenantFullName || '—' },
     { key: 'tenantEmail',   header: t('leases.email'),      render: (r) => <span className="text-xs">{r.tenantEmail || '—'}</span> },
     { key: 'unitNumber',    header: t('units.unit') },
