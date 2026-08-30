@@ -134,11 +134,11 @@ export default function LeasesPage() {
     },
     {
       key: 'actions', header: t('common.actions'),
-      render: (row) => row.status === 'ACTIVE' ? (
+      render: (row) => (row.status === 'ACTIVE' || row.status === 'PENDING') ? (
         <Button size="sm" variant="danger" onClick={() => setTerminateTarget(row)}>
           {t('leases.terminate')}
         </Button>
-      ) : <span className="text-xs text-slate-400">{t('leases.terminated')}</span>,
+      ) : <span className="text-xs text-slate-400">{row.status ? t(`common.status${row.status.charAt(0) + row.status.slice(1).toLowerCase()}`, { defaultValue: row.status }) : '—'}</span>,
     },
   ];
 
@@ -169,18 +169,18 @@ export default function LeasesPage() {
           />
 
       {/* Status filter */}
-      <div className="flex gap-2 mb-4">
-        {['', 'ACTIVE', 'TERMINATED'].map((s) => (
+      <div className="flex flex-wrap gap-2 mb-4">
+        {['', 'PENDING', 'ACTIVE', 'REJECTED', 'TERMINATED'].map((s) => (
           <button
             key={s}
             onClick={() => { setStatusFilter(s); setPage(0); }}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
               statusFilter === s
-                ? 'bg-emerald-600 text-white border-emerald-600'
+                ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}
           >
-            {s ? (s === 'ACTIVE' ? t('leases.active') : t('leases.terminated')) : t('common.all')}
+            {s ? (s === 'ACTIVE' ? t('leases.active') : s === 'PENDING' ? (t('leases.pending') || t('common.statusPending')) : s === 'REJECTED' ? (t('leases.rejected') || t('common.statusRejected')) : t('leases.terminated')) : t('common.all')}
           </button>
         ))}
       </div>

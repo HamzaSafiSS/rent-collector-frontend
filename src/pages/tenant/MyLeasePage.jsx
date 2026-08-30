@@ -14,11 +14,13 @@ export default function MyLeasePage() {
   const { formatDate } = useCalendarDate();
   const [searchParams, setSearchParams] = useSearchParams();
   const statusParam = searchParams.get('status') || '';
+  const autoOpenParam = searchParams.get('autoOpen') === 'true';
 
-  const [leases, setLeases]           = useState([]);
+  const [leases, setLeases]             = useState([]);
   const [statusFilter, setStatusFilter] = useState(statusParam);
-  const [loading, setLoading]         = useState(true);
-  const [error, setError]             = useState('');
+  const [loading, setLoading]           = useState(true);
+  const [error, setError]               = useState('');
+  const [openedLeaseId, setOpenedLeaseId] = useState(null);
 
   // Keep statusFilter in sync with URL search params
   useEffect(() => {
@@ -59,7 +61,18 @@ export default function MyLeasePage() {
     } else {
       leaseApi.getMyLeases(0, 50, statusFilter || null)
         .then((r) => {
-          if (!ignore) setLeases(r.data?.data?.content || []);
+          if (!ignore) {
+            const list = r.data?.data?.content || [];
+            setLeases(list);
+
+            if (autoOpenParam && list.length > 0) {
+              const pendingOrFirst = list.find((l) => l.status === 'PENDING' && l.agreementDocumentUrl) ||
+                                     list.find((l) => l.agreementDocumentUrl);
+              if (pendingOrFirst) {
+                setOpenedLeaseId(pendingOrFirst.id);
+              }
+            }
+          }
         })
         .catch((err) => {
           if (!ignore) setError(err.response?.data?.message || t('leases.failedLoadLeases'));
@@ -72,7 +85,7 @@ export default function MyLeasePage() {
     return () => {
       ignore = true;
     };
-  }, [statusFilter, t]);
+  }, [statusFilter, autoOpenParam, t]);
 
   const handleFilterChange = (key) => {
     if (statusFilter !== key) {
@@ -86,6 +99,12 @@ export default function MyLeasePage() {
     }
   };
 
+  const handleLeaseStatusChange = (leaseId, newStatus) => {
+    setLeases((prev) =>
+      prev.map((l) => (l.id === leaseId ? { ...l, status: newStatus } : l))
+    );
+  };
+
   return (
     <>
       <PageHeader title={t('leases.myLeasesTitle')} subtitle={t('leases.myLeasesSubtitle')} />
@@ -94,8 +113,10 @@ export default function MyLeasePage() {
       <div className="flex flex-wrap gap-2 mb-6">
         {[
           { key: '', label: t('common.all') },
+          { key: 'PENDING', label: t('leases.pending') || t('common.statusPending') },
           { key: 'ACTIVE', label: t('leases.active') },
           { key: 'UNPAID', label: t('common.statusUnpaid') },
+          { key: 'REJECTED', label: t('leases.rejected') || t('common.statusRejected') },
           { key: 'TERMINATED', label: t('leases.terminated') },
         ].map(({ key, label }) => (
           <button
@@ -153,7 +174,15 @@ export default function MyLeasePage() {
                 <div>
                   <p className="text-slate-600 dark:text-slate-400 text-xs mb-1">{t('leases.agreementDocument')}</p>
                   {lease.agreementDocumentUrl ? (
-                    <DocumentViewer leaseId={lease.id} documentUrl={lease.agreementDocumentUrl} />
+                    <DocumentViewer
+                      leaseId={lease.id}
+                      documentUrl={lease.agreementDocumentUrl}
+                      status={lease.status}
+                      isTenant={true}
+                      onStatusChange={(newStatus) => handleLeaseStatusChange(lease.id, newStatus)}
+                      isOpen={openedLeaseId === lease.id}
+                      onClose={() => setOpenedLeaseId(null)}
+                    />
                   ) : (
                     <p className="font-semibold text-slate-500">—</p>
                   )}

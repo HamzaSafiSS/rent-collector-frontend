@@ -12,7 +12,7 @@ import ThemeToggle from '../../components/common/ThemeToggle';
 export default function ChangePasswordPage() {
   const { t }                  = useTranslation();
   const navigate               = useNavigate();
-  const { user, logout, isAuthenticated, loading } = useAuth();
+  const { user, logout, isAuthenticated, loading, refreshUser } = useAuth();
 
   const [form, setForm]         = useState({
     currentPassword: '',
@@ -63,10 +63,13 @@ export default function ChangePasswordPage() {
       await authApi.changePassword(form.currentPassword, form.newPassword);
       setSuccess('auth.passwordChangedSuccess');
 
-      setTimeout(async () => {
-        await logout();
-        navigate('/login', { replace: true });
-      }, 2000);
+      await refreshUser();
+
+      if (user?.role === 'TENANT') {
+        navigate('/tenant/lease?autoOpen=true', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
 
     } catch (err) {
       setApiError(err.response?.data?.message || 'auth.failedChangePassword');

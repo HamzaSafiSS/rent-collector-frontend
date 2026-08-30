@@ -49,4 +49,10 @@ export const leaseApi = {
     api.get('/tenant/my-leases', {
       params: { page, size, ...(status && { status }) },
     }),
+
+  approveLease: (id) =>
+    api.patch(`/leases/${id}/approve`),
+
+  rejectLease: (id) =>
+    api.patch(`/leases/${id}/reject`),
 };
