@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Table, Badge, Button } from '../common';
+import { Table, Badge } from '../common';
 import useCalendarDate from '../../hooks/useCalendarDate';
 
-export default function TenantTable({ data, loading, onEdit, onDelete }) {
+export default function TenantTable({ data, loading }) {
   const { t } = useTranslation();
   const { formatDate } = useCalendarDate();
   const columns = [
@@ -13,15 +13,6 @@ export default function TenantTable({ data, loading, onEdit, onDelete }) {
     { key: 'unitNumber',      header: t('tenants.currentUnit'), render: (r) => r.unitNumber || '—' },
     { key: 'moveInDate',      header: t('tenants.moveIn'),      render: (r) => formatDate(r.moveInDate) },
     { key: 'activeLeaseCount',header: t('tenants.activeLeases'),render: (r) => r.activeLeaseCount ?? 0 },
-    {
-      key: 'actions', header: t('common.actions'),
-      render: (row) => (
-        <div className="flex gap-2">
-          <Button size="sm" variant="ghost"  onClick={() => onEdit(row)}>{t('common.edit')}</Button>
-          <Button size="sm" variant="danger" onClick={() => onDelete(row)}>{t('common.delete')}</Button>
-        </div>
-      ),
-    },
   ];
 
   return (
