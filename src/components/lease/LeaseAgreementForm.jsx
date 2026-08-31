@@ -253,6 +253,8 @@ export default function LeaseAgreementForm({
 
   const [dateWarning, setDateWarning] = useState('');
 
+  const PHONE_REGEX = /^(09|07|\+2519|\+2517)\d{8}$/;
+
   function validate() {
     const errs = {};
     if (!form.tenantEmail.trim()) {
@@ -271,8 +273,8 @@ export default function LeaseAgreementForm({
 
     if (!form.tenantPhone.trim()) {
       errs.tenantPhone = 'validation.phoneNumberRequired';
-    } else if (form.tenantPhone.trim().length < 10) {
-      errs.tenantPhone = 'validation.phoneNumberInvalid';
+    } else if (!PHONE_REGEX.test(form.tenantPhone.trim())) {
+      errs.tenantPhone = 'validation.phoneNumberPattern';
     }
 
     if (!form.unitId)
@@ -307,7 +309,12 @@ export default function LeaseAgreementForm({
     let nextValue = value;
 
     if (name === 'tenantPhone') {
-      nextValue = value.replace(/\D/g, '').slice(0, 10);
+      nextValue = value.replace(/[^\d+]/g, '');
+      if (nextValue.startsWith('+')) {
+        nextValue = '+' + nextValue.slice(1).replace(/\+/g, '').slice(0, 12);
+      } else {
+        nextValue = nextValue.replace(/\+/g, '').slice(0, 10);
+      }
     } else if (name === 'tenantName') {
       nextValue = value.replace(/[0-9]/g, '');
     }
@@ -490,14 +497,13 @@ export default function LeaseAgreementForm({
           label={t('leases.tenantPhoneLabel', { defaultValue: 'Tenant Phone Number' })}
           name="tenantPhone"
           type="tel"
-          inputMode="numeric"
-          maxLength={10}
+          maxLength={13}
           value={form.tenantPhone}
           onChange={handleChange}
           error={errors.tenantPhone ? t(errors.tenantPhone) : ''}
           disabled={loading}
           placeholder={t('leases.tenantPhonePlaceholder', {
-            defaultValue: 'e.g. 09XXXXXXXX',
+            defaultValue: 'e.g. 0911234567 or +251911234567',
           })}
           required
         />
