@@ -160,7 +160,7 @@ export default function AuditLogPage() {
       {error && <Alert type="error" message={error} className="mb-4" />}
 
       <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
-        <AuditLogTable data={logs} loading={loading} />
+        <AuditLogTable data={logs} loading={loading} page={page} pageSize={PAGE_SIZE} />
         <div className="px-4 border-t border-slate-100">
           <Pagination
             page={page}

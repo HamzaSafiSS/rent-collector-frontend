@@ -27,12 +27,16 @@ const ACTION_COLORS = {
   TENANT_DELETED: 'danger',
 };
 
-export default function AuditLogTable({ data, loading, emptyMessage }) {
+export default function AuditLogTable({ data, loading, emptyMessage, page = 0, pageSize = 20 }) {
   const { t } = useTranslation();
   const { formatDateTime } = useCalendarDate();
 
   const columns = [
-    { key: 'id', header: t('audit.id') },
+    {
+      key: '_no',
+      header: t('common.noCol', 'No.'),
+      render: (_, idx) => (page * pageSize) + idx + 1,
+    },
     { key: 'actorEmail', header: t('audit.actor'), render: (r) => <span className="font-mono text-xs">{r.actorEmail}</span> },
     { key: 'actorRole', header: t('audit.role'), render: (r) => <Badge label={r.actorRole ? t(`roles.${r.actorRole}`, r.actorRole) : ''} variant="neutral" /> },
     { key: 'action', header: t('audit.actionCol'), render: (r) => <Badge label={r.action ? t(`audit.action_${r.action}`) : ''} variant={ACTION_COLORS[r.action] || 'neutral'} /> },
