@@ -135,8 +135,9 @@ const getCategories = (t, formatDate, page = 0) => ({
       const props = propRes.data?.data?.content || [];
       const unitPromises = props.map(async (p) => {
         try {
-          const res = await unitApi.listUnits(p.id);
-          const units = res.data?.data || [];
+          const res = await unitApi.listUnits(p.id, 0, 500);
+          const raw = res.data?.data;
+          const units = Array.isArray(raw) ? raw : (raw?.content || []);
           return units.map((u) => ({
             ...u,
             propertyName: p.name,
@@ -165,14 +166,12 @@ const getCategories = (t, formatDate, page = 0) => ({
       { key: 'unitNumber',   header: t('units.unitNumber', 'Unit No.') },
       { key: 'propertyName', header: t('nav.properties') },
       { key: 'status',       header: t('units.status', 'Status'),   render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-      { key: 'baseRent',     header: t('units.baseRentETB', 'Base Rent'), render: (r) => r.baseRent ? `ETB ${Number(r.baseRent).toLocaleString()}` : '—' },
       { key: 'landlordName', header: t('nav.landlords') },
     ],
     detailFields: [
       { label: t('units.unitNumber', 'Unit No.'),    key: 'unitNumber' },
       { label: t('nav.properties'),       key: 'propertyName' },
       { label: t('units.status', 'Status'),         key: 'status', badge: true },
-      { label: t('units.baseRentETB', 'Base Rent'),      key: 'baseRent', currency: true },
       { label: t('nav.landlords'),       key: 'landlordName' },
     ],
   },
