@@ -44,21 +44,13 @@ export default function AdminAuditLog() {
       Object.keys(params).forEach((k) => { if (!params[k]) delete params[k]; });
       const res  = await auditApi.getAuditLogs(params);
       const data = res.data?.data;
-      
-      const content = data?.content || [];
-      const filtered = content.filter((log) => {
-        if (log.actorRole === 'SUPER_ADMIN') return false;
-        if (log.actorRole === 'ADMIN' && log.actorEmail !== user?.email) return false;
-        return true;
-      });
 
-      setLogs(filtered);
+      setLogs(data?.content || []);
       setTotalPages(data?.totalPages || 0);
       setTotalElements(data?.totalElements || 0);
     } catch { setError(t('audit.failedLoadLogs')); }
     finally  { setLoading(false); }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, applied, user?.email]);
+  }, [page, applied]);
 
   useEffect(() => { loadLogs(); }, [loadLogs]);
 
