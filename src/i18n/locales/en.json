@@ -144,7 +144,7 @@
     "fullNameLabel": "Full name",
     "fullNamePlaceholder": "Hamza Safi",
     "phoneLabel": "Phone number",
-    "phonePlaceholder": "0991234577",
+    "phonePlaceholder": "e.g. 0911... or +251911..or 0711..or +251711..",
     "confirmPasswordLabel": "Confirm password",
     "confirmPasswordPlaceholder": "Repeat your password",
     "createAccountBtn": "Create account",

@@ -25,6 +25,8 @@ export default function LandlordSignupPage() {
   const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const PHONE_REGEX = /^(09|07|\+2519|\+2517)\d{8}$/;
+
   function validate() {
     const errs = {};
 
@@ -44,8 +46,8 @@ export default function LandlordSignupPage() {
 
     if (!form.phoneNumber.trim()) {
       errs.phoneNumber = 'validation.phoneNumberRequired';
-    } else if (form.phoneNumber.trim().length < 10) {
-      errs.phoneNumber = 'validation.phoneNumberInvalid';
+    } else if (!PHONE_REGEX.test(form.phoneNumber.trim())) {
+      errs.phoneNumber = 'validation.phoneNumberPattern';
     }
 
     if (!form.password) {
@@ -95,7 +97,12 @@ export default function LandlordSignupPage() {
     let nextValue = value;
 
     if (name === "phoneNumber") {
-      nextValue = value.replace(/\D/g, "").slice(0, 10);
+      nextValue = value.replace(/[^\d+]/g, '');
+      if (nextValue.startsWith('+')) {
+        nextValue = '+' + nextValue.slice(1).replace(/\+/g, '').slice(0, 12);
+      } else {
+        nextValue = nextValue.replace(/\+/g, '').slice(0, 10);
+      }
     } else if (name === "fullName") {
       nextValue = value.replace(/[0-9]/g, "");
     }
@@ -182,8 +189,7 @@ export default function LandlordSignupPage() {
               onChange={handleChange}
               error={errors.phoneNumber ? t(errors.phoneNumber) : ''}
               disabled={loading}
-              inputMode="numeric"
-              maxLength={10}
+              maxLength={13}
               required
             />
 

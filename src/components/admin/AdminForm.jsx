@@ -43,7 +43,18 @@ export default function AdminForm({ initial, onSubmit, loading, error, isEdit })
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
+    let nextValue = value;
+
+    if (name === 'phoneNumber') {
+      nextValue = value.replace(/[^\d+]/g, '');
+      if (nextValue.startsWith('+')) {
+        nextValue = '+' + nextValue.slice(1).replace(/\+/g, '').slice(0, 12);
+      } else {
+        nextValue = nextValue.replace(/\+/g, '').slice(0, 10);
+      }
+    }
+
+    setForm((p) => ({ ...p, [name]: nextValue }));
     if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
   }
 
@@ -65,7 +76,9 @@ export default function AdminForm({ initial, onSubmit, loading, error, isEdit })
       <Input
         label={isEdit ? t('auth.phoneNumberOptional') : t('payments.phoneNumber')}
         name="phoneNumber"
-        placeholder="e.g. 0911234567 or +251911234567"
+        type="tel"
+        maxLength={13}
+        placeholder={t('leases.tenantPhonePlaceholder', { defaultValue: 'e.g. 0911... or +251911..or 0711..or +251711..' })}
         value={form.phoneNumber}
         onChange={handleChange}
         error={errors.phoneNumber}
