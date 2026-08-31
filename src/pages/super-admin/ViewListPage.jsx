@@ -23,6 +23,7 @@ const getCategories = (t, formatDate, page = 0) => ({
     icon: '👤',
     fetchList: (page) => adminApi.listAdmins(page, PAGE_SIZE),
     columns: [
+      { key: '_no',         header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
       { key: 'fullName',    header: t('admin.name') },
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
@@ -43,6 +44,7 @@ const getCategories = (t, formatDate, page = 0) => ({
     icon: '🏢',
     fetchList: (page) => adminApi.listLandlords(page, PAGE_SIZE),
     columns: [
+      { key: '_no',         header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
       { key: 'fullName',    header: t('admin.name') },
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
@@ -64,6 +66,7 @@ const getCategories = (t, formatDate, page = 0) => ({
     fetchList: (page) => adminApi.listLandlords(page, PAGE_SIZE),
     filterFn: (l) => l.status === 'Suspended',
     columns: [
+      { key: '_no',         header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
       { key: 'fullName',    header: t('admin.name') },
       { key: 'email',       header: t('admin.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
@@ -84,6 +87,7 @@ const getCategories = (t, formatDate, page = 0) => ({
     icon: '👥',
     fetchList: (page) => tenantApi.listAllTenants(page, PAGE_SIZE),
     columns: [
+      { key: '_no',         header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
       { key: 'fullName',    header: t('tenants.name') },
       { key: 'email',       header: t('tenants.email') },
       { key: 'phoneNumber', header: t('payments.phone'),   render: (r) => r.phoneNumber || '—' },
@@ -104,6 +108,7 @@ const getCategories = (t, formatDate, page = 0) => ({
     icon: '🏠',
     fetchList: (page) => propertyApi.listAllProperties(page, PAGE_SIZE),
     columns: [
+      { key: '_no',          header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
       { key: 'name',         header: t('nav.properties') },
       { key: 'address',      header: t('properties.address') },
       { key: 'city',         header: t('properties.city') },
@@ -156,6 +161,7 @@ const getCategories = (t, formatDate, page = 0) => ({
       };
     },
     columns: [
+      { key: '_no',          header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
       { key: 'unitNumber',   header: t('units.unitNumber', 'Unit No.') },
       { key: 'propertyName', header: t('nav.properties') },
       { key: 'status',       header: t('units.status', 'Status'),   render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },

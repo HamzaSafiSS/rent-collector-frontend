@@ -94,7 +94,6 @@ export default function PropertyDashboardViewPage() {
       return [
         { key: 'unitNumber', header: t('units.unitNumber', 'Unit No.') },
         { key: 'status', header: t('units.status', 'Status'), render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
-        { key: 'baseRent', header: t('units.baseRentETB', 'Base Rent'), render: (r) => r.baseRent ? `ETB ${Number(r.baseRent).toLocaleString()}` : '—' },
       ];
     }
     if (activeTab === 'tenants') {
