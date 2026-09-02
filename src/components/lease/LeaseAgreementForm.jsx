@@ -570,10 +570,17 @@ export default function LeaseAgreementForm({
         <Input
           label={t('leases.monthlyRentETB')}
           name="monthlyRent"
-          type="number"
-          min="1"
+          type="text"
+          inputMode="decimal"
+          pattern="[0-9]*\.?[0-9]*"
           value={form.monthlyRent}
-          onChange={handleChange}
+          onChange={(e) => {
+            // Allow only digits and a single decimal point
+            const val = e.target.value;
+            if (val === '' || /^\d*\.?\d*$/.test(val)) {
+              handleChange(e);
+            }
+          }}
           error={errors.monthlyRent ? t(errors.monthlyRent) : ''}
           disabled={loading}
           placeholder={t('leases.monthlyRentPlaceholder')}
