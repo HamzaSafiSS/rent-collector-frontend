@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import {
   PageHeader,
   Alert, Pagination, TableSkeleton,
@@ -13,10 +14,23 @@ const PAGE_SIZE = 10;
 export default function TenantsPage() {
   const { t } = useTranslation();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const restoredPropertyId = searchParams.get('propertyId');
+  const page = Number(searchParams.get('page')) || 0;
+  const setPage = (pg) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('page', String(pg)); return p; }, { replace: true });
+
+  const handleSelectProperty = (p) => {
+    setSelectedProperty(p);
+    setSearchParams({ propertyId: String(p.id) }, { replace: true });
+  };
+
+  const handleBack = () => {
+    setSelectedProperty(null);
+    setSearchParams({}, { replace: true });
+  };
 
   const [tenants, setTenants]         = useState([]);
-  const [page, setPage]               = useState(0);
   const [totalPages, setTotalPages]   = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading]         = useState(true);
@@ -50,12 +64,12 @@ export default function TenantsPage() {
             title={t('common.selectProperty')}
             subtitle={t('tenants.selectPropertyTenants')}
           />
-          <PropertySelector onSelect={(p) => { setSelectedProperty(p); setPage(0); }} />
+          <PropertySelector onSelect={handleSelectProperty} restoredPropertyId={restoredPropertyId} />
         </>
       ) : (
         <>
           <button 
-            onClick={() => setSelectedProperty(null)} 
+            onClick={handleBack} 
             className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
             {t('common.backToProperties')}

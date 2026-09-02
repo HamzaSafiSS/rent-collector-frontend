@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import {
   PageHeader, Table, Badge, Button, Modal,
   ConfirmDialog, Alert, Pagination,
@@ -20,16 +21,29 @@ export default function LeasesPage() {
   const toast = useToast();
   const { formatDate } = useCalendarDate();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const restoredPropertyId = searchParams.get('propertyId');
+  const page = Number(searchParams.get('page')) || 0;
+  const setPage = (pg) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('page', String(pg)); return p; }, { replace: true });
+  const statusFilter = searchParams.get('status') || '';
+  const setStatusFilter = (s) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (s) p.set('status', s); else p.delete('status'); p.delete('page'); return p; }, { replace: true });
+
+  const handleSelectProperty = (p) => {
+    setSelectedProperty(p);
+    setSearchParams({ propertyId: String(p.id) }, { replace: true });
+  };
+
+  const handleBack = () => {
+    setSelectedProperty(null);
+    setSearchParams({}, { replace: true });
+  };
 
   const [leases, setLeases]           = useState([]);
-  const [page, setPage]               = useState(0);
   const [totalPages, setTotalPages]   = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading]         = useState(true);
   const [fetchError, setFetchError]   = useState('');
-
-  const [statusFilter, setStatusFilter] = useState('');
 
   // Create lease
   const [createOpen, setCreateOpen]   = useState(false);
@@ -150,12 +164,12 @@ export default function LeasesPage() {
             title={t('common.selectProperty')}
             subtitle={t('leases.selectPropertyLeases')}
           />
-          <PropertySelector onSelect={(p) => { setSelectedProperty(p); setPage(0); setStatusFilter(''); }} />
+          <PropertySelector onSelect={handleSelectProperty} restoredPropertyId={restoredPropertyId} />
         </>
       ) : (
         <>
           <button 
-            onClick={() => setSelectedProperty(null)} 
+            onClick={handleBack} 
             className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
             {t('common.backToProperties')}

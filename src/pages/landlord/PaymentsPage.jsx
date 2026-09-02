@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import {
   PageHeader, Table, Badge, Button, Alert, Pagination,
 } from '../../components/common';
@@ -23,17 +24,32 @@ export default function PaymentsPage() {
   const detailsRef = useRef(null);
   const { formatDate, formatMonth } = useCalendarDate();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const restoredPropertyId = searchParams.get('propertyId');
+  const page = Number(searchParams.get('page')) || 0;
+  const setPage = (pg) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('page', String(pg)); return p; }, { replace: true });
+  const statusFilter = searchParams.get('status') || 'PENDING';
+  const monthFilter = searchParams.get('month') || '';
+
+  const setStatusFilter = (s) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (s) p.set('status', s); else p.delete('status'); p.delete('page'); return p; }, { replace: true });
+  const setMonthFilter = (m) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (m) p.set('month', m); else p.delete('month'); p.delete('page'); return p; }, { replace: true });
+
+  const handleSelectProperty = (p) => {
+    setSelectedProperty(p);
+    setSearchParams({ propertyId: String(p.id), status: 'PENDING' }, { replace: true });
+  };
+
+  const handleBack = () => {
+    setSelectedProperty(null);
+    setSearchParams({}, { replace: true });
+  };
 
   const [payments, setPayments]       = useState([]);
-  const [page, setPage]               = useState(0);
   const [totalPages, setTotalPages]   = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading]         = useState(true);
   const [fetchError, setFetchError]   = useState('');
-
-  const [statusFilter, setStatusFilter] = useState('PENDING');
-  const [monthFilter, setMonthFilter]   = useState('');
 
   const [reportData, setReportData]   = useState(null);
 
@@ -44,7 +60,6 @@ export default function PaymentsPage() {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
-    setPage(0);
     setTimeout(() => {
       detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 50);
@@ -150,18 +165,14 @@ export default function PaymentsPage() {
             />
           </div>
           <PropertySelector
-            onSelect={(p) => {
-              setSelectedProperty(p);
-              setPage(0);
-              setStatusFilter('PENDING');
-              setMonthFilter('');
-            }}
+            onSelect={handleSelectProperty}
+            restoredPropertyId={restoredPropertyId}
           />
         </>
       ) : (
         <>
           <button
-            onClick={() => setSelectedProperty(null)}
+            onClick={handleBack}
             className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
             {t('common.backToProperties')}
@@ -179,7 +190,7 @@ export default function PaymentsPage() {
           <input
             type="month"
             value={monthFilter}
-            onChange={(e) => { setMonthFilter(e.target.value); setPage(0); }}
+            onChange={(e) => { setMonthFilter(e.target.value); }}
             placeholder={t('payments.filterByMonth')}
             className="w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200"
           />

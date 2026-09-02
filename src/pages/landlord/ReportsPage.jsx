@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { PageHeader, Spinner, Alert, Input, Button, StatCard } from '../../components/common';
 import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
@@ -8,8 +9,21 @@ import useCalendarDate from '../../hooks/useCalendarDate';
 
 export default function ReportsPage() {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState('Payments');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'Payments';
+  const setActiveTab = (tab) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('tab', tab); return p; }, { replace: true });
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const restoredPropertyId = searchParams.get('propertyId');
+
+  const handleSelectProperty = (p) => {
+    setSelectedProperty(p);
+    setSearchParams({ propertyId: String(p.id), tab: 'Payments' }, { replace: true });
+  };
+
+  const handleBack = () => {
+    setSelectedProperty(null);
+    setSearchParams({}, { replace: true });
+  };
   const [properties, setProperties] = useState([]);
 
   useEffect(() => {
@@ -30,12 +44,12 @@ export default function ReportsPage() {
       {!selectedProperty ? (
         <>
           <PageHeader title={t('common.selectProperty')} subtitle={t('reports.selectPropertyReports')} />
-          <PropertySelector onSelect={(p) => { setSelectedProperty(p); setActiveTab('Payments'); }} />
+          <PropertySelector onSelect={handleSelectProperty} restoredPropertyId={restoredPropertyId} />
         </>
       ) : (
         <>
           <button
-            onClick={() => setSelectedProperty(null)}
+            onClick={handleBack}
             className="text-sm text-emerald-400 hover:underline mb-4 flex items-center gap-1"
           >
             {t('common.backToProperties')}
