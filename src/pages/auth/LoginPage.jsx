@@ -28,7 +28,17 @@ export default function LoginPage() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  // Show success message if redirected from password change
+  useEffect(() => {
+    if (location.state?.passwordChanged) {
+      setSuccessMessage('auth.passwordChangedSuccess');
+      // Clear the state so refreshing the page doesn't show it again
+      window.history.replaceState({}, '');
+    }
+  }, [location.state]);
 
   // Where to send the user after login — respect the page they tried to visit
   const from = location.state?.from?.pathname || null;
@@ -125,6 +135,9 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="glass rounded-3xl p-6 text-slate-700 dark:text-slate-200">
+          {successMessage && (
+            <Alert type="success" message={t(successMessage)} className="mb-6" />
+          )}
           {apiError && (
             <Alert type="error" message={t(apiError)} className="mb-6" />
           )}

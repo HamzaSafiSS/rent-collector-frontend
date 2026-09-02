@@ -61,15 +61,19 @@ export default function ChangePasswordPage() {
     try {
       setSubmitting(true);
       await authApi.changePassword(form.currentPassword, form.newPassword);
-      setSuccess('auth.passwordChangedSuccess');
 
-      await refreshUser();
+      // The backend revokes all refresh tokens after a password change,
+      // so we must fully log out on the client side before redirecting.
+      // Keep the loading state visible throughout so the user sees a smooth
+      // transition instead of a flash of "success" followed by an error.
+      await logout();
 
-      if (user?.role === 'TENANT') {
-        navigate('/tenant/lease?autoOpen=true', { replace: true });
-      } else {
-        navigate('/', { replace: true });
-      }
+      // Navigate to login with a success flag so the login page can show
+      // the "Password changed successfully" message.
+      navigate('/login', {
+        replace: true,
+        state: { passwordChanged: true },
+      });
 
     } catch (err) {
       setApiError(err.response?.data?.message || 'auth.failedChangePassword');
