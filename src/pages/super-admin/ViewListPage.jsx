@@ -111,18 +111,16 @@ const getCategories = (t, formatDate, page = 0) => ({
       { key: '_no',          header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
       { key: 'name',         header: t('nav.properties') },
       { key: 'address',      header: t('properties.address', 'Address') },
-      { key: 'city',         header: t('properties.city', 'City') },
-      { key: 'totalUnits',   header: t('properties.totalUnits', 'Total Units') },
-      { key: 'occupiedUnits',header: t('properties.occupied', 'Occupied') },
-      { key: 'landlordName', header: t('nav.landlords') },
+      { key: 'totalUnits',   header: t('properties.totalUnits', 'Total Units'), render: (r) => r.totalUnits ?? r.unitsCount ?? 0 },
+      { key: 'occupiedUnits',header: t('properties.occupied', 'Occupied'), render: (r) => r.occupiedUnits ?? 0 },
+      { key: 'landlordName', header: t('nav.landlords'), render: (r) => r.landlordName || r.landlordFullName || '—' },
     ],
     detailFields: [
-      { label: t('nav.properties'),       key: 'name' },
-      { label: t('properties.address', 'Address'),    key: 'address' },
-      { label: t('properties.city', 'City'),       key: 'city' },
-      { label: t('properties.totalUnits', 'Total Units'), key: 'totalUnits' },
-      { label: t('properties.occupied', 'Occupied'),   key: 'occupiedUnits' },
-      { label: t('nav.landlords'),       key: 'landlordName' },
+      { label: t('nav.properties'),                     key: 'name' },
+      { label: t('properties.address', 'Address'),       key: 'address' },
+      { label: t('properties.totalUnits', 'Total Units'),key: 'totalUnits', fallbackKey: 'unitsCount' },
+      { label: t('properties.occupied', 'Occupied'),     key: 'occupiedUnits' },
+      { label: t('nav.landlords'),                      key: 'landlordName', fallbackKey: 'landlordFullName' },
     ],
   },
 
@@ -204,6 +202,7 @@ const getCategories = (t, formatDate, page = 0) => ({
 
 /* ─── Detail Value Renderer ────────────────────────────────────────────────── */
 function DetailValue({ field, item, formatDate }) {
+  const { t } = useTranslation();
   const value = item[field.key] ?? (field.fallbackKey ? item[field.fallbackKey] : null);
   if (value === null || value === undefined || value === '') return <span className="text-slate-500 dark:text-slate-400">—</span>;
   if (field.badge) return <Badge statusKey={value} label={value ? t(`common.status${value.charAt(0) + value.slice(1).toLowerCase()}`, { defaultValue: value }) : ''} />;
