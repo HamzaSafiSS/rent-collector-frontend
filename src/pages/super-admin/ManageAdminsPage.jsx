@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
   PageHeader, Table, Badge, Button, Modal,
-  ConfirmDialog, Pagination, Spinner, Alert,
+  Pagination, Spinner, Alert,
 } from '../../components/common';
 import AdminForm from '../../components/admin/AdminForm';
 import { adminApi } from '../../api/adminApi';
@@ -30,7 +30,6 @@ export default function ManageAdminsPage() {
   // Modal state
   const [createOpen, setCreateOpen]     = useState(false);
   const [editTarget, setEditTarget]     = useState(null);
-  const [deleteTarget, setDeleteTarget] = useState(null);
   const [formLoading, setFormLoading]   = useState(false);
   const [formError, setFormError]       = useState('');
 
@@ -107,21 +106,6 @@ export default function ManageAdminsPage() {
     }
   }
 
-  // ── Delete ─────────────────────────────────────────────────────────────────
-  async function handleDelete() {
-    try {
-      setFormLoading(true);
-      await adminApi.deleteAdmin(deleteTarget.id);
-      toast.success(t('admin.adminDeleted'));
-      setDeleteTarget(null);
-      loadAdmins();
-    } catch (err) {
-      toast.error(err.response?.data?.message || t('admin.failedDeleteAdmin'));
-    } finally {
-      setFormLoading(false);
-    }
-  }
-
   // ── Table columns ──────────────────────────────────────────────────────────
   const columns = [
     { key: 'fullName',  header: t('admin.name') },
@@ -143,9 +127,6 @@ export default function ManageAdminsPage() {
             onClick={() => handleToggleStatus(row)}
           >
             {row.status === 'Suspended' ? t('admin.activate') : t('admin.suspend')}
-          </Button>
-          <Button size="sm" variant="danger" onClick={() => setDeleteTarget(row)}>
-            {t('common.delete')}
           </Button>
         </div>
       ),
@@ -211,17 +192,6 @@ export default function ManageAdminsPage() {
         />
       </Modal>
 
-      {/* Delete Confirm */}
-      <ConfirmDialog
-        isOpen={!!deleteTarget}
-        onClose={() => setDeleteTarget(null)}
-        onConfirm={handleDelete}
-        loading={formLoading}
-        title={t('admin.deleteAdminTitle')}
-        message={t('admin.deleteAdminMessage', { name: deleteTarget?.fullName })}
-        confirmText={t('common.delete')}
-        variant="danger"
-      />
     </>
   );
 }

@@ -83,7 +83,7 @@ export default function UnitDashboardViewPage() {
 
       <div className="flex items-center justify-between mb-6">
         <PageHeader title={t('dashboard.unitDashboardTitle', 'Unit Dashboard')} subtitle={t('units.unitId', { id, defaultValue: `Unit ID: ${id}` })} />
-        <div className="bg-amber-500/15 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-200 shadow-sm">
+        <div className="bg-amber-500/15 text-amber-800 dark:text-amber-300 text-[10px] sm:text-xs font-semibold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-amber-200 dark:border-amber-500/30 shadow-sm shrink-0 whitespace-nowrap">
           {t('common.readOnlyView', 'Read-Only View')}
         </div>
       </div>
