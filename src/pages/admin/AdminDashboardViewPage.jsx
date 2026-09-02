@@ -70,15 +70,15 @@ export default function AdminDashboardViewPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{t('admin.name')}</span>
-                  <span className="text-slate-100 font-medium">{adminData.fullName}</span>
+                  <span className="text-slate-900 dark:text-slate-100 font-medium">{adminData.fullName}</span>
                 </div>
                 <div>
                   <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{t('admin.email')}</span>
-                  <span className="text-slate-100">{adminData.email}</span>
+                  <span className="text-slate-900 dark:text-slate-100 font-medium">{adminData.email}</span>
                 </div>
                 <div>
                   <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{t('payments.phone')}</span>
-                  <span className="text-slate-100">{adminData.phoneNumber || '—'}</span>
+                  <span className="text-slate-900 dark:text-slate-100 font-medium">{adminData.phoneNumber || '—'}</span>
                 </div>
                 <div>
                   <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{t('admin.status')}</span>
@@ -86,7 +86,7 @@ export default function AdminDashboardViewPage() {
                 </div>
                 <div>
                   <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{t('admin.joined')}</span>
-                  <span className="text-slate-100">{adminData.createdAt ? formatDate(adminData.createdAt) : '—'}</span>
+                  <span className="text-slate-900 dark:text-slate-100 font-medium">{adminData.createdAt ? formatDate(adminData.createdAt) : '—'}</span>
                 </div>
               </div>
             </div>
