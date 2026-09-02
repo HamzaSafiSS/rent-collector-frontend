@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState, useCallback } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 
@@ -23,13 +23,16 @@ export default function LandlordDashboardViewPage() {
   const backUrl = location.state?.from || (isSuperAdmin ? '/super-admin/view/landlords' : '/admin/landlords');
 
   const [landlord, setLandlord] = useState(null);
-  const [activeTab, setActiveTab] = useState('properties');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'properties';
+  const setActiveTab = (tab) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('tab', tab); p.delete('page'); return p; }, { replace: true });
+  const page = Number(searchParams.get('page')) || 0;
+  const setPage = (pg) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('page', String(pg)); return p; }, { replace: true });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   // Table state
   const [items, setItems] = useState([]);
-  const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [isTableLoading, setIsTableLoading] = useState(false);
 
@@ -67,10 +70,7 @@ export default function LandlordDashboardViewPage() {
     loadTabData();
   }, [loadTabData]);
 
-  // Reset page when tab changes
-  useEffect(() => {
-    setPage(0);
-  }, [activeTab]);
+  // Page is reset via setActiveTab which deletes the page param
 
   const getColumns = () => {
     if (activeTab === 'properties') {

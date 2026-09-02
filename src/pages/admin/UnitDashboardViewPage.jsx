@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState, useCallback } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { PageHeader, Table, Badge, Pagination, Spinner, Alert } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 
@@ -21,13 +21,16 @@ export default function UnitDashboardViewPage() {
   const backUrl = location.state?.from || (isSuperAdmin ? '/super-admin/view/units' : '/admin/view/units');
 
 
-  const [activeTab, setActiveTab] = useState('leases');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'leases';
+  const setActiveTab = (tab) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('tab', tab); p.delete('page'); return p; }, { replace: true });
+  const page = Number(searchParams.get('page')) || 0;
+  const setPage = (pg) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('page', String(pg)); return p; }, { replace: true });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   // Table state
   const [items, setItems] = useState([]);
-  const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
   const loadTabData = useCallback(async () => {
@@ -54,9 +57,7 @@ export default function UnitDashboardViewPage() {
     loadTabData();
   }, [loadTabData]);
 
-  useEffect(() => {
-    setPage(0);
-  }, [activeTab]);
+  // Page is reset via setActiveTab which deletes the page param
 
   const getColumns = () => {
     if (activeTab === 'leases') {

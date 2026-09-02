@@ -4,7 +4,7 @@ import { CardGridSkeleton } from '../common';
 import { propertyApi } from '../../api/propertyApi';
 import PropertyImage from './PropertyImage';
 
-export default function PropertySelector({ onSelect }) {
+export default function PropertySelector({ onSelect, restoredPropertyId }) {
   const { t } = useTranslation();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,6 +19,11 @@ export default function PropertySelector({ onSelect }) {
       const fetchedProperties = res.data?.data?.content || [];
       setProperties(fetchedProperties);
 
+      // Auto-select: restore from URL param or auto-select if only 1 property
+      if (restoredPropertyId) {
+        const match = fetchedProperties.find(p => String(p.id) === String(restoredPropertyId));
+        if (match) { onSelect(match); return; }
+      }
       if (fetchedProperties.length === 1) {
         onSelect(fetchedProperties[0]);
       }
@@ -28,7 +33,7 @@ export default function PropertySelector({ onSelect }) {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [restoredPropertyId]);
 
   useEffect(() => { loadProperties(); }, [loadProperties]);
 
