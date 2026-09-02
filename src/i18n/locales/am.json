@@ -308,7 +308,11 @@
     "clickToUpload": "ለማስገባት ጠቅ ያድርጉ ወይም ይጎትቱ",
     "imageFormats": "JPEG, PNG ወይም WebP (ከፍተኛ 10ሜባ)",
     "propertyPreview": "የንብረት ቅድመ-ዕይታ",
-    "createdAt": "የተፈጠረበት ቀን"
+    "createdAt": "የተፈጠረበት ቀን",
+    "address": "አድራሻ",
+    "city": "ከተማ",
+    "totalUnits": "ጠቅላላ ክፍሎች",
+    "occupied": "የተያዙ"
   },
   "units": {
     "unitId": "የክፍል መታወቂያ: {{id}}",

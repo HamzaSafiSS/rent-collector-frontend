@@ -307,7 +307,11 @@
     "clickToUpload": "Click to upload or drag & drop",
     "imageFormats": "JPEG, PNG or WebP (max 10MB)",
     "propertyPreview": "Property preview",
-    "createdAt": "Created At"
+    "createdAt": "Created At",
+    "address": "Address",
+    "city": "City",
+    "totalUnits": "Total Units",
+    "occupied": "Occupied"
   },
   "units": {
     "unitId": "Unit ID: {{id}}",

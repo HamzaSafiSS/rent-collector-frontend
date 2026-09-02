@@ -37,13 +37,12 @@ export default function AuditLogPage() {
     from: '',
     to: ''
   });
-  const [appliedFilters, setAppliedFilters] = useState({});
 
   const loadLogs = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
-      const params = { page, size: PAGE_SIZE, ...appliedFilters };
+      const params = { page, size: PAGE_SIZE, ...filters };
       // Remove empty strings from params
       Object.keys(params).forEach((k) => { if (!params[k]) delete params[k]; });
       const res = await auditApi.getAuditLogs(params);
@@ -57,25 +56,19 @@ export default function AuditLogPage() {
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, appliedFilters]);
+  }, [page, filters]);
 
   useEffect(() => { loadLogs(); }, [loadLogs]);
 
   function handleFilterChange(e) {
     const { name, value } = e.target;
     setFilters((p) => ({ ...p, [name]: value }));
-  }
-
-  function handleApplyFilters(e) {
-    e.preventDefault();
     setPage(0);
-    setAppliedFilters({ ...filters });
   }
 
   function handleClearFilters() {
     const empty = { action: '', entityType: '', from: '', to: '' };
     setFilters(empty);
-    setAppliedFilters({});
     setPage(0);
   }
 
@@ -91,8 +84,8 @@ export default function AuditLogPage() {
       <PageHeader title={t('audit.auditLogsTitle')} subtitle={t('audit.totalEntriesCount', { count: totalElements })} />
 
       {/* Filters */}
-      <form onSubmit={handleApplyFilters} className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 mb-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
+      <form onSubmit={(e) => e.preventDefault()} className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 items-end">
 
           <div>
             <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('audit.action')}</label>
@@ -147,11 +140,6 @@ export default function AuditLogPage() {
           <div>
             <Button type="button" variant="secondary" size="sm" className="w-full" onClick={handleClearFilters}>
               {t('audit.clearFilters')}
-            </Button>
-          </div>
-          <div>
-            <Button type="submit" size="sm" className="w-full">
-              {t('audit.applyFilters')}
             </Button>
           </div>
         </div>

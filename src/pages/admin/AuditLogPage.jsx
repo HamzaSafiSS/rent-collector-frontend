@@ -34,13 +34,12 @@ export default function AdminAuditLog() {
   const [loading, setLoading]           = useState(true);
   const [error, setError]               = useState('');
   const [filters, setFilters]           = useState({ action: '', entityType: '', from: '', to: '' });
-  const [applied, setApplied]           = useState({});
 
   const loadLogs = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
-      const params = { page, size: PAGE_SIZE, ...applied };
+      const params = { page, size: PAGE_SIZE, ...filters };
       Object.keys(params).forEach((k) => { if (!params[k]) delete params[k]; });
       const res  = await auditApi.getAuditLogs(params);
       const data = res.data?.data;
@@ -50,9 +49,21 @@ export default function AdminAuditLog() {
       setTotalElements(data?.totalElements || 0);
     } catch { setError(t('audit.failedLoadLogs')); }
     finally  { setLoading(false); }
-  }, [page, applied]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, filters]);
 
   useEffect(() => { loadLogs(); }, [loadLogs]);
+
+  function handleFilterChange(e) {
+    const { name, value } = e.target;
+    setFilters((p) => ({ ...p, [name]: value }));
+    setPage(0);
+  }
+
+  function handleClearFilters() {
+    setFilters({ action: '', entityType: '', from: '', to: '' });
+    setPage(0);
+  }
 
   return (
     <>
@@ -66,16 +77,16 @@ export default function AdminAuditLog() {
       <PageHeader title={t('audit.auditLogsTitle')} subtitle={t('audit.entriesCount', { count: totalElements })} />
 
       <form
-        onSubmit={(e) => { e.preventDefault(); setPage(0); setApplied({ ...filters }); }}
+        onSubmit={(e) => e.preventDefault()}
         className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700/50 rounded-xl p-4 mb-4"
       >
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 items-end">
           <div>
             <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('audit.action')}</label>
             <select
               name="action"
               value={filters.action}
-              onChange={(e) => setFilters((p) => ({ ...p, action: e.target.value }))}
+              onChange={handleFilterChange}
               className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ACTIONS.map((a) => (
@@ -89,7 +100,7 @@ export default function AdminAuditLog() {
             <select
               name="entityType"
               value={filters.entityType}
-              onChange={(e) => setFilters((p) => ({ ...p, entityType: e.target.value }))}
+              onChange={handleFilterChange}
               className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               {ENTITY_TYPES.map((type) => (
@@ -104,7 +115,7 @@ export default function AdminAuditLog() {
               type="date"
               name="from"
               value={filters.from}
-              onChange={(e) => setFilters((p) => ({ ...p, from: e.target.value }))}
+              onChange={handleFilterChange}
               className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
@@ -115,19 +126,14 @@ export default function AdminAuditLog() {
               type="date"
               name="to"
               value={filters.to}
-              onChange={(e) => setFilters((p) => ({ ...p, to: e.target.value }))}
+              onChange={handleFilterChange}
               className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 w-full px-2 py-1.5 text-sm border border-slate-300 dark:border-slate-600/50 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
 
           <div>
-            <Button type="button" variant="secondary" size="sm" className="w-full" onClick={() => { setFilters({ action:'', entityType:'', from:'', to:'' }); setApplied({}); setPage(0); }}>
+            <Button type="button" variant="secondary" size="sm" className="w-full" onClick={handleClearFilters}>
               {t('audit.clearFilters')}
-            </Button>
-          </div>
-          <div>
-            <Button type="submit" size="sm" className="w-full">
-              {t('audit.applyFilters')}
             </Button>
           </div>
         </div>
