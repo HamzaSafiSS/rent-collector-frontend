@@ -69,4 +69,16 @@ export const adminApi = {
   // ── Admin — Lease scoped read-only views ─────────────────────────────────
   getLeasePayments: (id, page = 0, size = 20) =>
     api.get(`/admin/leases/${id}/payments`, { params: { page, size } }),
+
+  // ── Admin / Super Admin — Platform-wide Units with filters ────────────────
+  listAllUnits: (page = 0, size = 10, status = '', month = '', year = '') =>
+    api.get('/admin/units', {
+      params: {
+        page,
+        size,
+        ...(status && { status }),
+        ...(month && { month }),
+        ...(year && { year }),
+      },
+    }),
 };

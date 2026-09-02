@@ -107,36 +107,8 @@ const getCategories = (t, formatDate, page = 0) => ({
   units: {
     title: t('dashboard.totalUnits'),
     icon: '🚪',
-    fetchList: async (page) => {
-      const propRes = await propertyApi.listAllProperties(0, 1000);
-      const props = propRes.data?.data?.content || [];
-      const unitPromises = props.map(async (p) => {
-        try {
-          const res = await unitApi.listUnits(p.id, 0, 500);
-          const raw = res.data?.data;
-          const units = Array.isArray(raw) ? raw : (raw?.content || []);
-          return units.map((u) => ({
-            ...u,
-            propertyName: p.name,
-            landlordName: p.landlordName,
-          }));
-        } catch {
-          return [];
-        }
-      });
-      const allUnits = (await Promise.all(unitPromises)).flat();
-      const start = page * PAGE_SIZE;
-      const content = allUnits.slice(start, start + PAGE_SIZE);
-      return {
-        data: {
-          data: {
-            content,
-            totalPages: Math.ceil(allUnits.length / PAGE_SIZE),
-            totalElements: allUnits.length,
-          },
-        },
-      };
-    },
+    fetchList: (page, filters = {}) =>
+      adminApi.listAllUnits(page, PAGE_SIZE, filters.status, filters.month, filters.year),
     columns: [
       { key: '_no',          header: t('common.noCol', 'No.'), render: (_, idx) => (page * PAGE_SIZE) + idx + 1 },
       { key: 'unitNumber',   header: t('units.unitNumber', 'Unit No.') },
@@ -240,44 +212,47 @@ export default function AdminViewListPage() {
     try {
       setLoading(true);
       setError('');
-      const res  = await config.fetchList(page);
+      const filters = { status: statusFilter, month: monthFilter, year: yearFilter };
+      const res  = await config.fetchList(page, filters);
       const data = res.data?.data;
       let content = data?.content || [];
 
-      if (config.filterFn) {
-        content = config.filterFn(content);
-      }
+      if (category !== 'units') {
+        if (config.filterFn) {
+          content = config.filterFn(content);
+        }
 
-      if (statusFilter) {
-        content = content.filter(l => l.status && l.status.toLowerCase().includes(statusFilter.toLowerCase()));
-      }
-      if (dateFilter) {
-        content = content.filter(l => {
-          const d = l.createdAt || l.moveInDate || l.startDate;
-          if (!d) return false;
-          return String(d).startsWith(dateFilter);
-        });
-      }
-      if (monthFilter || yearFilter) {
-        content = content.filter(l => {
-          const d = l.createdAt || l.moveInDate || l.startDate;
-          if (!d) return false;
-          const dateObj = new Date(d);
-          if (isNaN(dateObj.getTime())) return false;
-          
-          const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-          const y = String(dateObj.getFullYear());
-          
-          let match = true;
-          if (monthFilter && m !== monthFilter) match = false;
-          if (yearFilter && y !== yearFilter) match = false;
-          return match;
-        });
+        if (statusFilter) {
+          content = content.filter(l => l.status && l.status.toLowerCase().includes(statusFilter.toLowerCase()));
+        }
+        if (dateFilter) {
+          content = content.filter(l => {
+            const d = l.createdAt || l.moveInDate || l.startDate;
+            if (!d) return false;
+            return String(d).startsWith(dateFilter);
+          });
+        }
+        if (monthFilter || yearFilter) {
+          content = content.filter(l => {
+            const d = l.createdAt || l.moveInDate || l.startDate;
+            if (!d) return false;
+            const dateObj = new Date(d);
+            if (isNaN(dateObj.getTime())) return false;
+            
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const y = String(dateObj.getFullYear());
+            
+            let match = true;
+            if (monthFilter && m !== monthFilter) match = false;
+            if (yearFilter && y !== yearFilter) match = false;
+            return match;
+          });
+        }
       }
 
       setItems(content);
-      setTotalPages(config.filterFn ? 1 : (data?.totalPages || 0));
-      setTotalElements(config.filterFn ? content.length : (data?.totalElements || 0));
+      setTotalPages(category !== 'units' && config.filterFn ? 1 : (data?.totalPages || 0));
+      setTotalElements(category !== 'units' && config.filterFn ? content.length : (data?.totalElements || 0));
     } catch {
       setError(`Failed to load ${config?.title || 'data'}.`);
     } finally {
@@ -365,7 +340,7 @@ export default function AdminViewListPage() {
         {category !== 'properties' && (
           <select 
             value={statusFilter} 
-            onChange={e => setStatusFilter(e.target.value)}
+            onChange={e => { setStatusFilter(e.target.value); setPage(0); }}
             className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">{t('common.allStatuses')}</option>
@@ -393,7 +368,7 @@ export default function AdminViewListPage() {
         <>
           <select
             value={monthFilter}
-            onChange={e => setMonthFilter(e.target.value)}
+            onChange={e => { setMonthFilter(e.target.value); setPage(0); }}
             className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
           >
             <option value="">{t('common.allMonths')}</option>
@@ -406,13 +381,13 @@ export default function AdminViewListPage() {
             type="number"
             placeholder={t('common.yearPlaceholder')}
             value={yearFilter}
-            onChange={e => setYearFilter(e.target.value)}
+            onChange={e => { setYearFilter(e.target.value); setPage(0); }}
             className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
           />
         </>
         {(statusFilter || dateFilter || monthFilter || yearFilter) && (
           <button 
-            onClick={() => { setStatusFilter(''); setDateFilter(''); setMonthFilter(''); setYearFilter(''); }}
+            onClick={() => { setStatusFilter(''); setDateFilter(''); setMonthFilter(''); setYearFilter(''); setPage(0); }}
             className="text-sm text-emerald-400 hover:underline"
           >
             {t('common.clear')}
