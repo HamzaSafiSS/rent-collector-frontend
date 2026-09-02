@@ -40,7 +40,8 @@ function cacheUser(profile) {
   if (profile) {
     try {
       sessionStorage.setItem(USER_CACHE_KEY, JSON.stringify(profile));
-      sessionStorage.setItem(SESSION_MARKER_KEY, '1');
+      // Use localStorage so the marker survives browser restarts
+      localStorage.setItem(SESSION_MARKER_KEY, '1');
     } catch {}
   }
 }
@@ -54,14 +55,16 @@ function getCachedUser() {
 
 function hadPreviousSession() {
   try {
-    return sessionStorage.getItem(SESSION_MARKER_KEY) === '1';
+    // Use localStorage so the marker survives browser restarts
+    // (sessionStorage is cleared when the browser is closed)
+    return localStorage.getItem(SESSION_MARKER_KEY) === '1';
   } catch { return false; }
 }
 
 function clearCachedUser() {
   try {
     sessionStorage.removeItem(USER_CACHE_KEY);
-    sessionStorage.removeItem(SESSION_MARKER_KEY);
+    localStorage.removeItem(SESSION_MARKER_KEY);
   } catch {}
 }
 
