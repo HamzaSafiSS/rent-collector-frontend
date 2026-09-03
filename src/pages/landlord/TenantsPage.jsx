@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import {
   PageHeader,
-  Alert, Pagination, TableSkeleton,
+  Alert, Pagination, Spinner,
 } from '../../components/common';
 import TenantTable from '../../components/tenant/TenantTable';
 import PropertySelector from '../../components/property/PropertySelector';
@@ -156,7 +156,7 @@ export default function TenantsPage() {
 
           <div className="mb-6">
             {loading ? (
-              <TableSkeleton rows={8} cols={6} />
+              <div className="flex justify-center py-20"><Spinner size="lg" /></div>
             ) : (
               <TenantTable data={filteredTenants} />
             )}

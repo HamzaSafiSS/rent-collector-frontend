@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PageHeader, StatCard, StatCardsSkeleton, Alert } from '../../components/common';
+import { PageHeader, StatCard, Spinner, Alert } from '../../components/common';
 import { leaseApi } from '../../api/leaseApi';
 import { paymentApi } from '../../api/paymentApi';
 import { getLeasePaymentStatus } from '../../utils/leasePaymentStatus';
@@ -72,7 +72,7 @@ export default function TenantDashboard() {
       {error && <Alert type="error" message={error} className="mb-4" />}
 
       {loading ? (
-        <StatCardsSkeleton count={3} />
+        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
       ) : !stats && !error ? (
         <p className="text-slate-500 text-sm">{t('dashboard.couldNotLoadStats')}</p>
       ) : stats ? (

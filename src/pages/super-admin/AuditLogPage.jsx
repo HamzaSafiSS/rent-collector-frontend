@@ -147,18 +147,22 @@ export default function AuditLogPage() {
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
-      <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
-        <AuditLogTable data={logs} loading={loading} page={page} pageSize={PAGE_SIZE} />
-        <div className="px-4 border-t border-slate-100">
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            totalElements={totalElements}
-            size={PAGE_SIZE}
-            onPageChange={setPage}
-          />
+      {loading ? (
+        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
+      ) : (
+        <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
+          <AuditLogTable data={logs} page={page} pageSize={PAGE_SIZE} />
+          <div className="px-4 border-t border-slate-100">
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalElements={totalElements}
+              size={PAGE_SIZE}
+              onPageChange={setPage}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

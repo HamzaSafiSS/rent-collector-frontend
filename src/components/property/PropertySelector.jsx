@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CardGridSkeleton } from '../common';
+import { Spinner } from '../common';
 import { propertyApi } from '../../api/propertyApi';
 import PropertyImage from './PropertyImage';
 
@@ -38,7 +38,11 @@ export default function PropertySelector({ onSelect, restoredPropertyId }) {
   useEffect(() => { loadProperties(); }, [loadProperties]);
 
   if (loading) {
-    return <CardGridSkeleton count={3} />;
+    return (
+      <div className="flex justify-center py-20">
+        <Spinner size="lg" />
+      </div>
+    );
   }
 
   if (properties.length === 1) {

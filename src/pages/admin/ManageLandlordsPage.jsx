@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PageHeader, Table, Badge, Button, Pagination, Alert, ConfirmDialog } from '../../components/common';
+import { PageHeader, Table, Badge, Button, Pagination, Alert, ConfirmDialog, Spinner } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 import { useToast } from '../../context/ToastContext';
-import { TableSkeleton } from '../../components/common';
 import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
@@ -107,20 +106,20 @@ export default function ManageLandlordsPage() {
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
-      <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
-        {loading ? (
-          <TableSkeleton rows={8} cols={columns.length} />
-        ) : (
+      {loading ? (
+        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
+      ) : (
+        <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
           <Table columns={columns} data={landlords} emptyMessage={t('admin.noLandlordsFound')} />
-        )}
-        <div className="px-4 border-t border-slate-100">
-          <Pagination
-            page={page} totalPages={totalPages}
-            totalElements={totalElements} size={PAGE_SIZE}
-            onPageChange={setPage}
-          />
+          <div className="px-4 border-t border-slate-100">
+            <Pagination
+              page={page} totalPages={totalPages}
+              totalElements={totalElements} size={PAGE_SIZE}
+              onPageChange={setPage}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       <ConfirmDialog
         isOpen={!!confirmTarget}

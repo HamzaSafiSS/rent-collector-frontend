@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { StatCard, PageHeader, Spinner } from '../../components/common';
 import { adminApi } from '../../api/adminApi';
 import { reportApi } from '../../api/reportApi';
-import { StatCardsSkeleton } from '../../components/common';
 
 
 export default function SuperAdminDashboard() {
@@ -41,7 +40,7 @@ export default function SuperAdminDashboard() {
       />
 
       {loading ? (
-        <StatCardsSkeleton count={7} />
+        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
       ) : !stats ? (
         <p className="text-slate-500 text-sm">{t('common.couldNotLoadStats')}</p>
       ) : (

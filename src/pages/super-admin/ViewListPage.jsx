@@ -11,7 +11,6 @@ import { leaseApi } from '../../api/leaseApi';
 import { paymentApi } from '../../api/paymentApi';
 import { reportApi } from '../../api/reportApi';
 import { unitApi } from '../../api/unitApi';
-import { TableSkeleton } from '../../components/common';
 import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
@@ -378,22 +377,22 @@ export default function ViewListPage() {
 
       {error && <Alert type="error" message={error} className="mb-4" />}
 
-      <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
-        {loading ? (
-          <TableSkeleton rows={8} cols={columnsWithView.length} />
-        ) : (
+      {loading ? (
+        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
+      ) : (
+        <div className="bg-white dark:bg-[#111827] rounded-xl border border-slate-200 dark:border-slate-700/50 overflow-hidden">
           <Table columns={columnsWithView} data={items} emptyMessage={t('empty.searchTitle')} />
-        )}
-        <div className="px-4 border-t border-slate-100">
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            totalElements={totalElements}
-            size={PAGE_SIZE}
-            onPageChange={setPage}
-          />
+          <div className="px-4 border-t border-slate-100">
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              totalElements={totalElements}
+              size={PAGE_SIZE}
+              onPageChange={setPage}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── View-only Detail Modal ─────────────────────────────────────────── */}
       <Modal

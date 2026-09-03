@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PageHeader, Table, Badge, Alert, TableSkeleton } from '../../components/common';
+import { PageHeader, Table, Badge, Alert, Spinner } from '../../components/common';
 import { leaseApi } from '../../api/leaseApi';
 import { useToast } from '../../context/ToastContext';
 
@@ -261,7 +261,7 @@ export default function TenantLandlordsPage() {
       {error && <Alert type="error" message={error} className="mb-4" />}
 
       {loading ? (
-        <TableSkeleton rows={4} cols={columns.length} />
+        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
       ) : (
         <Table
           columns={columns}

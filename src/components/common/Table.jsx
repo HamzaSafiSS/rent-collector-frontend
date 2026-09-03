@@ -43,6 +43,10 @@ export default function Table({
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 && loading ? (
+            <tr>
+              <td colSpan={columns.length} className="py-20"></td>
+            </tr>
           ) : (
             data.map((row, rowIndex) => (
               <tr

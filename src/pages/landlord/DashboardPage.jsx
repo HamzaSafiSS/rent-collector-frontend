@@ -6,7 +6,6 @@ import { reportApi } from '../../api/reportApi';
 import { propertyApi } from '../../api/propertyApi';
 import { auditApi } from '../../api/auditApi';
 import { formatRelativeTime } from '../../utils/dateUtils';
-import { StatCardsSkeleton } from '../../components/common';
 import {
   ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
@@ -193,7 +192,7 @@ export default function LandlordDashboard() {
       <PageHeader title={t('dashboard.landlordTitle')}/>
 
       {loading ? (
-        <StatCardsSkeleton count={6} />
+        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
       ) : !stats ? (
         <p className="text-slate-400 text-sm">{t('common.couldNotLoadStats')}</p>
       ) : (

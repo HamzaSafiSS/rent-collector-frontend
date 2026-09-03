@@ -2,13 +2,12 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import {
-  PageHeader, Table, Badge, Button, Alert, Pagination,
+  PageHeader, Table, Badge, Button, Alert, Pagination, Spinner,
 } from '../../components/common';
 import ReviewModal from '../../components/payment/ReviewModal';
 import { paymentApi } from '../../api/paymentApi';
 import { reportApi } from '../../api/reportApi';
 import { useToast } from '../../context/ToastContext';
-import { TableSkeleton } from '../../components/common';
 import PropertySelector from '../../components/property/PropertySelector';
 import useCalendarDate from '../../hooks/useCalendarDate';
 
@@ -248,7 +247,7 @@ export default function PaymentsPage() {
             {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
             {loading ? (
-                <TableSkeleton rows={8} cols={columns.length} />
+                <div className="flex justify-center py-20"><Spinner size="lg" /></div>
               ) : (
                 <Table columns={columns} data={payments} emptyMessage={statusFilter ? t('payments.noPaymentsFound', { status: statusFilter }) : t('empty.searchTitle', 'No records found')} />
               )}

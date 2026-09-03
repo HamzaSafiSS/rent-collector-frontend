@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import {
   PageHeader, Table, Badge, Button, Modal,
-  ConfirmDialog, Alert, Pagination,
+  ConfirmDialog, Alert, Pagination, Spinner,
 } from '../../components/common';
 import LeaseAgreementForm from '../../components/lease/LeaseAgreementForm';
 import PropertySelector from '../../components/property/PropertySelector';
@@ -11,7 +11,6 @@ import DocumentViewer from '../../components/lease/DocumentViewer';
 import { leaseApi } from '../../api/leaseApi';
 import { unitApi } from '../../api/unitApi';
 import { useToast } from '../../context/ToastContext';
-import { TableSkeleton } from '../../components/common';
 import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
@@ -256,7 +255,7 @@ export default function LeasesPage() {
 
           <div className="mb-6">
             {loading ? (
-              <TableSkeleton rows={8} cols={columns.length} />
+              <div className="flex justify-center py-20"><Spinner size="lg" /></div>
             ) : (
               <Table columns={columns} data={filteredLeases} emptyMessage={t('leases.noLeasesFound')} />
             )}

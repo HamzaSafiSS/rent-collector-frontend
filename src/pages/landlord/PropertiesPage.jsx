@@ -10,7 +10,6 @@ import PropertyImage from '../../components/property/PropertyImage';
 import { propertyApi } from '../../api/propertyApi';
 import { unitApi } from '../../api/unitApi';
 import { useToast } from '../../context/ToastContext';
-import { CardGridSkeleton } from '../../components/common';
 
 const PAGE_SIZE = 9;
 
@@ -144,7 +143,7 @@ export default function PropertiesPage() {
       {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
       {loading ? (
-        <CardGridSkeleton count={6} />
+        <div className="flex justify-center py-20"><Spinner size="lg" /></div>
       ) : properties.length === 0 ? (
         <div className="text-center py-24 bg-white dark:bg-[#111827] rounded-3xl border border-slate-200 dark:border-slate-700/50 shadow-sm">
           <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-5">

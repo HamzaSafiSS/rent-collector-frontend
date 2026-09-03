@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PageHeader, Table, Alert, Pagination, TableSkeleton } from '../../components/common';
+import { PageHeader, Table, Alert, Pagination, Spinner } from '../../components/common';
 import { paymentApi } from '../../api/paymentApi';
 
 const PAGE_SIZE = 10;
@@ -64,7 +64,7 @@ export default function DueSoonPage() {
 
       <div className="mb-6">
         {loading ? (
-          <TableSkeleton rows={8} cols={columns.length} />
+          <div className="flex justify-center py-20"><Spinner size="lg" /></div>
         ) : (
           <Table columns={columns} data={tenants} emptyMessage={t('dueSoon.noTenantsDue')} />
         )}
