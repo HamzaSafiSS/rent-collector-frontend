@@ -110,28 +110,28 @@ export default function MyLeasePage() {
       <PageHeader title={t('leases.myLeasesTitle')} subtitle={t('leases.myLeasesSubtitle')} />
 
       {/* Status filter */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {[
-          { key: '', label: t('common.all') },
-          { key: 'PENDING', label: t('leases.pending') || t('common.statusPending') },
-          { key: 'ACTIVE', label: t('leases.active') },
-          { key: 'UNPAID', label: t('common.statusUnpaid') },
-          { key: 'REJECTED', label: t('leases.rejected') || t('common.statusRejected') },
-          { key: 'TERMINATED', label: t('leases.terminated') },
-        ].map(({ key, label }) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => handleFilterChange(key)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
-              statusFilter === key
-                ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
+      <div className="mb-6 flex flex-wrap gap-4 items-center bg-slate-100 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-200 dark:border-slate-700/50">
+        <div className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('common.filters')}</div>
+        <select 
+          value={statusFilter} 
+          onChange={e => handleFilterChange(e.target.value)}
+          className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+        >
+          <option value="">{t('common.allStatuses')}</option>
+          <option value="PENDING">{t('leases.pending') || t('common.statusPending')}</option>
+          <option value="ACTIVE">{t('leases.active') || t('common.statusActive')}</option>
+          <option value="UNPAID">{t('common.statusUnpaid')}</option>
+          <option value="REJECTED">{t('leases.rejected') || t('common.statusRejected')}</option>
+          <option value="TERMINATED">{t('leases.terminated') || t('common.statusTerminated')}</option>
+        </select>
+        {statusFilter && (
+          <button 
+            onClick={() => handleFilterChange('')}
+            className="text-sm text-emerald-400 hover:underline"
           >
-            {label}
+            {t('common.clear')}
           </button>
-        ))}
+        )}
       </div>
 
       {error   && <Alert type="error" message={error} className="mb-4" />}

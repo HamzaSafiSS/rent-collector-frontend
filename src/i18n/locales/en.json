@@ -588,7 +588,8 @@
     "cannotDeleteTenant": "Cannot delete tenant.",
     "cannotDeleteActiveLease": "Cannot delete tenant: they still have an active lease. Terminate the lease first before deleting the tenant.",
     "failedLoadTenants": "Failed to load tenants.",
-    "selectPropertyTenants": "Choose a property to view its tenants"
+    "selectPropertyTenants": "Choose a property to view its tenants",
+    "noTenantsFound": "No tenants found."
   },
   "reports": {
     "reportsTitle": "Reports — {{name}}",

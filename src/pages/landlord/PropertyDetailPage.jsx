@@ -238,46 +238,41 @@ export default function PropertyDetailPage() {
         </div>
       )}
 
-      {/* Units summary */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
-        {['ALL', 'AVAILABLE', 'OCCUPIED', 'MAINTENANCE'].map((s) => {
-          const count = s === 'ALL' ? units.length : units.filter((u) => u.status === s).length;
-          const isSelected = filterStatus === s;
-          const labelText = s === 'ALL' ? t('common.all') : t(`dashboard.${s.toLowerCase()}Units`, { defaultValue: s });
-          return (
-            <div 
-              key={s} 
-              onClick={() => setSearchParams(s === 'ALL' ? {} : { status: s })}
-              className={`rounded-2xl p-6 border text-center shadow-sm relative overflow-hidden cursor-pointer transition-transform hover:-translate-y-1 ${
-              isSelected ? 'ring-2 ring-emerald-500 shadow-md' : ''
-            } ${
-              s === 'AVAILABLE'   ? 'bg-white dark:bg-[#111827] border-emerald-500/20'  :
-              s === 'OCCUPIED'    ? 'bg-white dark:bg-[#111827] border-sky-500/20'   :
-              s === 'MAINTENANCE' ? 'bg-white dark:bg-[#111827] border-amber-500/20'  :
-                                    'bg-white dark:bg-[#111827] border-slate-200 dark:border-slate-700/50'
-            }`}>
-              <div className={`absolute inset-0 opacity-10 ${
-                s === 'AVAILABLE' ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' :
-                s === 'OCCUPIED'  ? 'bg-gradient-to-br from-sky-400 to-blue-600' :
-                s === 'MAINTENANCE' ? 'bg-gradient-to-br from-amber-400 to-orange-500' :
-                                    'bg-gradient-to-br from-slate-400 to-slate-600'
-              }`}></div>
-              <p className={`text-3xl font-extrabold relative z-10 ${
-                s === 'AVAILABLE' ? 'text-emerald-400' :
-                s === 'OCCUPIED'  ? 'text-sky-400' :
-                s === 'MAINTENANCE' ? 'text-amber-400' :
-                                    'text-slate-800 dark:text-slate-200'
-              }`}>{count}</p>
-              <p className="text-xs font-bold mt-2 uppercase tracking-wider text-slate-500 relative z-10">{labelText}</p>
-            </div>
-          );
-        })}
+      {/* Units filter bar */}
+      <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-100 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-200 dark:border-slate-700/50">
+        <div className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('common.filters')}</div>
+        <select 
+          value={filterStatus} 
+          onChange={e => setSearchParams(prev => {
+            const p = new URLSearchParams(prev);
+            if (e.target.value && e.target.value !== 'ALL') p.set('status', e.target.value);
+            else p.delete('status');
+            return p;
+          })}
+          className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+        >
+          <option value="ALL">{t('common.allStatuses')}</option>
+          <option value="AVAILABLE">{t('common.statusAvailable')}</option>
+          <option value="OCCUPIED">{t('common.statusOccupied')}</option>
+          <option value="MAINTENANCE">{t('common.statusMaintenance')}</option>
+        </select>
+        {filterStatus && filterStatus !== 'ALL' && (
+          <button 
+            onClick={() => setSearchParams({})}
+            className="text-sm text-emerald-400 hover:underline"
+          >
+            {t('common.clear')}
+          </button>
+        )}
       </div>
 
       {/* Units table */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{filterStatus === 'ALL' ? t('units.allUnits') : t(`common.status${filterStatus.charAt(0) + filterStatus.slice(1).toLowerCase()}`, { defaultValue: filterStatus })} <span className="text-slate-500 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span></h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            {filterStatus === 'ALL' ? t('units.allUnits') : t(`common.status${filterStatus.charAt(0) + filterStatus.slice(1).toLowerCase()}`, { defaultValue: filterStatus })} 
+            <span className="text-slate-500 dark:text-slate-400 font-medium text-base ml-1">({units.filter((u) => filterStatus === 'ALL' || u.status === filterStatus).length})</span>
+          </h2>
         </div>
         <Table
           columns={unitColumns}

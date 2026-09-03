@@ -27,7 +27,12 @@ export default function LeasesPage() {
   const page = Number(searchParams.get('page')) || 0;
   const setPage = (pg) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('page', String(pg)); return p; }, { replace: true });
   const statusFilter = searchParams.get('status') || '';
+  const monthFilter  = searchParams.get('month') || '';
+  const yearFilter   = searchParams.get('year') || '';
+
   const setStatusFilter = (s) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (s) p.set('status', s); else p.delete('status'); p.delete('page'); return p; }, { replace: true });
+  const setMonthFilter  = (m) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (m) p.set('month', m); else p.delete('month'); p.delete('page'); return p; }, { replace: true });
+  const setYearFilter   = (y) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (y) p.set('year', y); else p.delete('year'); p.delete('page'); return p; }, { replace: true });
 
   const handleSelectProperty = (p) => {
     setSelectedProperty(p);
@@ -75,6 +80,20 @@ export default function LeasesPage() {
   }, [page, statusFilter, selectedProperty]);
 
   useEffect(() => { loadLeases(); }, [loadLeases, selectedProperty]);
+
+  const filteredLeases = leases.filter(l => {
+    if (monthFilter || yearFilter) {
+      const d = l.startDate || l.createdAt;
+      if (!d) return false;
+      const dateObj = new Date(d);
+      if (isNaN(dateObj.getTime())) return false;
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const y = String(dateObj.getFullYear());
+      if (monthFilter && m !== monthFilter) return false;
+      if (yearFilter && y !== yearFilter) return false;
+    }
+    return true;
+  });
 
   // Load available units for the create form
   async function openCreateModal() {
@@ -182,32 +201,66 @@ export default function LeasesPage() {
             }
           />
 
-      {/* Status filter */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {['', 'PENDING', 'ACTIVE', 'REJECTED', 'TERMINATED'].map((s) => (
-          <button
-            key={s}
-            onClick={() => { setStatusFilter(s); setPage(0); }}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
-              statusFilter === s
-                ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
-          >
-            {s ? (s === 'ACTIVE' ? t('leases.active') : s === 'PENDING' ? (t('leases.pending') || t('common.statusPending')) : s === 'REJECTED' ? (t('leases.rejected') || t('common.statusRejected')) : t('leases.terminated')) : t('common.all')}
-          </button>
-        ))}
-      </div>
+          <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-100 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-200 dark:border-slate-700/50">
+            <div className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('common.filters')}</div>
+            <select 
+              value={statusFilter} 
+              onChange={e => { setStatusFilter(e.target.value); }}
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            >
+              <option value="">{t('common.allStatuses')}</option>
+              <option value="ACTIVE">{t('common.statusActive')}</option>
+              <option value="PENDING">{t('common.statusPending')}</option>
+              <option value="REJECTED">{t('common.statusRejected')}</option>
+              <option value="TERMINATED">{t('common.statusTerminated')}</option>
+              <option value="CANCELLED">{t('common.statusCancelled')}</option>
+            </select>
+            <select
+              value={monthFilter}
+              onChange={e => { setMonthFilter(e.target.value); }}
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            >
+              <option value="">{t('common.allMonths')}</option>
+              {[1,2,3,4,5,6,7,8,9,10,11,12].map(m => {
+                const val = String(m).padStart(2, '0');
+                return <option key={val} value={val}>{t(`common.month${val}`)}</option>;
+              })}
+            </select>
+            <input
+              type="number"
+              placeholder={t('common.yearPlaceholder')}
+              value={yearFilter}
+              onChange={e => { setYearFilter(e.target.value); }}
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
+            />
+            {(statusFilter || monthFilter || yearFilter) && (
+              <button 
+                onClick={() => {
+                  setSearchParams(prev => {
+                    const p = new URLSearchParams(prev);
+                    p.delete('status');
+                    p.delete('month');
+                    p.delete('year');
+                    p.delete('page');
+                    return p;
+                  }, { replace: true });
+                }}
+                className="text-sm text-emerald-400 hover:underline"
+              >
+                {t('common.clear')}
+              </button>
+            )}
+          </div>
 
-      {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
+          {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
-      <div className="mb-6">
-        {loading ? (
-          <TableSkeleton rows={8} cols={columns.length} />
-        ) : (
-          <Table columns={columns} data={leases} emptyMessage={t('leases.noLeasesFound')} />
-        )}
-      </div>
+          <div className="mb-6">
+            {loading ? (
+              <TableSkeleton rows={8} cols={columns.length} />
+            ) : (
+              <Table columns={columns} data={filteredLeases} emptyMessage={t('leases.noLeasesFound')} />
+            )}
+          </div>
       {leases.length > 0 && (
         <div className="mt-4 flex justify-end">
           <Pagination

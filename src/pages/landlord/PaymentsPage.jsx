@@ -10,10 +10,6 @@ import { reportApi } from '../../api/reportApi';
 import { useToast } from '../../context/ToastContext';
 import { TableSkeleton } from '../../components/common';
 import PropertySelector from '../../components/property/PropertySelector';
-import StatCard from '../../components/common/StatCard';
-import Input from '../../components/common/Input';
-
-
 import useCalendarDate from '../../hooks/useCalendarDate';
 
 const PAGE_SIZE = 10;
@@ -29,15 +25,17 @@ export default function PaymentsPage() {
   const restoredPropertyId = searchParams.get('propertyId');
   const page = Number(searchParams.get('page')) || 0;
   const setPage = (pg) => setSearchParams(prev => { const p = new URLSearchParams(prev); p.set('page', String(pg)); return p; }, { replace: true });
-  const statusFilter = searchParams.get('status') || 'PENDING';
+  const statusFilter = searchParams.get('status') || '';
   const monthFilter = searchParams.get('month') || '';
+  const yearFilter = searchParams.get('year') || '';
 
-  const setStatusFilter = (s) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (s) p.set('status', s); else p.delete('status'); p.delete('page'); return p; }, { replace: true });
+  const setStatusFilter = (s) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (s && s !== 'ALL') p.set('status', s); else p.delete('status'); p.delete('page'); return p; }, { replace: true });
   const setMonthFilter = (m) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (m) p.set('month', m); else p.delete('month'); p.delete('page'); return p; }, { replace: true });
+  const setYearFilter = (y) => setSearchParams(prev => { const p = new URLSearchParams(prev); if (y) p.set('year', y); else p.delete('year'); p.delete('page'); return p; }, { replace: true });
 
   const handleSelectProperty = (p) => {
     setSelectedProperty(p);
-    setSearchParams({ propertyId: String(p.id), status: 'PENDING' }, { replace: true });
+    setSearchParams({ propertyId: String(p.id) }, { replace: true });
   };
 
   const handleBack = () => {
@@ -57,26 +55,28 @@ export default function PaymentsPage() {
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviewError, setReviewError]     = useState('');
 
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
-    setTimeout(() => {
-      detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 50);
-  };
-
   const loadPayments = useCallback(async () => {
     if (!selectedProperty) return;
     try {
       setLoading(true);
       setFetchError('');
 
+      let fullMonthParam = '';
+      if (monthFilter && yearFilter) {
+        fullMonthParam = `${yearFilter}-${monthFilter}`;
+      } else if (monthFilter) {
+        const currentYear = new Date().getFullYear();
+        fullMonthParam = `${currentYear}-${monthFilter}`;
+      } else if (yearFilter) {
+        fullMonthParam = `${yearFilter}`;
+      }
+
       const params = { page, size: PAGE_SIZE, propertyId: selectedProperty.id };
       if (statusFilter && statusFilter !== 'ALL') params.status = statusFilter;
-      if (monthFilter) params.month = monthFilter;
+      if (fullMonthParam) params.month = fullMonthParam;
 
       let res;
-      if (statusFilter === 'PENDING' && !monthFilter) {
+      if (statusFilter === 'PENDING' && !fullMonthParam) {
           res = await paymentApi.getPendingPayments(page, PAGE_SIZE, selectedProperty.id);
       } else {
           res = await paymentApi.getLandlordPayments(params);
@@ -88,9 +88,9 @@ export default function PaymentsPage() {
       setTotalElements(data?.totalElements || 0);
 
       const reportParams = { propertyId: selectedProperty.id };
-      if (monthFilter) {
-          reportParams.from = monthFilter;
-          reportParams.to = monthFilter;
+      if (fullMonthParam) {
+          reportParams.from = fullMonthParam;
+          reportParams.to = fullMonthParam;
       }
       const reportRes = await reportApi.getPaymentReport(reportParams);
       setReportData(reportRes.data?.data);
@@ -100,7 +100,7 @@ export default function PaymentsPage() {
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, statusFilter, monthFilter, selectedProperty]);
+  }, [page, statusFilter, monthFilter, yearFilter, selectedProperty]);
 
   useEffect(() => { loadPayments(); }, [loadPayments]);
 
@@ -184,72 +184,75 @@ export default function PaymentsPage() {
             />
           </div>
 
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('payments.summary')}</h2>
-        <div className="w-48">
-          <input
-            type="month"
-            value={monthFilter}
-            onChange={(e) => { setMonthFilter(e.target.value); }}
-            placeholder={t('payments.filterByMonth')}
-            className="w-full px-3 py-2 text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all duration-200"
-          />
-        </div>
-      </div>
+          <div className="mb-4 flex flex-wrap gap-4 items-center bg-slate-100 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-200 dark:border-slate-700/50">
+            <div className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('common.filters')}</div>
+            <select 
+              value={statusFilter} 
+              onChange={e => { setStatusFilter(e.target.value); }}
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            >
+              <option value="">{t('common.allStatuses')}</option>
+              <option value="PENDING">{t('common.statusPending')}</option>
+              <option value="APPROVED">{t('common.statusApproved')}</option>
+              <option value="REJECTED">{t('common.statusRejected')}</option>
+              <option value="UNPAID">{t('payments.unpaidTenants', 'Unpaid Tenants')}</option>
+            </select>
+            <select
+              value={monthFilter}
+              onChange={e => { setMonthFilter(e.target.value); }}
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50"
+            >
+              <option value="">{t('common.allMonths')}</option>
+              {[1,2,3,4,5,6,7,8,9,10,11,12].map(m => {
+                const val = String(m).padStart(2, '0');
+                return <option key={val} value={val}>{t(`common.month${val}`)}</option>;
+              })}
+            </select>
+            <input
+              type="number"
+              placeholder={t('common.yearPlaceholder')}
+              value={yearFilter}
+              onChange={e => { setYearFilter(e.target.value); }}
+              className="bg-white dark:bg-[#111827] text-slate-800 dark:text-slate-100 text-sm border border-slate-300 dark:border-slate-600/50 rounded px-2 py-1 outline-none focus:border-emerald-500/50 w-24"
+            />
+            {(statusFilter || monthFilter || yearFilter) && (
+              <button 
+                onClick={() => {
+                  setSearchParams(prev => {
+                    const p = new URLSearchParams(prev);
+                    p.delete('status');
+                    p.delete('month');
+                    p.delete('year');
+                    p.delete('page');
+                    return p;
+                  }, { replace: true });
+                }}
+                className="text-sm text-emerald-400 hover:underline"
+              >
+                {t('common.clear')}
+              </button>
+            )}
+          </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard 
-            label={t('payments.pendingPayments')}
-            value={reportData?.pendingCount || 0}
-            icon={<svg className="w-5 h-5 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-            color="blue"
-            isSelected={statusFilter === 'PENDING'}
-            onClick={() => handleCardClick('PENDING')}
-        />
-        <StatCard 
-            label={t('payments.approvedPayments')}
-            value={reportData?.approvedCount || 0}
-            icon={<svg className="w-5 h-5 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>}
-            color="green"
-            isSelected={statusFilter === 'APPROVED'}
-            onClick={() => handleCardClick('APPROVED')}
-        />
-        <StatCard 
-            label={t('payments.rejectedPayments')}
-            value={reportData?.rejectedCount || 0}
-            icon={<svg className="w-5 h-5 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>}
-            color="red"
-            isSelected={statusFilter === 'REJECTED'}
-            onClick={() => handleCardClick('REJECTED')}
-        />
-        <StatCard 
-            label={t('payments.unpaidTenants')}
-            value={reportData?.unpaidCount || 0}
-            icon={<svg className="w-5 h-5 text-black dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>}
-            color="yellow"
-            isSelected={statusFilter === 'UNPAID'}
-            onClick={() => handleCardClick('UNPAID')}
-        />
-      </div>
+          <div ref={detailsRef} className="mb-6 scroll-mt-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                {t('payments.paymentDetails')}
+                {statusFilter && (
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    {t(`common.status${statusFilter.charAt(0) + statusFilter.slice(1).toLowerCase()}`, { defaultValue: statusFilter })}
+                  </span>
+                )}
+              </h2>
+            </div>
+            {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
 
-      <div ref={detailsRef} className="mb-6 scroll-mt-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-            {t('payments.paymentDetails')}
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              {statusFilter ? t(`common.status${statusFilter.charAt(0) + statusFilter.slice(1).toLowerCase()}`, { defaultValue: statusFilter }) : ''}
-            </span>
-          </h2>
-        </div>
-        {fetchError && <Alert type="error" message={fetchError} className="mb-4" />}
-
-        {loading ? (
-            <TableSkeleton rows={8} cols={columns.length} />
-          ) : (
-            <Table columns={columns} data={payments} emptyMessage={t('payments.noPaymentsFound', { status: statusFilter })} />
-          )}
-      </div>
+            {loading ? (
+                <TableSkeleton rows={8} cols={columns.length} />
+              ) : (
+                <Table columns={columns} data={payments} emptyMessage={statusFilter ? t('payments.noPaymentsFound', { status: statusFilter }) : t('empty.searchTitle', 'No records found')} />
+              )}
+          </div>
       {payments.length > 0 && (
         <div className="mt-4 flex justify-end">
           <Pagination
