@@ -157,6 +157,7 @@ export default function LeasesPage() {
     { key: 'propertyName',  header: t('leases.property') },
     { key: 'monthlyRent',   header: t('leases.rentETB'), render: (r) => Number(r.monthlyRent).toLocaleString() },
     { key: 'startDate',     header: t('leases.startDateCol'), render: (r) => r.startDate ? formatDate(r.startDate) : '—' },
+    { key: 'endDate',       header: t('leases.endDateCol', 'End Date'), render: (r) => r.endDate ? formatDate(r.endDate) : '—' },
     { key: 'status',        header: t('leases.status'),     render: (r) => <Badge statusKey={r.status} label={r.status ? t(`common.status${r.status.charAt(0) + r.status.slice(1).toLowerCase()}`, { defaultValue: r.status }) : ''} /> },
     {
       key: 'document', header: t('leases.document'),

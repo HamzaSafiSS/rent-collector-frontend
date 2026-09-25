@@ -402,6 +402,7 @@
     "rentETB": "Rent (ETB)",
     "monthlyRent": "Monthly Rent",
     "startDateCol": "Start Date",
+    "endDateCol": "End Date",
     "status": "Status",
     "myLeaseTitle": "My Lease",
     "myLeaseSubtitle": "Your current lease details",
